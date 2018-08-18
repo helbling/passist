@@ -253,6 +253,26 @@ Vue.component('siteswap-component', {
 			}).join('');
 		},
 	},
+	mounted: function() {
+		var siteswap = localStorage.getItem('siteswap');
+		if (siteswap)
+			this.siteswap_input = siteswap;
+		var n_jugglers = localStorage.getItem('n_jugglers');
+		if (n_jugglers)
+			this.n_jugglers_input = n_jugglers;
+	},
+	watch: {
+		siteswap_input: {
+			handler() {
+				localStorage.setItem('siteswap', this.siteswap_input);
+			},
+		},
+		n_jugglers_input: {
+			handler() {
+				localStorage.setItem('n_jugglers', this.n_jugglers_input);
+			},
+		},
+	},
 });
 
 var app = new Vue({el: '#siteswap'});
