@@ -41,9 +41,9 @@ var tags = "a,b,br,button,div,em,fieldset,form,h1,h2,h3,h4,h5,h6,hr,img,input,la
 for (var i in tags)
 	window[tags[i]] = tag(tags[i]);
 
-// component with handy siteswap information like starting position, causal diagram, ...
-Vue.component('siteswap-component', {
-	template: div(
+var app = new Vue({
+	el: '#siteswap',
+	template: div({class:'container'},
 		p(label('Siteswap: ',  input({type:'text', 'v-model':'siteswap_input',   inputmode:'verbatim', pattern:'[0-9a-zA-Z ]+', ':class': 'validClass'}))),
 		p(label('#Jugglers: ', input({type:'text', 'v-model':'n_jugglers_input', inputmode:'number',   pattern:'[0-9]+', size: 1,}))),
 		div({'v-if': 'valid'},
@@ -274,5 +274,3 @@ Vue.component('siteswap-component', {
 		},
 	},
 });
-
-var app = new Vue({el: '#siteswap'});
