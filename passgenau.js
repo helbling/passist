@@ -37,95 +37,161 @@ var tag = function (tag, args, content) {
 		return '<' + tag + attributes + '>' + content + '</' + tag + '>';
 	};
 }
-var tags = "a,b,br,button,div,em,fieldset,form,h1,h2,h3,h4,h5,h6,hr,img,input,label,legend,li,meta,noscript,p,pre,span,style,table,tbody,td,textarea,tfoot,th,thead,tr,ul,ol,article,section,defs,desc,g,image,line,marker,path,pattern,rect,svg,text,textPath,circle".split(',');
+var tags = "a,b,br,button,div,em,fieldset,form,h1,h2,h3,h4,h5,h6,hr,img,input,label,legend,li,meta,noscript,p,pre,span,style,sub,sup,table,tbody,td,textarea,tfoot,th,thead,tr,ul,ol,article,section,defs,desc,g,image,line,marker,path,pattern,rect,svg,text,textPath,circle".split(',');
 for (var i in tags)
 	window[tags[i]] = tag(tags[i]);
 
-var app = new Vue({
-	el: '#siteswap',
-	template: div({class:'container'},
-		p(label('Siteswap: ',  input({type:'text', 'v-model':'siteswap_input',   inputmode:'verbatim', pattern:'[0-9a-zA-Z ]+', ':class': 'validClass'}))),
-		p(label('#Jugglers: ', input({type:'text', 'v-model':'n_jugglers_input', inputmode:'number',   pattern:'[0-9]+', size: 1,}))),
-		div({'v-if': 'valid'},
-			table(
-				tr(td('#Objects'), td('{{n_objects}}')),
-				tr(td('Period'),   td('{{period}}')),
-			),
-			h4('Local'),
-			table(tr({'v-for': "j in jugglers"}, td('{{j.name}}'), td('{{j.local}}'))),
 
-			h4('Causal diagram'),
-			svg({
-				':width': 'causal_diagram.width',
-				':height': 'causal_diagram.height',
-				},
-				defs(
-					marker({
-						'id': 'arrow',
-						'markerWidth': 10,
-						'markerHeight': 10,
-						'refX': 0,
-						'refY': 3,
-						'orient': 'auto',
-						'markerUnits': 'strokeWidth',
-						},
-						path({
-							'd': 'M0,0 L0,6 L9,3 z',
-							'fill': 'blue'
-						}),
-					)
+// template
+var causal_diagram = svg(
+	{
+		':width': 'causal_diagram.width',
+		':height': 'causal_diagram.height',
+	},
+	defs(
+		marker({
+			'id': 'arrow',
+			'markerWidth': 10,
+			'markerHeight': 10,
+			'refX': 0,
+			'refY': 3,
+			'orient': 'auto',
+			'markerUnits': 'strokeWidth',
+			},
+			path({
+				class: 'arrow_fill',
+				d: 'M0,0 L0,6 L9,3 z',
+			}),
+		)
+	),
+	rect({
+		'x': 0,
+		'y': 0,
+		':width': 'causal_diagram.width',
+		':height': 'causal_diagram.height',
+		'stroke': '#ccc',
+		'stroke-width': '2px',
+		'fill': 'none',
+	}),
+	text({
+		'v-for': "(j, i) in jugglers",
+		':x'  : "10",
+		':y'  : "causal_diagram.yoff + 9 + i * causal_diagram.dy",
+		'font-size': 20,
+		'stroke-width': '0px',
+		'stroke': 'black',
+	},
+	'{{j.name}}',
+	),
+	circle({
+		'v-for': "(n, i) in causal_diagram.nodes",
+		':cx'  : "n.x",
+		':cy'  : "n.y",
+		':r'   : "n.r",
+		':class': 'n.class',
+		'stroke': 'black',
+		'stroke-width': 2,
+	}),
+	text({
+		'v-for': "(n, i) in causal_diagram.nodes",
+		':x'  : "n.x",
+		':y'  : "n.y + 5",
+		'class': 'node_label',
+		':class': 'n.class',
+		'font-size': 16,
+		'stroke-width': '0px',
+		'text-anchor': 'middle',
+	},
+	'{{n.label}}',
+	),
+	path({
+		'class': 'arrow_stroke',
+		'v-for': "(n, i) in causal_diagram.nodes",
+		'v-if': 'n.arrow',
+		':d': 'n.arrow',
+		'stroke-width': '2px',
+		'fill': 'none',
+		'marker-end': "url(#arrow)",
+	}),
+);
+
+var siteswap_col = [
+	div({class:'form-inline'},
+		label({
+			class:'sr-only',
+			for:'siteswap_input',
+			}, 'Siteswap',
+		),
+		div({class:'input-group'},
+			div({class:'input-group-prepend'},
+				div({class:'input-group-text'},
+					'Siteswap',
 				),
-				rect({
-					'x': 0,
-					'y': 0,
-					':width': 'causal_diagram.width',
-					':height': 'causal_diagram.height',
-					'stroke': '#ccc',
-					'stroke-width': '2px',
-					'fill': 'none',
-				}),
-				text({
-					'v-for': "(j, i) in jugglers",
-					':x'  : "10",
-					':y'  : "causal_diagram.yoff + 9 + i * causal_diagram.dy",
-					'font-size': 20,
-					'stroke-width': '0px',
-					'stroke': 'black',
-					},
-					'{{j.name}}',
-				),
-				circle({
-					'v-for': "(n, i) in causal_diagram.nodes",
-					':cx'  : "n.x",
-					':cy'  : "n.y",
-					':r'   : "n.r",
-					'stroke': 'black',
-					'stroke-width': 2,
-					':fill': 'n.fill',
-				}),
-				text({
-					'v-for': "(n, i) in causal_diagram.nodes",
-					':x'  : "n.x",
-					':y'  : "n.y + 5",
-					'font-size': 16,
-					'stroke-width': '0px',
-					'text-anchor': 'middle',
-					'stroke': 'black',
-					},
-					'{{n.label}}',
-				),
-				path({
-					'v-for': "(n, i) in causal_diagram.nodes",
-					'v-if': 'n.arrow',
-					':d': 'n.arrow',
-					'stroke-width': '2px',
-					'stroke': 'blue',
-					'fill': 'none',
-					'marker-end': "url(#arrow)",
-				}),
 			),
+			input({
+				type:'text',
+				'v-model':'siteswap_input',
+				'v-model':'siteswap_input',
+				inputmode:'verbatim',
+				pattern:'[0-9a-zA-Z ]+',
+				':class': 'validClass',
+				size:10,
+
+			}),
+		),
+		label({
+			class:'sr-only',
+			for:'n_jugglers_input',
+			}, 'Number of Jugglers',
+		),
+		div({class:'input-group n_jugglers'},
+			div({class:'input-group-prepend'},
+				div({
+					class:'input-group-text',
+					title:'Number of jugglers',
+					}, '👥',
+				),
+			),
+			input({
+				type:'number',
+				min:1,
+				max:9,
+				'v-model':'n_jugglers_input',
+				inputmode:'number',
+				id:'n_jugglers_input',
+				class:'form-control',
+				size: 1,
+			}),
 		),
 	),
+	div({'v-if': 'valid'},
+		p(
+			'{{n_objects}} objects, period {{period}}',
+			span({'v-if': 'n_jugglers > 1'}, ', interface: {{interface}}'),
+		 ),
+		div({'v-if': 'n_jugglers > 1'},
+			h4('Local'),
+			table(tr({'v-for': "j in jugglers"}, td('{{j.name}}'), td({'v-html':'j.local'}))),
+		   ),
+		h4('Causal diagram'),
+		div({class:'causal_diagram'},
+			causal_diagram,
+	   ),
+	),
+].join('');
+
+var template = div({class:'container'},
+	div({class:'row'},
+		div({class: 'col siteswap'},
+			siteswap_col,
+		),
+	),
+	div({class:'padding_bottom'}), // add some white space to the page end so that we never loose the scroll position when editing the siteswap
+);
+
+var app = new Vue({
+	el: '#siteswap',
+	template: template,
 	data: function() { return {
 		siteswap_input: 86277,
 		n_jugglers_input: 2,
@@ -147,9 +213,11 @@ var app = new Vue({
 		},
 		n_jugglers: function() {
 			var result = parseInt(this.n_jugglers_input);
-			if (this.n_jugglers_input !== '' && result == 0)
-				this.n_jugglers_input = 2;
-			return result == 0 ? 2 : result;
+			if (result >= 10)
+				this.n_jugglers_input = result = parseInt(this.n_jugglers_input.slice(-1));
+			if (result <= 0)
+				this.n_jugglers_input = result = 2;
+			return result;
 		},
 		valid: function() {
 			var period = this.period;
@@ -166,16 +234,43 @@ var app = new Vue({
 		validClass: function() {
 			return this.valid == false ? 'text-danger' : '';
 		},
+		interface: function() {
+			var result = new Array(this.period);
+			for (var i in this.siteswap) {
+				var t = this.siteswap[i];
+				result[(+i + +t) % this.period] = (t % this.n_jugglers) ? 'p' : 's';
+			}
+			return result.join('');
+		},
 		jugglers: function() {
-			var result = new Array(this.n_jugglers);
-			for (var juggler = 0; juggler < this.n_jugglers; juggler++) {
+			var n_jugglers = this.n_jugglers;
+			var result = new Array(n_jugglers);
+			for (var juggler = 0; juggler < n_jugglers; juggler++) {
 				var period = this.period;
 				var local = new Array(period);
-				for (var i = 0; i < (period % this.n_jugglers == 0 ? period / this.n_jugglers : period); i++)
-					local[i] = this.siteswap[(juggler + i * this.n_jugglers) % period];
+				for (var i = 0; i < (period % n_jugglers == 0 ? period / n_jugglers : period); i++)
+					local[i] = String(this.siteswap[(juggler + i * n_jugglers) % period]);
+				var name = function(i) {
+					return String.fromCharCode('A'.charCodeAt(0) + i);
+				};
+				var left = function(i) {
+					return (i / n_jugglers) & 1;
+				};
 				result[juggler] = {
-					local: this.output_siteswap(local),
-					name:  String.fromCharCode('A'.charCodeAt(0) + juggler),
+					local: local.map(function(t, i) {
+						var a = juggler + i * n_jugglers;
+						var b = a + +t;
+						var desc = '';
+						if (t % n_jugglers) {
+							if (n_jugglers > 2)
+								desc += name(b % n_jugglers);
+							desc += left(a) == left(b) ? 'X' : '||';
+
+							desc = sub(desc);
+						}
+						return this.output_siteswap([t]) + desc + '&nbsp;';
+					}.bind(this)).join(' ',),
+					name:  name(juggler),
 				};
 			}
 			return result;
@@ -234,7 +329,7 @@ var app = new Vue({
 					r: p.r,
 					x: x(i),
 					y: y(i),
-					fill: (Math.floor(i / n_jugglers) % 2) ? '#ccc' : 'white',
+					class: (Math.floor(i / n_jugglers) % 2) ? 'left_hand' : 'right_hand',
 					juggler: juggler(i),
 					label: this.output_siteswap(this.siteswap).charAt(pos),
 					arrow: cur_throw ? arrow(i, this.siteswap[pos] - 2 * n_jugglers) : undefined, // for ladder diagram: don't subtract 2 * n_jugglers
@@ -249,6 +344,7 @@ var app = new Vue({
 	methods: {
 		output_siteswap: function(siteswap) {
 			return siteswap.map(function(x) {
+				x = +x;
 				return x <= 9 ? String(x) : String.fromCharCode('a'.charCodeAt(0) + x - 10);
 			}).join('');
 		},

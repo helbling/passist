@@ -1,0 +1,12 @@
+.jumbotron { background-color:#19a2ba }
+.siteswap .input-group { margin-right:1em; margin-bottom:1em; width:auto }
+.n_jugglers { width:6.5em !important }
+.causal_diagram { overflow-x:auto }
+.arrow { fill:#007bff; stroke:#007bff }
+.arrow_stroke { stroke:#007bff }
+.arrow_fill   {   fill:#007bff }
+circle { stroke:#343a40 }
+circle.right_hand { fill:white }
+circle.left_hand  { fill:#b7c8d5 }
+.node_label { fill: #343a40 }
+.padding_bottom { height:30em }
