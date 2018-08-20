@@ -37,7 +37,7 @@ var tag = function (tag, args, content) {
 		return '<' + tag + attributes + '>' + content + '</' + tag + '>';
 	};
 }
-var tags = "a,b,br,button,div,em,fieldset,form,h1,h2,h3,h4,h5,h6,hr,img,input,label,legend,li,meta,noscript,p,pre,span,style,sub,sup,table,tbody,td,textarea,tfoot,th,thead,tr,ul,ol,article,section,defs,desc,g,image,line,marker,path,pattern,rect,svg,text,textPath,circle".split(',');
+var tags = "a,b,br,button,div,em,fieldset,form,h1,h2,h3,h4,h5,h6,hr,img,input,label,legend,li,meta,noscript,p,pre,small,span,style,sub,sup,table,tbody,td,textarea,tfoot,th,thead,tr,ul,ol,article,section,defs,desc,g,image,line,marker,path,pattern,rect,svg,text,textPath,circle".split(',');
 for (var i in tags)
 	window[tags[i]] = tag(tags[i]);
 
@@ -129,14 +129,15 @@ var siteswap_col = [
 				),
 			),
 			input({
-				type:'text',
+				type:'search',
+				id:'siteswap_input',
 				'v-model':'siteswap_input',
 				'v-model':'siteswap_input',
 				inputmode:'verbatim',
 				pattern:'[0-9a-zA-Z ]+',
 				':class': 'validClass',
 				size:10,
-
+				placeholder:'Siteswap',
 			}),
 		),
 		label({
@@ -185,9 +186,81 @@ var template = div({class:'container'},
 		div({class: 'col siteswap'},
 			siteswap_col,
 		),
+		div({class: 'col known_siteswaps'},
+			h2('Well-known siteswaps'),
+			p(small('© Tilman Sinning, ', a({href: 'https://github.com/namlit/siteswap_generator'}, 'Siteswap Generator'))),
+			ul(
+				li({'v-for': 's in known_siteswaps'},
+					a({href:'#', 'v-on:click':'siteswap_input = s[0]; n_jugglers_input = s[1]'}, span({class:'siteswap'}, '{{s[0]}}'), span({class:'name'}, '{{s[2]}}')),
+				),
+			),
+		),
 	),
 	div({class:'padding_bottom'}), // add some white space to the page end so that we never loose the scroll position when editing the siteswap
 );
+
+var known_siteswaps = [
+	["86722", 2, "5 club not why"],
+	["86227", 2, "5 club why not"],
+	["86867", 2, "5 count popcorn (44)"],
+	["a6667", 2, "5 count popcorn"],
+	["9964966", 2, "7 club Jim's 2 count"],
+	["9964786", 2, "7 club Jim's 2 count (variation)"],
+	["9784966", 2, "7 club Jim's 2 count (variation)"],
+	["9784786", 2, "7 club Jim's 2 count (variation)"],
+	["9969268", 2, "7 club maybe (1)"],
+	["9968296", 2, "7 club maybe (2)"],
+	["9968278", 2, "7 club maybe (variation)"],
+	["7", 2, "7 club one count"],
+	["9962968", 2, "7 club not why"],
+	["9962788", 2, "7 club not why (variation)"],
+	["9782968", 2, "7 club not why (variation)"],
+	["9782788", 2, "7 club not why (variation)"],
+	["966", 2, "7 club three count"],
+	["9968926", 2, "7 club why not"],
+	["9788926", 2, "7 club why not (variation)"],
+	["8686867", 2, "7 count popcorn"],
+	["9668686", 2, "7 count popcorn (variation)"],
+	["a666786", 2, "7 count popcorn (variation)"],
+	["a666867", 2, "7 count popcorn (variation)"],
+	["a666966", 2, "7 count popcorn (variation)"],
+	["996", 2, "8 club pps"],
+	["9797888", 2, "8 Club Vitoria"],
+	["9", 2, "9 club one count"],
+	["a2747", 2, "aa7 Warmup Pattern"],
+	["9667867", 2, "Aspirin"],
+	["756", 2, "baby dragon; zap opus 1; holy hand-grenade"],
+	["9968978", 2, "Clean Finish"],
+	["726", 2, "coconut laden swallow"],
+	["945", 2, "dragon; black beast of aaaarg..."],
+	["867", 2, "French 3 count"],
+	["7742744", 2, "Flipalot"],
+	["86777", 2, "Funky Bookends"],
+	["942", 2, "glass elevator"],
+	["9792688", 2, "Good Morning"],
+	["8882225", 2, "Heffalot"],
+	["975", 2, "Holy Grail; zap opus two"],
+	["77222", 2, "inverted parsnip"],
+	["75724", 2, "Kaatzi"],
+	["645", 2, "killer bunny"],
+	["774", 2, "Jim's 1 count (async)"],
+	["77466", 2, "Jim's 2 count (async)"],
+	["77772", 2, "Martin's one count (async)"],
+	["86727", 2, "maybe"],
+	["96627", 2, "maybe not"],
+	["7777266", 2, "Mild Madness (async)"],
+	["9789788", 2, "Milk Duds"],
+	["9647772", 2, "Odnom"],
+	["96672", 2, "not likely"],
+	["86772", 2, "not why"],
+	["77722", 2, "parsnip"],
+	["9669667", 2, "Placebo"],
+	["9969788", 2, "Poem"],
+	["9968897", 2, "Real Fake Clean Finish"],
+	["97428", 2, "The One to Concentrate"],
+	["86277", 2, "why not"],
+];
+
 
 var app = new Vue({
 	el: '#siteswap',
@@ -195,6 +268,7 @@ var app = new Vue({
 	data: function() { return {
 		siteswap_input: 86277,
 		n_jugglers_input: 2,
+		known_siteswaps: known_siteswaps,
 	};},
 	computed: {
 		stripped_input: function() {
