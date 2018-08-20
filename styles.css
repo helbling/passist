@@ -4,10 +4,9 @@
 }
 .siteswap .input-group { margin-right:1em; margin-bottom:1em; width:auto }
 input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: searchfield-cancel-button }
-input[type="search"] { -webkit-appearance: searchfield }
-.n_jugglers { width:6.5em !important }
+
+.n_jugglers { width:6em !important }
 .causal_diagram { overflow-x:auto }
-.arrow { fill:#007bff; stroke:#007bff }
 .arrow_stroke { stroke:#007bff }
 .arrow_fill   {   fill:#007bff }
 circle { stroke:#343a40 }

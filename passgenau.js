@@ -135,6 +135,7 @@ var siteswap_col = [
 				'v-model':'siteswap_input',
 				inputmode:'verbatim',
 				pattern:'[0-9a-zA-Z ]+',
+				class:'form-control',
 				':class': 'validClass',
 				size:10,
 				placeholder:'Siteswap',
