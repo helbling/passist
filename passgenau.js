@@ -371,7 +371,7 @@ var app = new Vue({
 			var p = {
 				r:    13,
 				xoff: 50,
-				yoff: 30,
+				yoff: 70,
 				dx:   70 / n_jugglers,
 				dy:   100,
 				nodes: [],
@@ -399,7 +399,7 @@ var app = new Vue({
 				if (ji != jj || Math.abs(step) == n_jugglers)
 					return "M" + xy(i, p.r, x(j), y(j)) + " L" + xy(j, p.r + arrow_length, x(i), y(i));
 				var dir_x = x(j) > x(i) ? 1 : -1;
-				var dir_y = ji ? -1 : 1;
+				var dir_y = ji ? 1 : -1;
 
 				var offset_x = dir_x * p.dy / 2;
 				var offset_y = dir_y * p.dy / 2;
@@ -427,7 +427,7 @@ var app = new Vue({
 			}
 
 			p.width  =  p.steps * p.dx + 50;
-			p.height = (this.n_jugglers - (this.n_jugglers > 1 ? 1 : 0.5)) * p.dy + 2 * p.yoff;
+			p.height = (this.n_jugglers - (this.n_jugglers > 1 ? 1 : 1.4)) * p.dy + 2 * p.yoff;
 			return p;
 		},
 	},
