@@ -171,7 +171,7 @@ var siteswap_col = [
 		 ),
 		div({'v-if': 'n_jugglers > 1'},
 			h4('Local'),
-			table(tr({'v-for': "j in jugglers"}, td('{{j.name}}'), td({'v-html':'j.local'}))),
+			table(tr({'v-for': "j in jugglers"}, th('{{j.name}}', sub('{{j.start}}')), td({'v-html':'j.local'}))),
 		   ),
 		h4('Causal diagram'),
 		div({class:'causal_diagram'},
@@ -244,6 +244,19 @@ var app = new Vue({
 		},
 		jugglers: function() {
 			var n_jugglers = this.n_jugglers;
+			var start_hands = Array.apply(null, Array(n_jugglers * 2)).map(function() {return 0;});
+			var i = 0;
+			var has_obj = [];
+			for (var missing = this.n_objects; missing > 0; i++) {
+				var t = this.siteswap[i % this.period];
+				if (t > 0) {
+					if (!has_obj[i]) {
+						start_hands[i % (n_jugglers * 2)]++;
+						missing--;
+					}
+					has_obj[i + t] = true;
+				}
+			}
 			var result = new Array(n_jugglers);
 			for (var juggler = 0; juggler < n_jugglers; juggler++) {
 				var period = this.period;
@@ -271,6 +284,7 @@ var app = new Vue({
 						return this.output_siteswap([t]) + desc + '&nbsp;';
 					}.bind(this)).join(' ',),
 					name:  name(juggler),
+					start: start_hands[n_jugglers + juggler] + '|' + start_hands[juggler],
 				};
 			}
 			return result;
