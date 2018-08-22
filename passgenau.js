@@ -18,7 +18,7 @@
 
 // minimalistic implementation of it_html in js without quoting
 // see https://itools.search.ch/ for the original php version
-var tag = function (tag, args, content) {
+var tag = function (tag) {
 	return function() {
 		var i = 0;
 		var args = {};
@@ -43,6 +43,127 @@ for (var i in tags)
 
 
 // template
+var card = function() {
+	var i = 0;
+	var args = {};
+	var content = '';
+	if (typeof(arguments[i]) == 'object') {
+		args = arguments[i];
+		i++;
+	}
+	for (; i < arguments.length; i++)
+		content += arguments[i];
+	return div({class:'card mb-4'},
+		args.title ? div({class:'card-header'}, args.title) : '',
+		div({class:'card-body'},
+			content,
+		),
+	);
+};
+
+var generator_col = [
+	div({class:'form-inline'},
+		label({
+			class:'sr-only',
+			for:'gen_objects',
+		}, 'Number of objects',
+		),
+		div({class:'input-group gen_objects'},
+			div({class:'input-group-prepend'},
+				div({
+					class:'input-group-text',
+				}, '# Objects',
+				),
+			),
+			input({
+				type:'number',
+				class:'twodigit',
+				min:1,
+				'v-model':'gen_objects',
+				inputmode:'number',
+				id:'gen_objects',
+				class:'twodigit form-control',
+				size: 1,
+			}),
+		),
+
+		label({
+			class:'sr-only',
+			for:'gen_period',
+			}, 'Period',
+		),
+		div({class:'input-group gen_period'},
+			div({class:'input-group-prepend'},
+				div({
+					class:'input-group-text',
+					}, 'Period',
+				),
+			),
+			input({
+				type:'number',
+				min:1,
+				'v-model':'gen_period',
+				inputmode:'number',
+				id:'gen_period',
+				class:'twodigit form-control',
+				size: 1,
+			}),
+		),
+
+
+		label({
+			class:'sr-only',
+			for:'gen_max_throw',
+			}, 'Max Throw',
+		),
+		div({class:'input-group gen_max_throw'},
+			div({class:'input-group-prepend'},
+				div({
+					class:'input-group-text',
+					}, 'Max Throw',
+				),
+			),
+			input({
+				type:'number',
+				min:1,
+				max:35,
+				'v-model':'gen_max_throw',
+				inputmode:'number',
+				id:'gen_max_throw',
+				class:'twodigit form-control',
+				size: 1,
+			}),
+		),
+		label({
+			class:'sr-only',
+			for:'gen_min_throw',
+			}, 'Min Throw',
+		),
+		div({class:'input-group gen_min_throw'},
+			div({class:'input-group-prepend'},
+				div({
+					class:'input-group-text',
+					}, 'Min Throw',
+				),
+			),
+			input({
+				type:'number',
+				min:1,
+				'v-model':'gen_min_throw',
+				inputmode:'number',
+				id:'gen_min_throw',
+				class:'twodigit form-control',
+				size: 1,
+			}),
+		),
+	),
+	ul({class:'mt-4 siteswap_list'},
+		li({'v-for': 's in gen_list'},
+			a({href:'#siteswap_col', 'v-on:click':'siteswap_input = s'}, span({class:'siteswap'}, '{{s}}')),
+		),
+	),
+].join('');
+
 var causal_diagram = svg(
 	{
 		':width': 'causal_diagram.width',
@@ -144,7 +265,7 @@ var siteswap_col = [
 		label({
 			class:'sr-only',
 			for:'n_jugglers_input',
-			}, 'Number of Jugglers',
+			}, 'Number of jugglers',
 		),
 		div({class:'input-group n_jugglers'},
 			div({class:'input-group-prepend'},
@@ -161,7 +282,7 @@ var siteswap_col = [
 				'v-model':'n_jugglers_input',
 				inputmode:'number',
 				id:'n_jugglers_input',
-				class:'form-control',
+				class:'digit form-control',
 				size: 1,
 			}),
 		),
@@ -184,16 +305,21 @@ var siteswap_col = [
 
 var template = div({class:'container'},
 	div({class:'row'},
-		div({class: 'col siteswap'},
-			siteswap_col,
+		div({class: 'col generator'},
+			card({title:'Generator'}, generator_col),
+		),
+	), div({class:'row'},
+		div({id:'siteswap_col', class: 'col siteswap'},
+			card({title:'Siteswap'}, siteswap_col),
 		),
 	), div({class:'row'},
 		div({class: 'col known_siteswaps'},
-			h2('Well-known siteswaps'),
-			p(small('© Tilman Sinning, ', a({href: 'https://github.com/namlit/siteswap_generator'}, 'Siteswap Generator'))),
-			ul(
-				li({'v-for': 's in known_siteswaps'},
-					a({href:'#', 'v-on:click':'siteswap_input = s[0]; n_jugglers_input = s[1]'}, span({class:'siteswap'}, '{{s[0]}}'), span({class:'name'}, '{{s[2]}}')),
+			card({title:'Well-known siteswaps'},
+				p(small('© Tilman Sinning, ', a({href: 'https://github.com/namlit/siteswap_generator'}, 'Siteswap Generator'))),
+				ul({class:'siteswap_list'},
+					li({'v-for': 's in known_siteswaps'},
+						a({href:'#siteswap_col', 'v-on:click':'siteswap_input = s[0]; n_jugglers_input = s[1]'}, span({class:'siteswap'}, '{{s[0]}}'), span({class:'name'}, '{{s[2]}}')),
+					),
 				),
 			),
 		),
@@ -267,11 +393,15 @@ var known_siteswaps = [
 var app = new Vue({
 	el: '#siteswap',
 	template: template,
-	data: function() { return {
+	data: {
 		siteswap_input: 86277,
 		n_jugglers_input: 2,
 		known_siteswaps: known_siteswaps,
-	};},
+		gen_objects:   7,
+		gen_period:    3,
+		gen_min_throw: 5,
+		gen_max_throw: 10,
+	},
 	computed: {
 		stripped_input: function() {
 			return String(this.siteswap_input).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
@@ -354,7 +484,6 @@ var app = new Vue({
 							if (n_jugglers > 2)
 								desc += name(b % n_jugglers);
 							desc += left(a) == left(b) ? 'X' : '||';
-
 							desc = sub(desc);
 						}
 						return this.output_siteswap([t]) + desc + '&nbsp;';
@@ -429,6 +558,87 @@ var app = new Vue({
 			p.width  =  p.steps * p.dx + 50;
 			p.height = (this.n_jugglers - (this.n_jugglers > 1 ? 1 : 1.4)) * p.dy + 2 * p.yoff;
 			return p;
+		},
+
+		gen_list: function() {
+			var canonic = function(siteswap) {
+				var out = this.output_siteswap(siteswap);
+				var shifts = [];
+				for (var i = 0; i < period; i++)
+					shifts.push(out.slice(i) + out.slice(0, i));
+				return shifts.sort()[period - 1];
+			}.bind(this);
+			var min = Math.max(0, Math.min(35, parseInt(this.gen_min_throw)));
+			var max = Math.max(0, Math.min(35, parseInt(this.gen_max_throw)));
+			var objects = Math.max(0, Math.min(35, parseInt(this.gen_objects)));
+			var period = parseInt(this.gen_period);
+			this.gen_min_throw = min;
+			this.gen_max_throw = max;
+			this.gen_objects = objects;
+
+			var check_min_max = function(siteswap) {
+				for (var i = 0; i < siteswap.length; i++)
+					if (siteswap[i] < min || siteswap[i] > max)
+						return false;
+				return true;
+			}
+			var output_result = function(canonic) {
+				// check if it is a smaller period
+				for (var p = 1; p < period; p++) {
+					if (period % p == 0) {
+						// splits canonic into period / i chunks of i characters
+						// if all chunks are equal, we have found a smaller period p
+						if (Array.apply(null, {length: period / p}).map(Function.call, Number).map(function (k) {
+								return canonic.slice(p * k, p * (k + 1));
+							}).every(function (val, i, arr) { return val === arr[0]; }))
+								return false;
+					}
+				}
+				// TODO: check if there is at least one pass
+
+				return true;
+			}
+
+			var visited = {};
+			var stack = [];
+
+			var a = (new Array(period)).fill(objects);
+			if (check_min_max(a))
+				stack.push(a);
+
+			var result = [];
+			while (stack.length) {
+				var a = stack.pop();
+				var c = canonic(a);
+				if (visited[c])
+					continue;
+				visited[c] = true;
+
+				if (output_result(c))
+					result.push(c);
+
+				if (result.length >= 100)
+					break;
+
+				var shifts = [];
+				for (var i = 0; i < period; i++)
+					shifts.push(a.slice(i).concat(a.slice(0, i)));
+
+				for (var k = 0; k < period; k++) {
+					for (var i = 0; i < period - 1; i++) {
+						for (var j = i + 1; j < period; j++) {
+							// swap positions i and j
+							var b = shifts[k].slice(0); // copy of a
+							b[i] = shifts[k][j] + j - i;
+							b[j] = shifts[k][i] - j + i;
+							if (check_min_max(b))
+								stack.push(b);
+						}
+					}
+				}
+			}
+// 			console.log(result.length);
+			return result;
 		},
 	},
 	methods: {

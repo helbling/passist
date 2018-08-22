@@ -2,10 +2,10 @@
 @media (min-width:30em) {
 	.col.siteswap { min-width:30em }
 }
-.siteswap .input-group { margin-right:1em; margin-bottom:1em; width:auto }
+.input-group { margin-right:1em; margin-bottom:1em; width:auto }
 input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: searchfield-cancel-button }
-
-.n_jugglers { width:6em !important }
+input[type="number"].digit    { width:3.5em !important }
+input[type="number"].twodigit { width:5em !important }
 .causal_diagram { overflow-x:auto }
 .arrow_stroke { stroke:#007bff }
 .arrow_fill   {   fill:#007bff }
@@ -13,8 +13,8 @@ circle { stroke:#343a40 }
 circle.right_hand { fill:white }
 circle.left_hand  { fill:#b7c8d5 }
 .node_label { fill: #343a40 }
-.known_siteswaps ul { padding-left:1em }
-.known_siteswaps li { list-style-type:none }
+ul.siteswap_list { padding-left:1em }
+ul.siteswap_list li { list-style-type:none }
 .known_siteswaps li .siteswap { display:inline-block; width:5em }
 @media (min-width: 30em) {
 	.known_siteswaps li           { width:30em }
