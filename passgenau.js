@@ -74,7 +74,7 @@ function input_field(p) {
 		input_attr.min = 'min' in p ? p.min : 0;
 		if (p.max)
 			input_attr.max = p.max;
-		input_attr.class += (p.max && p.max < 10) ? '' : ' twodigit';
+		input_attr.class += (p.max && p.max < 10) ? ' digit' : ' twodigit';
 	} else {
 		input_attr.placeholder = p.label;
 		for (k in p.attr)
@@ -106,6 +106,7 @@ var generator_col = [
 		input_field({id:'gen_max_throw',   label:'Max throw', type:'number', min:1, max:35 }),
 		input_field({id:'gen_min_throw',   label:'Min throw', type:'number', min:0, max:35 }),
 		input_field({id:'gen_n_jugglers',  label:'👥', title:'Number of jugglers', type:'number', min:0, max:9 }),
+		// TODO: add filters
 	),
 
 	ul({class:'mt-4 siteswap_list'},
