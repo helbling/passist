@@ -61,105 +61,56 @@ var card = function() {
 	);
 };
 
+function input_field(p) {
+	var title = p.title ? p.title : p.label;
+	var input_attr = {
+		type:      p.type,
+		'v-model': p.id,
+		id:        p.id,
+		class:    'form-control',
+	};
+	if (p.type == 'number') {
+		input_attr.inputmode = 'number';
+		input_attr.min = 'min' in p ? p.min : 0;
+		if (p.max)
+			input_attr.max = p.max;
+		input_attr.class += (p.max && p.max < 10) ? '' : ' twodigit';
+	} else {
+		input_attr.placeholder = p.label;
+		for (k in p.attr)
+			input_attr[k] = p.attr[k];
+	}
+	return [
+		label({
+			class: 'sr-only',
+			for:   p.id,
+			}, title,
+		),
+		div({class:'input-group ' + p.id},
+			div({class:'input-group-prepend'},
+				div({
+					class: 'input-group-text',
+					title: title,
+					}, p.label,
+				),
+			),
+			input(input_attr),
+		),
+	].join('');
+}
+
 var generator_col = [
 	div({class:'form-inline'},
-		label({
-			class:'sr-only',
-			for:'gen_objects',
-		}, 'Number of objects',
-		),
-		div({class:'input-group gen_objects'},
-			div({class:'input-group-prepend'},
-				div({
-					class:'input-group-text',
-				}, '# Objects',
-				),
-			),
-			input({
-				type:'number',
-				class:'twodigit',
-				min:1,
-				'v-model':'gen_objects',
-				inputmode:'number',
-				id:'gen_objects',
-				class:'twodigit form-control',
-				size: 1,
-			}),
-		),
-
-		label({
-			class:'sr-only',
-			for:'gen_period',
-			}, 'Period',
-		),
-		div({class:'input-group gen_period'},
-			div({class:'input-group-prepend'},
-				div({
-					class:'input-group-text',
-					}, 'Period',
-				),
-			),
-			input({
-				type:'number',
-				min:1,
-				'v-model':'gen_period',
-				inputmode:'number',
-				id:'gen_period',
-				class:'twodigit form-control',
-				size: 1,
-			}),
-		),
-
-
-		label({
-			class:'sr-only',
-			for:'gen_max_throw',
-			}, 'Max Throw',
-		),
-		div({class:'input-group gen_max_throw'},
-			div({class:'input-group-prepend'},
-				div({
-					class:'input-group-text',
-					}, 'Max Throw',
-				),
-			),
-			input({
-				type:'number',
-				min:1,
-				max:35,
-				'v-model':'gen_max_throw',
-				inputmode:'number',
-				id:'gen_max_throw',
-				class:'twodigit form-control',
-				size: 1,
-			}),
-		),
-		label({
-			class:'sr-only',
-			for:'gen_min_throw',
-			}, 'Min Throw',
-		),
-		div({class:'input-group gen_min_throw'},
-			div({class:'input-group-prepend'},
-				div({
-					class:'input-group-text',
-					}, 'Min Throw',
-				),
-			),
-			input({
-				type:'number',
-				min:1,
-				'v-model':'gen_min_throw',
-				inputmode:'number',
-				id:'gen_min_throw',
-				class:'twodigit form-control',
-				size: 1,
-			}),
-		),
+		input_field({id:'gen_objects',     label:'#Objects', title:'Number of objects', type:'number', min:1, max:35}),
+		input_field({id:'gen_period',      label:'Period',    type:'number', min:1 }),
+		input_field({id:'gen_max_throw',   label:'Max throw', type:'number', min:1, max:35 }),
+		input_field({id:'gen_min_throw',   label:'Min throw', type:'number', min:0, max:35 }),
+		input_field({id:'gen_n_jugglers',  label:'👥', title:'Number of jugglers', type:'number', min:0, max:9 }),
 	),
+
 	ul({class:'mt-4 siteswap_list'},
 		li({'v-for': 's in gen_list'},
-			a({href:'#siteswap_col', 'v-on:click':'siteswap_input = s'}, span({class:'siteswap'}, '{{s}}')),
+			a({href:'#siteswap_col', 'v-on:click':'siteswap_input = s; n_jugglers_input = gen_n_jugglers'}, span({class:'siteswap'}, '{{s}}')),
 		),
 	),
 ].join('');
@@ -238,54 +189,8 @@ var causal_diagram = svg(
 
 var siteswap_col = [
 	div({class:'form-inline'},
-		label({
-			class:'sr-only',
-			for:'siteswap_input',
-			}, 'Siteswap',
-		),
-		div({class:'input-group'},
-			div({class:'input-group-prepend'},
-				div({class:'input-group-text'},
-					'Siteswap',
-				),
-			),
-			input({
-				type:'search',
-				id:'siteswap_input',
-				'v-model':'siteswap_input',
-				'v-model':'siteswap_input',
-				inputmode:'verbatim',
-				pattern:'[0-9a-zA-Z ]+',
-				class:'form-control',
-				':class': 'validClass',
-				size:10,
-				placeholder:'Siteswap',
-			}),
-		),
-		label({
-			class:'sr-only',
-			for:'n_jugglers_input',
-			}, 'Number of jugglers',
-		),
-		div({class:'input-group n_jugglers'},
-			div({class:'input-group-prepend'},
-				div({
-					class:'input-group-text',
-					title:'Number of jugglers',
-					}, '👥',
-				),
-			),
-			input({
-				type:'number',
-				min:1,
-				max:9,
-				'v-model':'n_jugglers_input',
-				inputmode:'number',
-				id:'n_jugglers_input',
-				class:'digit form-control',
-				size: 1,
-			}),
-		),
+		input_field({id:'siteswap_input',  label:'Siteswap', type:'search', attr:{ inputmode: 'verbatim', pattern:'[0-9a-zA-Z ]+', ':class':'validClass', size:10 }}),
+		input_field({id:'n_jugglers_input',  label:'👥', title:'Number of jugglers', type:'number', min:0, max:9 }),
 	),
 	div({'v-if': 'valid'},
 		p(
@@ -401,6 +306,7 @@ var app = new Vue({
 		gen_period:    3,
 		gen_min_throw: 5,
 		gen_max_throw: 10,
+		gen_n_jugglers: 2,
 	},
 	computed: {
 		stripped_input: function() {
@@ -571,10 +477,13 @@ var app = new Vue({
 			var min = Math.max(0, Math.min(35, parseInt(this.gen_min_throw)));
 			var max = Math.max(0, Math.min(35, parseInt(this.gen_max_throw)));
 			var objects = Math.max(0, Math.min(35, parseInt(this.gen_objects)));
-			var period = parseInt(this.gen_period);
+			var period = Math.max(1, parseInt(this.gen_period));
+			var n_jugglers = Math.max(1, Math.min(9, parseInt(this.gen_n_jugglers)));
 			this.gen_min_throw = min;
 			this.gen_max_throw = max;
 			this.gen_objects = objects;
+			this.gen_period = period;
+			this.gen_n_jugglers = n_jugglers;
 
 			var check_min_max = function(siteswap) {
 				for (var i = 0; i < siteswap.length; i++)
@@ -582,7 +491,7 @@ var app = new Vue({
 						return false;
 				return true;
 			}
-			var output_result = function(canonic) {
+			var output_result = function(canonic, heights) {
 				// check if it is a smaller period
 				for (var p = 1; p < period; p++) {
 					if (period % p == 0) {
@@ -594,7 +503,19 @@ var app = new Vue({
 								return false;
 					}
 				}
-				// TODO: check if there is at least one pass
+
+				if (n_jugglers > 1) {
+					// TODO: check if there is at least one pass for every juggler (example: a56 for 3 jugglers makes C do only flips)
+
+					var n_passes = 0;
+					for (var i = 0; i < period; i++) {
+						if (heights[i] % n_jugglers)
+							n_passes++;
+					}
+					// TODO: let user specify n_passes range
+					if (n_passes == 0)
+						return false;
+				}
 
 				return true;
 			}
@@ -614,7 +535,7 @@ var app = new Vue({
 					continue;
 				visited[c] = true;
 
-				if (output_result(c))
+				if (output_result(c, a))
 					result.push(c);
 
 				if (result.length >= 100)
