@@ -1,4 +1,6 @@
 .jumbotron { background-color:#19a2ba }
+.jumbotron .cube { height:8em; display:inline-block; position:absolute; margin-top:-1em; float:left }
+.jumbotron h1, .jumbotron h5 { padding-left:9rem }
 @media (min-width:30em) {
 	.col.siteswap { min-width:30em }
 }
