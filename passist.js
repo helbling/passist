@@ -76,7 +76,7 @@ function input_field(p) {
 			input_attr.max = p.max;
 		input_attr.class += (p.max && p.max < 10) ? ' digit' : ' twodigit';
 	} else {
-		input_attr.placeholder = p.label;
+		input_attr.placeholder = p.placeholder ? p.placeholder : p.label;
 		for (k in p.attr)
 			input_attr[k] = p.attr[k];
 	}
@@ -106,7 +106,8 @@ var generator_col = [
 		input_field({id:'gen_max_throw',   label:'Max throw', type:'number', min:1, max:35 }),
 		input_field({id:'gen_min_throw',   label:'Min throw', type:'number', min:0, max:35 }),
 		input_field({id:'gen_n_jugglers',  label:'👥', title:'Number of jugglers', type:'number', min:0, max:9 }),
-		// TODO: add filters
+		input_field({id:'gen_include',     label:'Include', type:'search', placeholder:'e.g. 2 8'}),
+		input_field({id:'gen_exclude',     label:'Exclude', type:'search'}),
 	),
 
 	ul({class:'mt-4 siteswap_list'},
@@ -304,10 +305,12 @@ var app = new Vue({
 		n_jugglers_input: 2,
 		known_siteswaps: known_siteswaps,
 		gen_objects:   7,
-		gen_period:    3,
-		gen_min_throw: 5,
+		gen_period:    5,
+		gen_min_throw: 2,
 		gen_max_throw: 10,
 		gen_n_jugglers: 2,
+		gen_include: '',
+		gen_exclude: '3 5',
 	},
 	computed: {
 		stripped_input: function() {
@@ -492,6 +495,22 @@ var app = new Vue({
 						return false;
 				return true;
 			}
+
+
+			function filters(input) {
+				input = input.trim();
+				return input ? input.split(/ /) : [];
+			}
+			var exclude_filters = filters(this.gen_exclude);
+			var include_filters = filters(this.gen_include);
+
+			function exclude(str) {
+				return exclude_filters.some(function(filter) { return str.match(filter);});
+			}
+			function include(str) {
+				return include_filters.every(function(filter) { return str.match(filter);});
+			}
+
 			var output_result = function(canonic, heights) {
 				// check if it is a smaller period
 				for (var p = 1; p < period; p++) {
@@ -517,6 +536,10 @@ var app = new Vue({
 					if (n_passes == 0)
 						return false;
 				}
+
+				// check constraints
+				if (exclude(canonic) || !include(canonic))
+					return false;
 
 				return true;
 			}
