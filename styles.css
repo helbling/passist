@@ -15,11 +15,9 @@ circle { stroke:#343a40 }
 circle.right_hand { fill:white }
 circle.left_hand  { fill:#b7c8d5 }
 .node_label { fill: #343a40 }
-ul.siteswap_list { padding-left:1em }
+ul.siteswap_list { padding-left:1em; column-width:20em }
+.generator ul.siteswap_list { column-width:8em }
 ul.siteswap_list li { list-style-type:none }
-.known_siteswaps li .siteswap { display:inline-block; width:5em }
-@media (min-width: 30em) {
-	.known_siteswaps li           { width:30em }
-	.known_siteswaps li .name     { width:25em }
-}
+.known_siteswaps li .siteswap { display:inline-block; width:5em ; vertical-align:top}
+.known_siteswaps li .name { display:inline-block; text-overflow:ellipsis; width:15em }
 .padding_bottom { height:30em }
