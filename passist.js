@@ -102,7 +102,7 @@ function input_field(p) {
 var generator_col = [
 	div({class:'form-inline'},
 		input_field({id:'gen_objects',     label:'#Objects', title:'Number of objects', type:'number', min:1, max:35}),
-		input_field({id:'gen_period',      label:'Period',    type:'number', min:1 }),
+		input_field({id:'gen_period',      label:'Period',    type:'number', min:1, max:15 }),
 		input_field({id:'gen_max_throw',   label:'Max throw', type:'number', min:1, max:35 }),
 		input_field({id:'gen_min_throw',   label:'Min throw', type:'number', min:0, max:35 }),
 		input_field({id:'gen_n_jugglers',  label:'👥', title:'Number of jugglers', type:'number', min:0, max:9 }),
@@ -481,7 +481,7 @@ var app = new Vue({
 			var min = Math.max(0, Math.min(35, parseInt(this.gen_min_throw)));
 			var max = Math.max(0, Math.min(35, parseInt(this.gen_max_throw)));
 			var objects = Math.max(0, Math.min(35, parseInt(this.gen_objects)));
-			var period = Math.max(1, parseInt(this.gen_period));
+			var period = Math.max(1, Math.min(15, parseInt(this.gen_period)));
 			var n_jugglers = Math.max(1, Math.min(9, parseInt(this.gen_n_jugglers)));
 			this.gen_min_throw = min;
 			this.gen_max_throw = max;
