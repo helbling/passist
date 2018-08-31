@@ -615,3 +615,10 @@ var app = new Vue({
 		},
 	},
 });
+
+// make web app work offline
+if ('serviceWorker' in navigator) {
+	window.addEventListener('load', function() {
+		navigator.serviceWorker.register('/service_worker.js');
+	});
+}

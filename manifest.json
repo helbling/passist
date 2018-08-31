@@ -1,21 +1,22 @@
 {
 	"short_name": "passist",
 	"name": "passing siteswap assistant",
-	"icons": [
-	{
-		"src": "images/icon192.png",
-		"type": "image/png",
-		"sizes": "192x192"
-	},
-	{
-		"src": "images/icon512.png",
-		"type": "image/png",
-		"sizes": "512x512"
-	}
-	],
-	"start_url": "index.html",
-	"background_color": "#19a2ba",
+	"description": "passing siteswap assistant",
+	"start_url": ".",
 	"display": "standalone",
-	"scope": "/",
-	"theme_color": "#19a2ba"
+	"scope": ".",
+	"background_color": "#19a2ba",
+	"theme_color": "#19a2ba",
+	"icons": [
+		{
+			"src": "images/icon192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "images/icon512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	]
 }
