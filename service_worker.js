@@ -34,17 +34,19 @@ this.addEventListener('activate', function(event) {
 	);
 });
 
-// https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/#stale-while-revalidate
+// Network falling back to cache
 self.addEventListener('fetch', function(event) {
+	console.log('fetch', event.request.url);
 	event.respondWith(
 		caches.open(cacheName).then(function(cache) {
-			return cache.match(event.request).then(function(response) {
-				var fetchPromise = fetch(event.request).then(function(networkResponse) {
-					if (event.request.url.match(/^http/))
-						cache.put(event.request, networkResponse.clone());
-					return networkResponse;
-				});
-				return response || fetchPromise;
+			return fetch(event.request).then(function(networkResponse) {
+				console.log('net worked, saving to cache', event.request.url, networkResponse);
+				if (event.request.url.match(/^http/))
+					cache.put(event.request, networkResponse.clone());
+				return networkResponse;
+			}).catch(function(c) {
+				console.log('net fail, from cache', event.request.url, c);
+				return cache.match(event.request);
 			})
 		})
 	);
