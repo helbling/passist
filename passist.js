@@ -490,6 +490,9 @@ var app = new Vue({
 			this.gen_period = period;
 			this.gen_n_jugglers = n_jugglers;
 
+			min = min || 0;
+			max = max || 0;
+
 			function filters(input) {
 				input = input.trim();
 				return input ? input.split(/ /) : [];
@@ -505,13 +508,6 @@ var app = new Vue({
 			}
 
 			var output_result = function(canonic, heights) {
-				// check if number of objects maches
-				var sum = 0;
-				for (var i = 0; i < period; i++)
-					sum += heights[i];
-				if (sum != objects * period)
-					return false;
-
 				// check if it is a smaller period
 				for (var p = 1; p < period; p++) {
 					if (period % p == 0) {
@@ -549,6 +545,7 @@ var app = new Vue({
 			var steps = 0;
 			var t = [];
 			var landing = new Array(period);
+			var sum = 0;
 			var i = 0;
 			while (i >= 0) {
 // 				steps++;
@@ -559,28 +556,35 @@ var app = new Vue({
 						seen[c] = true;
 						if (output_result(c, t)) {
 							result.push(c);
-							if (result.length > 100)
+							if (result.length >= 100)
 								break; // TODO: mechanism to add more siteswaps when scrolling down
 						}
 					}
 
 					i--;
 				} else {
-					if (t[i])
+					if (t[i]) {
 						landing[(i + t[i]) % period] = false;
+						sum -= t[i];
+					}
 
-					t[i] = (t[i] == undefined) ? min : t[i] + 1;
+					var min_t = Math.max(min, objects * period - sum - (period - i - 1) * max);
+					var max_t = Math.min(max, objects * period - sum - (period - i - 1) * min);
 
-					while (t[i] <= max + 1 && landing[(i + t[i]) % period])
+					t[i] = (t[i] == undefined) ? min_t : t[i] + 1;
+
+					while (t[i] <= max_t + 1 && landing[(i + t[i]) % period])
 						t[i]++;
 
-					if (t[i] > max) {
+					if (t[i] > max_t) {
 						t[i] = undefined;
 						i--;
 						continue;
 					}
 
 					landing[(i + t[i]) % period] = true;
+					sum += t[i];
+
 					i++;
 				}
 			}
