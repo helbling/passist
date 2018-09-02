@@ -471,6 +471,7 @@ var app = new Vue({
 		},
 
 		gen_list: function() {
+// 			console.time('gen_list');
 			var canonic = function(siteswap) {
 				var out = this.output_siteswap(siteswap);
 				var shifts = [];
@@ -489,14 +490,6 @@ var app = new Vue({
 			this.gen_period = period;
 			this.gen_n_jugglers = n_jugglers;
 
-			var check_min_max = function(siteswap) {
-				for (var i = 0; i < siteswap.length; i++)
-					if (siteswap[i] < min || siteswap[i] > max)
-						return false;
-				return true;
-			}
-
-
 			function filters(input) {
 				input = input.trim();
 				return input ? input.split(/ /) : [];
@@ -512,6 +505,13 @@ var app = new Vue({
 			}
 
 			var output_result = function(canonic, heights) {
+				// check if number of objects maches
+				var sum = 0;
+				for (var i = 0; i < period; i++)
+					sum += heights[i];
+				if (sum != objects * period)
+					return false;
+
 				// check if it is a smaller period
 				for (var p = 1; p < period; p++) {
 					if (period % p == 0) {
@@ -544,45 +544,49 @@ var app = new Vue({
 				return true;
 			}
 
-			var visited = {};
-			var stack = [];
-
-			var a = (new Array(period)).fill(objects);
-			if (check_min_max(a))
-				stack.push(a);
-
+			var seen = {};
 			var result = [];
-			while (stack.length) {
-				var a = stack.pop();
-				var c = canonic(a);
-				if (visited[c])
-					continue;
-				visited[c] = true;
+			var steps = 0;
+			var t = [];
+			var landing = new Array(period);
+			var i = 0;
+			while (i >= 0) {
+// 				steps++;
 
-				if (output_result(c, a))
-					result.push(c);
-
-				if (result.length >= 100)
-					break;
-
-				var shifts = [];
-				for (var i = 0; i < period; i++)
-					shifts.push(a.slice(i).concat(a.slice(0, i)));
-
-				for (var k = 0; k < period; k++) {
-					for (var i = 0; i < period - 1; i++) {
-						for (var j = i + 1; j < period; j++) {
-							// swap positions i and j
-							var b = shifts[k].slice(0); // copy of a
-							b[i] = shifts[k][j] + j - i;
-							b[j] = shifts[k][i] - j + i;
-							if (check_min_max(b))
-								stack.push(b);
+				if (i == period) {
+					var c = canonic(t);
+					if (!seen[c]) {
+						seen[c] = true;
+						if (output_result(c, t)) {
+							result.push(c);
+							if (result.length > 100)
+								break; // TODO: mechanism to add more siteswaps when scrolling down
 						}
 					}
+
+					i--;
+				} else {
+					if (t[i])
+						landing[(i + t[i]) % period] = false;
+
+					t[i] = (t[i] == undefined) ? min : t[i] + 1;
+
+					while (t[i] <= max + 1 && landing[(i + t[i]) % period])
+						t[i]++;
+
+					if (t[i] > max) {
+						t[i] = undefined;
+						i--;
+						continue;
+					}
+
+					landing[(i + t[i]) % period] = true;
+					i++;
 				}
 			}
-// 			console.log(result.length);
+
+// 			console.log('new: steps:', steps, 'found:', result.length);
+// 			console.timeEnd('gen_list');
 			return result;
 		},
 	},
