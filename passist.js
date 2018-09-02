@@ -501,16 +501,6 @@ var app = new Vue({
 			var exclude_filters = filters(this.gen_exclude);
 			var include_filters = filters(this.gen_include);
 
-			function get_height(siteswap, i) {
-				var x = siteswap.charCodeAt(i);
-				if (x >= 48 && x <= 57)
-					return x - 48;
-				else if (x >= 97 && x <= 122)
-					return x - 87;
-				else
-					throw "invalid character in siteswap: " + siteswap.charAt(i);
-			}
-
 			function exclude(str) {
 				return exclude_filters.some(function(filter) { return str.match(filter);});
 			}
@@ -536,7 +526,7 @@ var app = new Vue({
 
 					var n_passes = 0;
 					for (var i = 0; i < period; i++) {
-						if (get_height(canonic, i) % n_jugglers)
+						if (this.get_height(canonic, i) % n_jugglers)
 							n_passes++;
 					}
 					// TODO: let user specify n_passes range
@@ -549,7 +539,7 @@ var app = new Vue({
 					return false;
 
 				return true;
-			}
+			}.bind(this);
 
 			var seen = {};
 			var result = [];
@@ -621,6 +611,15 @@ var app = new Vue({
 				x = +x;
 				return x <= 9 ? String(x) : String.fromCharCode('a'.charCodeAt(0) + x - 10);
 			}).join('');
+		},
+		get_height: function(siteswap, i) {
+			var x = siteswap.charCodeAt(i);
+			if (x >= 48 && x <= 57)
+				return x - 48;
+			else if (x >= 97 && x <= 122)
+				return x - 87;
+			else
+				throw "invalid character in siteswap: " + siteswap.charAt(i);
 		},
 	},
 	mounted: function() {
