@@ -110,6 +110,8 @@ var generator_col = [
 		input_field({id:'gen_exclude',     label:'Exclude', type:'search'}),
 	),
 
+	h5({class:'mt-4'}, '{{gen_list.length}} siteswaps found'),
+
 	ul({class:'mt-4 siteswap_list'},
 		li({'v-for': 's in gen_list'},
 			span({'v-if':'s == "timeout"'}, "generator timeout :("),
@@ -473,13 +475,8 @@ var app = new Vue({
 
 		gen_list: function() {
 			var t0 = performance.now();
-			var canonic = function(siteswap) {
-				var out = this.output_siteswap(siteswap);
-				var shifts = [];
-				for (var i = 0; i < period; i++)
-					shifts.push(out.slice(i) + out.slice(0, i));
-				return shifts.sort()[period - 1];
-			}.bind(this);
+
+
 			var min = Math.max(0, Math.min(35, parseInt(this.gen_min_throw)));
 			var max = Math.max(0, Math.min(35, parseInt(this.gen_max_throw)));
 			var objects = Math.max(0, Math.min(35, parseInt(this.gen_objects)));
@@ -494,6 +491,12 @@ var app = new Vue({
 			min = min || 0;
 			max = max || 0;
 
+			var is_canonic = function(siteswap) {
+				var shifts = [];
+				for (var i = 0; i < period; i++)
+					shifts.push(siteswap.slice(i) + siteswap.slice(0, i));
+				return shifts.sort()[period - 1] == siteswap;
+			};
 			function filters(input) {
 				input = input.trim();
 				return input ? input.split(/ /) : [];
@@ -541,11 +544,10 @@ var app = new Vue({
 				return true;
 			}.bind(this);
 
-			var seen = {};
 			var result = [];
 			var steps = 0;
 			var heights = new Array(period).fill(-1);
-			var landing = new Array(period);
+			var landing = new Array(period).fill(0);
 			var sum = 0;
 			var i = 0;
 			while (i >= 0) {
@@ -560,14 +562,11 @@ var app = new Vue({
 				}
 
 				if (i == period) {
-					var c = canonic(heights);
-					if (!seen[c]) {
-						seen[c] = true;
-						if (final_check(c)) {
-							result.push(c);
-							if (result.length >= 100)
-								break; // TODO: mechanism to add more siteswaps when scrolling down
-						}
+					var c = this.output_siteswap(heights);
+					if (is_canonic(c) && final_check(c)) {
+						result.push(c);
+						if (result.length >= 100)
+							break; // TODO: mechanism to add more siteswaps when scrolling down
 					}
 
 					i--;
