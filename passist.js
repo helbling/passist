@@ -572,17 +572,20 @@ var app = new Vue({
 
 					i--;
 				} else {
-					var min_t = Math.max(min, objects * period - sum - (period - i - 1) * max);
-					var max_t = Math.min(max, objects * period - sum - (period - i - 1) * min);
-
 					var h = heights[i];
-					if (h < 0) {
-						heights[i] = min_t;
-					} else {
+					if (h >= 0) {
 						landing[(i + h) % period] = 0;
 						sum -= h;
 						heights[i]++;
 					}
+
+					var min_t = Math.max(min, objects * period - sum - (period - i - 1) * max);
+					var max_t = Math.min(max, objects * period - sum - (period - i - 1) * min);
+					if (i > 1)
+						max_t = Math.min(heights[0], max_t); // otherwise siteswap would not be canonic anymore
+
+					if (h < 0)
+						heights[i] = min_t;
 
 					while (heights[i] <= max_t + 1 && landing[(i + heights[i]) % period])
 						heights[i]++;
