@@ -32,7 +32,7 @@ var tag = function (tag) {
 
 		var attributes = '';
 		for (var key in args)
-			attributes += ' ' + key + '="' + args[key] + '"';
+			attributes += ' ' + key + '="' + ("" + args[key]).replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;") + '"';
 
 		return '<' + tag + attributes + '>' + content + '</' + tag + '>';
 	};
