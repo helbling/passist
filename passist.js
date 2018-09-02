@@ -112,7 +112,8 @@ var generator_col = [
 
 	ul({class:'mt-4 siteswap_list'},
 		li({'v-for': 's in gen_list'},
-			a({href:'#siteswap_col', 'v-on:click':'siteswap_input = s; n_jugglers_input = gen_n_jugglers'}, span({class:'siteswap'}, '{{s}}')),
+			span({'v-if':'s == "timeout"'}, "generator timeout :("),
+			a({'v-else':'v-else', href:'#siteswap_col', 'v-on:click':'siteswap_input = s; n_jugglers_input = gen_n_jugglers'}, span({class:'siteswap'}, '{{s}}')),
 		),
 	),
 ].join('');
@@ -471,7 +472,7 @@ var app = new Vue({
 		},
 
 		gen_list: function() {
-// 			console.time('gen_list');
+			var t0 = performance.now();
 			var canonic = function(siteswap) {
 				var out = this.output_siteswap(siteswap);
 				var shifts = [];
@@ -508,7 +509,7 @@ var app = new Vue({
 			}
 
 			var output_result = function(canonic, heights) {
-				// check if it is a smaller period
+				// check if it is a smaller period which is repeated
 				for (var p = 1; p < period; p++) {
 					if (period % p == 0) {
 						// splits canonic into period / i chunks of i characters
@@ -548,7 +549,15 @@ var app = new Vue({
 			var sum = 0;
 			var i = 0;
 			while (i >= 0) {
-// 				steps++;
+				steps++;
+
+				if (steps % 1000 == 0) {
+					var t1 = performance.now();
+					if (t1 - t0 > 1000) {
+						result.push("timeout");
+						return result;
+					}
+				}
 
 				if (i == period) {
 					var c = canonic(t);
@@ -589,8 +598,8 @@ var app = new Vue({
 				}
 			}
 
-// 			console.log('new: steps:', steps, 'found:', result.length);
-// 			console.timeEnd('gen_list');
+// 			var t1 = performance.now();
+// 			console.log('new: steps:', steps, 'found:', result.length, 'time [ms]:', Math.round(t1 - t0));
 			return result;
 		},
 	},
