@@ -501,6 +501,16 @@ var app = new Vue({
 			var exclude_filters = filters(this.gen_exclude);
 			var include_filters = filters(this.gen_include);
 
+			function get_height(siteswap, i) {
+				var x = siteswap.charCodeAt(i);
+				if (x >= 48 && x <= 57)
+					return x - 48;
+				else if (x >= 97 && x <= 122)
+					return x - 87;
+				else
+					throw "invalid character in siteswap: " + siteswap.charAt(i);
+			}
+
 			function exclude(str) {
 				return exclude_filters.some(function(filter) { return str.match(filter);});
 			}
@@ -508,7 +518,7 @@ var app = new Vue({
 				return include_filters.every(function(filter) { return str.match(filter);});
 			}
 
-			var output_result = function(canonic, heights) {
+			var final_check = function(canonic) {
 				// check if it is a smaller period which is repeated
 				for (var p = 1; p < period; p++) {
 					if (period % p == 0) {
@@ -526,7 +536,7 @@ var app = new Vue({
 
 					var n_passes = 0;
 					for (var i = 0; i < period; i++) {
-						if (heights[i] % n_jugglers)
+						if (get_height(canonic, i) % n_jugglers)
 							n_passes++;
 					}
 					// TODO: let user specify n_passes range
@@ -544,7 +554,7 @@ var app = new Vue({
 			var seen = {};
 			var result = [];
 			var steps = 0;
-			var t = [];
+			var heights = new Array(period).fill(-1);
 			var landing = new Array(period);
 			var sum = 0;
 			var i = 0;
@@ -560,10 +570,10 @@ var app = new Vue({
 				}
 
 				if (i == period) {
-					var c = canonic(t);
+					var c = canonic(heights);
 					if (!seen[c]) {
 						seen[c] = true;
-						if (output_result(c, t)) {
+						if (final_check(c)) {
 							result.push(c);
 							if (result.length >= 100)
 								break; // TODO: mechanism to add more siteswaps when scrolling down
@@ -572,27 +582,29 @@ var app = new Vue({
 
 					i--;
 				} else {
-					if (t[i]) {
-						landing[(i + t[i]) % period] = false;
-						sum -= t[i];
-					}
-
 					var min_t = Math.max(min, objects * period - sum - (period - i - 1) * max);
 					var max_t = Math.min(max, objects * period - sum - (period - i - 1) * min);
 
-					t[i] = (t[i] == undefined) ? min_t : t[i] + 1;
+					var h = heights[i];
+					if (h < 0) {
+						heights[i] = min_t;
+					} else {
+						landing[(i + h) % period] = 0;
+						sum -= h;
+						heights[i]++;
+					}
 
-					while (t[i] <= max_t + 1 && landing[(i + t[i]) % period])
-						t[i]++;
+					while (heights[i] <= max_t + 1 && landing[(i + heights[i]) % period])
+						heights[i]++;
 
-					if (t[i] > max_t) {
-						t[i] = undefined;
+					if (heights[i] > max_t) {
+						heights[i] = -1;
 						i--;
 						continue;
 					}
 
-					landing[(i + t[i]) % period] = true;
-					sum += t[i];
+					landing[(i + heights[i]) % period] = 1;
+					sum += heights[i];
 
 					i++;
 				}
