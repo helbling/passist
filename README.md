@@ -1,6 +1,8 @@
 # passist
 passing siteswap assistant
 
+https://passist.org/
+
 Work in progress.
 Generates siteswaps, writes the starting throws and a causal diagram.
 
