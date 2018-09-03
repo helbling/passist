@@ -567,8 +567,8 @@ var app = new Vue({
 					var c = this.output_siteswap(heights);
 					if (is_canonic(c) && final_check(c)) {
 						result.push(c);
-						if (result.length >= 100)
-							break; // TODO: mechanism to add more siteswaps when scrolling down
+// 						if (result.length >= 100)
+// 							break; // TODO: mechanism to add more siteswaps when scrolling down
 					}
 
 					i--;
