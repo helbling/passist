@@ -112,10 +112,12 @@ var generator_col = [
 
 	h5({class:'mt-4'}, '{{gen_list.length}} siteswaps found'),
 
-	ul({class:'mt-4 siteswap_list'},
-		li({'v-for': 's in gen_list'},
-			span({'v-if':'s == "timeout"'}, "generator timeout :("),
-			a({'v-else':'v-else', href:'#siteswap_col', 'v-on:click':'siteswap_input = s; n_jugglers_input = gen_n_jugglers'}, span({class:'siteswap'}, '{{s}}')),
+	div({class:'siteswap_scroll'},
+		ul({class:'mt-4 siteswap_list'},
+			li({'v-for': 's in gen_list'},
+				span({'v-if':'s == "timeout"'}, "generator timeout :("),
+				a({'v-else':'v-else', href:'#siteswap_col', 'v-on:click':'siteswap_input = s; n_jugglers_input = gen_n_jugglers'}, span({class:'siteswap'}, '{{s}}')),
+			),
 		),
 	),
 ].join('');

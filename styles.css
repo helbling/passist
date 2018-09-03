@@ -15,6 +15,7 @@ circle { stroke:#343a40 }
 circle.right_hand { fill:white }
 circle.left_hand  { fill:#b7c8d5 }
 .node_label { fill: #343a40 }
+.siteswap_scroll { max-height:20em; overflow-y:auto }
 ul.siteswap_list { padding-left:1em; column-width:20em }
 .generator ul.siteswap_list { column-width:8em }
 ul.siteswap_list li { list-style-type:none }
