@@ -56,8 +56,8 @@ var card = function() {
 	return div({class:'card mb-4'},
 		args.title ? div({class:'card-header'}, args.title) : '',
 		div({class:'card-body'},
-			content,
-		),
+			content
+		)
 	);
 };
 
@@ -84,17 +84,17 @@ function input_field(p) {
 		label({
 			class: 'sr-only',
 			for:   p.id,
-			}, title,
+			}, title
 		),
 		div({class:'input-group ' + p.id},
 			div({class:'input-group-prepend'},
 				div({
 					class: 'input-group-text',
 					title: title,
-					}, p.label,
-				),
+					}, p.label
+				)
 			),
-			input(input_attr),
+			input(input_attr)
 		),
 	].join('');
 }
@@ -107,7 +107,7 @@ var generator_col = [
 		input_field({id:'gen_min_throw',   label:'Min throw', type:'number', min:0, max:35 }),
 		input_field({id:'gen_n_jugglers',  label:'👥', title:'Number of jugglers', type:'number', min:0, max:9 }),
 		input_field({id:'gen_include',     label:'Include', type:'search', placeholder:'e.g. 2 8'}),
-		input_field({id:'gen_exclude',     label:'Exclude', type:'search'}),
+		input_field({id:'gen_exclude',     label:'Exclude', type:'search'})
 	),
 
 	h5({class:'mt-4'}, '{{gen_list.length}} siteswaps found'),
@@ -116,9 +116,9 @@ var generator_col = [
 		ul({class:'mt-4 siteswap_list'},
 			li({'v-for': 's in gen_list'},
 				span({'v-if':'s == "timeout"'}, "generator timeout :("),
-				a({'v-else':'v-else', href:'#siteswap_col', 'v-on:click':'siteswap_input = s; n_jugglers_input = gen_n_jugglers'}, span({class:'siteswap'}, '{{s}}')),
-			),
-		),
+				a({'v-else':'v-else', href:'#siteswap_col', 'v-on:click':'siteswap_input = s; n_jugglers_input = gen_n_jugglers'}, span({class:'siteswap'}, '{{s}}'))
+			)
+		)
 	),
 ].join('');
 
@@ -140,7 +140,7 @@ var causal_diagram = svg(
 			path({
 				class: 'arrow_fill',
 				d: 'M0,0 L0,6 L9,3 z',
-			}),
+			})
 		)
 	),
 	rect({
@@ -160,7 +160,7 @@ var causal_diagram = svg(
 		'stroke-width': '0px',
 		'stroke': 'black',
 	},
-	'{{j.name}}',
+	'{{j.name}}'
 	),
 	circle({
 		'v-for': "(n, i) in causal_diagram.nodes",
@@ -181,7 +181,7 @@ var causal_diagram = svg(
 		'stroke-width': '0px',
 		'text-anchor': 'middle',
 	},
-	'{{n.label}}',
+	'{{n.label}}'
 	),
 	path({
 		'class': 'arrow_stroke',
@@ -191,52 +191,52 @@ var causal_diagram = svg(
 		'stroke-width': '2px',
 		'fill': 'none',
 		'marker-end': "url(#arrow)",
-	}),
+	})
 );
 
 var siteswap_col = [
 	div({class:'form-inline'},
 		input_field({id:'siteswap_input',  label:'Siteswap', type:'search', attr:{ inputmode: 'verbatim', pattern:'[0-9a-zA-Z ]+', ':class':'validClass', size:10 }}),
-		input_field({id:'n_jugglers_input',  label:'👥', title:'Number of jugglers', type:'number', min:0, max:9 }),
+		input_field({id:'n_jugglers_input',  label:'👥', title:'Number of jugglers', type:'number', min:0, max:9 })
 	),
 	div({'v-if': 'valid'},
 		p(
 			'{{n_objects}} objects, period {{period}}',
-			span({'v-if': 'n_jugglers > 1'}, ', interface: {{interface}}'),
+			span({'v-if': 'n_jugglers > 1'}, ', interface: {{interface}}')
 		 ),
 		div({'v-if': 'n_jugglers > 1'},
 			h4('Local'),
-			table(tr({'v-for': "j in jugglers"}, th('{{j.name}}', sub('{{j.start}}')), td({'v-html':'j.local'}))),
-		   ),
+			table(tr({'v-for': "j in jugglers"}, th('{{j.name}}', sub('{{j.start}}')), td({'v-html':'j.local'})))
+		),
 		h4('Causal diagram'),
 		div({class:'causal_diagram'},
-			causal_diagram,
-	   ),
+			causal_diagram
+		)
 	),
 ].join('');
 
 var template = div({class:'container'},
 	div({class:'row'},
 		div({class: 'col generator'},
-			card({title:'Generator'}, generator_col),
-		),
+			card({title:'Generator'}, generator_col)
+		)
 	), div({class:'row'},
 		div({id:'siteswap_col', class: 'col siteswap'},
-			card({title:'Siteswap'}, siteswap_col),
-		),
+			card({title:'Siteswap'}, siteswap_col)
+		)
 	), div({class:'row'},
 		div({class: 'col known_siteswaps'},
 			card({title:'Well-known siteswaps'},
 				p(small('© Tilman Sinning, ', a({href: 'https://github.com/namlit/siteswap_generator'}, 'Siteswap Generator'))),
 				ul({class:'siteswap_list'},
 					li({'v-for': 's in known_siteswaps'},
-						a({href:'#siteswap_col', 'v-on:click':'siteswap_input = s[0]; n_jugglers_input = s[1]'}, span({class:'siteswap'}, '{{s[0]}}'), span({class:'name'}, '{{s[2]}}')),
-					),
-				),
-			),
-		),
+						a({href:'#siteswap_col', 'v-on:click':'siteswap_input = s[0]; n_jugglers_input = s[1]'}, span({class:'siteswap'}, '{{s[0]}}'), span({class:'name'}, '{{s[2]}}'))
+					)
+				)
+			)
+		)
 	),
-	div({class:'padding_bottom'}), // add some white space to the page end so that we never loose the scroll position when editing the siteswap
+	div({class:'padding_bottom'}) // add some white space to the page end so that we never loose the scroll position when editing the siteswap
 );
 
 var known_siteswaps = [
@@ -402,7 +402,7 @@ var app = new Vue({
 							desc = sub(desc);
 						}
 						return this.output_siteswap([t]) + desc + '&nbsp;';
-					}.bind(this)).join(' ',),
+					}.bind(this)).join(' '),
 					name:  name(juggler),
 					start: start_hands[n_jugglers + juggler] + '|' + start_hands[juggler],
 				};
