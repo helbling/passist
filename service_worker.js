@@ -12,8 +12,8 @@ self.addEventListener('install', function(e) {
 				'/vue.js',
 				'/passist.js',
 				'/images/cube.svg',
-				'/images/icon192.png',
-				'/images/icon512.png',
+				'/images/icon-192x192.png',
+				'/images/icon-512x192.png',
 				'/favicon.ico',
 				'/manifest.json',
 			]);
