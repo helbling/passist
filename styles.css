@@ -26,4 +26,5 @@ ul.siteswap_list { padding-left:1em; column-width:20em }
 ul.siteswap_list li { list-style-type:none }
 .known_siteswaps li .siteswap { display:inline-block; width:5em ; vertical-align:top}
 .known_siteswaps li .name { display:inline-block; text-overflow:ellipsis; width:15em }
+.local_throws { overflow-x:auto; margin-bottom:1em }
 /* .padding_bottom { height:30em } */

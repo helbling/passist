@@ -208,9 +208,16 @@ var siteswap_col = [
 			'{{n_objects}} objects, period {{period}}',
 			span({'v-if': 'n_jugglers > 1'}, ', interface: {{interface}}')
 		 ),
-		div({'v-if': 'n_jugglers > 1'},
-			h4('Local'),
-			table(tr({'v-for': "j in jugglers"}, th('{{j.name}}', sub('{{j.start}}')), td({'v-html':'j.local'})))
+		div({'v-if': 'n_jugglers > 1', class:'local_throws'},
+			table(
+				tr(td('Local&nbsp;'), td({':colspan':'period + 1'}, 'Siteswap'), td({':colspan':'period'}, 'Prechac')),
+				tr({'v-for': "j in jugglers"},
+					th('{{j.name}}', sub('{{j.start}}')),
+					td({'v-for': "t in j.local", 'v-html':'t.siteswap + t.desc + "&nbsp;"'}),
+					td({class:"px-3"}, ''),
+					td({'v-for': "t in j.local", 'v-html':'t.prechac + t.desc + "&nbsp;"'})
+				)
+			)
 		),
 		h4('Causal diagram'),
 		div({class:'causal_diagram'},
@@ -405,8 +412,12 @@ var app = new Vue({
 							desc += left(a) == left(b) ? 'X' : '||';
 							desc = sub(desc);
 						}
-						return this.output_siteswap([t]) + desc + '&nbsp;';
-					}.bind(this)).join(' '),
+						return {
+							siteswap: this.output_siteswap([t]),
+							prechac:  this.prechac(t, n_jugglers),
+							desc: desc ? desc : '&nbsp;'
+						};
+					}.bind(this)),
 					name:  name(juggler),
 					start: start_hands[n_jugglers + juggler] + '|' + start_hands[juggler],
 				};
@@ -619,6 +630,9 @@ var app = new Vue({
 				x = +x;
 				return x <= 9 ? String(x) : String.fromCharCode('a'.charCodeAt(0) + x - 10);
 			}).join('');
+		},
+		prechac: function(x, n_jugglers) {
+			return +x / n_jugglers;
 		},
 		get_height: function(siteswap, i) {
 			var x = siteswap.charCodeAt(i);
