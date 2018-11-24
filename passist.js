@@ -215,12 +215,22 @@ var siteswap_col = [
 		 ),
 		div({'v-if': 'n_jugglers > 1', class:'local_throws'},
 			table(
-				tr(td('Local&nbsp;'), td({':colspan':'local_period + 1'}, 'Siteswap'), td({':colspan':'local_period'}, 'Prechac')),
+				tr(
+					td('Local&nbsp;'),
+					td({':colspan':'local_period + 1'}, 'Siteswap'),
+					td({':colspan':'local_period + 1'},
+						a({'v-if': 'n_jugglers == 2', ':href':'prechacthis_url'}, 'Prechac'),
+						span({'v-else':true}, 'Prechac')
+					),
+					td({'v-if': 'n_jugglers == 2', ':colspan':'local_period'},     'Words')
+				),
 				tr({'v-for': "j in jugglers"},
 					th('{{j.name}}', sub('{{j.start}}')),
 					td({'v-for': "t in j.local", 'v-html':'t.siteswap + t.desc + "&nbsp;"'}),
 					td({class:"px-3"}, ''),
-					td({'v-for': "t in j.local", 'v-html':'t.prechac + t.desc + "&nbsp;"'})
+					td({'v-for': "t in j.local", 'v-html':'t.prechac + t.desc + "&nbsp;"'}),
+					td({'v-if': 'n_jugglers == 2', class:"px-3"}, ''),
+					td({'v-if': 'n_jugglers == 2', 'v-for': "t in j.local", 'v-html':'t.word + ",&nbsp;"'})
 				)
 			)
 		),
@@ -422,8 +432,10 @@ var app = new Vue({
 							desc = sub(desc);
 						}
 						return {
+							height: t,
 							siteswap: this.output_siteswap([t]),
 							prechac:  this.prechac(t, n_jugglers),
+							word:  this.word(t),
 							desc: desc ? desc : '&nbsp;'
 						};
 					}.bind(this)),
@@ -632,6 +644,11 @@ var app = new Vue({
 // 			console.log('new: steps:', steps, 'found:', result.length, 'time [ms]:', Math.round(t1 - t0));
 			return result;
 		},
+		prechacthis_url: function() {
+			return 'http://prechacthis.org/info.php?pattern=['
+			       + this.jugglers[0].local.map(function(x) { h = x.height / 2; return 'p(' + h + (+x.height & 1 ? ',1,' + (h + this.local_period / 2) : ',0,' + h) + ')';}.bind(this)).join(',')
+			       + ']&persons=2';
+		}
 	},
 	methods: {
 		output_siteswap: function(siteswap) {
@@ -642,6 +659,23 @@ var app = new Vue({
 		},
 		prechac: function(x, n_jugglers) {
 			return +x / n_jugglers;
+		},
+		word: function(x) {
+			var word = [
+				'wait',
+				1,
+				'zip',
+				3,
+				'hold',
+				'zap',
+				'self',
+				'pass',
+				'heff',
+				'double',
+				'triple self',
+				'triple pass'
+			][x];
+			return word ? word : x;
 		},
 		get_height: function(siteswap, i) {
 			var x = siteswap.charCodeAt(i);
