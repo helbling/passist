@@ -204,13 +204,18 @@ var siteswap_col = [
 		input_field({id:'n_jugglers_input',  label:'👥', title:'Number of jugglers', type:'number', min:0, max:9 })
 	),
 	div({'v-if': 'valid'},
+		h2(
+			a({class:'arrow', 'v-on:click':'siteswap_input = output_siteswap(shift(siteswap))'}, '◄'), // ⯇
+			' {{output_siteswap(siteswap)}} ',
+			a({class:'arrow', 'v-on:click':'siteswap_input = output_siteswap(unshift(siteswap))'}, '►') // ⯈
+		),
 		p(
 			'{{n_objects}} objects, period {{period}}',
-			span({'v-if': 'n_jugglers > 1'}, ', interface: {{interface}}')
+// 			span({'v-if': 'n_jugglers > 1'}, ', interface: {{interface}}')
 		 ),
 		div({'v-if': 'n_jugglers > 1', class:'local_throws'},
 			table(
-				tr(td('Local&nbsp;'), td({':colspan':'period + 1'}, 'Siteswap'), td({':colspan':'period'}, 'Prechac')),
+				tr(td('Local&nbsp;'), td({':colspan':'local_period + 1'}, 'Siteswap'), td({':colspan':'local_period'}, 'Prechac')),
 				tr({'v-for': "j in jugglers"},
 					th('{{j.name}}', sub('{{j.start}}')),
 					td({'v-for': "t in j.local", 'v-html':'t.siteswap + t.desc + "&nbsp;"'}),
@@ -339,6 +344,9 @@ var app = new Vue({
 		},
 		period: function() {
 			return this.siteswap.length;
+		},
+		local_period: function() {
+			return this.period % this.n_jugglers == 0 ? this.period / this.n_jugglers : this.period
 		},
 		n_objects: function() {
 			return this.siteswap.reduce(function(a, b) { return a + b}) / this.period;
@@ -644,6 +652,16 @@ var app = new Vue({
 			else
 				throw "invalid character in siteswap: " + siteswap.charAt(i);
 		},
+		shift: function(siteswap) {
+			var first = siteswap.shift();
+			siteswap.push(first);
+			return siteswap;
+		},
+		unshift: function(siteswap) {
+			var last = siteswap.pop();
+			siteswap.unshift(last);
+			return siteswap;
+		}
 	},
 	mounted: function() {
 		var siteswap = localStorage.getItem('siteswap');
