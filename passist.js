@@ -392,8 +392,9 @@ var app = new Vue({
 			var result = new Array(n_jugglers);
 			for (var juggler = 0; juggler < n_jugglers; juggler++) {
 				var period = this.period;
-				var local = new Array(period);
-				for (var i = 0; i < (period % n_jugglers == 0 ? period / n_jugglers : period); i++)
+				var local_period = period % n_jugglers == 0 ? period / n_jugglers : period;
+				var local = new Array(local_period);
+				for (var i = 0; i < local_period; i++)
 					local[i] = String(this.siteswap[(juggler + i * n_jugglers) % period]);
 				var name = function(i) {
 					return String.fromCharCode('A'.charCodeAt(0) + i);
