@@ -253,7 +253,7 @@ var template = div({class:'container'},
 	), div({class:'row'},
 		div({class: 'col known_siteswaps'},
 			card({title:'Well-known siteswaps'},
-				p(small('© Tilman Sinning, ', a({href: 'https://github.com/namlit/siteswap_generator'}, 'Siteswap Generator'))),
+				p(small('© Christian Kästner, ', a({href: 'https://github.com/ckaestne/CompatSiteswaps/blob/master/named-siteswaps.txt'}, 'named-siteswaps.txt'))),
 				ul({class:'siteswap_list'},
 					li({'v-for': 's in known_siteswaps'},
 						a({href:'#siteswap_col', 'v-on:click':'siteswap_input = s[0]; n_jugglers_input = s[1]'}, span({class:'siteswap'}, '{{s[0]}}'), span({class:'name'}, '{{s[2]}}'))
