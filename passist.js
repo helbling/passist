@@ -560,7 +560,15 @@ var app = new Vue({
 				return shifts.sort()[period - 1] == siteswap;
 			};
 			function filters(input) {
-				input = input.trim();
+				var selfs = [];
+				var passes = [];
+				for (var i = min; i <= max; i++) {
+					if (i % n_jugglers)
+						passes.push(i);
+					else
+						selfs.push(i);
+				}
+				input = input.trim().replace(/s/gi, '[' + selfs.join('') + ']').replace(/p/gi, '[' + passes.join('') + ']');
 				return input ? input.split(/ /) : [];
 			}
 			var exclude_filters = filters(this.gen_exclude);
