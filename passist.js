@@ -324,7 +324,7 @@ var known_siteswaps = [
 	["9784966", "7 club Jim's 2 count (variation)"],
 	["9784786", "7 club Jim's 2 count (variation)"],
 	["b64", "Odd Scots"],
-	["767872782", "Self Centered"],
+	["726778827", "Self Centered"],
 	["7747746677466", "Jim's ppsps (async)"],
 	["8686777", "Vitoria"],
 	["7742744", "Flipalot"],
