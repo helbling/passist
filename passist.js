@@ -207,10 +207,11 @@ var siteswap_col = [
 		h2(
 			a({class:'arrow', 'v-on:click':'siteswap_input = output_siteswap(shift(siteswap))'}, '◄'), // ⯇
 			' {{output_siteswap(siteswap)}} ',
-			a({class:'arrow', 'v-on:click':'siteswap_input = output_siteswap(unshift(siteswap))'}, '►') // ⯈
+			a({class:'arrow', 'v-on:click':'siteswap_input = output_siteswap(unshift(siteswap))'}, '►'), // ⯈
+			span({'v-if': 'siteswap_name'}, ' {{siteswap_name}}')
 		),
 		p(
-			'{{n_objects}} objects, period {{period}}',
+			'{{n_objects}} objects, period {{period}}'
 // 			span({'v-if': 'n_jugglers > 1'}, ', interface: {{interface}}')
 		 ),
 		div({'v-if': 'n_jugglers > 1', class:'local_throws'},
@@ -680,6 +681,17 @@ var app = new Vue({
 			return 'http://prechacthis.org/info.php?pattern=['
 			       + this.jugglers[0].local.map(function(x) { h = x.height / 2; return 'p(' + h + (+x.height & 1 ? ',1,' + (h + this.local_period / 2) : ',0,' + h) + ')';}.bind(this)).join(',')
 			       + ']&persons=2';
+		},
+		siteswap_names: function() {
+			var result = {}
+			for (var i in this.known_siteswaps) {
+				var ss = this.known_siteswaps[i];
+				result[this.canonic_siteswap(ss[0])] = ss[1];
+			}
+			return result;
+		},
+		siteswap_name: function() {
+			return this.siteswap_names[this.canonic_siteswap(this.output_siteswap(this.siteswap))];
 		}
 	},
 	methods: {
@@ -688,6 +700,13 @@ var app = new Vue({
 				x = +x;
 				return x <= 9 ? String(x) : String.fromCharCode('a'.charCodeAt(0) + x - 10);
 			}).join('');
+		},
+		canonic_siteswap: function(siteswap) {
+			var period = siteswap.length;
+			var shifts = [];
+			for (var i = 0; i < period; i++)
+				shifts.push(siteswap.slice(i) + siteswap.slice(0, i));
+			return shifts.sort()[period - 1];
 		},
 		prechac: function(x, n_jugglers) {
 			return +x / n_jugglers;
