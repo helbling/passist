@@ -703,7 +703,7 @@ var app = new Vue({
 			return shifts.sort()[period - 1];
 		},
 		prechac: function(x, n_jugglers) {
-			return +x / n_jugglers;
+			return Math.round(+x / n_jugglers * 100) / 100;
 		},
 		word: function(x) {
 			var word = [
