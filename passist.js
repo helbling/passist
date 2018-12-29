@@ -521,7 +521,7 @@ var app = new Vue({
 					class: (Math.floor(i / n_jugglers) % 2) ? 'left_hand' : 'right_hand',
 					juggler: juggler(i),
 					label: this.output_siteswap(this.siteswap).charAt(pos),
-					arrow: cur_throw ? arrow(i, this.siteswap[pos] - 2 * n_jugglers) : undefined, // for ladder diagram: don't subtract 2 * n_jugglers
+					arrow: arrow(i, this.siteswap[pos] - 2 * n_jugglers), // for ladder diagram: don't subtract 2 * n_jugglers
 				});
 			}
 
