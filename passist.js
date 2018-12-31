@@ -231,7 +231,7 @@ var siteswap_col = [
 			span({'v-if': 'siteswap_name'}, ' {{siteswap_name}}')
 		),
 		p(
-			'{{n_objects}} objects, period {{period}}'
+			'{{n_objects}} objects, period {{period}}, rethrows {{rethrows(siteswap)}}'
 // 			span({'v-if': 'n_jugglers > 1'}, ', interface: {{interface}}')
 		 ),
 		div({'v-if': 'n_jugglers > 1', class:'local_throws'},
@@ -761,6 +761,22 @@ var app = new Vue({
 			var last = siteswap.pop();
 			siteswap.unshift(last);
 			return siteswap;
+		},
+		rethrows: function(heights) {
+			var period = heights.length;
+			var landings = {};
+			var k = 0;
+			var i = 0;
+			var rethrows = 0;
+			while (k < period) {
+				landings[i + heights[i % period]] = true;
+				if (landings[i])
+					rethrows++;
+				else
+					k++;
+				i++;
+			}
+			return rethrows;
 		}
 	},
 	mounted: function() {
