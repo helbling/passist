@@ -106,8 +106,8 @@ var generator_col = [
 		input_field({id:'gen_max_throw',   label:'Max throw', type:'number', min:1, max:35 }),
 		input_field({id:'gen_min_throw',   label:'Min throw', type:'number', min:0, max:35 }),
 		input_field({id:'gen_n_jugglers',  label:'👥', title:'Number of jugglers', type:'number', min:0, max:9 }),
-		input_field({id:'gen_include',     label:'Include', type:'search', placeholder:'e.g. 2 8'}),
-		input_field({id:'gen_exclude',     label:'Exclude', type:'search'})
+		input_field({id:'gen_include',     label:'Include global', type:'search', placeholder:'e.g. 2 8'}),
+		input_field({id:'gen_exclude',     label:'Exclude global', type:'search'})
 	),
 
 	h5({class:'mt-4'}, '{{gen_list.length}} siteswaps found'),
@@ -163,7 +163,7 @@ var causal_diagram = svg(
 		'font-size': 20,
 		'stroke-width': '0px',
 		'stroke': 'black',
-	},
+		},
 		'{{j.name}}'
 	),
 	text({
@@ -173,7 +173,7 @@ var causal_diagram = svg(
 		'font-size': 20,
 		'stroke-width': '0px',
 		'stroke': 'black',
-	},
+		},
 		'{{j.start_obj_left}}'
 	),
 	text({
@@ -183,7 +183,7 @@ var causal_diagram = svg(
 		'font-size': 20,
 		'stroke-width': '0px',
 		'stroke': 'black',
-	},
+		},
 		'{{j.start_obj_right}}'
 	),
 	circle({
@@ -204,8 +204,8 @@ var causal_diagram = svg(
 		'font-size': 16,
 		'stroke-width': '0px',
 		'text-anchor': 'middle',
-	},
-	'{{n.label}}'
+		},
+		'{{n.label}}'
 	),
 	path({
 		'class': 'arrow_stroke',
