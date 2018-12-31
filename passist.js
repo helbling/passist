@@ -164,7 +164,27 @@ var causal_diagram = svg(
 		'stroke-width': '0px',
 		'stroke': 'black',
 	},
-	'{{j.name}}'
+		'{{j.name}}'
+	),
+	text({
+		'v-for': "(j, i) in jugglers",
+		':x'  : "20",
+		':y'  : "causal_diagram.yoff - 10 + i * causal_diagram.dy",
+		'font-size': 20,
+		'stroke-width': '0px',
+		'stroke': 'black',
+	},
+		'{{j.start_obj_left}}'
+	),
+	text({
+		'v-for': "(j, i) in jugglers",
+		':x'  : "20",
+		':y'  : "causal_diagram.yoff + 30 + i * causal_diagram.dy",
+		'font-size': 20,
+		'stroke-width': '0px',
+		'stroke': 'black',
+	},
+		'{{j.start_obj_right}}'
 	),
 	circle({
 		'v-for': "(n, i) in causal_diagram.nodes",
@@ -226,7 +246,7 @@ var siteswap_col = [
 					td({'v-if': 'n_jugglers == 2', ':colspan':'local_period'},     'Words')
 				),
 				tr({'v-for': "j in jugglers"},
-					th('{{j.name}}', sub('{{j.start}}')),
+					th('{{j.name}}', sub('{{j.start_obj_left}}|{{j.start_obj_right}}')),
 					td({'v-for': "t in j.local", 'v-html':'t.siteswap + t.desc + "&nbsp;"'}),
 					td({class:"px-3"}, ''),
 					td({'v-for': "t in j.local", 'v-html':'t.prechac + t.desc + "&nbsp;"'}),
@@ -459,7 +479,8 @@ var app = new Vue({
 						};
 					}.bind(this)),
 					name:  name(juggler),
-					start: start_hands[n_jugglers + juggler] + '|' + start_hands[juggler],
+					start_obj_right: start_hands[juggler],
+					start_obj_left:  start_hands[n_jugglers + juggler],
 				};
 			}
 			return result;
@@ -469,7 +490,7 @@ var app = new Vue({
 			var arrow_length = 20;
 			var p = {
 				r:    13,
-				xoff: 50,
+				xoff: 55,
 				yoff: 70,
 				dx:   70 / n_jugglers,
 				dy:   100,
