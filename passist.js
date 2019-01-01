@@ -225,9 +225,10 @@ var siteswap_col = [
 	),
 	div({'v-if': 'valid'},
 		h2(
-			a({class:'arrow', 'v-on:click':'siteswap_input = output_siteswap(shift(siteswap))'}, '◄'), // ⯇
+			a({class:'arrow', 'v-on:click':'siteswap_shift = (siteswap_shift + 1) % period'}, '◄'), // ⯇
 			' {{output_siteswap(siteswap)}} ',
-			a({class:'arrow', 'v-on:click':'siteswap_input = output_siteswap(unshift(siteswap))'}, '►'), // ⯈
+			a({class:'arrow', 'v-on:click':'siteswap_shift = (siteswap_shift + period - 1) % period'}, '►'), // ⯈
+
 			span({'v-if': 'siteswap_name'}, ' {{siteswap_name}}')
 		),
 		p(
@@ -372,6 +373,7 @@ var app = new Vue({
 	template: template,
 	data: {
 		siteswap_input: 86277,
+		siteswap_shift: 0,
 		n_jugglers_input: 2,
 		known_siteswaps: known_siteswaps,
 		gen_objects:   7,
@@ -387,9 +389,7 @@ var app = new Vue({
 			return String(this.siteswap_input).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
 		},
 		siteswap: function() {
-			return String(this.stripped_input).split('').map(function(x) {
-				return x.match(/[0-9]/) ? +x : x.charCodeAt(0) - 'a'.charCodeAt(0) + 10;
-			});
+			return this.shift(this.to_numbers(this.stripped_input), this.siteswap_shift);
 		},
 		period: function() {
 			return this.siteswap.length;
@@ -710,6 +710,11 @@ var app = new Vue({
 		}
 	},
 	methods: {
+		to_numbers: function(siteswap) {
+			return String(siteswap).split('').map(function(x) {
+				return x.match(/[0-9]/) ? +x : x.charCodeAt(0) - 'a'.charCodeAt(0) + 10;
+			});
+		},
 		output_siteswap: function(siteswap) {
 			return siteswap.map(function(x) {
 				x = +x;
@@ -752,9 +757,13 @@ var app = new Vue({
 			else
 				throw "invalid character in siteswap: " + siteswap.charAt(i);
 		},
-		shift: function(siteswap) {
-			var first = siteswap.shift();
-			siteswap.push(first);
+		shift: function(siteswap, times) {
+			if (typeof times === "undefined")
+				times = 1;
+			for (; times > 0; times--) {
+				var first = siteswap.shift();
+				siteswap.push(first);
+			}
 			return siteswap;
 		},
 		unshift: function(siteswap) {
@@ -791,6 +800,8 @@ var app = new Vue({
 		siteswap_input: {
 			handler() {
 				localStorage.setItem('siteswap', this.siteswap_input);
+				this.siteswap_shift = 0;
+				// TODO: set optimal shift here..
 			},
 		},
 		n_jugglers_input: {
