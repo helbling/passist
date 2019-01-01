@@ -231,7 +231,7 @@ var siteswap_col = [
 			span({'v-if': 'siteswap_name'}, ' {{siteswap_name}}')
 		),
 		p(
-			'{{n_objects}} objects, period {{period}}, rethrows {{rethrows(siteswap)}}'
+			'{{n_objects}} objects, period {{period}}'
 // 			span({'v-if': 'n_jugglers > 1'}, ', interface: {{interface}}')
 		 ),
 		div({'v-if': 'n_jugglers > 1', class:'local_throws'},
