@@ -1,6 +1,6 @@
 /*
  *  passist - passing siteswap assistant
- *  Copyright (C) 2018 Christian Helbling
+ *  Copyright (C) 2019 Christian Helbling
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -232,7 +232,8 @@ var siteswap_col = [
 			span({'v-if': 'siteswap_name'}, ' {{siteswap_name}}')
 		),
 		p(
-			'{{n_objects}} objects, period {{period}}'
+			'{{n_objects}} objects, period {{period}}, squeezes {{start_properties.squeezes}}',
+			span({'v-if': 'start_properties.is_ground_state'}, ', ground state'),
 // 			span({'v-if': 'n_jugglers > 1'}, ', interface: {{interface}}')
 		 ),
 		div({'v-if': 'n_jugglers > 1', class:'local_throws'},
@@ -387,6 +388,9 @@ var app = new Vue({
 	computed: {
 		stripped_input: function() {
 			return String(this.siteswap_input).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
+		},
+		original_siteswap: function() {
+			return this.to_numbers(this.stripped_input);
 		},
 		siteswap: function() {
 			return this.shift(this.to_numbers(this.stripped_input), this.siteswap_shift);
@@ -707,6 +711,23 @@ var app = new Vue({
 		},
 		siteswap_name: function() {
 			return this.siteswap_names[this.canonic_siteswap(this.output_siteswap(this.siteswap))];
+		},
+		optimal_shift: function() {
+			var opt_weight = -1;
+			var result = 0;
+			for (var shift = 0; shift < this.period; shift++) {
+				var heights = this.shift(this.original_siteswap, shift);
+				var start_properties = this.get_start_properties(heights, this.n_jugglers, this.n_objects);
+				var weight = 100 * start_properties.is_ground_state - 10 * start_properties.squeezes + start_properties.starts_with_pass;
+				if (weight > opt_weight) {
+					opt_weight = weight;
+					result = shift;
+				}
+			}
+			return result;
+		},
+		start_properties: function() {
+			return this.get_start_properties(this.siteswap, this.n_jugglers, this.n_objects);
 		}
 	},
 	methods: {
@@ -760,6 +781,7 @@ var app = new Vue({
 		shift: function(siteswap, times) {
 			if (typeof times === "undefined")
 				times = 1;
+			siteswap = siteswap.slice(0); // clone
 			for (; times > 0; times--) {
 				var first = siteswap.shift();
 				siteswap.push(first);
@@ -771,21 +793,32 @@ var app = new Vue({
 			siteswap.unshift(last);
 			return siteswap;
 		},
-		rethrows: function(heights) {
-			var period = heights.length;
-			var landings = {};
-			var k = 0;
+		get_start_properties(heights, n_jugglers, n_objects) {
+			var rethrows_by_hand = Array.apply(null, Array(n_jugglers * 2)).map(function() {return 0;});
 			var i = 0;
-			var rethrows = 0;
-			while (k < period) {
-				landings[i + heights[i % period]] = true;
-				if (landings[i])
-					rethrows++;
-				else
-					k++;
-				i++;
+			var has_landing = [];
+			var is_ground_state = 1;
+			var squeezes = 0;
+			for (var missing = n_objects; missing > 0; i++) {
+				var t = heights[i % heights.length];
+				if (t > 0) {
+					var hand = i % (n_jugglers * 2);
+					if (has_landing[i]) {
+						rethrows_by_hand[i % (n_jugglers * 2)]++;
+						is_ground_state = 0;
+					} else {
+						squeezes += rethrows_by_hand[hand];
+						rethrows_by_hand[hand] = 0;
+						missing--;
+					}
+					has_landing[i + t] = true;
+				}
 			}
-			return rethrows;
+			return {
+				is_ground_state: is_ground_state,
+				squeezes: squeezes,
+				starts_with_pass: heights[0] % n_jugglers ? 1 : 0
+			};
 		}
 	},
 	mounted: function() {
@@ -800,8 +833,7 @@ var app = new Vue({
 		siteswap_input: {
 			handler() {
 				localStorage.setItem('siteswap', this.siteswap_input);
-				this.siteswap_shift = 0;
-				// TODO: set optimal shift here..
+				this.siteswap_shift = this.optimal_shift;
 			},
 		},
 		n_jugglers_input: {
