@@ -757,12 +757,12 @@ var app = new Vue({
 				1,
 				'zip',
 				3,
-				'hold',
+				'flip',
 				'zap',
 				'self',
-				'pass',
+				'single pass',
 				'heff',
-				'double',
+				'double pass',
 				'triple self',
 				'triple pass'
 			][x];
