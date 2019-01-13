@@ -225,7 +225,7 @@ var siteswap_col = [
 	div({'v-if': 'valid'},
 		h2(
 			a({class:'arrow', 'v-on:click':'siteswap_shift = (siteswap_shift + 1) % period'}, '◄'), // ⯇
-			' {{output_siteswap(siteswap)}} ',
+			' {{siteswap.to_string()}} ',
 			a({class:'arrow', 'v-on:click':'siteswap_shift = (siteswap_shift + period - 1) % period'}, '►'), // ⯈
 
 			span({'v-if': 'siteswap_name'}, ' {{siteswap_name}}')
@@ -233,7 +233,7 @@ var siteswap_col = [
 		p(
 			'{{n_objects}} objects, period {{period}}, squeezes {{start_properties.squeezes}}',
 			span({'v-if': 'start_properties.is_ground_state'}, ', ground state'),
-// 			span({'v-if': 'n_jugglers > 1'}, ', interface: {{interface}}')
+// 			span({'v-if': 'n_jugglers > 1'}, ', interface: {{siteswap.global_interface(n_jugglers)}}')
 		 ),
 		div({'v-if': 'n_jugglers > 1', class:'local_throws'},
 			table(
@@ -389,19 +389,19 @@ var app = new Vue({
 			return String(this.siteswap_input).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
 		},
 		original_siteswap: function() {
-			return this.to_numbers(this.stripped_input);
+			return new Siteswap(this.stripped_input);
 		},
 		siteswap: function() {
-			return this.shift(this.to_numbers(this.stripped_input), this.siteswap_shift);
+			return this.original_siteswap.shift(this.siteswap_shift);
 		},
 		period: function() {
-			return this.siteswap.length;
+			return this.siteswap.period;
 		},
 		local_period: function() {
 			return this.period % this.n_jugglers == 0 ? this.period / this.n_jugglers : this.period
 		},
 		n_objects: function() {
-			return this.siteswap.reduce(function(a, b) { return a + b}) / this.period;
+			return this.siteswap.objects;
 		},
 		n_jugglers: function() {
 			var result = parseInt(this.n_jugglers_input);
@@ -412,35 +412,19 @@ var app = new Vue({
 			return result;
 		},
 		valid: function() {
-			var period = this.period;
-			var landing = new Array(period);
-			var valid = true;
-			this.siteswap.forEach(function(v, k) {
-				var pos = (k + v) % period;
-				if (landing[pos])
-					valid = false;
-				landing[pos] = true;
-			});
-			return period > 0 ? valid : undefined;
+			return this.siteswap.is_valid();
 		},
 		validClass: function() {
 			return this.valid == false ? 'text-danger' : '';
-		},
-		interface: function() {
-			var result = new Array(this.period);
-			for (var i in this.siteswap) {
-				var t = this.siteswap[i];
-				result[(+i + +t) % this.period] = (t % this.n_jugglers) ? 'p' : 's';
-			}
-			return result.join('');
 		},
 		jugglers: function() {
 			var n_jugglers = this.n_jugglers;
 			var start_hands = Array.apply(null, Array(n_jugglers * 2)).map(function() {return 0;});
 			var i = 0;
 			var has_obj = [];
+			var heights = this.siteswap.heights;
 			for (var missing = this.n_objects; missing > 0; i++) {
-				var t = this.siteswap[i % this.period];
+				var t = heights[i % this.period];
 				if (t > 0) {
 					if (!has_obj[i]) {
 						start_hands[i % (n_jugglers * 2)]++;
@@ -455,7 +439,7 @@ var app = new Vue({
 				var local_period = period % n_jugglers == 0 ? period / n_jugglers : period;
 				var local = new Array(local_period);
 				for (var i = 0; i < local_period; i++)
-					local[i] = String(this.siteswap[(juggler + i * n_jugglers) % period]);
+					local[i] = String(heights[(juggler + i * n_jugglers) % period]);
 				var name = function(i) {
 					return String.fromCharCode('A'.charCodeAt(0) + i);
 				};
@@ -475,7 +459,7 @@ var app = new Vue({
 						}
 						return {
 							height: t,
-							siteswap: this.output_siteswap([t]),
+							siteswap: Siteswap.height_to_char(t),
 							prechac:  this.prechac(t, n_jugglers),
 							word:  this.word(t),
 							desc: desc ? desc : '&nbsp;'
@@ -535,17 +519,18 @@ var app = new Vue({
 				     + " " + xy(j, p.r + arrow_length, x(j) - dir_x, y(i) + dir_y);
 			};
 			p.steps = n_jugglers * this.period * 2;
+			var heights = this.siteswap.heights;
 			for (var i = 0; i < p.steps; i++) {
 				var pos = i % this.period;
-				var cur_throw = this.siteswap[pos];
+				var cur_throw = heights[pos];
 				p.nodes.push({
 					r: p.r,
 					x: x(i),
 					y: y(i),
 					class: (Math.floor(i / n_jugglers) % 2) ? 'left_hand' : 'right_hand',
 					juggler: juggler(i),
-					label: this.output_siteswap(this.siteswap).charAt(pos),
-					arrow: arrow(i, this.siteswap[pos] - 2 * n_jugglers), // for ladder diagram: don't subtract 2 * n_jugglers
+					label: Siteswap.height_to_char(cur_throw),
+					arrow: arrow(i, heights[pos] - 2 * n_jugglers), // for ladder diagram: don't subtract 2 * n_jugglers
 				});
 			}
 
@@ -556,7 +541,6 @@ var app = new Vue({
 
 		gen_list: function() {
 			var t0 = performance.now();
-
 
 			var min = Math.max(0, Math.min(35, parseInt(this.gen_min_throw)));
 			var max = Math.max(0, Math.min(35, parseInt(this.gen_max_throw)));
@@ -651,7 +635,7 @@ var app = new Vue({
 				}
 
 				if (i == period) {
-					var c = this.output_siteswap(heights);
+					var c = Siteswap.heights_to_string(heights);
 					if (is_canonic(c) && final_check(c)) {
 						result.push(c);
 // 						if (result.length >= 100)
@@ -704,19 +688,19 @@ var app = new Vue({
 			var result = {}
 			for (var i in this.known_siteswaps) {
 				var ss = this.known_siteswaps[i];
-				result[this.canonic_siteswap(ss[0])] = ss[1];
+// 				result[this.canonic_siteswap(ss[0])] = ss[1];
+				result[new Siteswap(ss[0]).canonic_string()] = ss[1];
 			}
 			return result;
 		},
 		siteswap_name: function() {
-			return this.siteswap_names[this.canonic_siteswap(this.output_siteswap(this.siteswap))];
+			return this.siteswap_names[this.siteswap.canonic_string()];
 		},
 		optimal_shift: function() {
 			var opt_weight = -1;
 			var result = 0;
 			for (var shift = 0; shift < this.period; shift++) {
-				var heights = this.shift(this.original_siteswap, shift);
-				var start_properties = this.get_start_properties(heights, this.n_jugglers, this.n_objects);
+				var start_properties = this.original_siteswap.shift(shift).get_start_properties(this.n_jugglers);
 				var weight = 100 * start_properties.is_ground_state - 10 * start_properties.squeezes + start_properties.starts_with_pass;
 				if (weight > opt_weight) {
 					opt_weight = weight;
@@ -726,28 +710,10 @@ var app = new Vue({
 			return result;
 		},
 		start_properties: function() {
-			return this.get_start_properties(this.siteswap, this.n_jugglers, this.n_objects);
+			return this.siteswap.get_start_properties(this.n_jugglers);
 		}
 	},
 	methods: {
-		to_numbers: function(siteswap) {
-			return String(siteswap).split('').map(function(x) {
-				return x.match(/[0-9]/) ? +x : x.charCodeAt(0) - 'a'.charCodeAt(0) + 10;
-			});
-		},
-		output_siteswap: function(siteswap) {
-			return siteswap.map(function(x) {
-				x = +x;
-				return x <= 9 ? String(x) : String.fromCharCode('a'.charCodeAt(0) + x - 10);
-			}).join('');
-		},
-		canonic_siteswap: function(siteswap) {
-			var period = siteswap.length;
-			var shifts = [];
-			for (var i = 0; i < period; i++)
-				shifts.push(siteswap.slice(i) + siteswap.slice(0, i));
-			return shifts.sort()[period - 1];
-		},
 		prechac: function(x, n_jugglers) {
 			return Math.round(+x / n_jugglers * 100) / 100;
 		},
@@ -776,48 +742,6 @@ var app = new Vue({
 				return x - 87;
 			else
 				throw "invalid character in siteswap: " + siteswap.charAt(i);
-		},
-		shift: function(siteswap, times) {
-			if (typeof times === "undefined")
-				times = 1;
-			siteswap = siteswap.slice(0); // clone
-			for (; times > 0; times--) {
-				var first = siteswap.shift();
-				siteswap.push(first);
-			}
-			return siteswap;
-		},
-		unshift: function(siteswap) {
-			var last = siteswap.pop();
-			siteswap.unshift(last);
-			return siteswap;
-		},
-		get_start_properties(heights, n_jugglers, n_objects) {
-			var rethrows_by_hand = Array.apply(null, Array(n_jugglers * 2)).map(function() {return 0;});
-			var i = 0;
-			var has_landing = [];
-			var is_ground_state = 1;
-			var squeezes = 0;
-			for (var missing = n_objects; missing > 0; i++) {
-				var t = heights[i % heights.length];
-				if (t > 0) {
-					var hand = i % (n_jugglers * 2);
-					if (has_landing[i]) {
-						rethrows_by_hand[i % (n_jugglers * 2)]++;
-						is_ground_state = 0;
-					} else {
-						squeezes += rethrows_by_hand[hand];
-						rethrows_by_hand[hand] = 0;
-						missing--;
-					}
-					has_landing[i + t] = true;
-				}
-			}
-			return {
-				is_ground_state: is_ground_state,
-				squeezes: squeezes,
-				starts_with_pass: heights[0] % n_jugglers ? 1 : 0
-			};
 		}
 	},
 	mounted: function() {
