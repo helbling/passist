@@ -235,6 +235,10 @@ var siteswap_col = [
 			span({'v-if': 'start_properties.is_ground_state'}, ', ground state'),
 // 			span({'v-if': 'n_jugglers > 1'}, ', interface: {{siteswap.global_interface(n_jugglers)}}')
 		 ),
+
+//		h4('JIF - juggling interchange format'),
+//		div(pre('{{jif_json}}')),
+
 		div({'v-if': 'n_jugglers > 1', class:'local_throws'},
 			table(
 				tr(
@@ -711,6 +715,32 @@ var app = new Vue({
 		},
 		start_properties: function() {
 			return this.siteswap.get_start_properties(this.n_jugglers);
+		},
+		jif: function() {
+			var steps = this.n_jugglers * this.period * 2;
+			var p = {};
+			if (this.siteswap_name)
+				p.title = this.siteswap_name;
+			p.siteswap = this.siteswap.to_string();
+			var heights = this.siteswap.heights;
+			var n_hands = this.n_jugglers * 2;
+
+			p.time_period = steps;
+			p.events = [];
+			for (var i = 0; i < steps; i++) {
+				var height = heights[i % this.period];
+				p.events.push({
+					time: i,
+					duration: height,
+					from_hand: i % n_hands,
+					to_hand: (i + height) % n_hands
+				})
+			}
+
+			return p;
+		},
+		jif_json: function() {
+			return JSON.stringify(this.jif, null, 2);
 		}
 	},
 	methods: {
