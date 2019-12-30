@@ -116,7 +116,7 @@ var generator_col = [
 		ul({class:'mt-4 siteswap_list'},
 			li({'v-for': 's in gen_list'},
 				span({'v-if':'s == "timeout"'}, "generator timeout :("),
-				a({'v-else':'v-else', href:'#siteswap_col', 'v-on:click':'siteswap_input = s; n_jugglers_input = gen_n_jugglers'}, span({class:'siteswap'}, '{{s}}'))
+				a({'v-else':'v-else', href:'#siteswap_col', 'v-on:click':'siteswap_input = s; n_jugglers_input = gen_n_jugglers; jif_input = jif_json'}, span({class:'siteswap'}, '{{s}}'))
 			)
 		)
 	),
@@ -215,6 +215,102 @@ var causal_diagram = svg(
 		'fill': 'none',
 		'marker-end': "url(#arrow)",
 	})
+)
+
+var jif_causal_diagram = p({
+		'v-if': 'jif_causal_diagram.error',
+		}, '{{jif_causal_diagram.error}}'
+	) + svg(
+	{
+		'v-if': '!jif_causal_diagram.error',
+		':width': 'jif_causal_diagram.width',
+		':height': 'jif_causal_diagram.height',
+	},
+	defs(
+		marker({
+			'id': 'arrow',
+			'markerWidth': 10,
+			'markerHeight': 10,
+			'refX': 0,
+			'refY': 3,
+			'orient': 'auto',
+			'markerUnits': 'strokeWidth',
+			},
+			path({
+				class: 'arrow_fill',
+				d: 'M0,0 L0,6 L9,3 z',
+			})
+		)
+	),
+	rect({
+		'x': 0,
+		'y': 0,
+		':width': 'jif_causal_diagram.width',
+		':height': 'jif_causal_diagram.height',
+		'stroke': '#ccc',
+		'stroke-width': '2px',
+		'fill': 'none',
+	}),
+	text({
+		'v-for': "(j, i) in jugglers",
+		':x'  : "10",
+		':y'  : "jif_causal_diagram.yoff + 9 + i * jif_causal_diagram.dy",
+		'font-size': 20,
+		'stroke-width': '0px',
+		'stroke': 'black',
+		},
+		'{{j.name}}'
+	),
+	text({
+		'v-for': "(j, i) in jugglers",
+		':x'  : "20",
+		':y'  : "jif_causal_diagram.yoff - 10 + i * jif_causal_diagram.dy",
+		'font-size': 20,
+		'stroke-width': '0px',
+		'stroke': 'black',
+		},
+		'{{j.start_obj_left}}'
+	),
+	text({
+		'v-for': "(j, i) in jugglers",
+		':x'  : "20",
+		':y'  : "jif_causal_diagram.yoff + 30 + i * jif_causal_diagram.dy",
+		'font-size': 20,
+		'stroke-width': '0px',
+		'stroke': 'black',
+		},
+		'{{j.start_obj_right}}'
+	),
+	circle({
+		'v-for': "(n, i) in jif_causal_diagram.nodes",
+		':cx'  : "n.x",
+		':cy'  : "n.y",
+		':r'   : "n.r",
+		':class': 'n.class',
+		'stroke': 'black',
+		'stroke-width': 2,
+	}),
+	text({
+		'v-for': "(n, i) in jif_causal_diagram.nodes",
+		':x'  : "n.x",
+		':y'  : "n.y + 5",
+		'class': 'node_label',
+		':class': 'n.class',
+		'font-size': 16,
+		'stroke-width': '0px',
+		'text-anchor': 'middle',
+		},
+		'{{n.label}}'
+	),
+	path({
+		'class': 'arrow_stroke',
+		'v-for': "(n, i) in jif_causal_diagram.nodes",
+		'v-if': 'n.arrow',
+		':d': 'n.arrow',
+		'stroke-width': '2px',
+		'fill': 'none',
+		'marker-end': "url(#arrow)",
+	})
 );
 
 var siteswap_col = [
@@ -235,9 +331,6 @@ var siteswap_col = [
 			span({'v-if': 'start_properties.is_ground_state'}, ', ground state'),
 // 			span({'v-if': 'n_jugglers > 1'}, ', interface: {{siteswap.global_interface(n_jugglers)}}')
 		 ),
-
-//		h4('JIF - juggling interchange format'),
-//		div(pre('{{jif_json}}')),
 
 		div({'v-if': 'n_jugglers > 1', class:'local_throws'},
 			table(
@@ -282,12 +375,30 @@ var template = div({class:'container'},
 				p(small('© Christian Kästner, ', a({href: 'https://github.com/ckaestne/CompatSiteswaps/blob/master/named-siteswaps.txt'}, 'named-siteswaps.txt'))),
 				ul({class:'siteswap_list'},
 					li({'v-for': 's in known_siteswaps'},
-						a({href:'#siteswap_col', 'v-on:click':'siteswap_input = s[0]; n_jugglers_input = 2'}, span({class:'siteswap'}, '{{s[0]}}'), span({class:'name'}, '{{s[1]}}'))
+						a({href:'#siteswap_col', 'v-on:click':'siteswap_input = s[0]; n_jugglers_input = 2; jif_input = jif_json'}, span({class:'siteswap'}, '{{s[0]}}'), span({class:'name'}, '{{s[1]}}'))
 					)
 				)
 			)
 		)
+	), div({class:'row'},
+		div({id:'jif', class: 'col jif'},
+			card({title:'JIF - Juggling Interchange Format'},
+				div(textarea({
+					'v-model':'jif_input',
+					rows:10,
+					cols:80
+					}, '{{jif_input}}'
+				)),
+				div(
+					h4('Causal diagram'),
+					div({class:'causal_diagram'},
+						jif_causal_diagram
+					)
+			   ),
+			)
+		)
 	),
+
 	div({class:'padding_bottom'}) // add some white space to the page end so that we never loose the scroll position when editing the siteswap
 );
 
@@ -387,6 +498,7 @@ var app = new Vue({
 		gen_n_jugglers: 2,
 		gen_include: '',
 		gen_exclude: '3 5',
+		jif_input:   ''
 	},
 	computed: {
 		stripped_input: function() {
@@ -730,10 +842,12 @@ var app = new Vue({
 			for (var i = 0; i < steps; i++) {
 				var height = heights[i % this.period];
 				p.events.push({
+					type: 'throw',
 					time: i,
 					duration: height,
 					from_hand: i % n_hands,
-					to_hand: (i + height) % n_hands
+					to_hand: (i + height) % n_hands,
+					label: Siteswap.height_to_char(height)
 				})
 			}
 
@@ -741,6 +855,82 @@ var app = new Vue({
 		},
 		jif_json: function() {
 			return JSON.stringify(this.jif, null, 2);
+		},
+		jif_causal_diagram: function() {
+			var jif;
+			try {
+				jif = JSON.parse(this.jif_input);
+			} catch(e) {
+				return {error: 'not valid json'};
+			}
+
+			var n_jugglers = this.n_jugglers;
+			var arrow_length = 20;
+			var p = {
+				r:    13,
+				xoff: 55,
+				yoff: 70,
+				dx:   70 / n_jugglers,
+				dy:   100,
+				nodes: [],
+			};
+			var x  = function(i) { return p.xoff + i * p.dx;};
+			var y  = function(i, juggler) { return p.yoff + juggler * p.dy;};
+			var xy = function(i, shorten, towards_x, towards_y, juggler) {
+				var X = x(i);
+				var Y = y(i, juggler);
+				if (shorten) {
+					var dx = towards_x - X;
+					var dy = towards_y - Y;
+					var len = Math.sqrt(dx * dx + dy * dy);
+					X += shorten * dx / len;
+					Y += shorten * dy / len;
+				}
+				return X + ',' + Y;
+			}
+
+			var arrow = function(i, step, juggler_from, juggler_to) {
+				var j = i + step;
+				if (juggler_from != juggler_to || Math.abs(step) == n_jugglers)
+					return "M" + xy(i, p.r, x(j), y(j, juggler_from), juggler_from) + " L" + xy(j, p.r + arrow_length, x(i), y(i, juggler_from), juggler_to);
+				var dir_x = x(j) > x(i) ? 1 : -1;
+				var dir_y = juggler_from ? 1 : -1;
+
+				var offset_x = dir_x * p.dy / 2;
+				var offset_y = dir_y * p.dy / 2;
+
+				var control_point1 = (x(i) + offset_x) + "," + (y(i, juggler_from) + offset_y);
+				var control_point2 = (x(j) - offset_x) + "," + (y(i, juggler_from) + offset_y);
+				return "M" + xy(i, p.r, x(i) + dir_x, y(i, juggler_from) + dir_y, juggler_from)
+				     + "C" + control_point1
+				     + " " + control_point2
+				     + " " + xy(j, p.r + arrow_length, x(j) - dir_x, y(i, juggler_from) + dir_y, juggler_from);
+			};
+			p.steps = n_jugglers * this.period * 2;
+
+			for (var i = 0; i < jif.events.length; i++) {
+				var event = jif.events[i];
+				if (event.type != 'throw')
+					continue;
+				var t = event.time;
+				var juggler_from = event.from_hand % n_jugglers;
+				var juggler_to = event.to_hand % n_jugglers;
+
+				p.nodes.push({
+					r: p.r,
+					x: x(t),
+					y: y(t, juggler_from),
+					class: (Math.floor(event.from_hand / n_jugglers) % 2) ? 'left_hand' : 'right_hand',
+					juggler: juggler_from,
+					label: event.label,
+					arrow: arrow(i, event.duration - 2 * n_jugglers, juggler_from, juggler_to), // for ladder diagram: don't subtract 2 * n_jugglers
+				});
+
+			}
+
+			p.width  =  p.steps * p.dx + 50;
+			p.height = (this.n_jugglers - (this.n_jugglers > 1 ? 1 : 1.4)) * p.dy + 2 * p.yoff;
+			return p;
 		}
 	},
 	methods: {
@@ -781,12 +971,20 @@ var app = new Vue({
 		var n_jugglers = localStorage.getItem('n_jugglers');
 		if (n_jugglers)
 			this.n_jugglers_input = n_jugglers;
+		var jif = localStorage.getItem('jif');
+		if (jif)
+			this.jif_input = jif;
 	},
 	watch: {
 		siteswap_input: {
 			handler() {
 				localStorage.setItem('siteswap', this.siteswap_input);
 				this.siteswap_shift = this.optimal_shift;
+			},
+		},
+		jif_input: {
+			handler() {
+				localStorage.setItem('jif', this.jif_input);
 			},
 		},
 		n_jugglers_input: {
