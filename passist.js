@@ -694,10 +694,10 @@ var app = new Vue({
 			var include_filters = filters(this.gen_include);
 
 			function exclude(str) {
-				return exclude_filters.some(function(filter) { return (str + str).match(filter);});
+				return exclude_filters.some(function(filter) { return (str + str + str).match(filter);});
 			}
 			function include(str) {
-				return include_filters.every(function(filter) { return (str + str).match(filter);});
+				return include_filters.every(function(filter) { return (str + str + str).match(filter);});
 			}
 
 			var final_check = function(canonic) {
