@@ -37,7 +37,7 @@ var tag = function (tag) {
 		return '<' + tag + attributes + '>' + content + '</' + tag + '>';
 	};
 }
-var tags = "a,b,br,button,div,em,fieldset,form,h1,h2,h3,h4,h5,h6,hr,img,input,label,legend,li,meta,noscript,p,pre,small,span,style,sub,sup,table,tbody,td,textarea,tfoot,th,thead,tr,ul,ol,article,section,defs,desc,g,image,line,marker,path,pattern,rect,svg,text,textPath,circle".split(',');
+var tags = "a,b,br,button,div,em,fieldset,form,h1,h2,h3,h4,h5,h6,hr,img,input,label,legend,li,meta,noscript,p,pre,small,span,style,sub,sup,table,tbody,td,textarea,tfoot,th,thead,tr,ul,ol,article,section,defs,desc,g,image,line,marker,path,pattern,rect,svg,text,textPath,circle,canvas".split(',');
 for (var i in tags)
 	window[tags[i]] = tag(tags[i]);
 
@@ -116,7 +116,7 @@ var generator_col = [
 		ul({class:'mt-4 siteswap_list'},
 			li({'v-for': 's in gen_list'},
 				span({'v-if':'s == "timeout"'}, "generator timeout :("),
-				a({'v-else':'v-else', href:'#siteswap_col', 'v-on:click':'siteswap_input = s; n_jugglers_input = gen_n_jugglers; jif_input = jif_json'}, span({class:'siteswap'}, '{{s}}'))
+				a({'v-else':'v-else', href:'#siteswap_col', 'v-on:click':'siteswap_input = s; n_jugglers_input = gen_n_jugglers'}, span({class:'siteswap'}, '{{s}}'))
 			)
 		)
 	),
@@ -375,7 +375,7 @@ var template = div({class:'container'},
 				p(small('© Christian Kästner, ', a({href: 'https://github.com/ckaestne/CompatSiteswaps/blob/master/named-siteswaps.txt'}, 'named-siteswaps.txt'))),
 				ul({class:'siteswap_list'},
 					li({'v-for': 's in known_siteswaps'},
-						a({href:'#siteswap_col', 'v-on:click':'siteswap_input = s[0]; n_jugglers_input = 2; jif_input = jif_json'}, span({class:'siteswap'}, '{{s[0]}}'), span({class:'name'}, '{{s[1]}}'))
+						a({href:'#jif', 'v-on:click':'siteswap_input = s[0]; n_jugglers_input = 2'}, span({class:'siteswap'}, '{{s[0]}}'), span({class:'name'}, '{{s[1]}}'))
 					)
 				)
 			)
@@ -385,8 +385,7 @@ var template = div({class:'container'},
 			card({title:'JIF - Juggling Interchange Format'},
 				div(textarea({
 					'v-model':'jif_input',
-					rows:10,
-					cols:80
+					class:'jif_input',
 					}, '{{jif_input}}'
 				)),
 				div(
@@ -394,7 +393,15 @@ var template = div({class:'container'},
 					div({class:'causal_diagram'},
 						jif_causal_diagram
 					)
-			   ),
+				),
+				div(
+					h4('Animation'),
+// 					canvas({id:'animation'},
+// 						"Oh no! Your browser doesn't support canvas!"
+// 					)
+					div({id:'animation'}),
+					'{{update_scene}}',
+				)
 			)
 		)
 	),
@@ -652,6 +659,10 @@ var app = new Vue({
 
 			p.width  =  p.steps * p.dx + 50;
 			p.height = (this.n_jugglers - (this.n_jugglers > 1 ? 1 : 1.4)) * p.dy + 2 * p.yoff;
+
+
+			this.jif_input = this.jif_json;
+
 			return p;
 		},
 
@@ -829,13 +840,15 @@ var app = new Vue({
 			return this.siteswap.get_start_properties(this.n_jugglers);
 		},
 		jif: function() {
-			var steps = this.n_jugglers * this.period * 2;
+			var steps = this.n_jugglers * this.period * 2 * this.n_objects; // TODO: calculate smaller number or have a relabeling mechanism
 			var p = {};
 			if (this.siteswap_name)
 				p.title = this.siteswap_name;
 			p.siteswap = this.siteswap.to_string();
 			var heights = this.siteswap.heights;
 			var n_hands = this.n_jugglers * 2;
+			p.n_hands = n_hands;
+			p.n_props = this.n_objects;
 
 			p.time_period = steps;
 			p.events = [];
@@ -851,11 +864,32 @@ var app = new Vue({
 				})
 			}
 
+			// calculate which throw corresponds to which prop
+			var propid = 0;
+			for (var i = 0; i < steps; i++) {
+				var prop = p.events[i].prop;
+				if (prop === undefined) {
+					var j = i;
+					p.events[j].prop = propid;
+					do {
+						j += p.events[j].duration;
+						p.events[j % steps].prop = propid;
+					} while(j < steps);
+
+					propid++;
+				}
+			}
+
 			return p;
 		},
 		jif_json: function() {
 			return JSON.stringify(this.jif, null, 2);
 		},
+// 		animation_jif: function() {
+// 			var jif = this.jif;
+// 			// TODO: calculate dwell times
+// 			return jif;
+// 		},
 		jif_causal_diagram: function() {
 			var jif;
 			try {
@@ -931,6 +965,12 @@ var app = new Vue({
 			p.width  =  p.steps * p.dx + 50;
 			p.height = (this.n_jugglers - (this.n_jugglers > 1 ? 1 : 1.4)) * p.dy + 2 * p.yoff;
 			return p;
+		},
+		update_scene: function() {
+			window.jif = this.jif;
+			if ('updateScene' in window)
+				updateScene();
+			return '';
 		}
 	},
 	methods: {
@@ -991,7 +1031,7 @@ var app = new Vue({
 			handler() {
 				localStorage.setItem('n_jugglers', this.n_jugglers_input);
 			},
-		},
+		}
 	},
 });
 
