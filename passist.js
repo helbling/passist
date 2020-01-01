@@ -898,11 +898,18 @@ var app = new Vue({
 		jif_json: function() {
 			return JSON.stringify(this.jif, null, 2);
 		},
-// 		animation_jif: function() {
-// 			var jif = this.jif;
-// 			// TODO: calculate dwell times
-// 			return jif;
-// 		},
+		animation_jif: function() {
+			var jif = this.jif;
+
+			// calculate dwell times
+			for (var i in jif.events) {
+				var e = jif.events[i];
+				if (e.type == 'throw')
+					jif.events[i].dwell = e.duration > 2 ? 1 : (e.duration < 1 ? 0 : 0.5);
+			}
+
+			return jif;
+		},
 		jif_causal_diagram: function() {
 			var jif;
 			try {
@@ -980,7 +987,7 @@ var app = new Vue({
 			return p;
 		},
 		update_scene: function() {
-			window.jif = this.jif;
+			window.jif = this.animation_jif;
 			if ('updateScene' in window)
 				updateScene();
 			return '';

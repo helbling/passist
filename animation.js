@@ -44,7 +44,7 @@ var animate = function (time) {
 	requestAnimationFrame( animate );
 	controls.update();
 
-	var gravity = -1.5;
+	var gravity = -2.5;
 
 	var props = window.props;
 	if (jif && props) {
@@ -69,20 +69,28 @@ var animate = function (time) {
 				if (th.duration > 0 && (th.time <= t && t <= th.time + th.duration || wrapped)) { // TODO: handle wrap around period
 					visible = true;
 					var dt = (wrapped ? tt : t) - th.time;
-					var f = dt / th.duration;
-					var v0 = -gravity * Math.pow(th.duration, 2) / (2 * th.duration);
 
-// 					v = v0 + a * t;
-//
-// 					s = s0 + v0t + ½ * a * t^2
-// 					v = ds / dt;
-//
-					// v0 * duration + gravity * Math.pow(duration, 2) / 2 = 0;
-					// v0 * duration = -gravity * Math.pow(duration, 2) / 2;
-					// v0 = (-gravity * Math.pow(duration, 2) / 2) / duration;
-// 					p.mesh.position.x = (th.from_hand * (1 - f) + th.to_hand * f - (jif.n_hands - 1) / 2) * 10 / jif.n_hands;
-					p.mesh.position.x = throw_pos[th.from_hand] * (1 - f) + catch_pos[th.to_hand] * f;
-					p.mesh.position.y = 1 + v0 * dt + gravity * Math.pow(dt, 2) / 2;
+					var dwell = th.dwell === undefined ? 0 : th.dwell
+					var throw_duration = th.duration - dwell;
+
+					if (dt <= throw_duration) {
+						var f = dt / throw_duration;
+						var v0 = -gravity * Math.pow(th.duration, 2) / (2 * th.duration);
+
+// 						v = v0 + a * t;
+// 						s = s0 + v0t + ½ * a * t^2
+// 						v = ds / dt;
+// 						v0 * duration + gravity * Math.pow(duration, 2) / 2 = 0;
+// 						v0 * duration = -gravity * Math.pow(duration, 2) / 2;
+// 						v0 = (-gravity * Math.pow(duration, 2) / 2) / duration;
+
+						p.mesh.position.x = throw_pos[th.from_hand] * (1 - f) + catch_pos[th.to_hand] * f;
+						p.mesh.position.y = base_height + v0 * dt + gravity * Math.pow(dt, 2) / 2;
+					} else {
+						var f = (dt - throw_duration) / dwell;
+						p.mesh.position.y = base_height;
+						p.mesh.position.x = catch_pos[th.to_hand] * (1 - f) + throw_pos[th.to_hand] * f; // TODO: use bezier curve
+					}
 					break;
 				}
 			}
