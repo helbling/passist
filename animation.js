@@ -13,8 +13,8 @@ scene.add( gridHelper );
 var scene_width = 6;
 
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-var camera_height = 3;
-camera.position.z = 5;
+var camera_height = 6;
+camera.position.z = 15;
 camera.position.y = camera_height;
 
 // var controls = new THREE.OrbitControls( camera, canvas );
@@ -23,7 +23,24 @@ controls.enableKeys = false;
 controls.target = new THREE.Vector3(0, camera_height, 0);
 controls.update();
 
+var loader = new THREE.GLTFLoader();
+loader.load( 'mr_meeseeks.gltf', function ( gltf ) {
+	window.mr_meeseeks = gltf.scene;
+	updateScene();
+}, undefined, function ( error ) {
+	console.error( error );
+});
+
+// var frametimes = [];
 var animate = function (time) {
+// 	while (frametimes.length > 0 && frametimes[0] + 1000 < time)
+// 		frametimes.shift();
+// 	if (time)
+// 		frametimes.push(time);
+// 	console.log('fps', frametimes.length);
+
+	var base_height = 5;
+
 	requestAnimationFrame( animate );
 	controls.update();
 
@@ -118,6 +135,13 @@ function updateScene()
 		if (e.type == 'throw' && e.prop !== undefined)
 			window.props[e.prop].throws.push(e);
 	}
+
+	if ('mr_meeseeks' in window) {
+		var juggler = mr_meeseeks;
+		juggler.position.z = -1;
+		scene.add( juggler );
+	}
+
 	console.log('update scene', window.props);
 }
 if (jif)
