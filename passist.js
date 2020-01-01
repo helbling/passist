@@ -396,16 +396,12 @@ var template = div({class:'container'},
 				),
 				div(
 					h4('Animation'),
-// 					canvas({id:'animation'},
-// 						"Oh no! Your browser doesn't support canvas!"
-// 					)
 					div({id:'animation'}),
-					'{{update_scene}}',
+					'{{update_scene}}', // empty string as fake dependency so animation gets updated in animation.js
 				)
 			)
 		)
 	),
-
 	div({class:'padding_bottom'}) // add some white space to the page end so that we never loose the scroll position when editing the siteswap
 );
 
@@ -840,7 +836,25 @@ var app = new Vue({
 			return this.siteswap.get_start_properties(this.n_jugglers);
 		},
 		jif: function() {
-			var steps = this.n_jugglers * this.period * 2 * this.n_objects; // TODO: calculate smaller number or have a relabeling mechanism
+			var orbits = this.siteswap.orbits();
+
+
+			function lcm_array(array) {
+				function gcd(a, b) { return !b ? a : gcd(b, a % b); }
+				function lcm(a, b) { return (a * b) / gcd(a, b); }
+				var multiple = 1;
+				array.forEach(function(n) {
+					multiple = lcm(multiple, n);
+				});
+				return multiple;
+			}
+
+			var periods = orbits.map(function(orbit) {
+				return orbit.reduce(function(a, b) { return a + b; }, 0); // sum
+			});
+			periods.push( this.n_jugglers * 2); // n_hands
+			periods.push(this.period); // siteswap period
+			var steps = lcm_array(periods);
 			var p = {};
 			if (this.siteswap_name)
 				p.title = this.siteswap_name;
@@ -864,7 +878,6 @@ var app = new Vue({
 				})
 			}
 
-			// calculate which throw corresponds to which prop
 			var propid = 0;
 			for (var i = 0; i < steps; i++) {
 				var prop = p.events[i].prop;

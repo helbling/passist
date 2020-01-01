@@ -2,7 +2,6 @@ var container = document.getElementById("animation");
 var width  =  window.innerWidth - 80;
 var height  = window.innerHeight;
 
-// var renderer = new THREE.WebGLRenderer({ canvas: canvas });
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( width, height );
 renderer.setClearColor(new THREE.Color(0xffffff));

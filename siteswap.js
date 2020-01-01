@@ -105,4 +105,21 @@ Siteswap.prototype = {
 		}
 		return result.join('');
 	},
+	orbits: function() {
+		var visited = [];
+		var result = [];
+		for (var i in this.heights) {
+			if (visited[i])
+				continue;
+
+			var orbit = [];
+			for (var j = i; !visited[j]; j = (j + this.heights[j]) % this.period) {
+				orbit.push(this.heights[j]);
+				visited[j] = true;
+			}
+			result.push(orbit);
+		}
+
+		return result;
+	}
 };
