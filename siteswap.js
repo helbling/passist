@@ -109,7 +109,7 @@ Siteswap.prototype = {
 		var visited = [];
 		var result = [];
 		for (var i in this.heights) {
-			if (visited[i])
+			if (visited[i] || this.heights[i] == 0)
 				continue;
 
 			var orbit = [];
