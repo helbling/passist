@@ -50,13 +50,13 @@ var animate = function (time) {
 	if (jif && props) {
 		t = (time / 500) % jif.time_period;
 
-		var throw_pos = [];
-		var catch_pos = [];
+		var throw_positions = [];
+		var catch_positions = [];
 		for (var i = 0; i < jif.n_hands; i++) {
 			var base_pos = i * scene_width / (jif.n_hands - 1) - scene_width / 2;
 			var hand_offset = 0.6 / (jif.n_hands - 1);
-			throw_pos.push(base_pos + (i % 2 == 0 ? 1 : -1) * hand_offset);
-			catch_pos.push(base_pos + (i % 2 == 0 ? -1 : 1) * hand_offset);
+			throw_positions.push(base_pos + (i % 2 == 0 ? 1 : -1) * hand_offset);
+			catch_positions.push(base_pos + (i % 2 == 0 ? -1 : 1) * hand_offset);
 		}
 
 		for (var i in props) {
@@ -73,10 +73,11 @@ var animate = function (time) {
 					var dwell = th.dwell === undefined ? 0 : th.dwell
 					var throw_duration = th.duration - dwell;
 
+					var v0 = [(throw_positions[th.from_hand] - catch_positions[th.to_hand] ) / throw_duration , -gravity * Math.pow(throw_duration, 2) / (2 * throw_duration)];
+// 					var v1 = [v0[0], v0[1] + gravity * throw_duration];
+
 					if (dt <= throw_duration) {
 						var f = dt / throw_duration;
-						var v0 = -gravity * Math.pow(th.duration, 2) / (2 * th.duration);
-
 // 						v = v0 + a * t;
 // 						s = s0 + v0t + ½ * a * t^2
 // 						v = ds / dt;
@@ -84,18 +85,46 @@ var animate = function (time) {
 // 						v0 * duration = -gravity * Math.pow(duration, 2) / 2;
 // 						v0 = (-gravity * Math.pow(duration, 2) / 2) / duration;
 
-						p.mesh.position.x = throw_pos[th.from_hand] * (1 - f) + catch_pos[th.to_hand] * f;
-						p.mesh.position.y = base_height + v0 * dt + gravity * Math.pow(dt, 2) / 2;
+						p.mesh.position.x = throw_positions[th.from_hand] * (1 - f) + catch_positions[th.to_hand] * f;
+						p.mesh.position.y = base_height + v0[1] * dt + gravity * Math.pow(dt, 2) / 2;
 					} else {
 						var f = (dt - throw_duration) / dwell;
-						p.mesh.position.y = base_height;
-						p.mesh.position.x = catch_pos[th.to_hand] * (1 - f) + throw_pos[th.to_hand] * f; // TODO: use bezier curve
+
+						// linear interpolation
+// 						p.mesh.position.y = base_height;
+// 						p.mesh.position.x = catch_positions[th.to_hand] * (1 - f) + throw_positions[th.to_hand] * f;
+
+						// find v0 of next throw to calculate dwell bezier curve
+						var v0_next = [0, 0]; // some default if we don't find a next throw
+						var th2time = (th.time + th.duration) % jif.time_period;
+						for (var k in p.throws) {
+							var th2 = p.throws[k];
+							if (th2.time == th2time) {
+								var throw_duration2 = th2.duration - th2.dwell;
+								v0_next = [(throw_positions[th2.from_hand] - catch_positions[th2.to_hand] ) / throw_duration2 , -gravity * Math.pow(throw_duration2, 2) / (2 * throw_duration2)];
+								break;
+							}
+						}
+
+						var catch_pos = new THREE.Vector3(catch_positions[th.to_hand], base_height, 0);
+						var throw_pos = new THREE.Vector3(throw_positions[th.to_hand], base_height, 0);
+
+						// bezier curve
+						var damping = 0.5;
+						var curve = new THREE.CubicBezierCurve3(
+							catch_pos,
+							new THREE.Vector3( catch_pos.x - v0[0] * dwell * damping, catch_pos.y - v0[1] * dwell * damping, 0 ), // NOTE: -v0 only works when catching happens on the same height!
+							new THREE.Vector3( throw_pos.x   + v0_next[0] * dwell * damping,   throw_pos.y - v0_next[1] * dwell * damping, 0 ),
+							throw_pos
+						);
+						curve.getPoint(f, p.mesh.position);
 					}
 					break;
 				}
 			}
-			if (!visible)
-				console.log('object not visible, should not happen in siteswap:', p, t, tt, jif.time_period);
+// 			if (!visible)
+// 				console.log('object not visible, should not happen in siteswap:', p, t, tt, jif.time_period);
+
 			p.mesh.visible = visible;
 		}
 	}
