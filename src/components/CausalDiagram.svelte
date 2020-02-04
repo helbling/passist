@@ -1,3 +1,5 @@
+<svelte:options namespace=svg />
+
 <script>
 	export let jif;
 	export let start_configurations;
