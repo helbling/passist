@@ -192,10 +192,10 @@ to_jif(properties)
 		if (prop === undefined) {
 			var j = i;
 			p.events[j].prop = propid;
-			do {
+			while (j < steps && p.events[j].duration) {
 				j += p.events[j].duration;
 				p.events[j % steps].prop = propid;
-			} while(j < steps);
+			}
 
 			propid++;
 		}
