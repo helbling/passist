@@ -1,0 +1,33 @@
+body {
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"
+}
+
+.jumbotron { background-color:#19a2ba }
+.jumbotron .container { display:flex; flex-wrap:wrap }
+.container {max-width:none !important }
+@media (min-width:1200px){.container{max-width:1140px !important}}
+@media (max-width:40em) {
+   .card { border:none }
+   .col  { padding:0 }
+   .card-header { border-top: 1px solid rgba(0,0,0,.125) }
+	.jumbotron .meeseeks { display:none }
+}
+
+.jumbotron .cube, .jumbotron .meeseeks { height:8rem; margin-top:-1em }
+.jumbotron .cube { position:absolute }
+.jumbotron h1, .jumbotron h5 { padding-left:9rem }
+@media (min-width:30em) {
+	.col.siteswap { min-width:30em }
+}
+
+.siteswap_scroll { max-height:20em; overflow-y:auto }
+ul.siteswap_list { padding-left:0; column-width:20em }
+.generator ul.siteswap_list { column-width:8em }
+ul.siteswap_list li { list-style-type:none }
+.known_siteswaps li .siteswap { display:inline-block; width:5.5em ; vertical-align:top}
+.known_siteswaps li .name { display:inline-block; text-overflow:ellipsis; width:15em }
+.local_throws { overflow-x:auto; margin-bottom:1em }
+a.arrow { cursor:pointer }
+.jif_input { width:100%; height:15em }
+#animation { width:100%; height:600px }
+/* .padding_bottom { height:30em } */

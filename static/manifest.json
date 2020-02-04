@@ -1,0 +1,22 @@
+{
+	"short_name": "passist",
+	"name": "passing siteswap assistant",
+	"description": "passing siteswap assistant",
+	"start_url": ".",
+	"display": "standalone",
+	"scope": ".",
+	"background_color": "#19a2ba",
+	"theme_color": "#19a2ba",
+	"icons": [
+		{
+			"src": "images/icon-192x192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "images/icon-512x512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	]
+}
