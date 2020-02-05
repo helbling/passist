@@ -4,14 +4,15 @@
 	import Siteswap from './siteswap.js';
 	import { siteswap_names} from './patterns.js';
 
-	export let siteswap_input = "86277";
-	export let n_jugglers = 2;
+	const use_local_storage = typeof window !== 'undefined' && 'localStorage' in window;
 
-	// TODO: local storage:<script>
-	//  import { writable } from "svelte/store";
-	//  const store = writable(localStorage.getItem("store") || "");
-	//  store.subscribe(val => localStorage.setItem("store", val));
-	//    <input bind:value={$store} />
+	 // server should return empty siteswap to avoid flashing some overwritten default
+	export let siteswap_input = use_local_storage ? (localStorage.getItem("siteswap") || "86277") : "";
+
+	export let n_jugglers = use_local_storage ? (localStorage.getItem("n_jugglers") || 2) : 2;
+
+	$:	use_local_storage && siteswap_input && localStorage.setItem("siteswap", siteswap_input);
+	$:	use_local_storage && localStorage.setItem("n_jugglers", n_jugglers);
 
 	let siteswap_shift = 0;
 	let siteswap, stripped_input, original_siteswap, valid_class;
