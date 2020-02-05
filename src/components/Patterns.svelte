@@ -5,8 +5,9 @@
 <style>
 	ul{ padding-left:0; column-width:20em }
 	li { list-style-type:none }
-	li .siteswap { display:inline-block; width:5.5em ; vertical-align:top}
+	li .siteswap { display:inline-block; width:5.5em ; vertical-align:top; overflow-wrap:break-word}
 	li .name { display:inline-block; text-overflow:ellipsis; width:15em }
+	a:hover span { text-decoration:underline }
 </style>
 <h1>Well-known siteswaps</h1>
 
@@ -16,7 +17,8 @@
 	{#each known_siteswaps as s}
 		<li>
 			<a href="/siteswap/{s[0]}?n_jugglers=2">
-				{s[1]}
+				<span class=siteswap>{s[0]}</span>
+				<span class=name>{s[1]}</span>
 			</a>
 		</li>
 	{/each}
