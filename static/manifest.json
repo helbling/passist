@@ -1,6 +1,6 @@
 {
-	"short_name": "passist",
-	"name": "passing siteswap assistant",
+	"short_name": "passist beta",
+	"name": "passing siteswap assistant (beta)",
 	"description": "passing siteswap assistant",
 	"start_url": ".",
 	"display": "standalone",
