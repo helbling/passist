@@ -111,14 +111,14 @@ global_interface(n_jugglers)
 
 orbits()
 {
-	var visited = [];
-	var result = [];
-	for (var i in this.heights) {
+	const visited = [];
+	const result = [];
+	for (let i = 0; i < this.heights.length; i++) {
 		if (visited[i] || this.heights[i] == 0)
 			continue;
 
-		var orbit = [];
-		for (var j = i; !visited[j]; j = (j + this.heights[j]) % this.period) {
+		const orbit = [];
+		for (let j = i; !visited[j]; j = ((j + this.heights[j]) % this.period)) {
 			orbit.push(this.heights[j]);
 			visited[j] = true;
 		}
