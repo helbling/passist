@@ -174,27 +174,33 @@ to_jif(properties)
 	if (this.period < 1)
 		return p;
 
+	const eventsAtTime = [];
+
 	for (let i = 0; i < steps; i++) {
 		const height = heights[i % this.period];
-		p.events.push({
+		const e = {
 			type: 'throw',
 			time: i,
 			duration: height,
 			from_hand: i % n_hands,
 			to_hand: (i + height) % n_hands,
 			label: Siteswap.height_to_char(height)
-		})
+		};
+		eventsAtTime.push(e);
+		if (height)
+			p.events.push(e);
 	}
 
+	// label events with propid
 	let propid = 0;
 	for (let i = 0; i < steps; i++) {
-		const prop = p.events[i].prop;
-		if (prop === undefined) {
+		const e = eventsAtTime[i];
+		if (e.prop === undefined && e.duration) {
 			let j = i;
-			p.events[j].prop = propid;
-			while (j < steps && p.events[j].duration) {
-				j += p.events[j].duration;
-				p.events[j % steps].prop = propid;
+			eventsAtTime[j].prop = propid;
+			while (j < steps && eventsAtTime[j].duration) {
+				j += eventsAtTime[j].duration;
+				eventsAtTime[j % steps].prop = propid;
 			}
 
 			propid++;
