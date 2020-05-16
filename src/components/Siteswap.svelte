@@ -120,8 +120,10 @@ $:	{
 {#if valid || fullscreen}
 	<h2>
 		<!-- TODO: put correct siteswap shift in href -->
+		<!-- svelte-ignore a11y-invalid-attribute -->
 		<a class=arrow href='javascript:;' on:click={shift_left}>◄</a>
 		{siteswap.to_string()}
+		<!-- svelte-ignore a11y-invalid-attribute -->
 		<a class=arrow href='javascript:;' on:click={shift_right}>►</a>
 
 		{siteswap_name ? siteswap_name : ''}
