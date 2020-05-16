@@ -9,7 +9,7 @@
 		position: relative;
 		max-width: 56em;
 		background-color: white;
-		padding: 2em;
+		padding: 1ex;
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
@@ -34,7 +34,7 @@
 			<img class="cube" src="images/cube.svg" alt="logo" />
 		</div>
 		<div style="flex:1">
-			<h1>passist beta</h1>
+			<h1>passist alpha</h1>
 			<h5>passing siteswap assistant</h5>
 		</div>
 		<div>

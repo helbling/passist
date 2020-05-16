@@ -1,21 +1,24 @@
 <script>
-	import InputField from './InputField.svelte';
+	import SiteswapInput from './SiteswapInput.svelte';
 	import CausalDiagram from './CausalDiagram.svelte';
+	import Animation from './Animation.svelte';
 	import Siteswap from './siteswap.js';
 	import { siteswap_names} from './patterns.js';
+	import { goto } from '@sapper/app';
 
 	const use_local_storage = typeof window !== 'undefined' && 'localStorage' in window;
 
 	 // server should return empty siteswap to avoid flashing some overwritten default
 	export let siteswap_input = use_local_storage ? (localStorage.getItem("siteswap") || "86277") : "";
-
 	export let n_jugglers = use_local_storage ? (localStorage.getItem("n_jugglers") || 2) : 2;
+	export let fullscreen = false;
 
 	$:	use_local_storage && siteswap_input && localStorage.setItem("siteswap", siteswap_input);
 	$:	use_local_storage && localStorage.setItem("n_jugglers", n_jugglers);
+	$:	use_local_storage && localStorage.setItem("jif", jif);
 
 	let siteswap_shift = 0;
-	let siteswap, stripped_input, original_siteswap, valid_class;
+	let siteswap, stripped_input, original_siteswap;
 	let valid = false;
 	let period;
 	let n_props;
@@ -25,12 +28,30 @@
 	let prechacthis_url;
 	let start_configurations;
 	let jif;
+	let window_width;
+	let window_height;
 
 	function shift_left() {
 		siteswap_shift = (siteswap_shift + 1) % period;
 	}
 	function shift_right() {
 		siteswap_shift = (siteswap_shift + period - 1) % period;
+	}
+	function get_url(p = {}) {
+		p = Object.assign({
+			siteswap_input: siteswap_input,
+			n_jugglers: n_jugglers,
+			fullscreen: fullscreen,
+		}, p);
+		let res = new URL('/siteswap/' + p.siteswap_input, location.href);
+		res.searchParams.append('n_jugglers', p.n_jugglers);
+		if (p.fullscreen)
+			res.searchParams.append('fullscreen', 1);
+		return res.href;
+	}
+	function on_fullscreen_change(e) {
+		const url = get_url({fullscreen: e.detail});
+		goto(url);
 	}
 
 $:	{
@@ -42,7 +63,6 @@ $:	{
 			valid = siteswap.is_valid();
 			period = siteswap.period;
 			n_props = siteswap.n_props;
-			valid_class = valid == false ? 'text-danger' : '';
 			siteswap_name = siteswap_names[siteswap.canonic_string()];
 			start_properties = siteswap.get_start_properties(n_jugglers);
 
@@ -84,35 +104,20 @@ $:	{
 </script>
 
 <style>
-	.causal_diagram { overflow-x:auto }
+	.causal_diagram { overflow-x:auto; margin-bottom:1em }
 	a.arrow { color:inherit; text-decoration:none }
 </style>
 
-<div class=form-inline>
-	<InputField
-		bind:value={siteswap_input}
-		id=siteswap_input
-		label=Siteswap
-		type=search
-		attr={{
-			inputmode: 'verbatim',
-			pattern:   '[0-9a-zA-Z ]+',
-			class:     'valid_class',
-			size:      10,
-		}}
-		/>
-	<InputField
-		bind:value={n_jugglers}
-		id=n_jugglers
-		type=number
-		label='👥'
-		title='Number of jugglers'
-		min=1
-		max=9
-		/>
-</div>
+<svelte:window bind:innerWidth={window_width} bind:innerHeight={window_height} />
 
-{#if valid}
+<SiteswapInput
+	bind:siteswap_input={siteswap_input}
+	bind:n_jugglers={n_jugglers}
+	bind:valid={valid}
+	id_prefix=main_
+/>
+
+{#if valid || fullscreen}
 	<h2>
 		<!-- TODO: put correct siteswap shift in href -->
 		<a class=arrow href='javascript:;' on:click={shift_left}>◄</a>
@@ -173,8 +178,6 @@ $:	{
 		</div>
 	{/if}
 
-	<h4>Causal diagram</h4>
-
 	<div class=causal_diagram>
 		<CausalDiagram
 			{jif}
@@ -182,6 +185,22 @@ $:	{
 			steps={n_jugglers * period * 2}
 		/>
 	</div>
+
+	<Animation
+		{jif}
+		{valid}
+		width={window_width > 1000 ? 1000 : window_width - 32}
+		height=300
+		bind:fullscreen={fullscreen}
+		on:fullscreen_change={on_fullscreen_change}
+	>
+		<SiteswapInput
+			bind:siteswap_input={siteswap_input}
+			bind:n_jugglers={n_jugglers}
+			bind:valid={valid}
+			id_prefix=animation_
+		/>
+	</Animation>
 
 {:else if siteswap_input}
 	<div>

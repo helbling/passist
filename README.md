@@ -26,6 +26,15 @@ Usage:
  open http://localhost:3000
 ```
 
+# Tools used
+
+This project builds upon the follwing open source tools. Many thanks to its creators!
+
+- [svelte](https/svelte.dev/) for handling state
+- [sapper](https://sapper.svelte.dev/) for building the web application
+- [three.js](https://threejs.org/) for doing all the complicated 3d stuff
+- [bytesize-icons](https://danklammer.com/bytesize-icons/) for the iconset
+- [Bootstrap](https://getbootstrap.com/) so the input fields look nice
 
 # License
 
