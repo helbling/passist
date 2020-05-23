@@ -788,6 +788,7 @@ updateScene(jif, valid)
 
 	this.throwPositions = [];
 	this.catchPositions = [];
+	this.zipCatchPositions = [];
 	for (let i = 0; i < jif.n_hands; i++) {
 		let hand = jif.hands[i];
 		let j = hand.juggler;
@@ -827,6 +828,16 @@ updateScene(jif, valid)
 			);
 		this.catchPositions.push(catchPosition);
 		this.throwPositions.push(throwPosition);
+		this.zipCatchPositions.push(
+			base_pos.clone()
+				.add(
+					v3(0, shoulderHeight - 2 * hu, 0)
+				).add(
+					facing.clone()
+					.cross(v3(0, sf, 0))
+					.multiplyScalar(throw_catch_offset * 2)
+				)
+		);
 		this.jugglers[j].setHandPosition(side, throwPosition);
 
 		this.hands.push({
@@ -853,6 +864,10 @@ updateScene(jif, valid)
 			if (jugglerFrom == jugglerTo) { // self - TODO: improve angle for crossing selfs
 				e.axis = this.jugglers[jugglerFrom].facing.cross(up);
 				e.catchAngle = 1.5 * Math.PI;
+
+				// zip like
+				if (soloHeight < 2.5 && e.from_hand != e.to_hand)
+					e.catchPos = this.zipCatchPositions[e.to_hand];
 			} else { // pass
 				e.axis = e.catchPos.clone().sub(e.throwPos).normalize().cross(up);
 				e.catchAngle = 2 * Math.PI;
