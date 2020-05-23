@@ -970,6 +970,8 @@ updateScene(jif, valid)
 	}
 
 	this.positionCamera();
+
+	this.setPositions(0);
 }
 
 animate(t)
@@ -994,30 +996,31 @@ animate(t)
 	requestAnimationFrame(this.animate.bind(this));
 	this.controls.update();
 
-	if (jif && this.props && !this.paused) {
-		t = ((time * jif.n_hands / 1000 * jif.animationSpeed) % jif.time_period) / jif.beatsPerSecond;
-
-		for (const p of this.props) {
-			let visible = false;
-			if (p.movement.getPosition(t, p.mesh.position))
-				visible = true;
-
-			let quaternion = p.movement.getRotation(t);
-			if (quaternion)
-				p.mesh.setRotationFromQuaternion(quaternion);
-
-			p.mesh.visible = visible;
-		}
-
-		for (const hand of this.hands) {
-			const handPos = hand.movement.getPosition(t);
-			if (handPos)
-				hand.juggler.setHandPosition(hand.side, handPos);
-		}
-
-	}
+	if (jif && this.props && !this.paused)
+		this.setPositions(((time * jif.n_hands / 1000 * jif.animationSpeed) % jif.time_period) / jif.beatsPerSecond);
 
 	this.renderer.render(this.scene, this.camera);
+}
+
+setPositions(t)
+{
+	for (const p of this.props) {
+		let visible = false;
+		if (p.movement.getPosition(t, p.mesh.position))
+			visible = true;
+
+		let quaternion = p.movement.getRotation(t);
+		if (quaternion)
+			p.mesh.setRotationFromQuaternion(quaternion);
+
+		p.mesh.visible = visible;
+	}
+
+	for (const hand of this.hands) {
+		const handPos = hand.movement.getPosition(t);
+		if (handPos)
+			hand.juggler.setHandPosition(hand.side, handPos);
+	}
 }
 
 togglePause()
