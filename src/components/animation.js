@@ -196,7 +196,13 @@ constructor(faceTexture)
 		elbow.add(lowerArm);
 
 		lowerArm.add(new THREE.Mesh(
-			sphere.clone().scale(0.6 * hu, 0.6 * hu, handLength).translate(0, 0, lowerArmLength),
+			sphere.clone().scale(0.6 * hu, 0.6 * hu, 0.6 * hu).translate(0, 0, lowerArmLength),
+			bodyMaterial
+		));
+
+		// hand
+		lowerArm.add(new THREE.Mesh(
+			sphere.clone().scale(0.4 * hu, 0.5 * hu, handLength).rotateZ(-sideFactor(side) * Math.PI / 4).translate(0, 0, lowerArmLength + handLength / 2),
 			bodyMaterial
 		));
 	}
