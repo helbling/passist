@@ -410,18 +410,24 @@ class DwellCurve extends THREE.CubicBezierCurve3
 
 constructor(p)
 {
-	const dwellPropDamping = 0.3;
+	const dCatch = p.vCatch.clone().multiplyScalar( p.duration);
+	const dThrow = p.vThrow.clone().multiplyScalar(-p.duration);
+
+	// limit dwell path to be within arms length
+	// approximate solution by damping to some maximal distances to the control points
+	const maxDist = upperArmLength + lowerArmLength;
+	const dCatchFactor = DwellCurve.damping(dCatch.length() / maxDist) * maxDist;
+	const dThrowFactor = DwellCurve.damping(dThrow.length() / maxDist) * maxDist;
 
 	super(
 		p.catchPos.clone(),
-		p.catchPos.clone().add(p.vCatch.clone().multiplyScalar( p.duration * dwellPropDamping)),
-		p.throwPos.clone().add(p.vThrow.clone().multiplyScalar(-p.duration * dwellPropDamping)),
+		p.catchPos.clone().add(dCatch.clone().normalize().multiplyScalar(dCatchFactor)),
+		p.throwPos.clone().add(dThrow.clone().normalize().multiplyScalar(dThrowFactor)),
 		p.throwPos.clone(),
 	);
 	this.type = 'DwellCurve';
 	for (const [k, v] of Object.entries(p))
 		this[k] = v;
-
 }
 
 getRotation(t, optionalTarget)
@@ -435,6 +441,12 @@ getRotation(t, optionalTarget)
 		);
 	}
 	return undefined;
+}
+
+// damps input to a maximum of 1, from 0 to 0.5 linear
+static damping(x)
+{
+	return x <= 0.5 ? x : 1 - Math.pow(Math.E, Math.log(0.5) + 1 - 2 * x);
 }
 
 } // end class DwellCurve
