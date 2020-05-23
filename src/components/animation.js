@@ -484,11 +484,16 @@ constructor(p)
 	this.period = p.period;
 	this.positionCurves = p.positionCurves;
 	this.positionCurves.sort((a, b) => a.start - b.start);
+	this.nCurves = this.positionCurves.length;
+	this.lastIndex = 0;
 }
 
 getCurveAndFraction(t)
 {
-	for (const c of this.positionCurves) { // TODO: binary search to be more efficient on a lot of curves
+	for (let i = 0; i < this.nCurves; i++) {
+		const index = (this.lastIndex + i) % this.nCurves;
+		this.lastIndex = index;
+		const c = this.positionCurves[index];
 		const end = c.start + c.duration;
 		if (c.start <= t && t < end)
 			return {
