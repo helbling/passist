@@ -928,30 +928,32 @@ updateScene(jif, valid)
 			}
 			const start = (last.start + last.duration) % period;
 			const end = curve.start;
-			const dwellCurve = new DwellCurve({
-				catchPos: last.catchPos,
-				throwPos: curve.throwPos,
-				vCatch: last.v1.clone(),
-				vThrow: curve.v0.clone(),
-				start: start,
-				duration: end - start + (end > start ? 0 : period),
-				hand: curve.fromHand,
-				catchAxis: last.spinAxis.clone().multiplyScalar(last.isSelf ? 1 : -1),
-				catchAngle: last.catchAngle,
-				catchRotationSpeed: -last.rotationSpeed,
-				throwAxis: curve.spinAxis,
-				throwAngle: curve.throwAngle,
-				throwRotationSpeed: curve.rotationSpeed,
-			});
-			this.hands[dwellCurve.hand].positionCurves.push(dwellCurve);
+			const dwellDuration = end - start + (end >= start ? 0 : period);
 
-			if (jif.showOrbits)
-				this.scene.add(new THREE.Mesh(
-					new THREE.TubeBufferGeometry(dwellCurve, 32, 0.01, 16, false),
-					new THREE.MeshToonMaterial({ color:propColor(prop) }),
-				));
-
-			positionCurves.push(dwellCurve);
+			if (dwellDuration > 0) {
+				const dwellCurve = new DwellCurve({
+					catchPos: last.catchPos,
+					throwPos: curve.throwPos,
+					vCatch: last.v1.clone(),
+					vThrow: curve.v0.clone(),
+					start: start,
+					duration: dwellDuration,
+					hand: curve.fromHand,
+					catchAxis: last.spinAxis.clone().multiplyScalar(last.isSelf ? 1 : -1),
+					catchAngle: last.catchAngle,
+					catchRotationSpeed: -last.rotationSpeed,
+					throwAxis: curve.spinAxis,
+					throwAngle: curve.throwAngle,
+					throwRotationSpeed: curve.rotationSpeed,
+				});
+				this.hands[dwellCurve.hand].positionCurves.push(dwellCurve);
+				if (jif.showOrbits)
+					this.scene.add(new THREE.Mesh(
+						new THREE.TubeBufferGeometry(dwellCurve, 32, 0.01, 16, false),
+						new THREE.MeshToonMaterial({ color:propColor(prop) }),
+					));
+				positionCurves.push(dwellCurve);
+			}
 			positionCurves.push(curve);
 			last = curve;
 		}
