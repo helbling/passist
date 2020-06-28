@@ -928,7 +928,7 @@ updateScene(jif, valid)
 			}
 			const start = (last.start + last.duration) % period;
 			const end = curve.start;
-			const dwellDuration = end - start + (end >= start ? 0 : period);
+			const dwellDuration = end - start + (end >= start - 1e-10 ? 0 : period);
 
 			if (dwellDuration > 0) {
 				const dwellCurve = new DwellCurve({
