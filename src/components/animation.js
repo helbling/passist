@@ -415,7 +415,7 @@ constructor(p)
 
 	// limit dwell path to be within arms length
 	// approximate solution by damping to some maximal distances to the control points
-	const maxDist = upperArmLength + lowerArmLength;
+	const maxDist = upperArmLength + lowerArmLength - 0.4 * hu;
 	const dCatchFactor = DwellCurve.damping(dCatch.length() / maxDist) * maxDist;
 	const dThrowFactor = DwellCurve.damping(dThrow.length() / maxDist) * maxDist;
 
