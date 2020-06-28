@@ -426,6 +426,16 @@ constructor(p)
 		p.throwPos.clone(),
 	);
 	this.type = 'DwellCurve';
+	if (p.catchAxis && p.throwAxis && ('throwAngle' in p) && ('catchAngle' in p) && ('throwRotationSpeed' in p)) {
+		const maxRotationDelta = Math.PI;
+		this.rotationCurve = new THREE.CubicBezierCurve3(
+			new THREE.Vector3( p.catchAngle, 0 , 0),
+			new THREE.Vector3( p.catchAngle, 0 , 0),
+			new THREE.Vector3( p.throwAngle - DwellCurve.damping(p.throwRotationSpeed * p.duration / maxRotationDelta) * maxRotationDelta, 0, 0 ),
+			new THREE.Vector3( p.throwAngle, 0, 0 )
+		);
+	}
+
 	for (const [k, v] of Object.entries(p))
 		this[k] = v;
 }
@@ -433,11 +443,11 @@ constructor(p)
 getRotation(t, optionalTarget)
 {
 	const target = optionalTarget || new THREE.Quaternion();
-	if (this.catchAxis && this.throwAxis && this.throwAngle && this.catchAngle) {
+	if (this.rotationCurve) {
 		return target.setFromAxisAngle(
-				this.catchAxis.clone().multiplyScalar(1 - t)
-					.add(this.throwAxis.clone().multiplyScalar(t)),
-			this.catchAngle * (1 - t) + this.throwAngle * t //const rotation = f <= 0.5 ? f * Math.PI * 2 : Math.PI * (1.5 - f);
+			this.catchAxis.clone().multiplyScalar(1 - t)
+				.add(this.throwAxis.clone().multiplyScalar(t)),
+			this.rotationCurve.getPoint(t).x
 		);
 	}
 	return undefined;
@@ -888,6 +898,7 @@ updateScene(jif, valid)
 				spinAxis: e.axis,
 				throwAngle: e.throwAngle,
 				catchAngle: e.catchAngle,
+				isSelf:   jugglerFrom == jugglerTo,
 			});
 			propThrows[e.prop].push(e.throwCurve);
 
@@ -925,7 +936,7 @@ updateScene(jif, valid)
 				start: start,
 				duration: end - start + (end > start ? 0 : period),
 				hand: curve.fromHand,
-				catchAxis: last.spinAxis,
+				catchAxis: last.spinAxis.clone().multiplyScalar(last.isSelf ? 1 : -1),
 				catchAngle: last.catchAngle,
 				catchRotationSpeed: -last.rotationSpeed,
 				throwAxis: curve.spinAxis,
