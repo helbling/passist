@@ -179,7 +179,7 @@ to_jif(properties)
 	for (let i = 0; i < steps; i++) {
 		const height = heights[i % this.period];
 		const e = {
-			type: 'throw',
+			type: height ? 'throw' : 'pause',
 			time: i,
 			duration: height,
 			from_hand: i % n_hands,
@@ -187,8 +187,7 @@ to_jif(properties)
 			label: Siteswap.height_to_char(height)
 		};
 		eventsAtTime.push(e);
-		if (height)
-			p.events.push(e);
+		p.events.push(e);
 	}
 
 	// label events with propid

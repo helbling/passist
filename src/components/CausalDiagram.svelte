@@ -69,7 +69,7 @@ $: {
 		nodes = [];
 		for (let i = 0; i < jif.events.length; i++) {
 			let event = jif.events[i];
-			if (event.type != 'throw')
+			if (event.type != 'throw' && event.type != 'pause')
 				continue;
 			let t = event.time;
 			let juggler_from = event.from_hand % n_jugglers;
