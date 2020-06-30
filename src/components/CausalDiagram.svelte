@@ -82,7 +82,7 @@ $: {
 				class: (Math.floor(event.from_hand / n_jugglers) % 2) ? 'left_hand' : 'right_hand',
 				juggler: juggler_from,
 				label: event.label,
-				arrow: arrow(i, event.duration - 2 * n_jugglers, juggler_from, juggler_to), // for ladder diagram: don't subtract 2 * n_jugglers
+				arrow: arrow(event.time, event.duration - 2 * n_jugglers, juggler_from, juggler_to), // for ladder diagram: don't subtract 2 * n_jugglers
 			});
 		}
 		nodes = nodes; // update svelte state
