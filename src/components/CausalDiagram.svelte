@@ -1,10 +1,10 @@
 <svelte:options namespace=svg />
 
 <script>
-	import { onMount } from 'svelte';
 	export let jif;
 	export let start_configurations;
 	export let steps = 1;
+	export let url = '';
 
 	let jugglers = {};
 	let xoff = 55;
@@ -16,15 +16,6 @@
 	let width, height;
 	let nodes = {};
 	const arrow_length = 20;
-
-	onMount(async () => {
-		// fix relative urls in svg paths (arrow heads) which don't work on ios because of sveltes base tag
-		for (let path of document.querySelectorAll('path')) {
-			let markerend = path.getAttribute('marker-end');
-			if (path.hasAttribute('marker-end'))
-				path.setAttribute('marker-end', path.getAttribute('marker-end').replace(/url\((#.*)\)/, 'url(' + location.href + '$1)'));
-		}
-	});
 
 	function arrow(i, step, juggler_from, juggler_to) {
 		var j = i + step;
@@ -175,7 +166,7 @@ $: {
 				d={n.arrow}
 				stroke-width=2px
 				fill=none
-				marker-end=url(#arrow)
+				marker-end=url({url}#arrow)
 			/>
 		{/if}
 	{/each}

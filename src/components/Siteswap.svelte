@@ -4,18 +4,13 @@
 	import Animation from './Animation.svelte';
 	import Siteswap from './siteswap.js';
 	import { siteswap_names} from './patterns.js';
+	import { defaults, siteswapUrl } from './passist.js';
 	import { goto } from '@sapper/app';
 
-	const use_local_storage = typeof window !== 'undefined' && 'localStorage' in window;
-
-	 // server should return empty siteswap to avoid flashing some overwritten default
-	export let siteswap_input = use_local_storage ? (localStorage.getItem("siteswap") || "86277") : "";
-	export let n_jugglers = use_local_storage ? (localStorage.getItem("n_jugglers") || 2) : 2;
+	export let siteswap_input = "45678";
+	export let n_jugglers = defaults.n_jugglers;
 	export let fullscreen = false;
-
-	$:	use_local_storage && siteswap_input && localStorage.setItem("siteswap", siteswap_input);
-	$:	use_local_storage && localStorage.setItem("n_jugglers", n_jugglers);
-	$:	use_local_storage && localStorage.setItem("jif", jif);
+	export let url = '';
 
 	let siteswap_shift = 0;
 	let siteswap, stripped_input, original_siteswap;
@@ -43,11 +38,7 @@
 			n_jugglers: n_jugglers,
 			fullscreen: fullscreen,
 		}, p);
-		let res = new URL('/siteswap/' + p.siteswap_input, location.href);
-		res.searchParams.append('n_jugglers', p.n_jugglers);
-		if (p.fullscreen)
-			res.searchParams.append('fullscreen', 1);
-		return res.href;
+		return siteswapUrl(p);
 	}
 	function on_fullscreen_change(e) {
 		const url = get_url({fullscreen: e.detail});
@@ -185,6 +176,7 @@ $:	{
 			{jif}
 			{start_configurations}
 			steps={n_jugglers * period * 2}
+			{url}
 		/>
 	</div>
 
