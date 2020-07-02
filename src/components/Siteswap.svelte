@@ -25,6 +25,7 @@
 	let jif;
 	let window_width;
 	let window_height;
+	let sharebutton = process.browser === true && 'share' in navigator;
 
 	function shift_left() {
 		siteswap_shift = (siteswap_shift + 1) % period;
@@ -94,12 +95,20 @@ $:	{
 		return word ? word : x;
 	}
 
+	function share() {
+		navigator.share({
+			url: location.href,
+			title: 'Siteswap ' + stripped_input + (siteswap_name ? ' (' + siteswap_name + ')' : '') + ' - passist.org',
+		});
+		return false;
+	}
 
 </script>
 
 <style>
 	.causal_diagram { overflow-x:auto; margin-bottom:1em }
 	a.arrow { color:inherit; text-decoration:none }
+	.sharebutton { margin-top:1em }
 </style>
 
 <svelte:window bind:innerWidth={window_width} bind:innerHeight={window_height} />
@@ -199,6 +208,12 @@ $:	{
 		/>
 	</Animation>
 
+	{#if sharebutton}
+		<!-- svelte-ignore a11y-invalid-attribute -->
+		<div class=sharebutton>
+			<a href='javascript:;' on:click={share}>Share</a>
+		</div>
+	{/if}
 {:else if siteswap_input}
 	<div>
 		<img src=images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps">
