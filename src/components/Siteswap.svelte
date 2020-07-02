@@ -50,7 +50,10 @@ $:	{
 		original_siteswap = new Siteswap(stripped_input);
 		siteswap = original_siteswap.shift(siteswap_shift);
 		if (n_jugglers > 0) {
-			jif = siteswap.to_jif({n_jugglers: n_jugglers});
+			jif = siteswap.to_jif({
+				n_jugglers: n_jugglers,
+				flipTwos: true
+			});
 			valid = siteswap.is_valid();
 			period = siteswap.period;
 			n_props = siteswap.n_props;

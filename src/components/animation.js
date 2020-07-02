@@ -869,7 +869,9 @@ updateScene(jif, valid)
 		if (e.type == 'throw') {
 			const soloHeight = e.duration / jif.n_jugglers;
 			e.dwell = (soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5)) * jif.n_jugglers;
-			e.spins = Math.max(0, Math.floor(e.duration / jif.n_jugglers - 2));
+			if (!('spins' in e))
+				e.spins = Math.max(0, Math.floor(soloHeight - 2));
+
 			const jugglerFrom = jif.hands[e.from_hand].juggler;
 			const jugglerTo = jif.hands[e.to_hand].juggler;
 			const up = v3(0, 1, 0);

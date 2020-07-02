@@ -186,6 +186,9 @@ to_jif(properties)
 			to_hand: (i + height) % n_hands,
 			label: Siteswap.height_to_char(height)
 		};
+		if (p.flipTwos && height == 2 * n_jugglers)
+			e.spins = 1;
+
 		eventsAtTime.push(e);
 		p.events.push(e);
 	}
