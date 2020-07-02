@@ -4,13 +4,23 @@ const defaults = {
 	n_jugglers: 2,
 };
 
+function U(path, query)
+{
+	const queryPart = Object.entries(query).map(
+		([key, val]) => `${key}=${encodeURIComponent(val)}`
+	).join('&');
+	return path + (queryPart ? '?' + queryPart : '');
+}
+
 function siteswapUrl(p)
 {
-	let res = new URL('/siteswap/' + p.siteswap_input, location.href);
-	res.searchParams.append('n_jugglers', p.n_jugglers);
+	const query = {
+		n_jugglers: p.n_jugglers,
+	};
 	if (p.fullscreen)
-		res.searchParams.append('fullscreen', 1);
-	return res.href;
+		query.fullscreen = 1;
+	const url = U('/siteswap/' + p.siteswap_input, query);
+	return url;
 }
 
 export { defaults, siteswapUrl };
