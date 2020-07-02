@@ -1,4 +1,5 @@
 <script context="module">
+	import { defaults, siteswapUrl } from '../../components/passist.js';
 	export async function preload({ params, query }) {
 		return {
 			siteswap_input: params.siteswap,
@@ -17,13 +18,11 @@
 	$:  useLocalStorage && n_jugglers && localStorage.setItem("n_jugglers", n_jugglers);
 
 	$: {
-		query = {n_jugglers: n_jugglers};
-		if (fullscreen)
-			query.fullscreen = fullscreen;
-
-		url = '/siteswap/' + siteswap_input + '?' + Object.entries(query).map(
-			([key, val]) => `${key}=${encodeURIComponent(val)}`
-		).join('&');
+		url = siteswapUrl({
+			siteswap_input: siteswap_input,
+			n_jugglers: n_jugglers,
+			fullscreen: fullscreen,
+		});
 		if (process.browser === true && ('history' in window)) {
 			history.replaceState({}, '',url);
 		}
