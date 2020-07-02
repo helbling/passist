@@ -1,9 +1,10 @@
 <script context="module">
 	import { defaults, siteswapUrl } from '../../components/passist.js';
 	export async function preload({ params, query }) {
+		const n_jugglers = parseInt(query.n_jugglers);
 		return {
 			siteswap_input: params.siteswap,
-			n_jugglers: parseInt(query.n_jugglers),
+			n_jugglers: n_jugglers ? n_jugglers : defaults.n_jugglers,
 			fullscreen: parseInt(query.fullscreen),
 		};
 	}
@@ -18,12 +19,12 @@
 	$:  useLocalStorage && n_jugglers && localStorage.setItem("n_jugglers", n_jugglers);
 
 	$: {
-		url = siteswapUrl({
-			siteswap_input: siteswap_input,
-			n_jugglers: n_jugglers,
-			fullscreen: fullscreen,
-		});
 		if (process.browser === true && ('history' in window)) {
+			url = siteswapUrl({
+				siteswap_input: siteswap_input,
+				n_jugglers: n_jugglers,
+				fullscreen: fullscreen,
+			});
 			history.replaceState({}, '',url);
 		}
 	}
