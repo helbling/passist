@@ -3,6 +3,7 @@
 	import CausalDiagram from './CausalDiagram.svelte';
 	import Animation from './Animation.svelte';
 	import Siteswap from './siteswap.js';
+	import Icon from './Icon.svelte';
 	import { siteswap_names} from './patterns.js';
 	import { defaults, siteswapUrl } from './passist.js';
 	import { goto } from '@sapper/app';
@@ -211,7 +212,7 @@ $:	{
 	{#if sharebutton}
 		<!-- svelte-ignore a11y-invalid-attribute -->
 		<div class=sharebutton>
-			<a href='javascript:;' on:click={share}>Share</a>
+			<a href='javascript:;' on:click={share}><Icon type=send /> share</a>
 		</div>
 	{/if}
 {:else if siteswap_input}
