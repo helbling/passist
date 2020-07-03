@@ -1,0 +1,55 @@
+<script>
+import marked from 'marked';
+export let source = `
+
+## Purpose
+This is the passing siteswap assistant helping you to find, start and animate [passing](https://en.wikipedia.org/wiki/Passing_(juggling)) patterns. 
+
+It's currently based around [siteswaps](https://en.wikipedia.org/wiki/Siteswap). Hopefully it will support a much wider pattern variety one day.
+
+Solo siteswaps are supported as well by changing the number of jugglers to one.
+
+## Features
+- Siteswap generator
+- Start configuration calculator
+- Causal Diagrams
+- Web App that works offline
+- Reusable js components
+- 3d Animation
+
+## Browser support
+Should run in any modern desktop or mobile browser which supports WebGL.
+
+## Code
+
+The code is open source and available in this <a href="https://github.com/helbling/passist/">Github project</a>.
+You're welcome to contribute or fill bug reports there.
+
+## Tools used
+
+This project builds upon the follwing open source tools. Many thanks to its creators!
+
+- [svelte](https://svelte.dev/) for handling state
+- [sapper](https://sapper.svelte.dev/) for building the web application
+- [three.js](https://threejs.org/) for doing all the complicated 3d stuff
+- [bytesize-icons](https://danklammer.com/bytesize-icons/) for the iconset
+- [bootstrap](https://getbootstrap.com/) so the input fields look nice
+
+## License
+
+Copyright 2020 Christian Helbling
+
+Licensed under the GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
+
+`;
+let markdown = marked(source);
+</script>
+
+<style>
+.markdown {
+    width: 100%;
+    padding: 0 2em;
+}
+</style>
+
+<div class="markdown">{@html markdown}</div>

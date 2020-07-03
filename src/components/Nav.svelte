@@ -5,6 +5,7 @@
 		{ path:'generator', title:'Generator' },
 		{ path:'siteswap',  title:'Siteswap' },
 		{ path:'patterns',  title:'Patterns' },
+		{ path:'about',     title:'About' },
 	];
 </script>
 

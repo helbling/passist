@@ -48,9 +48,3 @@
 <main>
 	<slot></slot>
 </main>
-
-<footer class="page-footer font-small text-center pt-2 card-header">
-	<small>
-		<a class="text-muted" href="https://github.com/helbling/passist/">Github project</a>
-	</small>
-</footer>
