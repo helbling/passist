@@ -1,8 +1,8 @@
 <script>
-	import Generator from '../components/Generator.svelte';
+	import GeneratorPage from '../components/GeneratorPage.svelte';
 </script>
 
 <style>
 </style>
 
-<Generator />
+<GeneratorPage />

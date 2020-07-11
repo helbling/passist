@@ -1,5 +1,5 @@
 <script>
-	import Siteswap from '../../components/Siteswap.svelte';
+	//	import SiteswapPage from '../../components/SiteswapPage.svelte';
 	import { defaults, siteswapUrl } from '../../components/passist.js';
 	import { goto } from '@sapper/app';
 
@@ -14,4 +14,4 @@
 </script>
 
 <!-- server should return empty siteswap to avoid flashing some overwritten default -->
-<!-- <Siteswap siteswap_input="" n_jugglers=2 /> -->
+<!-- <SiteswapPage siteswap_input="" n_jugglers=2 /> -->

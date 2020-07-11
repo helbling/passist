@@ -10,7 +10,7 @@
 	}
 </script>
 <script>
-	import Siteswap from '../../components/Siteswap.svelte';
+	import SiteswapPage from '../../components/SiteswapPage.svelte';
 	export let siteswap_input, n_jugglers, fullscreen;
 	let query, url;
 
@@ -30,4 +30,4 @@
 	}
 </script>
 
-<Siteswap bind:siteswap_input={siteswap_input} bind:n_jugglers={n_jugglers} bind:fullscreen={fullscreen} {url} />
+<SiteswapPage bind:siteswap_input={siteswap_input} bind:n_jugglers={n_jugglers} bind:fullscreen={fullscreen} {url} />

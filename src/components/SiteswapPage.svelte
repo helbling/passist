@@ -1,7 +1,7 @@
 <script>
 	import SiteswapInput from './SiteswapInput.svelte';
-	import CausalDiagram from './CausalDiagram.svelte';
-	import Animation from './Animation.svelte';
+	import CausalDiagramWidget from './CausalDiagramWidget.svelte';
+	import AnimationWidget from './AnimationWidget.svelte';
 	import Siteswap from './siteswap.js';
 	import Icon from './Icon.svelte';
 	import { siteswap_names} from './patterns.js';
@@ -185,7 +185,7 @@ $:	{
 	{/if}
 
 	<div class=causal_diagram>
-		<CausalDiagram
+		<CausalDiagramWidget
 			{jif}
 			{start_configurations}
 			steps={n_jugglers * period * 2}
@@ -193,7 +193,7 @@ $:	{
 		/>
 	</div>
 
-	<Animation
+	<AnimationWidget
 		{jif}
 		{valid}
 		width={window_width > 1000 ? 1000 : window_width - 32}
@@ -207,7 +207,7 @@ $:	{
 			bind:valid={valid}
 			id_prefix=animation_
 		/>
-	</Animation>
+	</AnimationWidget>
 
 	{#if sharebutton}
 		<!-- svelte-ignore a11y-invalid-attribute -->

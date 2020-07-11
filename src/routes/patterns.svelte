@@ -1,9 +1,9 @@
 <script>
-	import Patterns from '../components/Patterns.svelte';
+	import PatternsPage from '../components/PatternsPage.svelte';
 </script>
 
 <style>
 
 </style>
 
-<Patterns />
+<PatternsPage />
