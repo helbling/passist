@@ -1,6 +1,7 @@
 <script>
 	import InputField from './InputField.svelte';
 	import Siteswap from './siteswap.js';
+	import { onMount, onDestroy } from 'svelte';
 
 	export let n_objects = 7;
 	export let period = 5;
@@ -8,6 +9,8 @@
 	export let max_throw = 10;
 	export let include = '';
 	export let exclude = '3 5';
+
+	const spinner = "⣷⣯⣟⡿⢿⣻⣽⣾";
 
 // TODO: limit parameters
 //	n_objects = Math.max(0, Math.min(35, parseInt(n_objects)));
@@ -18,28 +21,61 @@
 
 	export let n_jugglers = 2;
 
-//$:	list = Siteswap.generate({ n_objects:  n_objects, period:     period, min_throw:  min_throw, max_throw:  max_throw, include:    include, exclude:    exclude, n_jugglers: n_jugglers, });
-
 	let list = [];
-	let params;
-	let calculating = false;
-
-
-$:  {
+	let calculating = true;
+	let calctime = 0;
+	let ticks = 0;
+	let generatorInterval;
+	let timer;
+	onMount(() => {
+		timer = setInterval(() => {
+			ticks += 1;
+			if (calculating && (ticks % 10 == 0)) {
+				list = list;
+			}
+		}, 100);
+	});
+	onDestroy(() => {
+		clearInterval(timer);
+		clearInterval(generatorInterval);
+	});
+	const onchanged = (params) => {
+		ticks = 0;
 		calculating = true;
-		params = {
-			n_objects:  n_objects,
-			period:     period,
-			min_throw:  min_throw,
-			max_throw:  max_throw,
-			include:    include,
-			exclude:    exclude,
-			n_jugglers: n_jugglers
-		};
 		list = [];
-		for (let s of Siteswap.generate(params))
-			list.push(s);
-		calculating = false;
+		clearInterval(generatorInterval);
+		let generator = Siteswap.generate(params)
+		generatorInterval = setInterval(() => {
+			while (true) {
+				const next = generator.next();
+				if (next.done) {
+					calctime = ticks / 10;
+					clearInterval(generatorInterval);
+					generatorInterval = undefined;
+					calculating = false;
+					list = list;
+					return;
+				} else if (next.value !== undefined) {
+						list.push(next.value);
+				} else {
+					return;
+				}
+			}
+		}, 0);
+	};
+
+	$: {
+		if (process.browser === true) {
+			onchanged({
+				n_objects:  n_objects,
+				period:     period,
+				min_throw:  min_throw,
+				max_throw:  max_throw,
+				include:    include,
+				exclude:    exclude,
+				n_jugglers: n_jugglers
+			});
+		}
 	}
 
 </script>
@@ -113,22 +149,19 @@ $:  {
 	/>
 </div>
 
-<h5>{list.length} siteswaps found{ calculating ? ' so far' : ''}</h5>
+<h5>{list.length} siteswaps found{ calculating ? ' so far ' + spinner.charAt(ticks % 8) : ' in ' + calctime  + 's'}</h5>
 
 {#if list.length}
 	<div class=scroll>
 		<ul class="mt-4 list">
 			{#each list as s}
 				<li>
-					<!-- TODO
-					<span>generator timeout :(</span>
-					-->
 					<a href="./siteswap/{s}?n_jugglers={n_jugglers}"><span class=siteswap>{s}</span></a>
 				</li>
 			{/each}
 		</ul>
 	</div>
-{:else}
+{:else if !calculating}
 	<div>
 		<img src=images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps">
 	</div>

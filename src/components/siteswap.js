@@ -360,7 +360,12 @@ static *generate(params)
 	const landing = new Array(period).fill(0);
 	let sum = 0;
 	let i = 0;
+	let ops = 0;
 	while (i >= 0) {
+		ops += 1;
+		if (ops % 1000 == 0)
+			yield; // need to yield regularly so we have a chance to switch to the ui thread from time to time
+
 		if (i == period) {
 			const c = Siteswap.heights_to_string(heights);
 			if (is_canonic(c) && final_check(c))
