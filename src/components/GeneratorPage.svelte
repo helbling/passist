@@ -123,7 +123,7 @@ $:  {
 					<!-- TODO
 					<span>generator timeout :(</span>
 					-->
-					<a href="./siteswap/{s}?n_jugglers=2"><span class=siteswap>{s}</span></a>
+					<a href="./siteswap/{s}?n_jugglers={n_jugglers}"><span class=siteswap>{s}</span></a>
 				</li>
 			{/each}
 		</ul>
