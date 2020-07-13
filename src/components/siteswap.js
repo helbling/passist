@@ -279,14 +279,11 @@ start_configurations(n_jugglers)
  */
 static *generate(params)
 {
-	let min = Math.max(0, Math.min(35, parseInt(params.min_throw)));
-	let max = Math.max(0, Math.min(35, parseInt(params.max_throw)));
-	const n_objects = Math.max(0, Math.min(35, parseInt(params.n_objects)));
-	const period = Math.max(1, Math.min(15, parseInt(params.period)));
-	const n_jugglers = Math.max(1, Math.min(9, parseInt(params.n_jugglers)));
-
-	min = min || 0;
-	max = max || 0;
+	const min = Math.max(0, Math.min(35, parseInt(params.min_throw) || 0));
+	const max = Math.max(0, Math.min(35, parseInt(params.max_throw) || 0));
+	const n_objects = Math.max(0, Math.min(35, parseInt(params.n_objects) || 0));
+	const period = Math.max(1, Math.min(15, parseInt(params.period) || 0));
+	const n_jugglers = Math.max(1, Math.min(9, parseInt(params.n_jugglers) || 0));
 
 	function is_canonic(siteswap) {
 		const shifts = [];
