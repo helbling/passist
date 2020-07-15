@@ -58,22 +58,28 @@ $: {
 		height = (n_jugglers - (n_jugglers > 1 ? 1 : 1.4)) * dy + 2 * yoff;
 
 		nodes = [];
+		let throws = [];
 		for (let i = 0; i < jif.events.length; i++) {
 			let event = jif.events[i];
 			if (event.type != 'throw' && event.type != 'pause')
 				continue;
-			let t = event.time;
-			let juggler_from = event.from_hand % n_jugglers;
-			let juggler_to = event.to_hand % n_jugglers;
+			throws.push(event);
+		}
+		
+		for (let i = 0; i < steps; i++) {
+			const th = throws[i % throws.length];
+			let t = th.time + Math.floor(i / throws.length) * jif.time_period;
+			let juggler_from = th.from_hand % n_jugglers;
+			let juggler_to = th.to_hand % n_jugglers;
 
 			nodes.push({
 				r: r,
 				x: x(t),
 				y: y(t, juggler_from),
-				class: (Math.floor(event.from_hand / n_jugglers) % 2) ? 'left_hand' : 'right_hand',
+				class: (Math.floor(th.from_hand / n_jugglers) % 2) ? 'left_hand' : 'right_hand',
 				juggler: juggler_from,
-				label: event.label,
-				arrow: arrow(event.time, event.duration - 2 * n_jugglers, juggler_from, juggler_to), // for ladder diagram: don't subtract 2 * n_jugglers
+				label: th.label,
+				arrow: arrow(t, th.duration - 2 * n_jugglers, juggler_from, juggler_to), // for ladder diagram: don't subtract 2 * n_jugglers
 			});
 		}
 		nodes = nodes; // update svelte state
