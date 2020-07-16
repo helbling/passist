@@ -28,7 +28,7 @@
 
 	$: { // defaults
 		if (!jif.propType)
-			jif.propType = jif.n_jugglers > 1 ? 'club' : 'ball';
+			jif.propType = 'club';
 		jif.beatsPerSecond = jif.beatsPerSecond ? parseFloat(jif.beatsPerSecond) : (1.4 * jif.n_hands);
 		jif.animationSpeed = jif.animationSpeed ? parseFloat(jif.animationSpeed) : 1.0;
 		jif.showOrbits = ('showOrbits' in jif) ? jif.showOrbits : false;
