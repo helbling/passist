@@ -134,7 +134,7 @@ $:	{
 	</h2>
 
 	<p>
-		{n_props} objects, period {period}, squeezes {start_properties.squeezes} {start_properties.is_ground_state ? ', ground_state' : ''}
+		{n_props} objects, period {period}, squeezes {start_properties.squeezes}{start_properties.is_ground_state ? ', ground_state' : ''}
 
 		<!--
 		{#if n_jugglers > 1}
