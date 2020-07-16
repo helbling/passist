@@ -1,8 +1,10 @@
 
 const defaults = {
-	siteswap: "86277",
+	siteswap: '86277',
 	nJugglers: 2,
+	propType: 'club',
 };
+const useLocalStorage = process.browser === true && 'localStorage' in window;
 
 function U(path, query)
 {
@@ -23,4 +25,4 @@ function siteswapUrl(p)
 	return url;
 }
 
-export { defaults, siteswapUrl };
+export { defaults, useLocalStorage, siteswapUrl };

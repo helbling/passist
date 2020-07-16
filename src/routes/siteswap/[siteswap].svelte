@@ -1,5 +1,5 @@
 <script context="module">
-	import { defaults, siteswapUrl } from '../../components/passist.js';
+	import { defaults, useLocalStorage, siteswapUrl } from '../../components/passist.js';
 	export async function preload({ params, query }) {
 		const nJugglers = parseInt(query.nJugglers);
 		return {
@@ -14,7 +14,6 @@
 	export let siteswapInput, nJugglers, fullscreen;
 	let query, url;
 
-	const useLocalStorage = process.browser === true && 'localStorage' in window;
 	$:  useLocalStorage && siteswapInput && localStorage.setItem("siteswap", siteswapInput);
 	$:  useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
 

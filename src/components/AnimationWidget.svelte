@@ -3,6 +3,7 @@
 	import Animation from './animation.js';
 	import InputField from './InputField.svelte';
 	import Icon from './Icon.svelte';
+	import { defaults, useLocalStorage } from './passist.js';
 
 	export let jif;
 	export let valid = false;
@@ -27,8 +28,15 @@
 	$: h = fullscreen ? windowHeight : height;
 
 	$: { // defaults
-		if (!jif.propType)
-			jif.propType = 'club';
+		if (!jif.propType) {
+			if (useLocalStorage) {
+				const lsPropType = localStorage.getItem("propType");
+				jif.propType = lsPropType ? lsPropType : defaults.propType;
+			} else {
+				jif.propType = defaults.propType;
+			}
+		} else if (useLocalStorage)
+			localStorage.setItem("propType", jif.propType);
 		jif.beatsPerSecond = jif.beatsPerSecond ? parseFloat(jif.beatsPerSecond) : (1.4 * jif.nHands);
 		jif.animationSpeed = jif.animationSpeed ? parseFloat(jif.animationSpeed) : 1.0;
 		jif.showOrbits = ('showOrbits' in jif) ? jif.showOrbits : false;
