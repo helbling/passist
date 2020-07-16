@@ -3,23 +3,23 @@
 	import Siteswap from './siteswap.js';
 	import { onMount, onDestroy } from 'svelte';
 
-	export let n_objects = 7;
+	export let nProps = 7;
 	export let period = 5;
-	export let min_throw = 2;
-	export let max_throw = 10;
+	export let minThrow = 2;
+	export let maxThrow = 10;
 	export let include = '';
 	export let exclude = '3 5';
 
 	const spinner = "⣷⣯⣟⡿⢿⣻⣽⣾";
 
 // TODO: limit parameters
-//	n_objects = Math.max(0, Math.min(35, parseInt(n_objects)));
+//	nProps = Math.max(0, Math.min(35, parseInt(nProps)));
 //	period = Math.max(1, Math.min(15, parseInt(period)));
-//	min_throw = Math.max(0, Math.min(35, parseInt(min_throw)));
-//	max_throw = Math.max(0, Math.min(35, parseInt(max_throw)));
-//	n_jugglers = Math.max(1, Math.min(9, parseInt(n_jugglers)));
+//	minThrow = Math.max(0, Math.min(35, parseInt(minThrow)));
+//	maxThrow = Math.max(0, Math.min(35, parseInt(maxThrow)));
+//	nJugglers = Math.max(1, Math.min(9, parseInt(nJugglers)));
 
-	export let n_jugglers = 2;
+	export let nJugglers = 2;
 
 	let list = [];
 	let calculating = true;
@@ -67,13 +67,13 @@
 	$: {
 		if (process.browser === true) {
 			onchanged({
-				n_objects:  n_objects,
-				period:     period,
-				min_throw:  min_throw,
-				max_throw:  max_throw,
-				include:    include,
-				exclude:    exclude,
-				n_jugglers: n_jugglers
+				nProps:    nProps,
+				period:    period,
+				minThrow:  minThrow,
+				maxThrow:  maxThrow,
+				include:   include,
+				exclude:   exclude,
+				nJugglers: nJugglers
 			});
 		}
 	}
@@ -87,9 +87,9 @@
 <div class=form-inline>
 
 	<InputField
-		bind:value={n_objects}
+		bind:value={nProps}
 		type=number
-		id=n_objects
+		id=nProps
 		label=#Objects
 		title="Number of objects"
 		min=1
@@ -106,27 +106,27 @@
 	/>
 
 	<InputField
-		bind:value={max_throw}
+		bind:value={maxThrow}
 		type=number
-		id=max_throw
+		id=maxThrow
 		label="Max throw"
 		min=1
 		max=35
 	/>
 
 	<InputField
-		bind:value={min_throw}
+		bind:value={minThrow}
 		type=number
-		id=min_throw
+		id=minThrow
 		label="min throw"
 		min=0
 		max=35
 	/>
 
 	<InputField
-		bind:value={n_jugglers}
+		bind:value={nJugglers}
 		type=number
-		id=n_jugglers
+		id=nJugglers
 		label='👥'
 		title="Number of jugglers"
 		min=1
@@ -156,7 +156,7 @@
 		<ul class="mt-4 list">
 			{#each list as s}
 				<li>
-					<a href="./siteswap/{s}?n_jugglers={n_jugglers}"><span class=siteswap>{s}</span></a>
+					<a href="./siteswap/{s}?nJugglers={nJugglers}"><span class=siteswap>{s}</span></a>
 				</li>
 			{/each}
 		</ul>

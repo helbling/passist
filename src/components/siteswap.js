@@ -11,21 +11,21 @@ constructor(input)
 			return x.match(/[0-9]/) ? +x : x.charCodeAt(0) - 'a'.charCodeAt(0) + 10;
 		});
 	this.period = this.heights.length;
-	this.n_props = this.period > 0 ? this.heights.reduce(function(a, b) { return a + b; }, 0) / this.period : 0;
+	this.nProps = this.period > 0 ? this.heights.reduce(function(a, b) { return a + b; }, 0) / this.period : 0;
 }
 
-static height_to_char(x)
+static heightToChar(x)
 {
 	x = +x;
 	return x <= 9 ? String(x) : String.fromCharCode('a'.charCodeAt(0) + x - 10);
 }
 
-static heights_to_string(heights)
+static heightsToString(heights)
 {
-	return heights.map(Siteswap.height_to_char).join('');
+	return heights.map(Siteswap.heightToChar).join('');
 }
 
-is_valid()
+isValid()
 {
 	const landing = new Array(this.period);
 	let valid = true;
@@ -38,9 +38,9 @@ is_valid()
 	return this.period > 0 ? valid : undefined;
 }
 
-to_string()
+toString()
 {
-	return Siteswap.heights_to_string(this.heights);
+	return Siteswap.heightsToString(this.heights);
 }
 
 shift(times)
@@ -57,7 +57,7 @@ shift(times)
 }
 
 
-all_shifts()
+allShifts()
 {
 	const shifts = [];
 	for (let i = 0; i < this.period; i++)
@@ -65,46 +65,46 @@ all_shifts()
 	return shifts;
 }
 
-canonic_string()
+canonicString()
 {
-	return this.all_shifts().map(function(s) { return s.to_string();}).sort()[this.period - 1];
+	return this.allShifts().map(function(s) { return s.toString();}).sort()[this.period - 1];
 }
 
-get_start_properties(n_jugglers)
+getStartProperties(nJugglers)
 {
-	const rethrows_by_hand = Array.apply(null, Array(n_jugglers * 2)).map(function() {return 0;});
+	const rethrowsByHand = Array.apply(null, Array(nJugglers * 2)).map(function() {return 0;});
 	let i = 0;
-	const has_landing = [];
-	let is_ground_state = 1;
+	const hasLanding = [];
+	let isGroundState = 1;
 	let squeezes = 0;
-	for (let missing = this.n_props; missing > 0; i++) {
+	for (let missing = this.nProps; missing > 0; i++) {
 		const t = this.heights[i % this.period];
 		if (t > 0) {
-			var hand = i % (n_jugglers * 2);
-			if (has_landing[i]) {
-				rethrows_by_hand[i % (n_jugglers * 2)]++;
-				is_ground_state = 0;
+			var hand = i % (nJugglers * 2);
+			if (hasLanding[i]) {
+				rethrowsByHand[i % (nJugglers * 2)]++;
+				isGroundState = 0;
 			} else {
-				squeezes += rethrows_by_hand[hand];
-				rethrows_by_hand[hand] = 0;
+				squeezes += rethrowsByHand[hand];
+				rethrowsByHand[hand] = 0;
 				missing--;
 			}
-			has_landing[i + t] = true;
+			hasLanding[i + t] = true;
 		}
 	}
 	return {
-		is_ground_state: is_ground_state,
+		isGroundState: isGroundState,
 		squeezes: squeezes,
-		starts_with_pass: this.heights[0] % n_jugglers ? 1 : 0
+		startsWithPass: this.heights[0] % nJugglers ? 1 : 0
 	};
 }
 
-global_interface(n_jugglers)
+globalInterface(nJugglers)
 {
 	const result = new Array(this.period);
 	for (const i in this.heights) {
 		const t = this.heights[i];
-		result[(+i + +t) % this.period] = (t % n_jugglers) ? 'p' : 's';
+		result[(+i + +t) % this.period] = (t % nJugglers) ? 'p' : 's';
 	}
 	return result.join('');
 }
@@ -128,15 +128,15 @@ orbits()
 	return result;
 }
 
-to_jif(properties)
+toJif(properties)
 {
-	let n_jugglers = properties.n_jugglers;
-	if (n_jugglers === undefined)
-		n_jugglers = 2;
-	let n_hands = properties.n_hands;
-	if (n_hands === undefined)
-		n_hands = n_jugglers * 2;
-	function lcm_array(array) {
+	let nJugglers = properties.nJugglers;
+	if (nJugglers === undefined)
+		nJugglers = 2;
+	let nHands = properties.nHands;
+	if (nHands === undefined)
+		nHands = nJugglers * 2;
+	function lcmArray(array) {
 		function gcd(a, b) { return !b ? a : gcd(b, a % b); }
 		function lcm(a, b) { return (a * b) / gcd(a, b); }
 		let multiple = 1;
@@ -148,28 +148,28 @@ to_jif(properties)
 	const periods = this.orbits().map(function(orbit) {
 		return orbit.reduce(function(a, b) { return a + b; }, 0); // sum
 	});
-	periods.push(n_hands);
+	periods.push(nHands);
 
-	const steps = lcm_array(periods);
+	const steps = lcmArray(periods);
 
 	const p = {};
 	if (properties)
 		for (const k in properties)
 			p[k] = properties[k];
-	p.siteswap = this.to_string();
+	p.siteswap = this.toString();
 	const heights = this.heights;
-	p.n_hands = n_hands;
-	p.n_jugglers = n_jugglers;
+	p.nHands = nHands;
+	p.nJugglers = nJugglers;
 	const hands = [];
-	if (n_hands <= 2 * n_jugglers) {
-		for (let i = 0; i < n_hands; i++)
-			hands.push({juggler:i % n_jugglers, hand: i < n_jugglers ? 'right' : 'left'});
+	if (nHands <= 2 * nJugglers) {
+		for (let i = 0; i < nHands; i++)
+			hands.push({juggler:i % nJugglers, hand: i < nJugglers ? 'right' : 'left'});
 	}
 	p.hands = hands;
 
-	p.n_props = this.n_props;
+	p.nProps = this.nProps;
 
-	p.time_period = steps;
+	p.timePeriod = steps;
 	p.events = [];
 	if (this.period < 1)
 		return p;
@@ -182,11 +182,11 @@ to_jif(properties)
 			type: height ? 'throw' : 'pause',
 			time: i,
 			duration: height,
-			from_hand: i % n_hands,
-			to_hand: (i + height) % n_hands,
-			label: Siteswap.height_to_char(height)
+			fromHand: i % nHands,
+			toHand:  (i + height) % nHands,
+			label: Siteswap.heightToChar(height)
 		};
-		if (p.flipTwos && height == 2 * n_jugglers)
+		if (p.flipTwos && height == 2 * nJugglers)
 			e.spins = 1;
 
 		eventsAtTime.push(e);
@@ -212,55 +212,55 @@ to_jif(properties)
 	return p;
 }
 
-start_configurations(n_jugglers)
+startConfigurations(nJugglers)
 {
 	const period = this.period;
-	n_jugglers = +n_jugglers; // force integer
-	const start_hands = Array.apply(null, Array(n_jugglers * 2)).map(function() {return 0;});
+	nJugglers = +nJugglers; // force integer
+	const startHands = Array.apply(null, Array(nJugglers * 2)).map(function() {return 0;});
 	let i = 0;
-	const has_obj = [];
-	for (var missing = this.n_props; missing > 0; i++) {
+	const hasProp = [];
+	for (var missing = this.nProps; missing > 0; i++) {
 		const t = this.heights[i % period];
 		if (t > 0) {
-			if (!has_obj[i]) {
-				start_hands[i % (n_jugglers * 2)]++;
+			if (!hasProp[i]) {
+				startHands[i % (nJugglers * 2)]++;
 				missing--;
 			}
-			has_obj[i + t] = true;
+			hasProp[i + t] = true;
 		}
 	}
-	const result = new Array(n_jugglers);
-	for (let juggler = 0; juggler < n_jugglers; juggler++) {
-		const local_period = period % n_jugglers == 0 ? period / n_jugglers : period;
-		const local = new Array(local_period);
-		for (let i = 0; i < local_period; i++)
-			local[i] = String(this.heights[(juggler + i * n_jugglers) % period]);
+	const result = new Array(nJugglers);
+	for (let juggler = 0; juggler < nJugglers; juggler++) {
+		const localPeriod = period % nJugglers == 0 ? period / nJugglers : period;
+		const local = new Array(localPeriod);
+		for (let i = 0; i < localPeriod; i++)
+			local[i] = String(this.heights[(juggler + i * nJugglers) % period]);
 		const name = function(i) {
 			return String.fromCharCode('A'.charCodeAt(0) + i);
 		};
 		const left = function(i) {
-			return (i / n_jugglers) & 1;
+			return (i / nJugglers) & 1;
 		};
 		result[juggler] = {
 			local: local.map(function(t, i) {
-				const a = juggler + i * n_jugglers;
+				const a = juggler + i * nJugglers;
 				const b = a + +t;
 				let desc = '';
-				if (t % n_jugglers) {
-					if (n_jugglers > 2)
-						desc += name(b % n_jugglers);
+				if (t % nJugglers) {
+					if (nJugglers > 2)
+						desc += name(b % nJugglers);
 					desc += left(a) == left(b) ? 'X' : '||';
 					desc = '<sub>' + desc + '</sub>';
 				}
 				return {
 					height: t,
-					siteswap: Siteswap.height_to_char(t),
+					siteswap: Siteswap.heightToChar(t),
 					desc: desc ? desc : '&nbsp;'
 				};
 			}),
 			name:  name(juggler),
-			start_obj_right: start_hands[juggler],
-			start_obj_left:  start_hands[n_jugglers + juggler],
+			startPropsRight: startHands[juggler],
+			startPropsLeft:  startHands[nJugglers + juggler],
 		};
 	}
 	return result;
@@ -269,29 +269,29 @@ start_configurations(n_jugglers)
 /*
  * generate siteswaps
  * params:
- *  min_throw  minimal throw height
- *  max_throw  maximal throw height
- *  n_objects  number of objects
+ *  minThrow   minimal throw height
+ *  maxThrow   maximal throw height
+ *  nProps     number of props
  *  period     siteswap period
- *  n_jugglers number of jugglers
+ *  nJugglers  number of jugglers
  *  include    regular expression the global siteswap must match
  *  exclude    regular expression the global siteswap must not match
  */
 static *generate(params)
 {
-	const min = Math.max(0, Math.min(35, parseInt(params.min_throw) || 0));
-	const max = Math.max(0, Math.min(35, parseInt(params.max_throw) || 0));
-	const n_objects = Math.max(0, Math.min(35, parseInt(params.n_objects) || 0));
+	const min = Math.max(0, Math.min(35, parseInt(params.minThrow) || 0));
+	const max = Math.max(0, Math.min(35, parseInt(params.maxThrow) || 0));
+	const nProps = Math.max(0, Math.min(35, parseInt(params.nProps) || 0));
 	const period = Math.max(1, Math.min(15, parseInt(params.period) || 0));
-	const n_jugglers = Math.max(1, Math.min(9, parseInt(params.n_jugglers) || 0));
+	const nJugglers = Math.max(1, Math.min(9, parseInt(params.nJugglers) || 0));
 
-	function is_canonic(siteswap) {
+	function isCanonic(siteswap) {
 		const shifts = [];
 		for (let i = 0; i < period; i++)
 			shifts.push(siteswap.slice(i) + siteswap.slice(0, i));
 		return shifts.sort()[period - 1] == siteswap;
 	}
-	function get_height(siteswap, i) {
+	function getHeight(siteswap, i) {
 		const x = siteswap.charCodeAt(i);
 		if (x >= 48 && x <= 57)
 			return x - 48;
@@ -305,7 +305,7 @@ static *generate(params)
 		const selfs = [];
 		const passes = [];
 		for (let i = min; i <= max; i++) {
-			if (i % n_jugglers)
+			if (i % nJugglers)
 				passes.push(i);
 			else
 				selfs.push(i);
@@ -313,17 +313,17 @@ static *generate(params)
 		input = input.trim().replace(/s/gi, '[' + selfs.join('') + ']').replace(/p/gi, '[' + passes.join('') + ']');
 		return input ? input.split(/ /) : [];
 	}
-	const exclude_filters = filters(params.exclude);
-	const include_filters = filters(params.include);
+	const excludeFilters = filters(params.exclude);
+	const includeFilters = filters(params.include);
 
 	function exclude(str) {
-		return exclude_filters.some(function(filter) { return (str + str + str).match(filter);});
+		return excludeFilters.some(function(filter) { return (str + str + str).match(filter);});
 	}
 	function include(str) {
-		return include_filters.every(function(filter) { return (str + str + str).match(filter);});
+		return includeFilters.every(function(filter) { return (str + str + str).match(filter);});
 	}
 
-	const final_check = function(canonic) {
+	const finalCheck = function(canonic) {
 		// check if it is a smaller period which is repeated
 		for (let p = 1; p < period; p++) {
 			if (period % p == 0) {
@@ -336,16 +336,16 @@ static *generate(params)
 			}
 		}
 
-		if (n_jugglers > 1) {
+		if (nJugglers > 1) {
 			// TODO: check if there is at least one pass for every juggler (example: a56 for 3 jugglers makes C do only flips)
 
-			let n_passes = 0;
+			let nPasses = 0;
 			for (let i = 0; i < period; i++) {
-				if (get_height(canonic, i) % n_jugglers)
-					n_passes++;
+				if (getHeight(canonic, i) % nJugglers)
+					nPasses++;
 			}
-			// TODO: let user specify n_passes range
-			if (n_passes == 0)
+			// TODO: let user specify nPasses range
+			if (nPasses == 0)
 				return false;
 		}
 
@@ -367,8 +367,8 @@ static *generate(params)
 			yield; // need to yield regularly so we have a chance to switch to the ui thread from time to time
 
 		if (i == period) {
-			const c = Siteswap.heights_to_string(heights);
-			if (is_canonic(c) && final_check(c))
+			const c = Siteswap.heightsToString(heights);
+			if (isCanonic(c) && finalCheck(c))
 				yield c;
 
 			i--;
@@ -380,18 +380,18 @@ static *generate(params)
 				heights[i]++;
 			}
 
-			let min_t = Math.max(min, n_objects * period - sum - (period - i - 1) * max);
-			let max_t = Math.min(max, n_objects * period - sum - (period - i - 1) * min);
+			let minT = Math.max(min, nProps * period - sum - (period - i - 1) * max);
+			let maxT = Math.min(max, nProps * period - sum - (period - i - 1) * min);
 			if (i > 1)
-				max_t = Math.min(heights[0], max_t); // otherwise siteswap would not be canonic anymore
+				maxT = Math.min(heights[0], maxT); // otherwise siteswap would not be canonic anymore
 
 			if (h < 0)
-				heights[i] = min_t;
+				heights[i] = minT;
 
-			while (heights[i] <= max_t + 1 && landing[(i + heights[i]) % period])
+			while (heights[i] <= maxT + 1 && landing[(i + heights[i]) % period])
 				heights[i]++;
 
-			if (heights[i] > max_t) {
+			if (heights[i] > maxT) {
 				heights[i] = -1;
 				i--;
 				continue;

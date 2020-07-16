@@ -249,7 +249,7 @@ get facing()
 throwCatchBasePosition(side)
 {
 	const forwardDistance = lowerArmLength + handLength;
-	const side_distance = shoudlerWidth / 2;
+	const sideDistance = shoudlerWidth / 2;
 
 	return this.position.clone().add(
 		this.facing.clone()
@@ -257,7 +257,7 @@ throwCatchBasePosition(side)
 	).add(
 		this.facing.clone()
 		.cross(v3(0, -sideFactor(side), 0))
-		.multiplyScalar(side_distance)
+		.multiplyScalar(sideDistance)
 	);
 }
 
@@ -330,7 +330,7 @@ setHandPosition(side, handPos)
 		this.upperArms[side].lookAt(elbowPos);
 		this.lowerArms[side].lookAt(handPos);
 	} else {
-		// object not reachable, reach as far as we can
+		// prop not reachable, reach as far as we can
 		this.upperArms[side].lookAt(handPos);
 		this.lowerArms[side].lookAt(handPos);
 	}
@@ -484,7 +484,7 @@ getPoint(t, optionalTarget)
 } // end class LinearCurve
 
 /*
- * this class represents the movement of an objects position and rotation/orientation
+ * this class represents the movement of a prop position and rotation/orientation
  */
 class Movement
 {
@@ -745,14 +745,14 @@ updateScene(jif, valid)
 	this.bbox = new THREE.Box3(v3(0, 0, 0), v3(0, 0, 0));
 
 	this.jugglers = [];
-	const circleRadius = 2 + jif.n_jugglers * 0.2;
-	for (let i = 0; i < jif.n_jugglers; i++) {
+	const circleRadius = 2 + jif.nJugglers * 0.2;
+	for (let i = 0; i < jif.nJugglers; i++) {
 		const j = new Juggler(valid ? '/images/face_texture.png' : '/images/panic_face_texture.png');
-		if (jif.n_jugglers == 1) {
+		if (jif.nJugglers == 1) {
 			j.position.set(0, 0, 0);
 			j.lookAt(0, 0, 1);
 		} else {
-			const a = Math.PI * 2 * i / jif.n_jugglers;
+			const a = Math.PI * 2 * i / jif.nJugglers;
 			j.position.set(circleRadius * Math.cos(a), 0, circleRadius * Math.sin(a));
 			j.lookAt(0, 0, 0);
 		}
@@ -769,13 +769,13 @@ updateScene(jif, valid)
 		this.positionCamera();
 		return;
 	}
-	if (jif.n_props < 1) {
+	if (jif.nProps < 1) {
 		this.positionCamera();
 		return;
 	}
 
 	this.props = [];
-	for (let i = 0; i < jif.n_props; i++) {
+	for (let i = 0; i < jif.nProps; i++) {
 		const prop = jif.propType == 'ball' ?
 			new THREE.Mesh(
 				new THREE.SphereBufferGeometry( 0.04, 10, 10 ),
@@ -804,53 +804,53 @@ updateScene(jif, valid)
 	this.throwPositions = [];
 	this.catchPositions = [];
 	this.zipCatchPositions = [];
-	for (let i = 0; i < jif.n_hands; i++) {
+	for (let i = 0; i < jif.nHands; i++) {
 		let hand = jif.hands[i];
 		let j = hand.juggler;
 		let side = hand.hand == 'right' ? 0 : 1;
 		let sf = sideFactor(side);
 
-		let forward_distance = lowerArmLength + handLength;
-		let side_distance = shoudlerWidth / 2;
-		let throw_catch_offset = 0.1;
+		let forwardDistance = lowerArmLength + handLength;
+		let sideDistance = shoudlerWidth / 2;
+		let throwCatchOffset = 0.1;
 		let jugglerPos = this.jugglers[j].position;
 
 		const facing = this.jugglers[j].facing;
 
-		let base_pos = jugglerPos.clone().add(
+		let basePos = jugglerPos.clone().add(
 			facing.clone()
-			.multiplyScalar(forward_distance)
+			.multiplyScalar(forwardDistance)
 		).add(
 			facing.clone()
 			.cross(v3(0, -sf, 0))
-			.multiplyScalar(side_distance)
+			.multiplyScalar(sideDistance)
 		);
-		const throwPosition = base_pos.clone()
+		const throwPosition = basePos.clone()
 			.add(
 				v3(0, shoulderHeight - 2 * hu, 0)
 			).add(
 				facing.clone()
 				.cross(v3(0, sf, 0))
-				.multiplyScalar(throw_catch_offset)
+				.multiplyScalar(throwCatchOffset)
 			);
-		const catchPosition = base_pos.clone()
+		const catchPosition = basePos.clone()
 			.add(
 				v3(0, shoulderHeight, 0)
 			).add(
 				facing.clone()
 				.cross(v3(0, -sf, 0))
-				.multiplyScalar(throw_catch_offset)
+				.multiplyScalar(throwCatchOffset)
 			);
 		this.catchPositions.push(catchPosition);
 		this.throwPositions.push(throwPosition);
 		this.zipCatchPositions.push(
-			base_pos.clone()
+			basePos.clone()
 				.add(
 					v3(0, shoulderHeight - 2 * hu, 0)
 				).add(
 					facing.clone()
 					.cross(v3(0, sf, 0))
-					.multiplyScalar(throw_catch_offset * 2)
+					.multiplyScalar(throwCatchOffset * 2)
 				)
 		);
 		this.jugglers[j].setHandPosition(side, throwPosition);
@@ -862,29 +862,29 @@ updateScene(jif, valid)
 		});
 	}
 
-	const propThrows = Array.from(Array(jif.n_props), () => new Array());
+	const propThrows = Array.from(Array(jif.nProps), () => new Array());
 
 	// calculate prop movements
 	for (const e of jif.events) {
 		if (e.type == 'throw') {
-			const soloHeight = e.duration / jif.n_jugglers;
-			e.dwell = (soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5)) * jif.n_jugglers;
+			const soloHeight = e.duration / jif.nJugglers;
+			e.dwell = (soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5)) * jif.nJugglers;
 			if (!('spins' in e))
 				e.spins = Math.max(0, Math.floor(soloHeight - 2));
 
-			const jugglerFrom = jif.hands[e.from_hand].juggler;
-			const jugglerTo = jif.hands[e.to_hand].juggler;
+			const jugglerFrom = jif.hands[e.fromHand].juggler;
+			const jugglerTo = jif.hands[e.toHand].juggler;
 			const up = v3(0, 1, 0);
-			e.throwPos = this.throwPositions[e.from_hand];
-			e.catchPos = this.catchPositions[e.to_hand];
+			e.throwPos = this.throwPositions[e.fromHand];
+			e.catchPos = this.catchPositions[e.toHand];
 			e.throwAngle = 1.5 * Math.PI; // TODO: make this dependent on throw (type, duration, where its supposed to go)
 			if (jugglerFrom == jugglerTo) { // self - TODO: improve angle for crossing selfs
 				e.axis = this.jugglers[jugglerFrom].facing.cross(up);
 				e.catchAngle = 1.5 * Math.PI;
 
 				// zip like
-				if (soloHeight < 2.5 && e.from_hand != e.to_hand)
-					e.catchPos = this.zipCatchPositions[e.to_hand];
+				if (soloHeight < 2.5 && e.fromHand != e.toHand)
+					e.catchPos = this.zipCatchPositions[e.toHand];
 			} else { // pass
 				e.axis = e.catchPos.clone().sub(e.throwPos).normalize().cross(up);
 				e.catchAngle = 2 * Math.PI;
@@ -894,8 +894,8 @@ updateScene(jif, valid)
 				catchPos: e.catchPos,
 				start:    e.time / jif.beatsPerSecond,
 				duration: (e.duration - e.dwell) / jif.beatsPerSecond,
-				fromHand: e.from_hand,
-				toHand:   e.to_hand,
+				fromHand: e.fromHand,
+				toHand:   e.toHand,
 				nSpins:   e.spins,
 				spinAxis: e.axis,
 				throwAngle: e.throwAngle,
@@ -916,7 +916,7 @@ updateScene(jif, valid)
 		}
 	}
 
-	const period = jif.time_period / jif.beatsPerSecond;
+	const period = jif.timePeriod / jif.beatsPerSecond;
 
 	// calculate prop movements during dwell
 	propThrows.forEach((throwCurves, prop) => {
@@ -1017,7 +1017,7 @@ animate(t)
 	this.controls.update();
 
 	if (jif && this.props && !this.paused)
-		this.setPositions(((time * jif.n_hands / 1000 * jif.animationSpeed) % jif.time_period) / jif.beatsPerSecond);
+		this.setPositions(((time * jif.nHands / 1000 * jif.animationSpeed) % jif.timePeriod) / jif.beatsPerSecond);
 
 	this.renderer.render(this.scene, this.camera);
 }

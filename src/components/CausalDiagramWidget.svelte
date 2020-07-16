@@ -2,7 +2,7 @@
 
 <script>
 	export let jif;
-	export let start_configurations;
+	export let startConfigurations;
 	export let steps = 1;
 	export let url = '';
 
@@ -12,37 +12,37 @@
 	let dy = 100;
 	let dx;
 	let r = 13
-	let n_jugglers;
+	let nJugglers;
 	let width, height;
 	let nodes = {};
-	const arrow_length = 20;
+	const arrowLength = 20;
 
-	function arrow(i, step, juggler_from, juggler_to) {
+	function arrow(i, step, jugglerFrom, jugglerTo) {
 		var j = i + step;
-		if (juggler_from != juggler_to || Math.abs(step) == n_jugglers)
-			return "M" + xy(i, r, x(j), y(j, juggler_from), juggler_from) + " L" + xy(j, r + arrow_length, x(i), y(i, juggler_from), juggler_to);
-		var dir_x = x(j) > x(i) ? 1 : -1;
-		var dir_y = juggler_from ? 1 : -1;
+		if (jugglerFrom != jugglerTo || Math.abs(step) == nJugglers)
+			return "M" + xy(i, r, x(j), y(j, jugglerFrom), jugglerFrom) + " L" + xy(j, r + arrowLength, x(i), y(i, jugglerFrom), jugglerTo);
+		var dirX = x(j) > x(i) ? 1 : -1;
+		var dirY = jugglerFrom ? 1 : -1;
 
-		var offset_x = dir_x * dy / 2;
-		var offset_y = dir_y * dy / 2;
+		var offsetX = dirX * dy / 2;
+		var offsetY = dirY * dy / 2;
 
-		var control_point1 = (x(i) + offset_x) + "," + (y(i, juggler_from) + offset_y);
-		var control_point2 = (x(j) - offset_x) + "," + (y(i, juggler_from) + offset_y);
-		return "M" + xy(i, r, x(i) + dir_x, y(i, juggler_from) + dir_y, juggler_from)
-				 + "C" + control_point1
-				 + " " + control_point2
-				 + " " + xy(j, r + arrow_length, x(j) - dir_x, y(i, juggler_from) + dir_y, juggler_from);
+		var controlPoint1 = (x(i) + offsetX) + "," + (y(i, jugglerFrom) + offsetY);
+		var controlPoint2 = (x(j) - offsetX) + "," + (y(i, jugglerFrom) + offsetY);
+		return "M" + xy(i, r, x(i) + dirX, y(i, jugglerFrom) + dirY, jugglerFrom)
+				 + "C" + controlPoint1
+				 + " " + controlPoint2
+				 + " " + xy(j, r + arrowLength, x(j) - dirX, y(i, jugglerFrom) + dirY, jugglerFrom);
 	};
 
 	function x(i) { return xoff + i * dx;}
 	function y(i, juggler) { return yoff + juggler * dy;}
-	function xy(i, shorten, towards_x, towards_y, juggler) {
+	function xy(i, shorten, towardsX, towardsY, juggler) {
 		let X = x(i);
 		let Y = y(i, juggler);
 		if (shorten) {
-			let dx = towards_x - X;
-			let dy = towards_y - Y;
+			let dx = towardsX - X;
+			let dy = towardsY - Y;
 			let len = Math.sqrt(dx * dx + dy * dy);
 			X += shorten * dx / len;
 			Y += shorten * dy / len;
@@ -51,11 +51,11 @@
 	}
 
 $: {
-		n_jugglers = jif.n_jugglers;
-		dx = 70 / n_jugglers;
+		nJugglers = jif.nJugglers;
+		dx = 70 / nJugglers;
 
 		width = steps * dx + 50;
-		height = (n_jugglers - (n_jugglers > 1 ? 1 : 1.4)) * dy + 2 * yoff;
+		height = (nJugglers - (nJugglers > 1 ? 1 : 1.4)) * dy + 2 * yoff;
 
 		nodes = [];
 		let throws = [];
@@ -68,18 +68,18 @@ $: {
 		
 		for (let i = 0; i < steps; i++) {
 			const th = throws[i % throws.length];
-			let t = th.time + Math.floor(i / throws.length) * jif.time_period;
-			let juggler_from = th.from_hand % n_jugglers;
-			let juggler_to = th.to_hand % n_jugglers;
+			let t = th.time + Math.floor(i / throws.length) * jif.timePeriod;
+			let jugglerFrom = th.fromHand % nJugglers;
+			let jugglerTo = th.toHand % nJugglers;
 
 			nodes.push({
 				r: r,
 				x: x(t),
-				y: y(t, juggler_from),
-				class: (Math.floor(th.from_hand / n_jugglers) % 2) ? 'left_hand' : 'right_hand',
-				juggler: juggler_from,
+				y: y(t, jugglerFrom),
+				class: (Math.floor(th.fromHand / nJugglers) % 2) ? 'leftHand' : 'rightHand',
+				juggler: jugglerFrom,
 				label: th.label,
-				arrow: arrow(t, th.duration - 2 * n_jugglers, juggler_from, juggler_to), // for ladder diagram: don't subtract 2 * n_jugglers
+				arrow: arrow(t, th.duration - 2 * nJugglers, jugglerFrom, jugglerTo), // for ladder diagram: don't subtract 2 * nJugglers
 			});
 		}
 		nodes = nodes; // update svelte state
@@ -87,12 +87,12 @@ $: {
 </script>
 
 <style>
-	.arrow_stroke { stroke:#007bff }
-	.arrow_fill   {   fill:#007bff }
+	.arrowStroke { stroke:#007bff }
+	.arrowFill   {   fill:#007bff }
 	circle { stroke:#343a40 }
-	circle.right_hand { fill:white }
-	circle.left_hand  { fill:#b7c8d5 }
-	.node_label { fill: #343a40 }
+	circle.rightHand { fill:white }
+	circle.leftHand  { fill:#b7c8d5 }
+	.nodeLabel { fill: #343a40 }
 </style>
 
 <svg {width} {height}>
@@ -106,7 +106,7 @@ $: {
 			orient=auto
 			markerUnits=strokeWidth>
 			<path
-				class=arrow_fill
+				class=arrowFill
 				d='M0,0 L0,6 L9,3 z'
 			/>
 		</marker>
@@ -121,7 +121,7 @@ $: {
 		fill=none
 	/>
 
-	{#each start_configurations as j, i}
+	{#each startConfigurations as j, i}
 		<text
 			x=10
 			y={yoff + 9 + i * dy}
@@ -136,7 +136,7 @@ $: {
 			font-size=20
 			stroke-width=0px
 			strke=black
-		>{j.start_obj_left}</text>
+		>{j.startPropsLeft}</text>
 
 		<text
 			x=20
@@ -144,7 +144,7 @@ $: {
 			font-size=20
 			stroke-width=0px
 			strke=black
-		>{j.start_obj_right}</text>
+		>{j.startPropsRight}</text>
 	{/each}
 
 	{#each nodes as n}
@@ -159,7 +159,7 @@ $: {
 		<text
 			x={n.x}
 			y={n.y + 5}
-			class=node_label
+			class=nodeLabel
 			font-size=16
 			stroke-width=0px
 			text-anchor=middle
@@ -168,7 +168,7 @@ $: {
 		<!-- TODO allow more than one arrow per node -->
 		{#if n.arrow}
 			<path
-				class=arrow_stroke
+				class=arrowStroke
 				d={n.arrow}
 				stroke-width=2px
 				fill=none

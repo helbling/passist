@@ -1,6 +1,6 @@
 import Siteswap from "./siteswap.js";
 
-const known_siteswaps = [
+const knownSiteswaps = [
 	["645", "killer bunny"],
 	["744", "5 club one count"],
 	["726", "5 club one count"],
@@ -81,10 +81,10 @@ const known_siteswaps = [
 	["d757575", "Temple of Doom"],
 ];
 
-var siteswap_names = {}
-for (var i in known_siteswaps) {
-	var ss = known_siteswaps[i];
-	siteswap_names[new Siteswap(ss[0]).canonic_string()] = ss[1];
+var siteswapNames = {}
+for (var i in knownSiteswaps) {
+	var ss = knownSiteswaps[i];
+	siteswapNames[new Siteswap(ss[0]).canonicString()] = ss[1];
 }
 
-export { known_siteswaps, siteswap_names };
+export { knownSiteswaps, siteswapNames };

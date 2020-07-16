@@ -7,11 +7,11 @@
 
 	if (useLocalStorage) {
 		goto(siteswapUrl({
-			siteswap_input: (localStorage.getItem('siteswap') || defaults.siteswap),
-			n_jugglers: (localStorage.getItem('n_jugglers') || 2),
+			siteswapInput: (localStorage.getItem('siteswap') || defaults.siteswap),
+			nJugglers: (localStorage.getItem('nJugglers') || 2),
 		}));
 	}
 </script>
 
 <!-- server should return empty siteswap to avoid flashing some overwritten default -->
-<!-- <SiteswapPage siteswap_input="" n_jugglers=2 /> -->
+<!-- <SiteswapPage siteswapInput="" nJugglers=2 /> -->

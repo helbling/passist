@@ -16,24 +16,24 @@ export let attr = {};
 if (!title)
 	title = label;
 
-let input_attr = {
+let inputAttr = {
 	type:      type,
 	id:        id,
 	class:    'form-control',
 }
 
 if (type == 'number') {
-	input_attr.inputmode = 'number';
-	input_attr.min = min ? min : 0;
+	inputAttr.inputmode = 'number';
+	inputAttr.min = min ? min : 0;
 	if (max)
-		input_attr.max = max;
+		inputAttr.max = max;
 	if (step)
-		input_attr.step = step;
-	input_attr.class += (max && max < 10) ? ' digit' : ' twodigit';
+		inputAttr.step = step;
+	inputAttr.class += (max && max < 10) ? ' digit' : ' twodigit';
 } else {
-	input_attr.placeholder = placeholder ? placeholder : label;
+	inputAttr.placeholder = placeholder ? placeholder : label;
 	for (const k in attr)
-		input_attr[k] = attr[k];
+		inputAttr[k] = attr[k];
 }
 
 </script>
@@ -57,7 +57,7 @@ if (type == 'number') {
 				<input
 					type=checkbox
 					bind:checked={value}
-					{...input_attr}
+					{...inputAttr}
 				>
 			{/if}
 			{label}
@@ -69,7 +69,7 @@ if (type == 'number') {
 			type=number
 			bind:value={value}
 			class="form-control {max && max < 10 ? 'digit' : 'twodigit'}"
-			{...input_attr}
+			{...inputAttr}
 		>
 	{:else if type == 'select'}
 		<select bind:value={value}>
@@ -84,7 +84,7 @@ if (type == 'number') {
 			bind:value={value}
 			placeholder={placeholder ? placeholder : label}
 			class:invalid={!valid}
-			{...input_attr}
+			{...inputAttr}
 		>
 	{/if}
 </div>

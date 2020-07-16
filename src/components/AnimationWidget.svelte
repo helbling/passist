@@ -10,8 +10,8 @@
 	export let teaser = true;
 	export let width = 400;
 	export let height = 300;
-	let window_width;
-	let window_height;
+	let windowWidth;
+	let windowHeight;
 	let w, h;
 	let anim;
 	let paused = false;
@@ -23,13 +23,13 @@
 	let fps = '';
 	let fpsInterval;
 
-	$: w = fullscreen ? window_width : width;
-	$: h = fullscreen ? window_height : height;
+	$: w = fullscreen ? windowWidth : width;
+	$: h = fullscreen ? windowHeight : height;
 
 	$: { // defaults
 		if (!jif.propType)
 			jif.propType = 'club';
-		jif.beatsPerSecond = jif.beatsPerSecond ? parseFloat(jif.beatsPerSecond) : (1.4 * jif.n_hands);
+		jif.beatsPerSecond = jif.beatsPerSecond ? parseFloat(jif.beatsPerSecond) : (1.4 * jif.nHands);
 		jif.animationSpeed = jif.animationSpeed ? parseFloat(jif.animationSpeed) : 1.0;
 		jif.showOrbits = ('showOrbits' in jif) ? jif.showOrbits : false;
 	}
@@ -56,7 +56,7 @@
 	$: if (process.browser === true) { document.body.style.overflow = fullscreen ? 'hidden' : 'auto'; }
 
 	function toggleFullscreen() {
-		dispatch('fullscreen_change', !fullscreen);
+		dispatch('fullscreenChange', !fullscreen);
 	}
 	function togglePause() {
 		if (anim)
@@ -104,14 +104,14 @@
 	.controls.topleft  { top:1ex; left:1ex }
 	.controls.topright { top:1ex; right:1ex }
 	.settings { position:absolute; z-index:20; top:5ex; left:1ex; max-width:calc(100% - 2ex); max-height:calc(100% - 7ex); overflow:auto; display:flex; flex-direction:column; align-items:flex-start; background-color:rgba(0,0,0,0.2); padding:1em; border-radius:0.5em; margin-top:1ex }
-	.teaser_foreground   { position:absolute; top:0; bottom:0; left:0; right:0; z-index:21; cursor:pointer }
+	.teaserForeground   { position:absolute; top:0; bottom:0; left:0; right:0; z-index:21; cursor:pointer }
 	.message { color:white; background-color:rgba(0,0,0,0.2); pointer-events:none; position:absolute; bottom:2ex; left:50%; transform:translateX(-50%); padding:0 1ex; border-radius:1ex  }
 	.fullscreen .message { position:absolute; z-index:21; }
 </style>
 
 <svelte:window
-	bind:innerWidth={window_width}
-	bind:innerHeight={window_height}
+	bind:innerWidth={windowWidth}
+	bind:innerHeight={windowHeight}
 	on:mousedown|capture={onDown}
 	on:mousemove|capture={onMove}
 	on:mouseup|capture={onUp}
@@ -182,7 +182,7 @@
 	{/if}
 	{#if valid}
 		{#if teaser && !fullscreen}
-			<div class=teaser_foreground on:click={toggleFullscreen}>
+			<div class=teaserForeground on:click={toggleFullscreen}>
 				{#if loaded}
 				<div class=message>Click to interact</div>
 				{/if}

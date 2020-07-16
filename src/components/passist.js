@@ -1,7 +1,7 @@
 
 const defaults = {
 	siteswap: "86277",
-	n_jugglers: 2,
+	nJugglers: 2,
 };
 
 function U(path, query)
@@ -15,11 +15,11 @@ function U(path, query)
 function siteswapUrl(p)
 {
 	const query = {
-		n_jugglers: p.n_jugglers,
+		nJugglers: p.nJugglers,
 	};
 	if (p.fullscreen)
 		query.fullscreen = 1;
-	const url = U('/siteswap/' + p.siteswap_input, query);
+	const url = U('/siteswap/' + p.siteswapInput, query);
 	return url;
 }
 

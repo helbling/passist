@@ -1,5 +1,5 @@
 <script>
-	import { known_siteswaps } from './patterns.js';
+	import { knownSiteswaps } from './patterns.js';
 </script>
 
 <style>
@@ -14,9 +14,9 @@
 <p><small>© Christian Kästner, <a href='https://github.com/ckaestne/CompatSiteswaps/blob/master/named-siteswaps.txt'>named-siteswaps.txt</a></p>
 
 <ul>
-	{#each known_siteswaps as s}
+	{#each knownSiteswaps as s}
 		<li>
-			<a href="/siteswap/{s[0]}?n_jugglers=2">
+			<a href="/siteswap/{s[0]}?nJugglers=2">
 				<span class=siteswap>{s[0]}</span>
 				<span class=name>{s[1]}</span>
 			</a>

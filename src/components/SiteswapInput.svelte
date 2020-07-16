@@ -1,17 +1,17 @@
 <script>
 import InputField from './InputField.svelte';
 
-export let siteswap_input;
-export let n_jugglers;
-export let id_prefix;
+export let siteswapInput;
+export let nJugglers;
+export let idPrefix;
 export let valid;
 
 </script>
 
 <div class=form-inline>
 	<InputField
-		bind:value={siteswap_input}
-		id={id_prefix + "siteswap_input"}
+		bind:value={siteswapInput}
+		id={idPrefix + "SiteswapInput"}
 		label=Siteswap
 		type=search
 		bind:valid={valid}
@@ -22,8 +22,8 @@ export let valid;
 		}}
 		/>
 	<InputField
-		bind:value={n_jugglers}
-		id={id_prefix + "n_jugglers"}
+		bind:value={nJugglers}
+		id={idPrefix + "NJugglers"}
 		type=number
 		label='👥'
 		title='Number of jugglers'
