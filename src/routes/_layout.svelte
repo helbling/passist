@@ -14,8 +14,8 @@
 		box-sizing: border-box;
 	}
 
-	header { background-color:#19a2ba; margin-bottom:0; padding:2rem 1rem }
-	header .container { display:flex; flex-wrap:wrap; margin:auto }
+	header { background-color:#19a2ba; margin-bottom:0.5rem; padding:2rem 1rem 0 }
+	header .container { display:flex; flex-wrap:wrap; margin:auto; height:7.5rem }
 
 	@media (min-width:1200px){ header .container{max-width:1140px} }
 	@media (max-width:40em) {
@@ -28,7 +28,6 @@
 	main {max-width:none !important }
 	@media (min-width:1200px){main{max-width:1140px !important}}
 </style>
-
 
 <header>
 	<div class="container">
@@ -43,10 +42,8 @@
 			<img class="meeseeks" src="images/mr_meeseeks_proud2.png" alt="mr meeseeks" />
 		</div>
 	</div>
+	<NavigationWidget {segment}/>
 </header>
-
-<NavigationWidget {segment}/>
-
 <main>
 	<slot></slot>
 </main>
