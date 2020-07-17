@@ -64,6 +64,7 @@ if (type == 'number') {
 		border-radius: 0.25rem;
 		-webkit-box-shadow: inset 0 1px 3px #ddd;
 		        box-shadow: inset 0 1px 3px #ddd;
+		margin:0;
 	}
 	label {
 		padding: 0.4em 0.75em;
