@@ -8,7 +8,7 @@ export let valid;
 
 </script>
 
-<div class=form-inline>
+<div class="pure-form form-inline">
 	<InputField
 		bind:value={siteswapInput}
 		id={idPrefix + "SiteswapInput"}

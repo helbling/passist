@@ -14,8 +14,10 @@
 		box-sizing: border-box;
 	}
 
-	header { background-color:#19a2ba; margin-bottom:0 }
-	header .container { display:flex; flex-wrap:wrap }
+	header { background-color:#19a2ba; margin-bottom:0; padding:2rem 1rem }
+	header .container { display:flex; flex-wrap:wrap; margin:auto }
+
+	@media (min-width:1200px){ header .container{max-width:1140px} }
 	@media (max-width:40em) {
 		header .meeseeks { display:none }
 	}
@@ -28,8 +30,8 @@
 </style>
 
 
-<header class="jumbotron">
-	<div class="container" style="display:flex; flex-wrap:wrap">
+<header>
+	<div class="container">
 		<div >
 			<img class="cube" src="images/cube.svg" alt="logo" />
 		</div>

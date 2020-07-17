@@ -84,7 +84,7 @@
 	ul { list-style-type:none; column-width:8em }
 </style>
 
-<div class=form-inline>
+<div class="pure-form form-inline">
 
 	<InputField
 		bind:value={nProps}
@@ -118,7 +118,7 @@
 		bind:value={minThrow}
 		type=number
 		id=minThrow
-		label="min throw"
+		label="Min throw"
 		min=0
 		max=35
 	/>

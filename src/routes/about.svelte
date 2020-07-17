@@ -33,7 +33,7 @@ This project builds upon the follwing open source tools. Many thanks to its crea
 - [sapper](https://sapper.svelte.dev/) for building the web application
 - [three.js](https://threejs.org/) for doing all the complicated 3d stuff
 - [bytesize-icons](https://danklammer.com/bytesize-icons/) for the iconset
-- [bootstrap](https://getbootstrap.com/) so the input fields look nice
+- [Pure.css](https://purecss.io/) as a good css base
 
 ## License
 

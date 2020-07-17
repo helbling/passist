@@ -1,25 +1,39 @@
 html { overflow-y:scroll }
 body {
-	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"
+	color:#212529;
+	line-height: 1.5;
+	box-sizing: border-box
+}
+*, ::after, ::before { box-sizing: border-box }
+html, button, input, select, textarea, .pure-g [class *= "pure-u"] {
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
 
-.jumbotron { background-color:#19a2ba }
-.jumbotron .container { display:flex; flex-wrap:wrap }
-.container {max-width:none !important }
-@media (min-width:1200px){.container{max-width:1140px !important}}
+
 @media (max-width:40em) {
    .card { border:none }
    .col  { padding:0 }
    .card-header { border-top: 1px solid rgba(0,0,0,.125) }
 	.jumbotron .meeseeks { display:none }
 }
-
-.jumbotron .cube, .jumbotron .meeseeks { height:8rem; margin-top:-1em }
-.jumbotron .cube { position:absolute }
-.jumbotron h1, .jumbotron h5 { padding-left:9rem }
 @media (min-width:30em) {
 	.col.siteswap { min-width:30em }
 }
 
 .localThrows { overflow-x:auto; margin-bottom:1em }
 a.arrow { cursor:pointer }
+
+h1, h2, h3, h4, h5, h6 {margin-top:0; margin-bottom:.5rem; font-family:inherit; font-weight:500; line-height:1.2; color:inherit }
+h1 { font-size: 2.5em }
+h2 { font-size:2rem }
+h3 { font-size:1.75rem }
+h4 { font-size:1.5rem }
+h5 { font-size:1.25rem }
+h6 { font-size:1rem }
+a { color: #007bff; text-decoration: none; background-color: transparent; -webkit-text-decoration-skip: objects }
+a:hover { color: #0056b3; text-decoration: underline }
+a:not([href]):not([tabindex]) { color: inherit; text-decoration: none }
+a:not([href]):not([tabindex]):hover, a:not([href]):not([tabindex]):focus { color: inherit; text-decoration: none }
+a:not([href]):not([tabindex]):focus { outline: 0 }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0 }
+.form-inline { display: -ms-flexbox; display: flex; -ms-flex-flow: row wrap; flex-flow: row wrap; -ms-flex-align: center; align-items: center }

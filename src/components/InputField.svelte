@@ -39,30 +39,56 @@ if (type == 'number') {
 </script>
 
 <style>
-	.input-group { margin-right:1em; margin-bottom:1em; width:auto }
+	.input-group {
+		margin-right:1em;
+		margin-bottom:1em;
+		width:auto;
+		display: -ms-flexbox;
+		display: flex;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+		-ms-flex-align: stretch;
+		align-items: stretch;
+	}
+	.input-group > *:not(:last-child) { border-top-right-radius:0; border-bottom-right-radius:0; border-right:none }
+	.input-group > *:not(:first-child)  { border-top-left-radius:0; border-bottom-left-radius:0 }
 	input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: searchfield-cancel-button }
 	input[type="number"].digit    { width:3.5em !important }
 	input[type="number"].twodigit { width:5em !important }
+	input[type="checkbox"] { width:1.4em; height:1.4em; vertical-align:middle }
 	input.invalid { color:#dc3545 }
-	input[type="checkbox"] { width:1.5em; margin-right:0.2em }
 	.input-group-text.checkbox { padding-top:0.1em; padding-bottom:0.1em }
+	label, input {
+		color: #495057;
+		border: 1px solid #ced4da;
+		border-radius: 0.25rem;
+		-webkit-box-shadow: inset 0 1px 3px #ddd;
+		        box-shadow: inset 0 1px 3px #ddd;
+	}
+	label {
+		padding: 0.4em 0.75em;
+		margin: 0;
+		font-weight: 400;
+		line-height: 1.5;
+		text-align: center;
+		white-space: nowrap;
+		background-color: #e9ecef;
+	}
 </style>
 
-
+{#if title != label}
 <label class=sr-only for={id}>{title}</label>
+{/if}
 <div class="input-group {id}">
-	<div class=input-group-prepend>
-		<div class="input-group-text {type}" {title}>
-			{#if type == 'checkbox'}
-				<input
-					type=checkbox
-					bind:checked={value}
-					{...inputAttr}
-				>
-			{/if}
-			{label}
-		</div>
-	</div>
+	<label for={id}>
+		{#if type == 'checkbox'}
+			<input
+				type=checkbox
+				bind:checked={value}
+				{...inputAttr}
+			>
+		{/if}
+		{label}</label>
 	{#if type == 'number'}
 		<input
 			{id}

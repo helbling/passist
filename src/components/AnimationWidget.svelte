@@ -115,6 +115,7 @@
 	.teaserForeground   { position:absolute; top:0; bottom:0; left:0; right:0; z-index:21; cursor:pointer }
 	.message { color:white; background-color:rgba(0,0,0,0.2); pointer-events:none; position:absolute; bottom:2ex; left:50%; transform:translateX(-50%); padding:0 1ex; border-radius:1ex  }
 	.fullscreen .message { position:absolute; z-index:21; }
+	label.pure-button { margin:0 }
 </style>
 
 <svelte:window
@@ -145,21 +146,19 @@
 	</div>
 	{/if}
 	{#if showSettings}
-	<div class="settings">
+	<div class="settings pure-form form-inline">
 		<slot></slot>
 		<InputField
 			id=proptype
 			type=custom
 			label="Prop type"
 		>
-			<div class="btn-group btn-group-toggle" data-toggle="buttons">
-				<label class="btn btn-light" class:active={jif.propType == 'ball'}>
-					<input type="radio" bind:group={jif.propType} value="ball" autocomplete="off"> Balls
-				</label>
-				<label class="btn btn-light" class:active={jif.propType == 'club'}>
-					<input type="radio" bind:group={jif.propType} value="club" autocomplete="off"> Clubs
-				</label>
-			</div>
+			<label class="pure-button" class:pure-button-active={jif.propType == 'ball'}>
+				<input type="radio" bind:group={jif.propType} value="ball" autocomplete="off"> Balls
+			</label>
+			<label class="pure-button" class:pure-button-active={jif.propType == 'club'}>
+				<input type="radio" bind:group={jif.propType} value="club" autocomplete="off"> Clubs
+			</label>
 		</InputField>
 		<InputField
 			bind:value={jif.beatsPerSecond}
