@@ -210,10 +210,7 @@ $:	{
 	</AnimationWidget>
 
 	{#if sharebutton}
-		<!-- svelte-ignore a11y-invalid-attribute -->
-		<div class=sharebutton>
-			<a href='javascript:;' on:click={share}><Icon type=send /> share</a>
-		</div>
+		<button class="sharebutton pure-button" on:click={share}><Icon type=send /> share</button>
 	{/if}
 {:else if siteswapInput}
 	<div>

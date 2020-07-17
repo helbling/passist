@@ -5,7 +5,7 @@
 </script>
 
 <style>
-	.icon { cursor:pointer }
+	.icon { cursor:pointer; vertical-align:middle }
 </style>
 
 <svg
