@@ -10,7 +10,7 @@
 </script>
 
 <style>
-	.pure-menu-selected { background:#fff }
+	.pure-menu-selected, .pure-menu-link:focus { background:#fff }
 	.pure-menu-link { color:#212529 }
 </style>
 
