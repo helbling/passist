@@ -100,6 +100,12 @@
 			return;
 		togglePause();
 	}
+	function onKeyDown(e) {
+		if (e.key == ' ')
+			togglePause();
+		if (fullscreen && e.key == 'Escape')
+			toggleFullscreen();
+	}
 </script>
 
 <style>
@@ -127,6 +133,7 @@
 	on:touchstart|capture={ e => e.touches.length == 1        && onDown(e.touches[0])     }
 	on:touchmove|capture={  e => e.touches.length == 1        && onMove(e.touches[0])     }
 	on:touchend|capture={   e => e.changedTouches.length == 1 && onUp(e.changedTouches[0])}
+	on:keydown={onKeyDown}
 />
 
 
