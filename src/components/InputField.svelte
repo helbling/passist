@@ -75,6 +75,7 @@ if (type == 'number') {
 		white-space: nowrap;
 		background-color: #e9ecef;
 	}
+	.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0 }
 </style>
 
 {#if title != label}

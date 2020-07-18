@@ -8,20 +8,6 @@ html, button, input, select, textarea, .pure-g [class *= "pure-u"] {
 	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
 
-
-@media (max-width:40em) {
-   .card { border:none }
-   .col  { padding:0 }
-   .card-header { border-top: 1px solid rgba(0,0,0,.125) }
-	.jumbotron .meeseeks { display:none }
-}
-@media (min-width:30em) {
-	.col.siteswap { min-width:30em }
-}
-
-.localThrows { overflow-x:auto; margin-bottom:1em }
-a.arrow { cursor:pointer }
-
 h1, h2, h3, h4, h5, h6 {margin-top:0; margin-bottom:.5rem; font-family:inherit; font-weight:500; line-height:1.2; color:inherit }
 h1 { font-size: 2.5em }
 h2 { font-size:2rem }
@@ -29,10 +15,8 @@ h3 { font-size:1.75rem }
 h4 { font-size:1.5rem }
 h5 { font-size:1.25rem }
 h6 { font-size:1rem }
-a { color: #007bff; text-decoration: none; background-color: transparent; -webkit-text-decoration-skip: objects }
-a:not(.pure-menu-link):hover { color: #0056b3; text-decoration: underline }
-a:not([href]):not([tabindex]) { color: inherit; text-decoration: none }
-a:not([href]):not([tabindex]):hover, a:not([href]):not([tabindex]):focus { color: inherit; text-decoration: none }
-a:not([href]):not([tabindex]):focus { outline: 0 }
-.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0 }
+
+a { color:#0056b3; text-decoration:none }
+a:not(.pure-menu-link):hover { text-decoration: underline }
+
 .form-inline { display: -ms-flexbox; display: flex; -ms-flex-flow: row wrap; flex-flow: row wrap; -ms-flex-align: center; align-items: center }

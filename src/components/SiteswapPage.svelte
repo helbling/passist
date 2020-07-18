@@ -108,8 +108,9 @@ $:	{
 
 <style>
 	.causalDiagram { overflow-x:auto; margin-bottom:1em }
-	a.arrow { color:inherit; text-decoration:none }
+	a.arrow { color:inherit; text-decoration:none; cursor:pointer }
 	.sharebutton { margin-top:1em }
+	.localThrows { overflow-x:auto; margin-bottom:1em }
 </style>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
