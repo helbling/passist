@@ -14,16 +14,17 @@
 		box-sizing: border-box;
 	}
 
-	header { background-color:#19a2ba; margin-bottom:0.5rem; padding:2rem 1rem 0 }
-	header .container { display:flex; flex-wrap:wrap; margin:auto; height:7.5rem }
+	header { background-color:#19a2ba; margin-bottom:0.5rem; padding:1rem 1rem 0 }
+	header .container { display:flex; flex-wrap:wrap; margin:auto; padding-bottom:3em; position:relative }
 
 	@media (min-width:1200px){ header .container{max-width:1140px} }
-	@media (max-width:40em) {
+	@media (max-width:35.5em) {
 		header .meeseeks { display:none }
 	}
-	header .cube, header .meeseeks { height:8rem; margin-top:-1em }
-	header .cube { position:absolute }
-	header h1, header h5 { padding-left:9rem }
+	header .cube     { height:5.5rem; position:absolute }
+	header .meeseeks { height:6rem; position:absolute; right:2em }
+	header h1, header h2 { padding-left:6.5rem }
+	header h2 { font-size:1.25rem}
 
 	main {max-width:none !important }
 	@media (min-width:1200px){main{max-width:1140px !important}}
@@ -36,13 +37,13 @@
 		</div>
 		<div style="flex:1">
 			<h1>passist beta</h1>
-			<h5>passing siteswap assistant</h5>
+			<h2>passing siteswap assistant</h2>
 		</div>
 		<div>
 			<img class="meeseeks" src="images/mr_meeseeks_proud2.png" alt="mr meeseeks" />
 		</div>
+		<NavigationWidget {segment}/>
 	</div>
-	<NavigationWidget {segment}/>
 </header>
 <main>
 	<slot></slot>
