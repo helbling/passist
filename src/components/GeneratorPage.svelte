@@ -82,6 +82,7 @@
 
 <style>
 	ul { list-style-type:none; column-width:8em }
+	span.siteswap { color: #212529 }
 </style>
 
 <div class="pure-form form-inline">
@@ -152,11 +153,11 @@
 <h5>{list.length} siteswaps found{ calculating ? ' so far ' + spinner.charAt(ticks % 8) : ' in ' + calctime  + 's'}</h5>
 
 {#if list.length}
-	<div class=scroll>
-		<ul class="mt-4 list">
+	<div class=pure-menu>
+		<ul class="pure-menu-list pure-g">
 			{#each list as s}
-				<li>
-					<a href="./siteswap/{s}?nJugglers={nJugglers}"><span class=siteswap>{s}</span></a>
+				<li class="pure-menu-item pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+					<a class=pure-menu-link href="./siteswap/{s}?nJugglers={nJugglers}"><span class=siteswap>{s}</span></a>
 				</li>
 			{/each}
 		</ul>
