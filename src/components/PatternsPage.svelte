@@ -7,7 +7,7 @@
 	li .siteswap { width:5.5em; vertical-align:top; overflow:hidden; text-overflow:ellipsis }
 	span { display:inline-block; color:#212529 }
 </style>
-<h1>Well-known siteswaps</h1>
+<h2>Well-known siteswaps</h2>
 
 <p><small>© Christian Kästner, <a href='https://github.com/ckaestne/CompatSiteswaps/blob/master/named-siteswaps.txt'>named-siteswaps.txt</a></p>
 
