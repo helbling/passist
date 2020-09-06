@@ -27,6 +27,7 @@
 	let windowWidth;
 	let windowHeight;
 	let sharebutton = process.browser === true && 'share' in navigator;
+	let showAnimationWidget = true;
 
 	function shiftLeft() {
 		siteswapShift = (siteswapShift + 1) % period;
