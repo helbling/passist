@@ -138,7 +138,7 @@
 		bind:value={include}
 		type=search
 		id=include
-		label='Include global {include}'
+		label='Include global'
 		placeholder='e.g. 2 8'
 	/>
 
@@ -146,7 +146,7 @@
 		bind:value={exclude}
 		type=search
 		id=exclude
-		label='Exclude global {include}'
+		label='Exclude global'
 	/>
 </div>
 
