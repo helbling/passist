@@ -12,7 +12,10 @@
 <style>
 	.pure-menu-selected, .pure-menu-link:focus { background:#fff }
 	.pure-menu-link { color:#212529 }
-	nav { position:absolute; bottom: 0 }
+	nav { position:absolute; bottom: 0; overflow-x:scroll }
+	@media (max-width:30em) {
+		.pure-menu-link { padding: .5em .5em }
+	}
 </style>
 
 <nav class="pure-menu pure-menu-horizontal">

@@ -21,6 +21,9 @@
 	@media (max-width:35.5em) {
 		header .meeseeks { display:none }
 	}
+	@media (max-width:30em) {
+		header { padding:.5rem .5rem 0 }
+	}
 	header .cube     { height:5.5rem; position:absolute }
 	header .meeseeks { height:6rem; position:absolute; right:2em }
 	header h1, header h2 { padding-left:6.5rem }
