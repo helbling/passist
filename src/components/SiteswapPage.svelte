@@ -195,13 +195,16 @@ $:	{
 		/>
 	</div>
 
+	{#if showAnimationWidget}
 	<AnimationWidget
 		{jif}
 		{valid}
 		width={windowWidth > 1000 ? 1000 : windowWidth - 32}
 		height=300
+		closeButton=true
 		bind:fullscreen={fullscreen}
 		on:fullscreenChange={onFullscreenChange}
+		on:close={e => {showAnimationWidget = false;}}
 	>
 		<SiteswapInput
 			bind:siteswapInput={siteswapInput}
@@ -210,6 +213,10 @@ $:	{
 			idPrefix=animation
 		/>
 	</AnimationWidget>
+	{:else}
+		<button on:click={e => {showAnimationWidget = true;}}>Show Animation</button>
+	{/if}
+
 
 	{#if sharebutton}
 		<button class="sharebutton pure-button" on:click={share}><Icon type=send /> share</button>

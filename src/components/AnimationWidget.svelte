@@ -11,6 +11,7 @@
 	export let teaser = true;
 	export let width = 400;
 	export let height = 300;
+	export let closeButton = false;
 	let windowWidth;
 	let windowHeight;
 	let w, h;
@@ -147,11 +148,9 @@
 	<div class="controls topleft">
 		<Icon type=settings on:click={e => showSettings = !showSettings}/>
 	</div>
-	{#if fullscreen}
 	<div class="controls topright">
 		<Icon type=close on:click={e => {showSettings = false; toggleFullscreen()}}/>
 	</div>
-	{/if}
 	{#if showSettings}
 	<div class="settings pure-form form-inline">
 		<slot></slot>
@@ -197,6 +196,11 @@
 	{#if valid}
 		{#if teaser && !fullscreen}
 			<div class=teaserForeground on:click={toggleFullscreen}>
+				{#if closeButton}
+				<div class="controls topright" on:click|stopPropagation={dispatch('close', !fullscreen)}>
+					<Icon type=close/>
+				</div>
+				{/if}
 				{#if loaded}
 				<div class=message>Click to interact</div>
 				{/if}
