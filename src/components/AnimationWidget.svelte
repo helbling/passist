@@ -52,7 +52,7 @@
 
 	onDestroy(() => {
 		if (anim) {
-			anim.cleanup();
+			anim.destroy();
 			anim = undefined;
 		}
 		if (fpsInterval)

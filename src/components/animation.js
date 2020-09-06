@@ -1013,7 +1013,7 @@ animate(t)
 		this.prevTime = t;
 	}
 
-	requestAnimationFrame(this.animate.bind(this));
+	this.animationFrameRequestId = requestAnimationFrame(this.animate.bind(this));
 	this.controls.update();
 
 	if (jif && this.props && !this.paused)
@@ -1056,6 +1056,13 @@ cleanup()
 		this.scene.remove.apply(this.scene, this.scene.children);
 		this.renderer.renderLists.dispose();
 	}
+}
+
+destroy()
+{
+	this.cleanup();
+	if (this.animationFrameRequestId)
+		cancelAnimationFrame(this.animationFrameRequestId);
 }
 
 } // end class Animation
