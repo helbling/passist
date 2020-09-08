@@ -25,4 +25,27 @@ function siteswapUrl(p)
 	return url;
 }
 
-export { defaults, useLocalStorage, siteswapUrl };
+function loadFavorites()
+{
+	console.log('load', localStorage.getItem('favorites'));
+	let list = JSON.parse(localStorage.getItem('favorites'));
+	if (!list)
+		list = [];
+	const favorites = {};
+	for (const fav of list)
+		favorites[fav] = true;
+	return favorites;
+}
+
+function saveFavorites(favorites)
+{
+	console.log('favorites', favorites);
+	const list = [];
+	// TODO: sort order??
+	for (const [fav, dummy] of Object.entries(favorites))
+		list.push(fav)
+	console.log('save', JSON.stringify(list));
+	localStorage.setItem('favorites', JSON.stringify(list));
+}
+
+export { defaults, useLocalStorage, siteswapUrl, loadFavorites, saveFavorites };

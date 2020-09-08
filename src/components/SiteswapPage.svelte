@@ -5,7 +5,7 @@
 	import Siteswap from './siteswap.js';
 	import Icon from './Icon.svelte';
 	import { siteswapNames} from './patterns.js';
-	import { defaults, useLocalStorage, siteswapUrl } from './passist.js';
+	import { defaults, siteswapUrl, useLocalStorage, loadFavorites, saveFavorites } from './passist.js';
 	import { goto } from '@sapper/app';
 
 	export let siteswapInput = "45678";
@@ -31,12 +31,23 @@
 	if (process.browser === true)
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
 	$: useLocalStorage && localStorage.setItem("showAnimationWidget", showAnimationWidget ? "true" : "false");
+	let favorites = useLocalStorage ? loadFavorites() : {};
+	let isFavorite = false;
+	let canonicUrl;
 
 	function shiftLeft() {
 		siteswapShift = (siteswapShift + 1) % period;
 	}
 	function shiftRight() {
 		siteswapShift = (siteswapShift + period - 1) % period;
+	}
+	function toggleFavorite() {
+		if (isFavorite) {
+			delete favorites[canonicUrl];
+			favorites = favorites;
+		} else {
+			favorites[canonicUrl] = true;
+		}
 	}
 	function getUrl(p = {}) {
 		p = Object.assign({
@@ -65,6 +76,10 @@ $:	{
 			nProps = siteswap.nProps;
 			siteswapName = siteswapNames[siteswap.canonicString()];
 			startProperties = siteswap.getStartProperties(nJugglers);
+			canonicUrl = siteswapUrl({
+				siteswapInput: siteswap.canonicString(),
+				nJugglers: nJugglers,
+			});
 
 			localPeriod = period % nJugglers == 0 ? period / nJugglers : period;
 
@@ -77,6 +92,8 @@ $:	{
 			valid = false;
 		}
 	}
+	$: isFavorite = !!favorites[canonicUrl];
+	$: useLocalStorage && saveFavorites(favorites);
 
 	function prechac(x, nJugglers) {
 		return Math.round(+x / nJugglers * 100) / 100;
@@ -129,6 +146,8 @@ $:	{
 
 {#if valid || fullscreen}
 	<h2>
+		<Icon type=star fill={isFavorite ? '#f8ed71' : 'none'} on:click={toggleFavorite} />
+
 		<!-- TODO: put correct siteswap shift in href -->
 		<!-- svelte-ignore a11y-invalid-attribute -->
 		<a class=arrow href='javascript:;' on:click={shiftLeft}>◄</a>
