@@ -160,6 +160,10 @@ toJif(properties)
 	const heights = this.heights;
 	p.nHands = nHands;
 	p.nJugglers = nJugglers;
+	p.valid = this.isValid();
+	if (!p.valid)
+		return p;
+
 	const hands = [];
 	if (nHands <= 2 * nJugglers) {
 		for (let i = 0; i < nHands; i++)
