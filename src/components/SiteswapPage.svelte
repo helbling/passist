@@ -187,14 +187,16 @@ $:	{
 		</div>
 	{/if}
 
-	<div class=causalDiagram>
-		<CausalDiagramWidget
-			{jif}
-			{startConfigurations}
-			steps={nJugglers * period * 2}
-			{url}
-		/>
-	</div>
+	{#if valid}
+		<div class=causalDiagram>
+			<CausalDiagramWidget
+				{jif}
+				{startConfigurations}
+				steps={nJugglers * period * 2}
+				{url}
+			/>
+		</div>
+	{/if}
 
 	{#if showAnimationWidget}
 	<AnimationWidget
