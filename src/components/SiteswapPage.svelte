@@ -217,7 +217,7 @@ $:	{
 		/>
 	</AnimationWidget>
 	{:else}
-		<button on:click={e => {showAnimationWidget = true;}}>Show Animation</button>
+		<button class="pure-button" on:click={e => {showAnimationWidget = true;}}>Show Animation</button>
 	{/if}
 
 
