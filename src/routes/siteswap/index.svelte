@@ -1,9 +1,7 @@
 <script>
 	//	import SiteswapPage from '../../components/SiteswapPage.svelte';
-	import { defaults, siteswapUrl } from '../../components/passist.js';
+	import { defaults, useLocalStorage, siteswapUrl } from '../../components/passist.js';
 	import { goto } from '@sapper/app';
-
-	const useLocalStorage = process.browser === true && 'localStorage' in window;
 
 	if (useLocalStorage) {
 		goto(siteswapUrl({
