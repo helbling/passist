@@ -24,6 +24,8 @@
 	let showSettings = false;
 	let fps = '';
 	let fpsInterval;
+	let beatsPerSecond = 1.4 * jif.nHands;
+	let animationSpeed = 1.0;
 
 	$: w = fullscreen ? windowWidth : width;
 	$: h = fullscreen ? windowHeight : height;
@@ -38,8 +40,8 @@
 			}
 		} else if (useLocalStorage)
 			localStorage.setItem("propType", jif.propType);
-		jif.beatsPerSecond = jif.beatsPerSecond ? parseFloat(jif.beatsPerSecond) : (1.4 * jif.nHands);
-		jif.animationSpeed = jif.animationSpeed ? parseFloat(jif.animationSpeed) : 1.0;
+		jif.beatsPerSecond = beatsPerSecond ? parseFloat(beatsPerSecond) : (1.4 * jif.nHands);
+		jif.animationSpeed = animationSpeed ? parseFloat(animationSpeed) : 1.0;
 		jif.showOrbits = ('showOrbits' in jif) ? jif.showOrbits : false;
 	}
 
@@ -167,14 +169,14 @@
 			</label>
 		</InputField>
 		<InputField
-			bind:value={jif.beatsPerSecond}
+			bind:value={beatsPerSecond}
 			type=number
 			id=bps
 			label='Beats per second'
 			step=0.1
 		/>
 		<InputField
-			bind:value={jif.animationSpeed}
+			bind:value={animationSpeed}
 			type=number
 			id=animationspeed
 			label='Animation speed'
