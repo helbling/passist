@@ -994,10 +994,11 @@ updateScene(jif, valid)
 	this.setPositions(0);
 }
 
-animate(t)
+animate()
 {
 	const jif = this.jif;
 
+	const t = performance.now();
 	let time = 0;
 	if (t !== undefined) {
 		if (this.paused) {
