@@ -5,7 +5,7 @@
 	import Siteswap from './siteswap.js';
 	import Icon from './Icon.svelte';
 	import { siteswapNames} from './patterns.js';
-	import { defaults, siteswapUrl } from './passist.js';
+	import { defaults, useLocalStorage, siteswapUrl } from './passist.js';
 	import { goto } from '@sapper/app';
 
 	export let siteswapInput = "45678";
@@ -27,7 +27,10 @@
 	let windowWidth;
 	let windowHeight;
 	let sharebutton = process.browser === true && 'share' in navigator;
-	let showAnimationWidget = true;
+	let showAnimationWidget = false;
+	if (process.browser === true)
+		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
+	$: useLocalStorage && localStorage.setItem("showAnimationWidget", showAnimationWidget ? "true" : "false");
 
 	function shiftLeft() {
 		siteswapShift = (siteswapShift + 1) % period;
