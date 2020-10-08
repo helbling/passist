@@ -1,7 +1,7 @@
 <script context="module">
 	import { defaults, useLocalStorage, siteswapUrl } from '../../components/passist.js';
 	export async function preload({ params, query }) {
-		const nJugglers = parseInt(query.nJugglers);
+		const nJugglers = parseInt(query.jugglers);
 		return {
 			siteswapInput: params.siteswap,
 			nJugglers: nJugglers ? nJugglers : defaults.nJugglers,

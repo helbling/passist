@@ -17,7 +17,7 @@ function U(path, query)
 function siteswapUrl(p)
 {
 	const query = {
-		nJugglers: p.nJugglers,
+		jugglers: p.nJugglers,
 	};
 	if (p.fullscreen)
 		query.fullscreen = 1;

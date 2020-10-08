@@ -157,7 +157,7 @@
 		<ul class="pure-menu-list pure-g">
 			{#each list as s}
 				<li class="pure-menu-item pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
-					<a class=pure-menu-link href="./siteswap/{s}?nJugglers={nJugglers}"><span class=siteswap>{s}</span></a>
+					<a class=pure-menu-link href="./siteswap/{s}?jugglers={nJugglers}"><span class=siteswap>{s}</span></a>
 				</li>
 			{/each}
 		</ul>
