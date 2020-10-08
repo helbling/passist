@@ -20,7 +20,7 @@ Work in progress..
 # Usage
 ```
  npm install
- npm build
+ npm run build
  npm start
  open http://localhost:3000
 ```
