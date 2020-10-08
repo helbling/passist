@@ -39,7 +39,7 @@
 			<img class="cube" src="images/cube.svg" alt="logo" />
 		</div>
 		<div style="flex:1">
-			<h1>passist beta</h1>
+			<h1>passist</h1>
 			<h2>passing siteswap assistant</h2>
 		</div>
 		<div>
