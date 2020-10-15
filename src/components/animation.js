@@ -745,7 +745,7 @@ updateScene(jif, valid)
 	this.bbox = new THREE.Box3(v3(0, 0, 0), v3(0, 0, 0));
 
 	this.jugglers = [];
-	const circleRadius = 2 + jif.nJugglers * 0.2;
+	const circleRadius = 1.2 + jif.nJugglers * 0.2;
 	for (let i = 0; i < jif.nJugglers; i++) {
 		const j = new Juggler(valid ? '/images/face_texture.png' : '/images/panic_face_texture.png');
 		if (jif.nJugglers == 1) {
