@@ -130,12 +130,9 @@
 <svelte:window
 	bind:innerWidth={windowWidth}
 	bind:innerHeight={windowHeight}
-	on:mousedown|capture={onDown}
-	on:mousemove|capture={onMove}
-	on:mouseup|capture={onUp}
-	on:touchstart|capture={ e => e.touches.length == 1        && onDown(e.touches[0])     }
-	on:touchmove|capture={  e => e.touches.length == 1        && onMove(e.touches[0])     }
-	on:touchend|capture={   e => e.changedTouches.length == 1 && onUp(e.changedTouches[0])}
+	on:pointerdown|capture={onDown}
+	on:pointermove|capture={onMove}
+	on:pointerup|capture={onUp}
 	on:keydown={onKeyDown}
 />
 
