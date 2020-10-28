@@ -25,4 +25,12 @@ function siteswapUrl(p)
 	return url;
 }
 
-export { defaults, useLocalStorage, siteswapUrl };
+const servertype = {
+	development:'dev',
+	beta:'beta',
+	alpha:'alpha'
+}[process.env.NODE_ENV];
+
+const jifdev = servertype == 'dev' || servertype == 'alpha';
+
+export { defaults, useLocalStorage, siteswapUrl, servertype, jifdev };

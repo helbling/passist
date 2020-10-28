@@ -1,5 +1,6 @@
 <script>
 	import NavigationWidget from '../components/NavigationWidget.svelte';
+	import { servertype } from '../components/passist.js';
 
 	export let segment;
 </script>
@@ -39,7 +40,7 @@
 			<img class="cube" src="images/cube.svg" alt="logo" />
 		</div>
 		<div style="flex:1">
-			<h1>passist</h1>
+			<h1>passist{servertype ? ' ' + servertype : ''}</h1>
 			<h2>passing siteswap assistant</h2>
 		</div>
 		<div>

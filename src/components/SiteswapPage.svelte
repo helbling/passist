@@ -5,7 +5,7 @@
 	import Siteswap from './siteswap.js';
 	import Icon from './Icon.svelte';
 	import { siteswapNames} from './patterns.js';
-	import { defaults, useLocalStorage, siteswapUrl } from './passist.js';
+	import { defaults, useLocalStorage, siteswapUrl, jifdev } from './passist.js';
 	import { goto } from '@sapper/app';
 
 	export let siteswapInput = "45678";
@@ -116,9 +116,17 @@ $:	{
 	.sharebutton { margin-top:1em }
 	.localThrows { overflow-x:auto; margin-bottom:1em }
 	.localThrows td { white-space:nowrap }
+	.jif-button { float:right }
 </style>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
+
+{#if jifdev}
+	<button class="pure-button jif-button" on:click={e => {
+		// localStorage.setItem("jif", JSON.stringify(jif)); goto('/jif');
+		console.log(jif);
+	}}>JIF</button>
+{/if}
 
 <SiteswapInput
 	bind:siteswapInput={siteswapInput}
