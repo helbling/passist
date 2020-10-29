@@ -24,7 +24,7 @@
 	let showSettings = false;
 	let fps = '';
 	let fpsInterval;
-	let beatsPerSecond = 1.4 * jif.nHands;
+	let jugglingSpeed = 2.8;
 	let animationSpeed = 1.0;
 
 	$: w = fullscreen ? windowWidth : width;
@@ -40,7 +40,7 @@
 			}
 		} else if (useLocalStorage)
 			localStorage.setItem("propType", jif.propType);
-		jif.beatsPerSecond = beatsPerSecond ? parseFloat(beatsPerSecond) : (1.4 * jif.nHands);
+		jif.jugglingSpeed = jugglingSpeed ? parseFloat(jugglingSpeed) : 2.8;
 		jif.animationSpeed = animationSpeed ? parseFloat(animationSpeed) : 1.0;
 		jif.showOrbits = ('showOrbits' in jif) ? jif.showOrbits : false;
 	}
@@ -166,10 +166,10 @@
 			</label>
 		</InputField>
 		<InputField
-			bind:value={beatsPerSecond}
+			bind:value={jugglingSpeed}
 			type=number
-			id=bps
-			label='Beats per second'
+			id=jugglingspeed
+			label='Juggling speed'
 			step=0.1
 		/>
 		<InputField

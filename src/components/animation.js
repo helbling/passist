@@ -723,6 +723,7 @@ static clubTexture(clubColors = {})
 updateScene(jif, valid)
 {
 	this.jif = jif;
+	this.beatsPerSecond = jif.jugglingSpeed * jif.timeStretchFactor;
 
 	this.cleanup();
 	this.scene = new THREE.Scene();
@@ -892,8 +893,8 @@ updateScene(jif, valid)
 			e.throwCurve = new ThrowCurve({
 				throwPos: e.throwPos,
 				catchPos: e.catchPos,
-				start:    e.time / jif.beatsPerSecond,
-				duration: (e.duration - e.dwell) / jif.beatsPerSecond,
+				start:    e.time / this.beatsPerSecond,
+				duration: (e.duration - e.dwell) / this.beatsPerSecond,
 				from: e.from,
 				to:   e.to,
 				nSpins:   e.spins,
@@ -916,7 +917,7 @@ updateScene(jif, valid)
 		}
 	}
 
-	const period = jif.timePeriod / jif.beatsPerSecond;
+	const period = jif.timePeriod / this.beatsPerSecond;
 
 	// calculate prop movements during dwell
 	propThrows.forEach((throwCurves, prop) => {
@@ -1018,7 +1019,7 @@ animate()
 	this.controls.update();
 
 	if (jif && this.props && !this.paused)
-		this.setPositions(((time * jif.nHands / 1000 * jif.animationSpeed) % jif.timePeriod) / jif.beatsPerSecond);
+		this.setPositions(((time * jif.nHands / 1000 * jif.animationSpeed) % jif.timePeriod) / this.beatsPerSecond);
 
 	this.renderer.render(this.scene, this.camera);
 }

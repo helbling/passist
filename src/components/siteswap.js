@@ -161,6 +161,7 @@ toJif(properties)
 	p.nHands = nHands;
 	p.nJugglers = nJugglers;
 	p.valid = this.isValid();
+	p.timeStretchFactor = nHands / 2;
 	if (!p.valid)
 		return p;
 
