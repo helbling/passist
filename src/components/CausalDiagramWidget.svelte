@@ -65,18 +65,18 @@ $: {
 				continue;
 			throws.push(event);
 		}
-		
+
 		for (let i = 0; i < steps; i++) {
 			const th = throws[i % throws.length];
 			let t = th.time + Math.floor(i / throws.length) * jif.timePeriod;
-			let jugglerFrom = th.fromHand % nJugglers;
-			let jugglerTo = th.toHand % nJugglers;
+			let jugglerFrom = jif.limbs[th.from].juggler;
+			let jugglerTo = jif.limbs[th.to].juggler;
 
 			nodes.push({
 				r: r,
 				x: x(t),
 				y: y(t, jugglerFrom),
-				class: (Math.floor(th.fromHand / nJugglers) % 2) ? 'leftHand' : 'rightHand',
+				class: (Math.floor(th.from / nJugglers) % 2) ? 'leftHand' : 'rightHand',
 				juggler: jugglerFrom,
 				label: th.label,
 				arrow: arrow(t, th.duration - 2 * nJugglers, jugglerFrom, jugglerTo), // for ladder diagram: don't subtract 2 * nJugglers

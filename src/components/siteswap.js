@@ -164,12 +164,12 @@ toJif(properties)
 	if (!p.valid)
 		return p;
 
-	const hands = [];
+	const limbs = [];
 	if (nHands <= 2 * nJugglers) {
 		for (let i = 0; i < nHands; i++)
-			hands.push({juggler:i % nJugglers, hand: i < nJugglers ? 'right' : 'left'});
+			limbs.push({juggler:i % nJugglers, hand: i < nJugglers ? 'right' : 'left'});
 	}
-	p.hands = hands;
+	p.limbs = limbs;
 
 	p.nProps = this.nProps;
 
@@ -186,8 +186,8 @@ toJif(properties)
 			type: height ? 'throw' : 'pause',
 			time: i,
 			duration: height,
-			fromHand: i % nHands,
-			toHand:  (i + height) % nHands,
+			from: i % nHands,
+			to:  (i + height) % nHands,
 			label: Siteswap.heightToChar(height)
 		};
 		if (p.flipTwos && height == 2 * nJugglers)

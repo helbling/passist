@@ -805,7 +805,7 @@ updateScene(jif, valid)
 	this.catchPositions = [];
 	this.zipCatchPositions = [];
 	for (let i = 0; i < jif.nHands; i++) {
-		let hand = jif.hands[i];
+		let hand = jif.limbs[i];
 		let j = hand.juggler;
 		let side = hand.hand == 'right' ? 0 : 1;
 		let sf = sideFactor(side);
@@ -872,19 +872,19 @@ updateScene(jif, valid)
 			if (!('spins' in e))
 				e.spins = Math.max(0, Math.floor(soloHeight - 2));
 
-			const jugglerFrom = jif.hands[e.fromHand].juggler;
-			const jugglerTo = jif.hands[e.toHand].juggler;
+			const jugglerFrom = jif.limbs[e.from].juggler;
+			const jugglerTo = jif.limbs[e.to].juggler;
 			const up = v3(0, 1, 0);
-			e.throwPos = this.throwPositions[e.fromHand];
-			e.catchPos = this.catchPositions[e.toHand];
+			e.throwPos = this.throwPositions[e.from];
+			e.catchPos = this.catchPositions[e.to];
 			e.throwAngle = 1.5 * Math.PI; // TODO: make this dependent on throw (type, duration, where its supposed to go)
 			if (jugglerFrom == jugglerTo) { // self - TODO: improve angle for crossing selfs
 				e.axis = this.jugglers[jugglerFrom].facing.cross(up);
 				e.catchAngle = 1.5 * Math.PI;
 
 				// zip like
-				if (soloHeight < 2.5 && e.fromHand != e.toHand)
-					e.catchPos = this.zipCatchPositions[e.toHand];
+				if (soloHeight < 2.5 && e.from != e.to)
+					e.catchPos = this.zipCatchPositions[e.to];
 			} else { // pass
 				e.axis = e.catchPos.clone().sub(e.throwPos).normalize().cross(up);
 				e.catchAngle = 2 * Math.PI;
@@ -894,8 +894,8 @@ updateScene(jif, valid)
 				catchPos: e.catchPos,
 				start:    e.time / jif.beatsPerSecond,
 				duration: (e.duration - e.dwell) / jif.beatsPerSecond,
-				fromHand: e.fromHand,
-				toHand:   e.toHand,
+				from: e.from,
+				to:   e.to,
 				nSpins:   e.spins,
 				spinAxis: e.axis,
 				throwAngle: e.throwAngle,
@@ -924,7 +924,7 @@ updateScene(jif, valid)
 		const positionCurves = [];
 		let last = throwCurves[throwCurves.length - 1];
 		for (const curve of throwCurves) {
-			if (last.toHand != curve.fromHand) {
+			if (last.to != curve.from) {
 				console.log('prop teleportation detected - should not happen!');
 				continue;
 			}
@@ -940,7 +940,7 @@ updateScene(jif, valid)
 					vThrow: curve.v0.clone(),
 					start: start,
 					duration: dwellDuration,
-					hand: curve.fromHand,
+					hand: curve.from,
 					catchAxis: last.spinAxis.clone().multiplyScalar(last.isSelf ? 1 : -1),
 					catchAngle: last.catchAngle,
 					catchRotationSpeed: -last.rotationSpeed,
