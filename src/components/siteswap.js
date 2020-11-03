@@ -133,9 +133,9 @@ toJif(properties)
 	let nJugglers = properties.nJugglers;
 	if (nJugglers === undefined)
 		nJugglers = 2;
-	let nHands = properties.nHands;
-	if (nHands === undefined)
-		nHands = nJugglers * 2;
+	let nLimbs = properties.nLimbs;
+	if (nLimbs === undefined)
+		nLimbs = nJugglers * 2;
 	function lcmArray(array) {
 		function gcd(a, b) { return !b ? a : gcd(b, a % b); }
 		function lcm(a, b) { return (a * b) / gcd(a, b); }
@@ -148,7 +148,7 @@ toJif(properties)
 	const periods = this.orbits().map(function(orbit) {
 		return orbit.reduce(function(a, b) { return a + b; }, 0); // sum
 	});
-	periods.push(nHands);
+	periods.push(nLimbs);
 
 	const steps = lcmArray(periods);
 
@@ -158,17 +158,19 @@ toJif(properties)
 			p[k] = properties[k];
 	p.siteswap = this.toString();
 	const heights = this.heights;
-	p.nHands = nHands;
 	p.nJugglers = nJugglers;
 	p.valid = this.isValid();
-	p.timeStretchFactor = nHands / 2;
+	p.timeStretchFactor = nLimbs / 2;
 	if (!p.valid)
 		return p;
 
 	const limbs = [];
-	if (nHands <= 2 * nJugglers) {
-		for (let i = 0; i < nHands; i++)
-			limbs.push({juggler:i % nJugglers, hand: i < nJugglers ? 'right' : 'left'});
+	if (nLimbs <= 2 * nJugglers) {
+		for (let i = 0; i < nLimbs; i++)
+			limbs.push({
+				juggler:i % nJugglers,
+				type: i < nJugglers ? 'right hand' : 'left hand',
+			});
 	}
 	p.limbs = limbs;
 
@@ -187,8 +189,8 @@ toJif(properties)
 			type: height ? 'throw' : 'pause',
 			time: i,
 			duration: height,
-			from: i % nHands,
-			to:  (i + height) % nHands,
+			from: i % nLimbs,
+			to:  (i + height) % nLimbs,
 			label: Siteswap.heightToChar(height)
 		};
 		if (p.flipTwos && height == 2 * nJugglers)

@@ -806,10 +806,18 @@ updateScene(jif, valid)
 	this.throwPositions = [];
 	this.catchPositions = [];
 	this.zipCatchPositions = [];
-	for (let i = 0; i < jif.nHands; i++) {
-		let hand = jif.limbs[i];
-		let j = hand.juggler;
-		let side = hand.hand == 'right' ? 0 : 1;
+	for (let limb of jif.limbs) {
+		let j = limb.juggler;
+
+		let side = ({
+			'right hand': 0,
+			'left hand':  1
+		})[limb.type];
+		if (side === undefined) {
+			console.log('unable to handle limb type: ' + limb.type);
+			side = limb.type.match(/right/) ? 0 : 1;
+		}
+
 		let sf = sideFactor(side);
 
 		let forwardDistance = lowerArmLength + handLength;
