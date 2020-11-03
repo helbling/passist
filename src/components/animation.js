@@ -724,6 +724,7 @@ updateScene(jif, valid)
 {
 	this.jif = jif;
 	this.beatsPerSecond = jif.jugglingSpeed * jif.timeStretchFactor;
+	const period = this.period = jif.timePeriod / this.beatsPerSecond;
 
 	this.cleanup();
 	this.scene = new THREE.Scene();
@@ -917,8 +918,6 @@ updateScene(jif, valid)
 		}
 	}
 
-	const period = jif.timePeriod / this.beatsPerSecond;
-
 	// calculate prop movements during dwell
 	propThrows.forEach((throwCurves, prop) => {
 
@@ -999,8 +998,8 @@ animate()
 {
 	const jif = this.jif;
 
-	const t = performance.now();
-	let time = 0;
+	const t = performance.now(); // web page time [ms]
+	let time = 0; // time since animation start [ms]
 	if (t !== undefined) {
 		if (this.paused) {
 			time = this.timer.dt;
@@ -1019,11 +1018,15 @@ animate()
 	this.controls.update();
 
 	if (jif && this.props && !this.paused)
-		this.setPositions(((time * jif.nHands / 1000 * jif.animationSpeed) % jif.timePeriod) / this.beatsPerSecond);
+		this.setPositions((time / 1000 * jif.animationSpeed) % this.period);
 
 	this.renderer.render(this.scene, this.camera);
 }
 
+/**
+ * set positions of all objects
+ * t: time in secons
+ */
 setPositions(t)
 {
 	for (const p of this.props) {

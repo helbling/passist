@@ -25,7 +25,7 @@
 	let fps = '';
 	let fpsInterval;
 	let jugglingSpeed = 2.8;
-	let animationSpeed = 1.0;
+	let animationSpeed = 0.8;
 
 	$: w = fullscreen ? windowWidth : width;
 	$: h = fullscreen ? windowHeight : height;
