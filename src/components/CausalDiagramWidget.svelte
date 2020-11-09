@@ -51,7 +51,7 @@
 	}
 
 $: {
-		nJugglers = jif.nJugglers;
+		nJugglers = jif.jugglers.length;
 		dx = 70 / nJugglers;
 
 		width = steps * dx + 50;

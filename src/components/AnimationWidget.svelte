@@ -26,20 +26,21 @@
 	let fpsInterval;
 	let jugglingSpeed = 2.8;
 	let animationSpeed = 0.8;
+	let propType = defaults.propType;
 
 	$: w = fullscreen ? windowWidth : width;
 	$: h = fullscreen ? windowHeight : height;
 
 	$: { // defaults
-		if (!jif.propType) {
+		if (!jif.defaults || !jif.defaults.prop || !jif.defaults.prop.type) {
 			if (useLocalStorage) {
 				const lsPropType = localStorage.getItem("propType");
-				jif.propType = lsPropType ? lsPropType : defaults.propType;
-			} else {
-				jif.propType = defaults.propType;
+				propType = lsPropType ? lsPropType : defaults.propType;
 			}
+			jif.defaults.prop.type = propType;
 		} else if (useLocalStorage)
-			localStorage.setItem("propType", jif.propType);
+			localStorage.setItem("propType", propType);
+		jif.defaults.prop.type = propType;
 		jif.jugglingSpeed = jugglingSpeed ? parseFloat(jugglingSpeed) : 2.8;
 		jif.animationSpeed = animationSpeed ? parseFloat(animationSpeed) : 1.0;
 		jif.showOrbits = ('showOrbits' in jif) ? jif.showOrbits : false;
@@ -158,11 +159,11 @@
 			type=custom
 			label="Prop type"
 		>
-			<label class="pure-button" class:pure-button-active={jif.propType == 'ball'}>
-				<input type="radio" bind:group={jif.propType} value="ball" autocomplete="off"> Balls
+			<label class="pure-button" class:pure-button-active={propType == 'ball'}>
+				<input type="radio" bind:group={propType} value="ball" autocomplete="off"> Balls
 			</label>
-			<label class="pure-button" class:pure-button-active={jif.propType == 'club'}>
-				<input type="radio" bind:group={jif.propType} value="club" autocomplete="off"> Clubs
+			<label class="pure-button" class:pure-button-active={propType == 'club'}>
+				<input type="radio" bind:group={propType} value="club" autocomplete="off"> Clubs
 			</label>
 		</InputField>
 		<InputField

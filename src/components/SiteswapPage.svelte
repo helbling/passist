@@ -5,7 +5,7 @@
 	import Siteswap from './siteswap.js';
 	import Icon from './Icon.svelte';
 	import { siteswapNames} from './patterns.js';
-	import { defaults, useLocalStorage, siteswapUrl, jifdev } from './passist.js';
+	import { defaults, colors, useLocalStorage, siteswapUrl, jifdev } from './passist.js';
 	import { goto } from '@sapper/app';
 
 	export let siteswapInput = "45678";
@@ -56,14 +56,50 @@ $:	{
 		originalSiteswap = new Siteswap(strippedInput);
 		siteswap = originalSiteswap.shift(siteswapShift);
 		if (nJugglers > 0) {
-			jif = siteswap.toJif({
-				nJugglers: nJugglers,
-				flipTwos: true
-			});
+			const circleRadius = 1.2 + nJugglers * 0.2;
+			const jugglers = [];
+			for (let i = 0; i < nJugglers; i++) {
+				const juggler = {
+					name: String.fromCharCode(65 + i),
+				};
+				if (nJugglers == 1) {
+					Object.assign(juggler, {
+						position: [0, 0, 0],
+						lookAt:   [0, 0, 1],
+					});
+				} else {
+					const a = Math.PI * 2 * i / nJugglers;
+					Object.assign(juggler, {
+						position: [circleRadius * Math.cos(a), 0, circleRadius * Math.sin(a)],
+						lookAt:   [0, 0, 0],
+					});
+				}
+				jugglers.push(juggler);
+			}
+
+			const limbs = [];
+			for (let i = 0; i < 2 * nJugglers; i++)
+				limbs.push({
+					juggler:i % nJugglers,
+					type: i < nJugglers ? 'right hand' : 'left hand',
+				});
+
 			valid = siteswap.isValid();
 			period = siteswap.period;
 			nProps = siteswap.nProps;
+			const props = [];
+			for (let i = 0; i < nProps; i++)
+				props.push({color: colors.props[i % colors.props.length]});
+
 			siteswapName = siteswapNames[siteswap.canonicString()];
+
+			jif = siteswap.toJif({
+				name: siteswapName ? siteswapName + " (" + siteswap.toString() + ")" : undefined,
+				jugglers: jugglers,
+				limbs: limbs,
+				props: props,
+				flipTwos: true
+			});
 			startProperties = siteswap.getStartProperties(nJugglers);
 
 			localPeriod = period % nJugglers == 0 ? period / nJugglers : period;

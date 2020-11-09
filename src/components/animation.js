@@ -2,6 +2,7 @@
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { colors } from './passist.js';
 
 const hu = 0.21;
 const jugglerHeight  = 8    * hu;
@@ -14,27 +15,10 @@ const handLength     = 0.8  * hu;
 const footLength     = 1.5  * hu; // original: 1.14
 const footWidth      = 0.8  * hu; // original: 0.46
 const gravity = -9.8;
-const colors = {
-	sky: 0x24b59f,
-	horizon: 0xeff9b7,
-	fog: 0xffffee,
-	ground1: 0x937a24,
-	ground2: 0x987d2e,
-	meeseeks: 0x5fcaf6,
-	props: [
-		0xc0392b, // red
-		0x0c0d5d, // blue
-		0xf45d20, // orange
-		0xed4694, // pink
-		0x6f5499, // violet
-		0x00dc3c, // green
-		0xffd700, // yellow
-		0xf2f2f2, // white
-	],
-};
-function propColor(propId)
+
+function propColor(prop, jif)
 {
-	return colors.props[propId % colors.props.length];
+	return prop.color || (jif.defaults && jif.defaults.prop && jif.defaults.prop.color) || "white";
 }
 
 function sideFactor(side)
@@ -725,6 +709,8 @@ updateScene(jif, valid)
 	this.jif = jif;
 	this.beatsPerSecond = jif.jugglingSpeed * jif.timeStretchFactor;
 	const period = this.period = jif.timePeriod / this.beatsPerSecond;
+	const timeStretchFactor = jif.timeStretchFactor ? jif.timeStretchFactor : 1;
+	const nProps = jif.props.length;
 
 	this.cleanup();
 	this.scene = new THREE.Scene();
@@ -747,17 +733,10 @@ updateScene(jif, valid)
 	this.bbox = new THREE.Box3(v3(0, 0, 0), v3(0, 0, 0));
 
 	this.jugglers = [];
-	const circleRadius = 1.2 + jif.nJugglers * 0.2;
-	for (let i = 0; i < jif.nJugglers; i++) {
+	for (const juggler of jif.jugglers) {
 		const j = new Juggler(valid ? '/images/face_texture.png' : '/images/panic_face_texture.png');
-		if (jif.nJugglers == 1) {
-			j.position.set(0, 0, 0);
-			j.lookAt(0, 0, 1);
-		} else {
-			const a = Math.PI * 2 * i / jif.nJugglers;
-			j.position.set(circleRadius * Math.cos(a), 0, circleRadius * Math.sin(a));
-			j.lookAt(0, 0, 0);
-		}
+		j.position.set(...juggler.position);
+		j.lookAt(...juggler.lookAt);
 		this.jugglers.push(j);
 		this.scene.add(j);
 		this.bbox.expandByObject(j);
@@ -771,29 +750,32 @@ updateScene(jif, valid)
 		this.positionCamera();
 		return;
 	}
-	if (jif.nProps < 1) {
+	if (nProps < 1) {
 		this.positionCamera();
 		return;
 	}
 
 	this.props = [];
-	for (let i = 0; i < jif.nProps; i++) {
-		const prop = jif.propType == 'ball' ?
+	for (const prop of jif.props) {
+		const type = prop.type || (jif.defaults && jif.defaults.prop && jif.defaults.prop.type) || "club";
+		const color = propColor(prop, jif)
+
+		const mesh = type == 'ball' ?
 			new THREE.Mesh(
 				new THREE.SphereBufferGeometry( 0.04, 10, 10 ),
-				new THREE.MeshToonMaterial({color: propColor(i)} )
+				new THREE.MeshToonMaterial({color: color} )
 			)
 			: new THREE.Mesh(
 				this.clubGeometry,
 				new THREE.MeshToonMaterial({
-					map: Animation.clubTexture({body: propColor(i)})
+					map: Animation.clubTexture({body: color})
 				})
 			);
 		this.props.push({
-			mesh: prop,
+			mesh: mesh,
 			throws: []
 		});
-		this.scene.add(prop);
+		this.scene.add(mesh);
 	}
 	for (let i in jif.events) {
 		const e = jif.events[i];
@@ -872,13 +854,13 @@ updateScene(jif, valid)
 		});
 	}
 
-	const propThrows = Array.from(Array(jif.nProps), () => new Array());
+	const propThrows = Array.from(Array(jif.props.length), () => new Array());
 
 	// calculate prop movements
 	for (const e of jif.events) {
 		if (e.type == 'throw') {
-			const soloHeight = e.duration / jif.nJugglers;
-			e.dwell = (soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5)) * jif.nJugglers;
+			const soloHeight = e.duration / timeStretchFactor;
+			e.dwell = (soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5)) * timeStretchFactor;
 			if (!('spins' in e))
 				e.spins = Math.max(0, Math.floor(soloHeight - 2));
 
@@ -920,7 +902,7 @@ updateScene(jif, valid)
 			if (this.jif.showOrbits) {
 				this.scene.add(new THREE.Mesh(
 					new THREE.TubeBufferGeometry(e.throwCurve, 32, 0.01, 16, false),
-					new THREE.MeshToonMaterial({ color:propColor(e.prop) }),
+					new THREE.MeshToonMaterial({ color:propColor(jif.props[e.prop], jif) }),
 				));
 			}
 		}
@@ -960,7 +942,7 @@ updateScene(jif, valid)
 				if (jif.showOrbits)
 					this.scene.add(new THREE.Mesh(
 						new THREE.TubeBufferGeometry(dwellCurve, 32, 0.01, 16, false),
-						new THREE.MeshToonMaterial({ color:propColor(prop) }),
+						new THREE.MeshToonMaterial({ color:propColor(jif.props[prop], jif) }),
 					));
 				positionCurves.push(dwellCurve);
 			}

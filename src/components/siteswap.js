@@ -128,14 +128,36 @@ orbits()
 	return result;
 }
 
-toJif(properties)
+toJif(options)
 {
-	let nJugglers = properties.nJugglers;
-	if (nJugglers === undefined)
-		nJugglers = 2;
-	let nLimbs = properties.nLimbs;
-	if (nLimbs === undefined)
-		nLimbs = nJugglers * 2;
+	const nLimbs = options.limbs.length;
+	const siteswap = this.toString();
+
+	const p = {
+		jif: '0.01 draft',
+		meta: {
+			name: options.name ? options.name : 'siteswap ' + siteswap,
+			generator: 'passist',
+		},
+		highLevelDescription: {
+			type: 'vanillaSiteswap',
+			description: siteswap,
+		},
+		defaults: {
+			juggler: {},
+			limb: {},
+			prop: {},
+		},
+		jugglers: options.jugglers,
+		limbs:    options.limbs,
+		props:    options.props,
+	};
+
+	const heights = this.heights;
+	p.valid = this.isValid();
+	if (!p.valid)
+		return p;
+
 	function lcmArray(array) {
 		function gcd(a, b) { return !b ? a : gcd(b, a % b); }
 		function lcm(a, b) { return (a * b) / gcd(a, b); }
@@ -151,30 +173,6 @@ toJif(properties)
 	periods.push(nLimbs);
 
 	const steps = lcmArray(periods);
-
-	const p = {};
-	if (properties)
-		for (const k in properties)
-			p[k] = properties[k];
-	p.siteswap = this.toString();
-	const heights = this.heights;
-	p.nJugglers = nJugglers;
-	p.valid = this.isValid();
-	p.timeStretchFactor = nLimbs / 2;
-	if (!p.valid)
-		return p;
-
-	const limbs = [];
-	if (nLimbs <= 2 * nJugglers) {
-		for (let i = 0; i < nLimbs; i++)
-			limbs.push({
-				juggler:i % nJugglers,
-				type: i < nJugglers ? 'right hand' : 'left hand',
-			});
-	}
-	p.limbs = limbs;
-
-	p.nProps = this.nProps;
 
 	p.timePeriod = steps;
 	p.events = [];
@@ -193,7 +191,7 @@ toJif(properties)
 			to:  (i + height) % nLimbs,
 			label: Siteswap.heightToChar(height)
 		};
-		if (p.flipTwos && height == 2 * nJugglers)
+		if (options.flipTwos && (height > 1.5 * p.timeStretchFactor && height < 2.5 * p.timeStretchFactor))
 			e.spins = 1;
 
 		eventsAtTime.push(e);
@@ -216,6 +214,7 @@ toJif(properties)
 		}
 	}
 
+	p.timeStretchFactor = nLimbs / 2;
 	return p;
 }
 
