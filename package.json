@@ -1,7 +1,7 @@
 {
   "name": "passist",
   "description": "passing siteswap assistant",
-  "version": "0.0.1",
+  "version": "1.0",
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build && rollup -c rollup.animationwidget.js",

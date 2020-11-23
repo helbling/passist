@@ -137,16 +137,11 @@ toJif(options)
 		jif: '0.01 draft',
 		meta: {
 			name: options.name ? options.name : 'siteswap ' + siteswap,
-			generator: 'passist',
+			generator: 'passist/1.0',
 		},
 		highLevelDescription: {
 			type: 'vanillaSiteswap',
 			description: siteswap,
-		},
-		defaults: {
-			juggler: {},
-			limb: {},
-			prop: {},
 		},
 		jugglers: options.jugglers,
 		limbs:    options.limbs,

@@ -524,7 +524,7 @@ getRotation(t, optionalTarget)
 
 export default class Animation {
 
-constructor(canvas, jif, valid, width, height)
+constructor(canvas, jif, options, width, height)
 {
 	this.renderer = new THREE.WebGLRenderer({
 		canvas: canvas,
@@ -551,7 +551,7 @@ constructor(canvas, jif, valid, width, height)
 	this.skyMesh = Animation.createSkyMesh();
 	this.clubGeometry = pirouetteGeometry();
 
-	this.updateScene(jif, valid);
+	this.updateScene(jif, options);
 	this.animate();
 }
 
@@ -704,10 +704,11 @@ static clubTexture(clubColors = {})
 	return tex;
 }
 
-updateScene(jif, valid)
+updateScene(jif, options)
 {
+	this.options = options = Object.assign({valid: true}, options); // defaults
 	this.jif = jif;
-	this.beatsPerSecond = jif.jugglingSpeed * jif.timeStretchFactor;
+	this.beatsPerSecond = options.jugglingSpeed * jif.timeStretchFactor;
 	const period = this.period = jif.timePeriod / this.beatsPerSecond;
 	const timeStretchFactor = jif.timeStretchFactor ? jif.timeStretchFactor : 1;
 	const nProps = jif.props.length;
@@ -734,7 +735,7 @@ updateScene(jif, valid)
 
 	this.jugglers = [];
 	for (const juggler of jif.jugglers) {
-		const j = new Juggler(valid ? '/images/face_texture.png' : '/images/panic_face_texture.png');
+		const j = new Juggler(options.valid ? '/images/face_texture.png' : '/images/panic_face_texture.png');
 		j.position.set(...juggler.position);
 		j.lookAt(...juggler.lookAt);
 		this.jugglers.push(j);
@@ -742,7 +743,7 @@ updateScene(jif, valid)
 		this.bbox.expandByObject(j);
 	}
 
-	if (!valid) {
+	if (!options.valid) {
 		for (const j of this.jugglers) {
 			j.lookAt(this.camera.position.clone().setY(0));
 			j.panic();
@@ -757,7 +758,7 @@ updateScene(jif, valid)
 
 	this.props = [];
 	for (const prop of jif.props) {
-		const type = prop.type || (jif.defaults && jif.defaults.prop && jif.defaults.prop.type) || "club";
+		const type = prop.type || "club";
 		const color = propColor(prop, jif)
 
 		const mesh = type == 'ball' ?
@@ -899,7 +900,7 @@ updateScene(jif, valid)
 			for (const p of e.throwCurve.getPoints(11))
 				this.bbox.expandByPoint(p);
 
-			if (this.jif.showOrbits) {
+			if (options.showOrbits) {
 				this.scene.add(new THREE.Mesh(
 					new THREE.TubeBufferGeometry(e.throwCurve, 32, 0.01, 16, false),
 					new THREE.MeshToonMaterial({ color:propColor(jif.props[e.prop], jif) }),
@@ -939,7 +940,7 @@ updateScene(jif, valid)
 					throwRotationSpeed: curve.rotationSpeed,
 				});
 				this.hands[dwellCurve.hand].positionCurves.push(dwellCurve);
-				if (jif.showOrbits)
+				if (options.showOrbits)
 					this.scene.add(new THREE.Mesh(
 						new THREE.TubeBufferGeometry(dwellCurve, 32, 0.01, 16, false),
 						new THREE.MeshToonMaterial({ color:propColor(jif.props[prop], jif) }),
@@ -1008,7 +1009,7 @@ animate()
 	this.controls.update();
 
 	if (jif && this.props && !this.paused)
-		this.setPositions((time / 1000 * jif.animationSpeed) % this.period);
+		this.setPositions((time / 1000 * this.options.animationSpeed) % this.period);
 
 	this.renderer.render(this.scene, this.camera);
 }

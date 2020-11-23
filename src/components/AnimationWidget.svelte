@@ -1,17 +1,16 @@
 <script>
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
 	import Animation from './animation.js';
-	import InputField from './InputField.svelte';
 	import Icon from './Icon.svelte';
-	import { defaults, useLocalStorage } from './passist.js';
 
 	export let jif;
-	export let valid = false;
 	export let fullscreen = false;
 	export let teaser = true;
 	export let width = 400;
 	export let height = 300;
 	export let closeButton = false;
+	export let enableSettings = false;
+	export let options = {};
 	let windowWidth;
 	let windowHeight;
 	let w, h;
@@ -21,35 +20,19 @@
 	let canvas;
 	let dragging = false;
 	let dragStart;
-	let showSettings = false;
 	let fps = '';
 	let fpsInterval;
-	let jugglingSpeed = 2.8;
-	let animationSpeed = 0.8;
-	let propType = defaults.propType;
+	let animationJif;
+	let showSettings = false;
 
 	$: w = fullscreen ? windowWidth : width;
 	$: h = fullscreen ? windowHeight : height;
-
-	$: { // defaults
-		if (!jif.defaults || !jif.defaults.prop || !jif.defaults.prop.type) {
-			if (useLocalStorage) {
-				const lsPropType = localStorage.getItem("propType");
-				propType = lsPropType ? lsPropType : defaults.propType;
-			}
-			jif.defaults.prop.type = propType;
-		} else if (useLocalStorage)
-			localStorage.setItem("propType", propType);
-		jif.defaults.prop.type = propType;
-		jif.jugglingSpeed = jugglingSpeed ? parseFloat(jugglingSpeed) : 2.8;
-		jif.animationSpeed = animationSpeed ? parseFloat(animationSpeed) : 1.0;
-		jif.showOrbits = ('showOrbits' in jif) ? jif.showOrbits : false;
-	}
+	$: animationJif = JSON.parse(JSON.stringify(jif)); // deep clone
 
 	const dispatch = createEventDispatcher();
 
 	onMount(async () => {
-		anim = new Animation(canvas, jif, valid, w, h);
+		anim = new Animation(canvas, animationJif, options, w, h);
 		loaded = true;
 		fpsInterval = setInterval(() => fps = anim.fps, 1000);
 	});
@@ -63,7 +46,7 @@
 			clearInterval(fpsInterval);
 	});
 
-	$: if (process.browser === true && anim) { anim.updateScene(jif, valid); }
+	$: if (process.browser === true && anim) { anim.updateScene(animationJif, options); }
 	$: if (process.browser === true && anim) { anim.resize(w, h);  }
 	$: if (process.browser === true) { document.body.style.overflow = fullscreen ? 'hidden' : 'auto'; }
 
@@ -125,7 +108,6 @@
 	.teaserForeground   { position:absolute; top:0; bottom:0; left:0; right:0; z-index:21; cursor:pointer }
 	.message { color:white; background-color:rgba(0,0,0,0.2); pointer-events:none; position:absolute; bottom:2ex; left:50%; transform:translateX(-50%); padding:0 1ex; border-radius:1ex  }
 	.fullscreen .message { position:absolute; z-index:21; }
-	label.pure-button { margin:0 }
 </style>
 
 <svelte:window
@@ -145,55 +127,27 @@
 		class:dragging={dragStart}
 	/>
 	{#if fullscreen || !teaser}
-	<div class="controls topleft">
-		<Icon type=settings on:click={e => showSettings = !showSettings}/>
-	</div>
 	<div class="controls topright">
 		<Icon type=close on:click={e => {showSettings = false; toggleFullscreen()}}/>
 	</div>
-	{#if showSettings}
-	<div class="settings pure-form form-inline">
-		<slot></slot>
-		<InputField
-			id=proptype
-			type=custom
-			label="Prop type"
-		>
-			<label class="pure-button" class:pure-button-active={propType == 'ball'}>
-				<input type="radio" bind:group={propType} value="ball" autocomplete="off"> Balls
-			</label>
-			<label class="pure-button" class:pure-button-active={propType == 'club'}>
-				<input type="radio" bind:group={propType} value="club" autocomplete="off"> Clubs
-			</label>
-		</InputField>
-		<InputField
-			bind:value={jugglingSpeed}
-			type=number
-			id=jugglingspeed
-			label='Juggling speed'
-			step=0.1
-		/>
-		<InputField
-			bind:value={animationSpeed}
-			type=number
-			id=animationspeed
-			label='Animation speed'
-			step=0.1
-			min=0.1
-		/>
-		<InputField
-			id=orbits
-			bind:value={jif.showOrbits}
-			type=checkbox
-			label="Show orbits"
-		/>
-		<div class=fps>
-		FPS: {fps}
+
+	{#if enableSettings}
+		<div class="controls topleft">
+			<Icon type=settings on:click={e => showSettings = !showSettings}/>
 		</div>
-	</div>
+		{#if showSettings}
+		<div class="settings pure-form form-inline">
+			<slot></slot>
+
+			<div class=fps>
+			FPS: {fps}
+			</div>
+		</div>
+
+		{/if}
 	{/if}
 	{/if}
-	{#if valid}
+	{#if options.valid}
 		{#if teaser && !fullscreen}
 			<div class=teaserForeground on:click={toggleFullscreen}>
 				{#if closeButton}

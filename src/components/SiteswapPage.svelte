@@ -4,6 +4,7 @@
 	import AnimationWidget from './AnimationWidget.svelte';
 	import Siteswap from './siteswap.js';
 	import Icon from './Icon.svelte';
+	import InputField from './InputField.svelte';
 	import { siteswapNames} from './patterns.js';
 	import { defaults, colors, useLocalStorage, siteswapUrl, jifdev } from './passist.js';
 	import { goto } from '@sapper/app';
@@ -24,13 +25,33 @@
 	let prechacthisUrl;
 	let startConfigurations;
 	let jif;
+	let propType = defaults.propType;
+	let jugglingSpeed = defaults.jugglingSpeed;
+	let animationSpeed = defaults.animationSpeed;
+	let showOrbits = false;
+	let animationOptions = {}
 	let windowWidth;
 	let windowHeight;
 	let sharebutton = process.browser === true && 'share' in navigator;
 	let showAnimationWidget = false;
-	if (process.browser === true)
+
+	$: {
+		animationOptions = {
+			valid,
+			jugglingSpeed: parseFloat(jugglingSpeed),
+			animationSpeed: parseFloat(animationSpeed),
+			showOrbits,
+		};
+	}
+
+	if (process.browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
+
+		if (useLocalStorage)
+			propType = localStorage.getItem("propType");
+	}
 	$: useLocalStorage && localStorage.setItem("showAnimationWidget", showAnimationWidget ? "true" : "false");
+	$: useLocalStorage && localStorage.setItem("propType", propType);
 
 	function shiftLeft() {
 		siteswapShift = (siteswapShift + 1) % period;
@@ -89,7 +110,10 @@ $:	{
 			nProps = siteswap.nProps;
 			const props = [];
 			for (let i = 0; i < nProps; i++)
-				props.push({color: colors.props[i % colors.props.length]});
+				props.push({
+					color: colors.props[i % colors.props.length],
+					type: propType,
+				});
 
 			siteswapName = siteswapNames[siteswap.canonicString()];
 
@@ -153,6 +177,7 @@ $:	{
 	.localThrows { overflow-x:auto; margin-bottom:1em }
 	.localThrows td { white-space:nowrap }
 	.jif-button { float:right }
+	label.pure-button { margin:0 }
 </style>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
@@ -248,10 +273,11 @@ $:	{
 	{#if showAnimationWidget}
 	<AnimationWidget
 		{jif}
-		{valid}
 		width={windowWidth > 1000 ? 1000 : windowWidth - 32}
 		height=300
 		closeButton=true
+		enableSettings=true
+		options={animationOptions}
 		bind:fullscreen={fullscreen}
 		on:fullscreenChange={onFullscreenChange}
 		on:close={e => {showAnimationWidget = false;}}
@@ -262,7 +288,41 @@ $:	{
 			bind:valid={valid}
 			idPrefix=animation
 		/>
+		<InputField
+			id=proptype
+			type=custom
+			label="Prop type"
+		>
+			<label class="pure-button" class:pure-button-active={propType == 'ball'}>
+				<input type="radio" bind:group={propType} value="ball" autocomplete="off"> Balls
+			</label>
+			<label class="pure-button" class:pure-button-active={propType == 'club'}>
+				<input type="radio" bind:group={propType} value="club" autocomplete="off"> Clubs
+			</label>
+		</InputField>
+		<InputField
+			bind:value={jugglingSpeed}
+			type=number
+			id=jugglingspeed
+			label='Juggling speed'
+			step=0.1
+		/>
+		<InputField
+			bind:value={animationSpeed}
+			type=number
+			id=animationspeed
+			label='Animation speed'
+			step=0.1
+			min=0.1
+		/>
+		<InputField
+			id=orbits
+			bind:value={showOrbits}
+			type=checkbox
+			label="Show orbits"
+		/>
 	</AnimationWidget>
+
 	{:else}
 		<button class="pure-button" on:click={e => {showAnimationWidget = true;}}>Show Animation</button>
 	{/if}
