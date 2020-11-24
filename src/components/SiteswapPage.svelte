@@ -90,8 +90,9 @@ $:	{
 					});
 				} else {
 					const a = Math.PI * 2 * i / nJugglers;
+					const round = x => Math.round(x * 1000) / 1000;
 					Object.assign(juggler, {
-						position: [circleRadius * Math.cos(a), 0, circleRadius * Math.sin(a)],
+						position: [round(circleRadius * Math.cos(a)), 0, round(circleRadius * Math.sin(a))],
 						lookAt:   [0, 0, 0],
 					});
 				}
@@ -186,6 +187,7 @@ $:	{
 {#if jifdev}
 	<button class="pure-button jif-button" on:click={e => {
 		// localStorage.setItem("jif", JSON.stringify(jif)); goto('/jif');
+		console.log(JSON.stringify(jif, null, 2));
 		console.log(jif);
 	}}>JIF</button>
 {/if}

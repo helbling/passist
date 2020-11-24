@@ -134,7 +134,7 @@ toJif(options)
 	const siteswap = this.toString();
 
 	const p = {
-		jif: '0.01 draft',
+		jif: '0.01',
 		meta: {
 			name: options.name ? options.name : 'siteswap ' + siteswap,
 			generator: options.generator,
