@@ -475,7 +475,7 @@ class Movement
 
 constructor(p)
 {
-	this.period = p.period;
+	this.periodSeconds = p.periodSeconds;
 	this.positionCurves = p.positionCurves;
 	this.positionCurves.sort((a, b) => a.start - b.start);
 	this.nCurves = this.positionCurves.length;
@@ -494,10 +494,10 @@ getCurveAndFraction(t)
 				curve: c,
 				fraction: (t - c.start) / c.duration,
 			};
-		else if (end > this.period && t < (end % this.period)) // wrap around period
+		else if (end > this.periodSeconds && t < (end % this.periodSeconds)) // wrap around period
 			return {
 				curve: c,
-				fraction: (t - c.start + this.period) / c.duration,
+				fraction: (t - c.start + this.periodSeconds) / c.duration,
 			};
 	}
 	return undefined;
@@ -709,7 +709,7 @@ updateScene(jif, options)
 	this.options = options = Object.assign({valid: true}, options); // defaults
 	this.jif = jif;
 	this.beatsPerSecond = options.jugglingSpeed * jif.timeStretchFactor;
-	const period = this.period = jif.timePeriod / this.beatsPerSecond;
+	const periodSeconds = this.periodSeconds = jif.period / this.beatsPerSecond;
 	const timeStretchFactor = jif.timeStretchFactor ? jif.timeStretchFactor : 1;
 	const nProps = jif.props.length;
 
@@ -919,9 +919,9 @@ updateScene(jif, options)
 				console.log('prop teleportation detected - should not happen!');
 				continue;
 			}
-			const start = (last.start + last.duration) % period;
+			const start = (last.start + last.duration) % periodSeconds;
 			const end = curve.start;
-			const dwellDuration = end - start + (end >= start - 1e-10 ? 0 : period);
+			const dwellDuration = end - start + (end >= start - 1e-10 ? 0 : periodSeconds);
 
 			if (dwellDuration > 0) {
 				const dwellCurve = new DwellCurve({
@@ -953,7 +953,7 @@ updateScene(jif, options)
 
 		this.props[prop].movement = new Movement({
 			positionCurves: positionCurves,
-			period: period,
+			periodSeconds: periodSeconds,
 		});
 	});
 
@@ -969,14 +969,14 @@ updateScene(jif, options)
 				fromPoint: last.throwPos,
 				toPoint: curve.catchPos,
 				start: start,
-				duration: end - start + (end > start ? 0 : period),
+				duration: end - start + (end > start ? 0 : periodSeconds),
 			}));
 			pc.push(curve);
 			last = curve;
 		}
 		hand.movement = new Movement({
 			positionCurves: pc,
-			period: period,
+			periodSeconds: periodSeconds,
 		});
 	}
 
@@ -1009,7 +1009,7 @@ animate()
 	this.controls.update();
 
 	if (jif && this.props && !this.paused)
-		this.setPositions((time / 1000 * this.options.animationSpeed) % this.period);
+		this.setPositions((time / 1000 * this.options.animationSpeed) % this.periodSeconds);
 
 	this.renderer.render(this.scene, this.camera);
 }

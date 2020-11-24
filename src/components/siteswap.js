@@ -171,7 +171,7 @@ toJif(options)
 
 	const steps = lcmArray(periods);
 
-	p.timePeriod = steps;
+	p.period = steps;
 	p.events = [];
 	if (this.period < 1)
 		return p;

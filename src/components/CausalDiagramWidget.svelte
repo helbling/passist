@@ -68,7 +68,7 @@ $: {
 
 		for (let i = 0; i < steps; i++) {
 			const th = throws[i % throws.length];
-			let t = th.time + Math.floor(i / throws.length) * jif.timePeriod;
+			let t = th.time + Math.floor(i / throws.length) * jif.period;
 			let jugglerFrom = jif.limbs[th.from].juggler;
 			let jugglerTo = jif.limbs[th.to].juggler;
 
