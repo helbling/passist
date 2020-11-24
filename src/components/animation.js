@@ -778,11 +778,9 @@ updateScene(jif, options)
 		});
 		this.scene.add(mesh);
 	}
-	for (let i in jif.events) {
-		const e = jif.events[i];
-		if (e.type == 'throw' && e.prop !== undefined)
-			this.props[e.prop].throws.push(e);
-	}
+	for (const t of jif.throws)
+		if (t.duration > 0 && t.prop !== undefined)
+			this.props[t.prop].throws.push(t);
 
 	this.hands = [];
 
@@ -858,52 +856,52 @@ updateScene(jif, options)
 	const propThrows = Array.from(Array(jif.props.length), () => new Array());
 
 	// calculate prop movements
-	for (const e of jif.events) {
-		if (e.type == 'throw') {
-			const soloHeight = e.duration / timeStretchFactor;
-			e.dwell = (soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5)) * timeStretchFactor;
-			if (!('spins' in e))
-				e.spins = Math.max(0, Math.floor(soloHeight - 2));
+	for (const t of jif.throws) {
+		if (t.duration > 0) {
+			const soloHeight = t.duration / timeStretchFactor;
+			t.dwell = (soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5)) * timeStretchFactor;
+			if (!('spins' in t))
+				t.spins = Math.max(0, Math.floor(soloHeight - 2));
 
-			const jugglerFrom = jif.limbs[e.from].juggler;
-			const jugglerTo = jif.limbs[e.to].juggler;
+			const jugglerFrom = jif.limbs[t.from].juggler;
+			const jugglerTo = jif.limbs[t.to].juggler;
 			const up = v3(0, 1, 0);
-			e.throwPos = this.throwPositions[e.from];
-			e.catchPos = this.catchPositions[e.to];
-			e.throwAngle = 1.5 * Math.PI; // TODO: make this dependent on throw (type, duration, where its supposed to go)
+			t.throwPos = this.throwPositions[t.from];
+			t.catchPos = this.catchPositions[t.to];
+			t.throwAngle = 1.5 * Math.PI; // TODO: make this dependent on throw (type, duration, where its supposed to go)
 			if (jugglerFrom == jugglerTo) { // self - TODO: improve angle for crossing selfs
-				e.axis = this.jugglers[jugglerFrom].facing.cross(up);
-				e.catchAngle = 1.5 * Math.PI;
+				t.axis = this.jugglers[jugglerFrom].facing.cross(up);
+				t.catchAngle = 1.5 * Math.PI;
 
 				// zip like
-				if (soloHeight < 2.5 && e.from != e.to)
-					e.catchPos = this.zipCatchPositions[e.to];
+				if (soloHeight < 2.5 && t.from != t.to)
+					t.catchPos = this.zipCatchPositions[t.to];
 			} else { // pass
-				e.axis = e.catchPos.clone().sub(e.throwPos).normalize().cross(up);
-				e.catchAngle = 2 * Math.PI;
+				t.axis = t.catchPos.clone().sub(t.throwPos).normalize().cross(up);
+				t.catchAngle = 2 * Math.PI;
 			}
-			e.throwCurve = new ThrowCurve({
-				throwPos: e.throwPos,
-				catchPos: e.catchPos,
-				start:    e.time / this.beatsPerSecond,
-				duration: (e.duration - e.dwell) / this.beatsPerSecond,
-				from: e.from,
-				to:   e.to,
-				nSpins:   e.spins,
-				spinAxis: e.axis,
-				throwAngle: e.throwAngle,
-				catchAngle: e.catchAngle,
+			t.throwCurve = new ThrowCurve({
+				throwPos: t.throwPos,
+				catchPos: t.catchPos,
+				start:    t.time / this.beatsPerSecond,
+				duration: (t.duration - t.dwell) / this.beatsPerSecond,
+				from: t.from,
+				to:   t.to,
+				nSpins:   t.spins,
+				spinAxis: t.axis,
+				throwAngle: t.throwAngle,
+				catchAngle: t.catchAngle,
 				isSelf:   jugglerFrom == jugglerTo,
 			});
-			propThrows[e.prop].push(e.throwCurve);
+			propThrows[t.prop].push(t.throwCurve);
 
-			for (const p of e.throwCurve.getPoints(11))
+			for (const p of t.throwCurve.getPoints(11))
 				this.bbox.expandByPoint(p);
 
 			if (options.showOrbits) {
 				this.scene.add(new THREE.Mesh(
-					new THREE.TubeBufferGeometry(e.throwCurve, 32, 0.01, 16, false),
-					new THREE.MeshToonMaterial({ color:propColor(jif.props[e.prop], jif) }),
+					new THREE.TubeBufferGeometry(t.throwCurve, 32, 0.01, 16, false),
+					new THREE.MeshToonMaterial({ color:propColor(jif.props[t.prop], jif) }),
 				));
 			}
 		}

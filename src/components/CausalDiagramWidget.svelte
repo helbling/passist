@@ -58,14 +58,7 @@ $: {
 		height = (nJugglers - (nJugglers > 1 ? 1 : 1.4)) * dy + 2 * yoff;
 
 		nodes = [];
-		let throws = [];
-		for (let i = 0; i < jif.events.length; i++) {
-			let event = jif.events[i];
-			if (event.type != 'throw' && event.type != 'pause')
-				continue;
-			throws.push(event);
-		}
-
+		const throws = jif.throws ? jif.throws : [];
 		for (let i = 0; i < steps; i++) {
 			const th = throws[i % throws.length];
 			let t = th.time + Math.floor(i / throws.length) * jif.period;

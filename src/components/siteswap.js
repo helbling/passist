@@ -172,16 +172,15 @@ toJif(options)
 	const steps = lcmArray(periods);
 
 	p.period = steps;
-	p.events = [];
+	p.throws = [];
 	if (this.period < 1)
 		return p;
 
-	const eventsAtTime = [];
+	const throwsAtTime = [];
 
 	for (let i = 0; i < steps; i++) {
 		const height = heights[i % this.period];
-		const e = {
-			type: height ? 'throw' : 'pause',
+		const t = {
 			time: i,
 			duration: height,
 			from: i % nLimbs,
@@ -189,22 +188,22 @@ toJif(options)
 			label: Siteswap.heightToChar(height)
 		};
 		if (options.flipTwos && (height > 1.5 * p.timeStretchFactor && height < 2.5 * p.timeStretchFactor))
-			e.spins = 1;
+			t.spins = 1;
 
-		eventsAtTime.push(e);
-		p.events.push(e);
+		throwsAtTime.push(t);
+		p.throws.push(t);
 	}
 
-	// label events with propid
+	// label throws with propid
 	let propid = 0;
 	for (let i = 0; i < steps; i++) {
-		const e = eventsAtTime[i];
-		if (e.prop === undefined && e.duration) {
+		const t = throwsAtTime[i];
+		if (t.prop === undefined && t.duration) {
 			let j = i;
-			eventsAtTime[j].prop = propid;
-			while (j < steps && eventsAtTime[j].duration) {
-				j += eventsAtTime[j].duration;
-				eventsAtTime[j % steps].prop = propid;
+			throwsAtTime[j].prop = propid;
+			while (j < steps && throwsAtTime[j].duration) {
+				j += throwsAtTime[j].duration;
+				throwsAtTime[j % steps].prop = propid;
 			}
 
 			propid++;
