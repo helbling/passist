@@ -119,6 +119,7 @@ $:	{
 
 			jif = siteswap.toJif({
 				name: siteswapName ? siteswapName + " (" + siteswap.toString() + ")" : undefined,
+				generator: pkg.name + '/' + pkg.version,
 				jugglers: jugglers,
 				limbs: limbs,
 				props: props,

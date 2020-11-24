@@ -17,15 +17,18 @@ const onwarn = (warning, onwarn) =>
 	(warning.code === 'UNUSED_EXTERNAL_IMPORT' && warning.source === 'three') ||
 	onwarn(warning);
 
+const replacements = {
+	'process.env.NODE_ENV': JSON.stringify(mode),
+	'pkg.name': JSON.stringify(pkg.name),
+	'pkg.version': JSON.stringify(pkg.version),
+};
+
 export default {
 	client: {
 		input: config.client.input(),
 		output: config.client.output(),
 		plugins: [
-			replace({
-				'process.browser': true,
-				'process.env.NODE_ENV': JSON.stringify(mode)
-			}),
+			replace(Object.assign({'process.browser': true}, replacements)),
 			svelte({
 				dev,
 				hydratable: true,
@@ -67,10 +70,7 @@ export default {
 		input: config.server.input(),
 		output: config.server.output(),
 		plugins: [
-			replace({
-				'process.browser': false,
-				'process.env.NODE_ENV': JSON.stringify(mode)
-			}),
+			replace(Object.assign({'process.browser': false}, replacements)),
 			svelte({
 				generate: 'ssr',
 				hydratable: true,
@@ -92,10 +92,7 @@ export default {
 		output: config.serviceworker.output(),
 		plugins: [
 			resolve(),
-			replace({
-				'process.browser': true,
-				'process.env.NODE_ENV': JSON.stringify(mode)
-			}),
+			replace(Object.assign({'process.browser': true}, replacements)),
 			commonjs(),
 			!dev && terser()
 		],

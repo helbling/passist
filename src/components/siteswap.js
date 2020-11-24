@@ -137,7 +137,7 @@ toJif(options)
 		jif: '0.01 draft',
 		meta: {
 			name: options.name ? options.name : 'siteswap ' + siteswap,
-			generator: 'passist/1.0',
+			generator: options.generator,
 		},
 		highLevelDescription: {
 			type: 'vanillaSiteswap',
