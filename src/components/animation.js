@@ -2,7 +2,7 @@
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { colors } from './passist.js';
+import { colors, defaults } from './passist.js';
 
 const hu = 0.21;
 const jugglerHeight  = 8    * hu;
@@ -706,8 +706,16 @@ static clubTexture(clubColors = {})
 
 updateScene(jif, options)
 {
-	this.options = options = Object.assign({valid: true}, options); // defaults
-	this.jif = jif;
+	this.options = options = Object.assign({
+		valid: true,
+		jugglingSpeed: defaults.jugglingSpeed,
+		animationSpeed: defaults.animationSpeed,
+	}, options); // defaults
+	this.jif = jif = Object.assign({
+		jugglers: [],
+		limbs: [],
+		props: [],
+	}, jif);
 	this.beatsPerSecond = options.jugglingSpeed * jif.timeStretchFactor;
 	const periodSeconds = this.periodSeconds = jif.period / this.beatsPerSecond;
 	const timeStretchFactor = jif.timeStretchFactor ? jif.timeStretchFactor : 1;

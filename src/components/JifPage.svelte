@@ -1,0 +1,49 @@
+<script>
+	import { useLocalStorage } from '../components/passist.js';
+	import AnimationWidget from './AnimationWidget.svelte';
+	/*
+	TODO import CausalDiagramWidget from './CausalDiagramWidget.svelte';
+	 */
+
+	let jif;
+	let jsonValid = true;
+	let jifString = '{}';
+
+	if (useLocalStorage)
+		jifString = localStorage.getItem('jif', null);
+
+	$: {
+		try {
+			jif = JSON.parse(jifString);
+			jsonValid = true;
+			if (useLocalStorage)
+				localStorage.setItem('jif', jifString);
+		} catch (e) {
+			jsonValid = false;
+		}
+	}
+</script>
+
+<style>
+	.horizontal-split { display:grid; grid-template-columns: 50% 50%; }
+	.left   { grid-column:1 }
+	.right  { grid-column:2 }
+	.input  { width:100%; height:30em }
+	.invalid { color:#dc3545 }
+</style>
+
+<div class=horizontal-split>
+
+<textarea class="left input" class:invalid={!jsonValid} bind:value={jifString}></textarea>
+
+<div class="right half" >
+{#if jif}
+	<AnimationWidget
+		{jif}
+		width=400
+		height=300
+	/>
+{/if}
+</div>
+
+</div>

@@ -169,7 +169,6 @@ $:	{
 		});
 		return false;
 	}
-
 </script>
 
 <style>
@@ -178,7 +177,7 @@ $:	{
 	.sharebutton { margin-top:1em }
 	.localThrows { overflow-x:auto; margin-bottom:1em }
 	.localThrows td { white-space:nowrap }
-	.jif-button { float:right }
+	.jif-button { float:right; margin-left:0.5em }
 	label.pure-button { margin:0 }
 </style>
 
@@ -186,10 +185,16 @@ $:	{
 
 {#if jifdev}
 	<button class="pure-button jif-button" on:click={e => {
-		// localStorage.setItem("jif", JSON.stringify(jif)); goto('/jif');
+		localStorage.setItem("jif", JSON.stringify(jif, null, 2)); goto('/jif');
+	}}>
+		<Icon type=edit /> edit
+	</button>
+	<button class="pure-button jif-button" on:click={e => {
 		console.log(JSON.stringify(jif, null, 2));
 		console.log(jif);
-	}}>JIF</button>
+	}}>
+		<Icon type=code /> JIF
+	</button>
 {/if}
 
 <SiteswapInput

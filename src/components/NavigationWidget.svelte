@@ -1,12 +1,15 @@
 <script>
+	import { jifdev } from '../components/passist.js';
+
 	export let segment;
 
 	let pages = [
 		{ path:'generator', title:'Generator' },
 		{ path:'siteswap',  title:'Siteswap' },
 		{ path:'patterns',  title:'Patterns' },
+		jifdev ? { path:'jif',       title:'Jif' } : null,
 		{ path:'about',     title:'About' },
-	];
+	].filter(Boolean);
 </script>
 
 <style>
