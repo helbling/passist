@@ -279,57 +279,57 @@ $:	{
 	{/if}
 
 	{#if showAnimationWidget}
-	<AnimationWidget
-		{jif}
-		width={windowWidth > 1000 ? 1000 : windowWidth - 32}
-		height=300
-		closeButton=true
-		enableSettings=true
-		options={animationOptions}
-		bind:fullscreen={fullscreen}
-		on:fullscreenChange={onFullscreenChange}
-		on:close={e => {showAnimationWidget = false;}}
-	>
-		<SiteswapInput
-			bind:siteswapInput={siteswapInput}
-			bind:nJugglers={nJugglers}
-			bind:valid={valid}
-			idPrefix=animation
-		/>
-		<InputField
-			id=proptype
-			type=custom
-			label="Prop type"
+	<div class=animation-wrapper style="width:{windowWidth > 1000 ? 1000 : windowWidth - 32}px; height:300px">
+		<AnimationWidget
+			{jif}
+			initialFullscreen={fullscreen}
+			closeButton=true
+			enableSettings=true
+			options={animationOptions}
+			on:fullscreenchange={onFullscreenChange}
+			on:close={e => {showAnimationWidget = false;}}
 		>
-			<label class="pure-button" class:pure-button-active={propType == 'ball'}>
-				<input type="radio" bind:group={propType} value="ball" autocomplete="off"> Balls
-			</label>
-			<label class="pure-button" class:pure-button-active={propType == 'club'}>
-				<input type="radio" bind:group={propType} value="club" autocomplete="off"> Clubs
-			</label>
-		</InputField>
-		<InputField
-			bind:value={jugglingSpeed}
-			type=number
-			id=jugglingspeed
-			label='Juggling speed'
-			step=0.1
-		/>
-		<InputField
-			bind:value={animationSpeed}
-			type=number
-			id=animationspeed
-			label='Animation speed'
-			step=0.1
-			min=0.1
-		/>
-		<InputField
-			id=orbits
-			bind:value={showOrbits}
-			type=checkbox
-			label="Show orbits"
-		/>
-	</AnimationWidget>
+			<SiteswapInput
+				bind:siteswapInput={siteswapInput}
+				bind:nJugglers={nJugglers}
+				bind:valid={valid}
+				idPrefix=animation
+			/>
+			<InputField
+				id=proptype
+				type=custom
+				label="Prop type"
+			>
+				<label class="pure-button" class:pure-button-active={propType == 'ball'}>
+					<input type="radio" bind:group={propType} value="ball" autocomplete="off"> Balls
+				</label>
+				<label class="pure-button" class:pure-button-active={propType == 'club'}>
+					<input type="radio" bind:group={propType} value="club" autocomplete="off"> Clubs
+				</label>
+			</InputField>
+			<InputField
+				bind:value={jugglingSpeed}
+				type=number
+				id=jugglingspeed
+				label='Juggling speed'
+				step=0.1
+			/>
+			<InputField
+				bind:value={animationSpeed}
+				type=number
+				id=animationspeed
+				label='Animation speed'
+				step=0.1
+				min=0.1
+			/>
+			<InputField
+				id=orbits
+				bind:value={showOrbits}
+				type=checkbox
+				label="Show orbits"
+			/>
+		</AnimationWidget>
+	</div>
 
 	{:else}
 		<button class="pure-button" on:click={e => {showAnimationWidget = true;}}>Show Animation</button>
