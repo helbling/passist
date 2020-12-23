@@ -48,8 +48,7 @@
 	}
 
 	const onFullscreenChange = e => {
-		isFullscreen = document.fullscreenElement === container;
-		dispatch('fullscreenchange', isFullscreen);
+		isFullscreen = (document.fullscreenElement ?? document.webkitFullscreenElement ?? document.msFullscreenElement) === container;
 	};
 	onMount(async () => {
 		anim = new Animation(canvas, animationJif, options, width, height);
