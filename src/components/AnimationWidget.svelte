@@ -42,7 +42,10 @@
 
 	const dispatch = createEventDispatcher();
 
-	$: isFull = isFullscreen || isMaximized;
+	$: {
+		isFull = isFullscreen || isMaximized;
+		dispatch('fullscreenchange', isFull);
+	}
 
 	const onFullscreenChange = e => {
 		isFullscreen = document.fullscreenElement === container;
