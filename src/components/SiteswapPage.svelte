@@ -187,12 +187,6 @@ $:	{
 	<button class="pure-button jif-button" on:click={e => {
 		localStorage.setItem("jif", JSON.stringify(jif, null, 2)); goto('/jif');
 	}}>
-		<Icon type=edit /> edit
-	</button>
-	<button class="pure-button jif-button" on:click={e => {
-		console.log(JSON.stringify(jif, null, 2));
-		console.log(jif);
-	}}>
 		<Icon type=code /> JIF
 	</button>
 {/if}

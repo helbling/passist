@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from 'svelte';
 	import { useLocalStorage } from '../components/passist.js';
 	import AnimationWidget from './AnimationWidget.svelte';
 	/*
@@ -22,6 +23,9 @@
 			jsonValid = false;
 		}
 	}
+	onMount(async () => {
+		console.log(jif);
+	});
 </script>
 
 <style>
