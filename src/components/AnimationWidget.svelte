@@ -217,7 +217,7 @@
 				</div>
 				{/if}
 				{#if loaded}
-				<div class=message>Click to interact</div>
+				<div class=message>Click to interact in fullscreen</div>
 				{/if}
 			</div>
 		{/if}
