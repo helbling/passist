@@ -152,7 +152,6 @@
 	.background {  position:absolute; z-index:0; top:0; right:0; bottom:0; left:0; background-color:#c9ede7 }
 	.controls { position:absolute; z-index:20 }
 	.position-top    { top:1ex }
-	.position-bottom { bottom:1ex }
 	.position-left   { left:1ex }
 	.position-right  { right:1ex }
 	.settings { position:absolute; z-index:20; top:5ex; left:1ex; max-width:calc(100% - 2ex); max-height:calc(100% - 7ex); overflow:auto; display:flex; flex-direction:column; align-items:flex-start; background-color:rgba(0,0,0,0.2); padding:1em; border-radius:0.5em; margin-top:1ex }
@@ -174,7 +173,7 @@
 		bind:this={canvas}
 		class:dragging={dragStart}
 	/>
-	<div class="controls position-bottom position-right">
+	<div class="controls position-top position-right">
 		{#if isFull}
 		<Icon type=fullscreen_exit on:click={e => {showSettings = false; exitFullscreen()}}/>
 		{:else}
@@ -204,7 +203,7 @@
 		{#if teaser && !isFull}
 			<div class=teaserForeground on:click={requestFullscreen}>
 				{#if closeButton}
-				<div class="controls position-top position-right" on:click|stopPropagation={dispatch('close', !isFull)}>
+				<div class="controls position-top position-left" on:click|stopPropagation={dispatch('close', !isFull)}>
 					<Icon type=close/>
 				</div>
 				{/if}
