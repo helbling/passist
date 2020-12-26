@@ -14,7 +14,7 @@
 	export let animationSpeed = defaults.animationSpeed;
 	export let showOrbits = false;
 
-	let anim;
+	let animation;
 	let paused = false;
 	let loaded = false;
 	let canvas;
@@ -58,9 +58,9 @@
 		isFullscreen = (document.fullscreenElement ?? document.webkitFullscreenElement ?? document.msFullscreenElement) === container;
 	};
 	onMount(async () => {
-		anim = new Animation(canvas, animationJif, options, width, height);
+		animation = new Animation(canvas, animationJif, options, width, height);
 		loaded = true;
-		fpsInterval = setInterval(() => fps = anim.fps, 1000);
+		fpsInterval = setInterval(() => fps = animation.fps, 1000);
 
 		requestFullscreen = () => {
 			const requestFS = (
@@ -105,9 +105,9 @@
 	});
 
 	onDestroy(() => {
-		if (anim) {
-			anim.destroy();
-			anim = undefined;
+		if (animation) {
+			animation.destroy();
+			animation = undefined;
 		}
 		if (fpsInterval)
 			clearInterval(fpsInterval);
@@ -116,13 +116,13 @@
 			document.removeEventListener("fullscreenchange", onFullscreenChange);
 	});
 
-	$: if (process.browser === true && anim) { anim.updateScene(animationJif, options); }
-	$: if (process.browser === true && anim) { anim.resize(width, height); }
+	$: if (process.browser === true && animation) { animation.updateScene(animationJif, options); }
+	$: if (process.browser === true && animation) { animation.resize(width, height); }
 	$: if (process.browser === true) { document.body.style.overflow = isMaximized ? 'hidden' : 'auto'; }
 
 	function togglePause() {
-		if (anim)
-			paused = anim.togglePause();
+		if (animation)
+			paused = animation.togglePause();
 	}
 
 	function handleEvent(e) {
