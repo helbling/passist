@@ -112,7 +112,8 @@
 		if (fpsInterval)
 			clearInterval(fpsInterval);
 
-		document.removeEventListener("fullscreenchange", onFullscreenChange);
+		if (process.browser === true)
+			document.removeEventListener("fullscreenchange", onFullscreenChange);
 	});
 
 	$: if (process.browser === true && anim) { anim.updateScene(animationJif, options); }
