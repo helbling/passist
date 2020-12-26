@@ -126,7 +126,7 @@
 	}
 
 	function handleEvent(e) {
-		return isFull && e.target.tagName == "CANVAS";
+		return (isFull || !teaser) && e.target.tagName == "CANVAS";
 	}
 	function onDown(e) {
 		if (!handleEvent(e))
@@ -175,8 +175,7 @@
 	.position-right  { right:1ex }
 	.settings { position:absolute; z-index:20; top:5ex; left:1ex; max-width:calc(100% - 2ex); max-height:calc(100% - 7ex); overflow:auto; display:flex; flex-direction:column; align-items:flex-start; background-color:rgba(0,0,0,0.2); padding:1em; border-radius:0.5em; margin-top:1ex }
 	.teaserForeground   { position:absolute; top:0; bottom:0; left:0; right:0; z-index:21; cursor:pointer }
-	.message { color:white; background-color:rgba(0,0,0,0.2); pointer-events:none; position:absolute; bottom:2ex; left:50%; transform:translateX(-50%); padding:0 1ex; border-radius:1ex  }
-	.isFullscreen .message { position:absolute; z-index:21; }
+	.message { color:white; background-color:rgba(0,0,0,0.2); pointer-events:none; position:absolute; bottom:2ex; left:50%; transform:translateX(-50%); padding:0 1ex; border-radius:1ex; z-index:21  }
 </style>
 
 <svelte:window
@@ -231,7 +230,7 @@
 				{/if}
 			</div>
 		{/if}
-		{#if isFull && paused}
+		{#if (isFull || !teaser) && paused}
 			<div class=message>Paused - Click to continue</div>
 		{/if}
 	{:else}
