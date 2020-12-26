@@ -42,11 +42,7 @@
 
 <div class="right half" >
 {#if jif}
-	<AnimationWidget
-		{jif}
-		width=400
-		height=300
-	/>
+	<AnimationWidget {jif} />
 {/if}
 </div>
 

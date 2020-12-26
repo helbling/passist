@@ -1,5 +1,6 @@
 <script>
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
+	import { defaults } from './passist.js';
 	import Animation from './animation.js';
 	import Icon from './Icon.svelte';
 
@@ -7,8 +8,12 @@
 	export let teaser = true;
 	export let closeButton = false;
 	export let enableSettings = false;
-	export let options = {};
-	export let initialFullscreen;
+	export let initialFullscreen = false;
+	export let valid = true;
+	export let jugglingSpeed = defaults.jugglingSpeed;
+	export let animationSpeed = defaults.animationSpeed;
+	export let showOrbits = false;
+
 	let anim;
 	let paused = false;
 	let loaded = false;
@@ -23,6 +28,7 @@
 	let isFullscreen = false;
 	let isMaximized = false;
 	let isFull = false;
+	let options = {};
 	let width;
 	let height;
 
@@ -39,6 +45,7 @@
 	let exitFullscreen = unmaximize;
 
 	$: animationJif = JSON.parse(JSON.stringify(jif)); // deep clone
+	$: options = { valid, jugglingSpeed, animationSpeed, showOrbits};
 
 	const dispatch = createEventDispatcher();
 
@@ -210,7 +217,7 @@
 		{/if}
 	{/if}
 	{/if}
-	{#if options.valid}
+	{#if valid}
 		{#if teaser && !isFull}
 			<div class=teaserForeground on:click={requestFullscreen}>
 				{#if closeButton}

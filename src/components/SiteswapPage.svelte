@@ -29,20 +29,10 @@
 	let jugglingSpeed = defaults.jugglingSpeed;
 	let animationSpeed = defaults.animationSpeed;
 	let showOrbits = false;
-	let animationOptions = {}
 	let windowWidth;
 	let windowHeight;
 	let sharebutton = process.browser === true && 'share' in navigator;
 	let showAnimationWidget = false;
-
-	$: {
-		animationOptions = {
-			valid,
-			jugglingSpeed: parseFloat(jugglingSpeed),
-			animationSpeed: parseFloat(animationSpeed),
-			showOrbits,
-		};
-	}
 
 	if (process.browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
@@ -279,7 +269,10 @@ $:	{
 			initialFullscreen={fullscreen}
 			closeButton=true
 			enableSettings=true
-			options={animationOptions}
+			{valid}
+			jugglingSpeed={parseFloat(jugglingSpeed)}
+			animationSpeed={parseFloat(animationSpeed)}
+			{showOrbits}
 			on:fullscreenchange={onFullscreenChange}
 			on:close={e => {showAnimationWidget = false;}}
 		>
