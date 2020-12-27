@@ -40,7 +40,7 @@
 
 <textarea class="left input" class:invalid={!jsonValid} bind:value={jifString}></textarea>
 
-<div class="right half" >
+<div class="right" >
 {#if jif}
 	<AnimationWidget {jif} />
 {/if}
