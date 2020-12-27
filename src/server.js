@@ -12,8 +12,10 @@ polka() // You can also use Express
 		sirv('static', {
 			dev,
 			setHeaders: (res, pathname, stats) => {
-				if (pathname.match(/\.jif$/))
+				if (pathname.match(/\.jif$/)) {
 					res.setHeader('Content-Type', 'application/jif+json');
+					res.setHeader('Access-Control-Allow-Origin', '*');
+				}
 			}
 		}),
 		sapper.middleware()
