@@ -9,7 +9,13 @@ const dev = NODE_ENV === 'development';
 polka() // You can also use Express
 	.use(
 		compression({ threshold: 0 }),
-		sirv('static', { dev }),
+		sirv('static', {
+			dev,
+			setHeaders: (res, pathname, stats) => {
+				if (pathname.match(/\.jif$/))
+					res.setHeader('Content-Type', 'application/jif+json');
+			}
+		}),
 		sapper.middleware()
 	)
 	.listen(PORT, err => {

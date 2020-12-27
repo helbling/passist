@@ -2,9 +2,6 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
 import svelte from 'rollup-plugin-svelte';
-import babel from '@rollup/plugin-babel';
-import { terser } from 'rollup-plugin-terser';
-import pkg from './package.json';
 
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
@@ -15,13 +12,13 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'AnimationWidget',
-		globals: {
-			three: 'THREE',
-			'three/examples/jsm/controls/OrbitControls.js': 'OrbitControls',
-		},
-		file: 'static/passist-animation-widget.js',
+		//globals: {
+		//	three: 'THREE',
+		//	'three/examples/jsm/controls/OrbitControls.js': 'OrbitControls',
+		//},
+		file: 'static/api/animation-widget-standalone.js',
 	},
-	external: ['three', 'three/examples/jsm/controls/OrbitControls.js'],
+	// external: ['three', 'three/examples/jsm/controls/OrbitControls.js'],
 	plugins: [
 		replace({
 			'process.browser': true,
@@ -30,11 +27,10 @@ export default {
 		svelte({
 			// enable run-time checks when not in production
 			dev,
+			accessors:true,
 			// we'll extract any component CSS out into
 			// a separate file - better for performance
-			css: css => {
-				css.write('passist-animation-widget.css');
-			}
+			// css: css => { css.write('animation-widget.css'); }
 		}),
 
 		// If you have external dependencies installed from

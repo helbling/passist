@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "name": "siteswap 531"
+  },
+  "highLevelDescription": {
+    "type": "vanillaSiteswap",
+    "description": "531"
+  },
+  "jugglers": [
+    {
+      "name": "A",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "lookAt": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "limbs": [
+    {
+      "juggler": 0,
+      "type": "right hand"
+    },
+    {
+      "juggler": 0,
+      "type": "left hand"
+    }
+  ],
+  "props": [
+    {
+      "color": "#c0392b",
+      "type": "ball"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "ball"
+    },
+    {
+      "color": "#f45d20",
+      "type": "ball"
+    }
+  ],
+  "timeStretchFactor": 1,
+  "valid": true,
+  "period": 6,
+  "throws": [
+    {
+      "time": 0,
+      "duration": 5,
+      "from": 0,
+      "to": 1,
+      "label": "5",
+      "prop": 0
+    },
+    {
+      "time": 1,
+      "duration": 3,
+      "from": 1,
+      "to": 0,
+      "label": "3",
+      "prop": 1
+    },
+    {
+      "time": 2,
+      "duration": 1,
+      "from": 0,
+      "to": 1,
+      "label": "1",
+      "prop": 2
+    },
+    {
+      "time": 3,
+      "duration": 5,
+      "from": 1,
+      "to": 0,
+      "label": "5",
+      "prop": 2
+    },
+    {
+      "time": 4,
+      "duration": 3,
+      "from": 0,
+      "to": 1,
+      "label": "3",
+      "prop": 1
+    },
+    {
+      "time": 5,
+      "duration": 1,
+      "from": 1,
+      "to": 0,
+      "label": "1",
+      "prop": 0
+    }
+  ]
+}
