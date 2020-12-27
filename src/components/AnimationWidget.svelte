@@ -49,7 +49,6 @@
 
 	$: animationJif = JSON.parse(JSON.stringify(jif)); // deep clone
 	$: pixelRatio = { low:0.5, medium:1, high:2 }[resolution];
-	$: console.log('pixelRatio', pixelRatio);
 	$: animationOptions = { valid, jugglingSpeed, animationSpeed, showOrbits };
 	$: sizeOptions = { width, height, pixelRatio };
 
