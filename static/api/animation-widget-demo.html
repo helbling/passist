@@ -18,10 +18,10 @@
 	<div id="bottom"></div>
 </div>
 
-<script src="/api/animation-widget-standalone.js"></script>
+<script src="https://dev.passist.org/api/animation-widget-standalone.js"></script>
 <script>
 
-fetch('/api/examples/holy_grail.jif')
+fetch('https://dev.passist.org/api/examples/holy_grail.jif')
 	.then(response => response.json())
 	.then(jif => {
 		new AnimationWidget({
@@ -33,7 +33,7 @@ fetch('/api/examples/holy_grail.jif')
 		});
 	})
 
-fetch('/api/examples/531.jif')
+fetch('https://dev.passist.org/api/examples/531.jif')
 	.then(response => response.json())
 	.then(jif => {
 		const aw = new AnimationWidget({
