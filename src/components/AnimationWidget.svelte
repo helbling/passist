@@ -3,6 +3,7 @@
 	import { defaults } from './passist.js';
 	import Animation from './animation.js';
 	import Icon from './Icon.svelte';
+	import InputField from './InputField.svelte';
 
 	export let jif;
 	export let teaser = true;
@@ -13,6 +14,7 @@
 	export let jugglingSpeed = defaults.jugglingSpeed;
 	export let animationSpeed = defaults.animationSpeed;
 	export let showOrbits = false;
+	export let resolution = 'medium';
 
 	let animation;
 	let paused = false;
@@ -28,9 +30,10 @@
 	let isFullscreen = false;
 	let isMaximized = false;
 	let isFull = false;
-	let options = {};
+	let animationOptions = {};
 	let width;
 	let height;
+	let pixelRatio = 1;
 
 	const noop = () => {};
 	const maximize = () => {
@@ -45,7 +48,10 @@
 	let exitFullscreen = unmaximize;
 
 	$: animationJif = JSON.parse(JSON.stringify(jif)); // deep clone
-	$: options = { valid, jugglingSpeed, animationSpeed, showOrbits};
+	$: pixelRatio = { low:0.5, medium:1, high:2 }[resolution];
+	$: console.log('pixelRatio', pixelRatio);
+	$: animationOptions = { valid, jugglingSpeed, animationSpeed, showOrbits };
+	$: sizeOptions = { width, height, pixelRatio };
 
 	const dispatch = createEventDispatcher();
 
@@ -58,7 +64,7 @@
 		isFullscreen = (document.fullscreenElement ?? document.webkitFullscreenElement ?? document.msFullscreenElement) === container;
 	};
 	onMount(async () => {
-		animation = new Animation(canvas, animationJif, options, width, height);
+		animation = new Animation(canvas, animationJif, animationOptions, sizeOptions);
 		loaded = true;
 		fpsInterval = setInterval(() => fps = animation.fps, 1000);
 
@@ -116,8 +122,8 @@
 			document.removeEventListener("fullscreenchange", onFullscreenChange);
 	});
 
-	$: if (process.browser === true && animation) { animation.updateScene(animationJif, options); }
-	$: if (process.browser === true && animation) { animation.resize(width, height); }
+	$: if (process.browser === true && animation) { animation.updateScene(animationJif, animationOptions); }
+	$: if (process.browser === true && animation) { animation.resize(sizeOptions); }
 	$: if (process.browser === true) { document.body.style.overflow = isMaximized ? 'hidden' : 'auto'; }
 
 	function togglePause() {
@@ -176,6 +182,8 @@
 	.settings { position:absolute; z-index:20; top:5ex; left:1ex; max-width:calc(100% - 2ex); max-height:calc(100% - 7ex); overflow:auto; display:flex; flex-direction:column; align-items:flex-start; background-color:rgba(0,0,0,0.2); padding:1em; border-radius:0.5em; margin-top:1ex }
 	.teaserForeground   { position:absolute; top:0; bottom:0; left:0; right:0; z-index:21; cursor:pointer }
 	.message { color:white; background-color:rgba(0,0,0,0.2); pointer-events:none; position:absolute; bottom:2ex; left:50%; transform:translateX(-50%); padding:0 1ex; border-radius:1ex; z-index:21  }
+	label.pure-button { margin:0 }
+	.fps { margin-left:1.5ex }
 </style>
 
 <svelte:window
@@ -210,8 +218,23 @@
 			<slot></slot>
 
 			<div class=fps>
-			FPS: {fps}
+				FPS: {fps}
 			</div>
+			<InputField
+				id=resolution
+				type=custom
+				label="Resolution"
+			>
+				<label class="pure-button" class:pure-button-active={resolution == 'low'}>
+					<input type="radio" bind:group={resolution} value="low" autocomplete="off"> low
+				</label>
+				<label class="pure-button" class:pure-button-active={resolution == 'medium'}>
+					<input type="radio" bind:group={resolution} value="medium" autocomplete="off"> medium
+				</label>
+				<label class="pure-button" class:pure-button-active={resolution == 'high'}>
+					<input type="radio" bind:group={resolution} value="high" autocomplete="off"> high
+				</label>
+			</InputField>
 		</div>
 
 		{/if}

@@ -524,7 +524,7 @@ getRotation(t, optionalTarget)
 
 export default class Animation {
 
-constructor(canvas, jif, options, width, height)
+constructor(canvas, jif, animationOptions, sizeOptions)
 {
 	this.renderer = new THREE.WebGLRenderer({
 		canvas: canvas,
@@ -534,11 +534,11 @@ constructor(canvas, jif, options, width, height)
 	this.renderer.outputEncoding = THREE.GammaEncoding;
 	this.renderer.gammaFactor = 2.2;
 
-	this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
+	this.camera = new THREE.PerspectiveCamera(45, sizeOptions.width / sizeOptions.height, 0.1, 10000);
 	this.camera.position.set(0, 2, 10);
 	this.camera.lookAt(v3(0, 2, 0));
 
-	this.resize(width, height);
+	this.resize(sizeOptions);
 
 	this.controls = new OrbitControls( this.camera, this.renderer.domElement );
 	this.controls.enableKeys = false;
@@ -551,15 +551,20 @@ constructor(canvas, jif, options, width, height)
 	this.skyMesh = Animation.createSkyMesh();
 	this.clubGeometry = pirouetteGeometry();
 
-	this.updateScene(jif, options);
+	this.updateScene(jif, animationOptions);
 	this.animate();
 }
 
-resize(width, height)
+resize(sizeOptions)
 {
+	const { width, height, pixelRatio } = sizeOptions;
 	this.camera.aspect = width / height;
 	this.camera.updateProjectionMatrix();
-	this.renderer.setSize(width, height);
+
+	this.renderer.setSize(width * pixelRatio, height * pixelRatio);
+	this.renderer.domElement.style.width  = (this.renderer.domElement.width  / pixelRatio) + 'px';
+	this.renderer.domElement.style.height = (this.renderer.domElement.height / pixelRatio) + 'px';
+
 	this.positionCamera();
 }
 
@@ -711,6 +716,7 @@ updateScene(jif, options)
 		jugglingSpeed: defaults.jugglingSpeed,
 		animationSpeed: defaults.animationSpeed,
 	}, options); // defaults
+
 	this.jif = jif = Object.assign({
 		jugglers: [],
 		limbs: [],
