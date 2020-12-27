@@ -43,11 +43,8 @@ if (type == 'number') {
 		margin-right:1em;
 		margin-bottom:1em;
 		width:auto;
-		display: -ms-flexbox;
 		display: flex;
-		-ms-flex-wrap: wrap;
 		flex-wrap: wrap;
-		-ms-flex-align: stretch;
 		align-items: stretch;
 	}
 	.input-group > *:not(:last-child) { border-top-right-radius:0; border-bottom-right-radius:0; border-right:none }
