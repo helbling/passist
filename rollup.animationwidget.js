@@ -1,6 +1,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
+import { terser } from 'rollup-plugin-terser';
 import svelte from 'rollup-plugin-svelte';
 
 const mode = process.env.NODE_ENV;
@@ -44,6 +45,7 @@ export default {
 			dedupe: ['svelte']
 		}),
 		commonjs(),
+		!dev && terser()
 	],
 	watch: {
 		clearScreen: false
