@@ -15,6 +15,8 @@ polka() // You can also use Express
 				if (pathname.match(/\.jif$/)) {
 					res.setHeader('Content-Type', 'application/jif+json');
 					res.setHeader('Access-Control-Allow-Origin', '*');
+				} else if (pathname.match(/^\/images\//)) {
+					res.setHeader('Access-Control-Allow-Origin', '*');
 				}
 			}
 		}),
