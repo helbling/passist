@@ -151,8 +151,7 @@ toJif(options)
 	};
 
 	const heights = this.heights;
-	p.valid = this.isValid();
-	if (!p.valid)
+	if (!this.isValid())
 		return p;
 
 	function lcmArray(array) {
