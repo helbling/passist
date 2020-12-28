@@ -45,7 +45,7 @@ export default {
 			dedupe: ['svelte']
 		}),
 		commonjs(),
-		!dev && terser()
+		terser()
 	],
 	watch: {
 		clearScreen: false
