@@ -27,12 +27,15 @@ export default {
 			'process.env.NODE_ENV': JSON.stringify(mode)
 		}),
 		svelte({
-			// enable run-time checks when not in production
-			dev,
-			accessors:true,
-			// we'll extract any component CSS out into
-			// a separate file - better for performance
-			// css: css => { css.write('animation-widget.css'); }
+			compilerOptions: {
+				// enable run-time checks when not in production
+				dev,
+				accessors:true,
+				// we'll extract any component CSS out into
+				// a separate file - better for performance
+				// css: css => { css.write('animation-widget.css'); }
+			},
+			emitCss: false
 		}),
 
 		// If you have external dependencies installed from
