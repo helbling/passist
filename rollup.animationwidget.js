@@ -22,6 +22,7 @@ export default {
 	plugins: [
 		replace({
 			'process.browser': true,
+			'process.widget': true,
 			'process.env.NODE_ENV': JSON.stringify(mode)
 		}),
 		svelte({

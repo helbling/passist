@@ -77,6 +77,11 @@ function pirouetteGeometry()
 		.center();
 }
 
+function resourceUrl(url)
+{
+	return (process.widget ? 'https://dev.passist.org' : '') + url;
+}
+
 class Juggler extends THREE.Group
 {
 
@@ -101,7 +106,7 @@ constructor(faceTexture)
 		}
 	);
 	(new THREE.TextureLoader()).load(
-		'/images/meeseeks_blue.png',
+		resourceUrl('/images/meeseeks_blue.png'),
 		function( texture ) {
 			texture.encoding = THREE.sRGBEncoding;
 			bodyMaterial.map = texture;
@@ -749,7 +754,7 @@ updateScene(jif, options)
 
 	this.jugglers = [];
 	for (const juggler of jif.jugglers) {
-		const j = new Juggler(options.valid ? '/images/face_texture.png' : '/images/panic_face_texture.png');
+		const j = new Juggler(resourceUrl(options.valid ? '/images/face_texture.png' : '/images/panic_face_texture.png'));
 		j.position.set(...juggler.position);
 		j.lookAt(...juggler.lookAt);
 		this.jugglers.push(j);
