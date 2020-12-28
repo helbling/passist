@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from 'svelte';
 	import { useLocalStorage } from '../components/passist.js';
 	import AnimationWidget from './AnimationWidget.svelte';
 	/*
@@ -22,6 +23,9 @@
 			jsonValid = false;
 		}
 	}
+	onMount(async () => {
+		console.log(jif);
+	});
 </script>
 
 <style>
@@ -36,13 +40,9 @@
 
 <textarea class="left input" class:invalid={!jsonValid} bind:value={jifString}></textarea>
 
-<div class="right half" >
+<div class="right" >
 {#if jif}
-	<AnimationWidget
-		{jif}
-		width=400
-		height=300
-	/>
+	<AnimationWidget {jif} />
 {/if}
 </div>
 

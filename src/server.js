@@ -9,7 +9,17 @@ const dev = NODE_ENV === 'development';
 polka() // You can also use Express
 	.use(
 		compression({ threshold: 0 }),
-		sirv('static', { dev }),
+		sirv('static', {
+			dev,
+			setHeaders: (res, pathname, stats) => {
+				if (pathname.match(/\.jif$/)) {
+					res.setHeader('Content-Type', 'application/jif+json');
+					res.setHeader('Access-Control-Allow-Origin', '*');
+				} else if (pathname.match(/^\/images\//)) {
+					res.setHeader('Access-Control-Allow-Origin', '*');
+				}
+			}
+		}),
 		sapper.middleware()
 	)
 	.listen(PORT, err => {

@@ -19,6 +19,7 @@ const onwarn = (warning, onwarn) =>
 
 const replacements = {
 	'process.env.NODE_ENV': JSON.stringify(mode),
+	'process.widget': false,
 	'pkg.name': JSON.stringify(pkg.name),
 	'pkg.version': JSON.stringify(pkg.version),
 };

@@ -1,65 +1,136 @@
 <script>
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
+	import { defaults } from './passist.js';
 	import Animation from './animation.js';
 	import Icon from './Icon.svelte';
+	import InputField from './InputField.svelte';
 
 	export let jif;
-	export let fullscreen = false;
 	export let teaser = true;
-	export let width = 400;
-	export let height = 300;
 	export let closeButton = false;
 	export let enableSettings = false;
-	export let options = {};
-	let windowWidth;
-	let windowHeight;
-	let w, h;
-	let anim;
+	export let initialFullscreen = false;
+	export let valid = true;
+	export let jugglingSpeed = defaults.jugglingSpeed;
+	export let animationSpeed = defaults.animationSpeed;
+	export let showOrbits = false;
+	export let resolution = 'medium';
+
+	let animation;
 	let paused = false;
 	let loaded = false;
 	let canvas;
+	let container;
 	let dragging = false;
 	let dragStart;
 	let fps = '';
 	let fpsInterval;
 	let animationJif;
 	let showSettings = false;
+	let isFullscreen = false;
+	let isMaximized = false;
+	let isFull = false;
+	let animationOptions = {};
+	let width;
+	let height;
+	let pixelRatio = 1;
 
-	$: w = fullscreen ? windowWidth : width;
-	$: h = fullscreen ? windowHeight : height;
+	const noop = () => {};
+	const maximize = () => {
+		isMaximized = true;
+		return new Promise((resolve, reject) => {
+			resolve()
+		})
+	};
+	const unmaximize = () => { isMaximized = false;  };
+
+	let requestFullscreen = maximize;
+	let exitFullscreen = unmaximize;
+
 	$: animationJif = JSON.parse(JSON.stringify(jif)); // deep clone
+	$: pixelRatio = { low:0.5, medium:1, high:2 }[resolution];
+	$: animationOptions = { valid, jugglingSpeed, animationSpeed, showOrbits };
+	$: sizeOptions = { width, height, pixelRatio };
 
 	const dispatch = createEventDispatcher();
 
+	$: {
+		isFull = isFullscreen || isMaximized;
+		dispatch('fullscreenchange', isFull);
+	}
+
+	const onFullscreenChange = e => {
+		isFullscreen = (document.fullscreenElement ?? document.webkitFullscreenElement ?? document.msFullscreenElement) === container;
+	};
 	onMount(async () => {
-		anim = new Animation(canvas, animationJif, options, w, h);
+		animation = new Animation(canvas, animationJif, animationOptions, sizeOptions);
 		loaded = true;
-		fpsInterval = setInterval(() => fps = anim.fps, 1000);
+		fpsInterval = setInterval(() => fps = animation.fps, 1000);
+
+		requestFullscreen = () => {
+			const requestFS = (
+				container.requestFullscreen ||
+				container.mozRequestFullScreen ||
+				container.webkitRequestFullscreen ||
+				container.msRequestFullscreen ||
+				maximize
+			).bind(container);
+			requestFS().catch(e => {
+				maximize();
+			});
+		};
+
+		exitFullscreen = () => {
+			if (isMaximized) {
+				unmaximize();
+			} else {
+				(
+					document.exitFullscreen ||
+					document.mozCancelFullScreen ||
+					document.webkitExitFullscreen ||
+					document.msExitFullscreen ||
+					noop
+				).bind(document)();
+			}
+		};
+
+		document.addEventListener("fullscreenchange", onFullscreenChange);
+
+		if (initialFullscreen)
+			requestFullscreen();
+
+		setTimeout(() => {
+			const containerRect = container.getBoundingClientRect();
+			if (containerRect.width != width || containerRect.height != height) {
+				width = containerRect.width;
+				height = containerRect.height;
+			}
+		}, 1);
 	});
 
 	onDestroy(() => {
-		if (anim) {
-			anim.destroy();
-			anim = undefined;
+		if (animation) {
+			animation.destroy();
+			animation = undefined;
 		}
 		if (fpsInterval)
 			clearInterval(fpsInterval);
+
+		if (process.browser === true)
+			document.removeEventListener("fullscreenchange", onFullscreenChange);
 	});
 
-	$: if (process.browser === true && anim) { anim.updateScene(animationJif, options); }
-	$: if (process.browser === true && anim) { anim.resize(w, h);  }
-	$: if (process.browser === true) { document.body.style.overflow = fullscreen ? 'hidden' : 'auto'; }
+	$: if (process.browser === true && animation) { animation.updateScene(animationJif, animationOptions); }
+	$: if (process.browser === true && animation) { animation.resize(sizeOptions); }
+	$: if (process.browser === true) { document.body.style.overflow = isMaximized ? 'hidden' : 'auto'; }
 
-	function toggleFullscreen() {
-		dispatch('fullscreenChange', !fullscreen);
-	}
 	function togglePause() {
-		if (anim)
-			paused = anim.togglePause();
+		if (animation)
+			paused = animation.togglePause();
 	}
 
 	function handleEvent(e) {
-		return fullscreen && e.target.tagName == "CANVAS";
+		return (isFull || !teaser) && e.target.tagName == "CANVAS";
 	}
 	function onDown(e) {
 		if (!handleEvent(e))
@@ -90,49 +161,54 @@
 	function onKeyDown(e) {
 		if (e.key == ' ')
 			togglePause();
-		if (fullscreen && e.key == 'Escape')
-			toggleFullscreen();
+		if (isFull && e.key == 'Escape')
+			exitFullscreen();
 	}
 </script>
 
 <style>
-	.outer { position:relative; margin:0; padding:0 }
-	.outer.fullscreen { position:fixed; top:0; bottom:0; left:0; right:0; z-index:9999 }
+	.container    { position:relative; margin:0; padding:0; width:100%; height:100%; display:inline-block; overflow:hidden }
+	.isFullscreen { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #fff; }
+	.isMaximized  { position:fixed; top:0; right:0; bottom:0; left:0 }
 	canvas { position:absolute; top:0; right:0; bottom:0; left:0; z-index:10; cursor:grab }
 	canvas.dragging { cursor:grabbing }
 	.background {  position:absolute; z-index:0; top:0; right:0; bottom:0; left:0; background-color:#c9ede7 }
 	.controls { position:absolute; z-index:20 }
-	.controls.topleft  { top:1ex; left:1ex }
-	.controls.topright { top:1ex; right:1ex }
+	.position-top    { top:1ex }
+	.position-left   { left:1ex }
+	.position-right  { right:1ex }
 	.settings { position:absolute; z-index:20; top:5ex; left:1ex; max-width:calc(100% - 2ex); max-height:calc(100% - 7ex); overflow:auto; display:flex; flex-direction:column; align-items:flex-start; background-color:rgba(0,0,0,0.2); padding:1em; border-radius:0.5em; margin-top:1ex }
 	.teaserForeground   { position:absolute; top:0; bottom:0; left:0; right:0; z-index:21; cursor:pointer }
-	.message { color:white; background-color:rgba(0,0,0,0.2); pointer-events:none; position:absolute; bottom:2ex; left:50%; transform:translateX(-50%); padding:0 1ex; border-radius:1ex  }
-	.fullscreen .message { position:absolute; z-index:21; }
+	.message { color:white; background-color:rgba(0,0,0,0.2); pointer-events:none; position:absolute; bottom:2ex; left:50%; transform:translateX(-50%); padding:0 1ex; border-radius:1ex; z-index:21  }
+	label.pure-button { margin:0 }
+	.fps { margin-left:1.5ex }
 </style>
 
 <svelte:window
-	bind:innerWidth={windowWidth}
-	bind:innerHeight={windowHeight}
 	on:pointerdown|capture={onDown}
 	on:pointermove|capture={onMove}
 	on:pointerup|capture={onUp}
 	on:keydown={onKeyDown}
 />
 
-
-<div class=outer class:fullscreen style="width:{w}px; height:{h}px">
+<div bind:this={container} class=container class:isFullscreen class:isMaximized bind:clientWidth={width} bind:clientHeight={height} >
 	<div class=background />
 	<canvas
 		bind:this={canvas}
 		class:dragging={dragStart}
 	/>
-	{#if fullscreen || !teaser}
-	<div class="controls topright">
-		<Icon type=close on:click={e => {showSettings = false; toggleFullscreen()}}/>
+	<div class="controls position-top position-right">
+		{#if isFull}
+		<Icon type=fullscreen_exit on:click={e => {showSettings = false; exitFullscreen()}}/>
+		{:else}
+		<Icon type=fullscreen on:click={requestFullscreen}/>
+		{/if}
 	</div>
 
+	{#if isFull || !teaser}
+
 	{#if enableSettings}
-		<div class="controls topleft">
+		<div class="controls position-top position-left">
 			<Icon type=settings on:click={e => showSettings = !showSettings}/>
 		</div>
 		{#if showSettings}
@@ -140,27 +216,42 @@
 			<slot></slot>
 
 			<div class=fps>
-			FPS: {fps}
+				FPS: {fps}
 			</div>
+			<InputField
+				id=resolution
+				type=custom
+				label="Resolution"
+			>
+				<label class="pure-button" class:pure-button-active={resolution == 'low'}>
+					<input type="radio" bind:group={resolution} value="low" autocomplete="off"> low
+				</label>
+				<label class="pure-button" class:pure-button-active={resolution == 'medium'}>
+					<input type="radio" bind:group={resolution} value="medium" autocomplete="off"> medium
+				</label>
+				<label class="pure-button" class:pure-button-active={resolution == 'high'}>
+					<input type="radio" bind:group={resolution} value="high" autocomplete="off"> high
+				</label>
+			</InputField>
 		</div>
 
 		{/if}
 	{/if}
 	{/if}
-	{#if options.valid}
-		{#if teaser && !fullscreen}
-			<div class=teaserForeground on:click={toggleFullscreen}>
+	{#if valid}
+		{#if teaser && !isFull}
+			<div class=teaserForeground on:click={requestFullscreen}>
 				{#if closeButton}
-				<div class="controls topright" on:click|stopPropagation={dispatch('close', !fullscreen)}>
+				<div class="controls position-top position-left" on:click|stopPropagation={dispatch('close', !isFull)}>
 					<Icon type=close/>
 				</div>
 				{/if}
 				{#if loaded}
-				<div class=message>Click to interact</div>
+				<div class=message>Click to interact in fullscreen</div>
 				{/if}
 			</div>
 		{/if}
-		{#if fullscreen && paused}
+		{#if (isFull || !teaser) && paused}
 			<div class=message>Paused - Click to continue</div>
 		{/if}
 	{:else}
