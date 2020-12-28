@@ -5,3 +5,5 @@ yarn-error.log
 /__sapper__/
 .vscode/
 tmp/
+static/api/animation-widget-standalone.js
+static/api/animation-widget-standalone.js.map
