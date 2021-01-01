@@ -133,7 +133,7 @@ toJif(options)
 	const nLimbs = options.limbs.length;
 	const siteswap = this.toString();
 
-	const p = {
+	const jif = {
 		jif: '0.01',
 		meta: {
 			name: options.name ? options.name : 'siteswap ' + siteswap,
@@ -152,7 +152,7 @@ toJif(options)
 
 	const heights = this.heights;
 	if (!this.isValid())
-		return p;
+		return jif;
 
 	function lcmArray(array) {
 		function gcd(a, b) { return !b ? a : gcd(b, a % b); }
@@ -170,10 +170,10 @@ toJif(options)
 
 	const steps = lcmArray(periods);
 
-	p.period = steps;
-	p.throws = [];
+	jif.period = steps;
+	jif.throws = [];
 	if (this.period < 1)
-		return p;
+		return jif;
 
 	const throwsAtTime = [];
 
@@ -186,11 +186,11 @@ toJif(options)
 			to:  (i + height) % nLimbs,
 			label: Siteswap.heightToChar(height)
 		};
-		if (options.flipTwos && (height > 1.5 * p.timeStretchFactor && height < 2.5 * p.timeStretchFactor))
+		if (options.flipTwos && (height > 1.5 * jif.timeStretchFactor && height < 2.5 * jif.timeStretchFactor))
 			t.spins = 1;
 
 		throwsAtTime.push(t);
-		p.throws.push(t);
+		jif.throws.push(t);
 	}
 
 	// label throws with propid
@@ -209,7 +209,7 @@ toJif(options)
 		}
 	}
 
-	return p;
+	return jif;
 }
 
 startConfigurations(nJugglers)
