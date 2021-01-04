@@ -7,43 +7,43 @@
 	export let url = '';
 
 	let jugglers = {};
-	let xoff = 55;
-	let yoff = 70;
-	let dy = 100;
+	const xoff = 55;
+	const yoff = 70;
+	const dy = 100;
 	let dx;
-	let r = 13
+	const r = 13
 	let nJugglers;
 	let width, height;
 	let nodes = {};
 	const arrowLength = 20;
 
-	function arrow(i, step, jugglerFrom, jugglerTo) {
-		var j = i + step;
+	function arrow(time, step, jugglerFrom, jugglerTo) {
+		const time2 = time + step;
 		if (jugglerFrom != jugglerTo || Math.abs(step) == nJugglers)
-			return "M" + xy(i, r, x(j), y(j, jugglerFrom), jugglerFrom) + " L" + xy(j, r + arrowLength, x(i), y(i, jugglerFrom), jugglerTo);
-		var dirX = x(j) > x(i) ? 1 : -1;
-		var dirY = jugglerFrom ? 1 : -1;
+			return "M" + xy(time, r, x(time2), y(jugglerFrom), jugglerFrom) + " L" + xy(time2, r + arrowLength, x(time), y(jugglerFrom), jugglerTo);
+		const dirX = x(time2) > x(time) ? 1 : -1;
+		const dirY = jugglerFrom ? 1 : -1;
 
-		var offsetX = dirX * dy / 2;
-		var offsetY = dirY * dy / 2;
+		const offsetX = dirX * dy / 2;
+		const offsetY = dirY * dy / 2;
 
-		var controlPoint1 = (x(i) + offsetX) + "," + (y(i, jugglerFrom) + offsetY);
-		var controlPoint2 = (x(j) - offsetX) + "," + (y(i, jugglerFrom) + offsetY);
-		return "M" + xy(i, r, x(i) + dirX, y(i, jugglerFrom) + dirY, jugglerFrom)
+		const controlPoint1 = (x(time) + offsetX) + "," + (y(jugglerFrom) + offsetY);
+		const controlPoint2 = (x(time2) - offsetX) + "," + (y(jugglerFrom) + offsetY);
+		return "M" + xy(time, r, x(time) + dirX, y(jugglerFrom) + dirY, jugglerFrom)
 				 + "C" + controlPoint1
 				 + " " + controlPoint2
-				 + " " + xy(j, r + arrowLength, x(j) - dirX, y(i, jugglerFrom) + dirY, jugglerFrom);
+				 + " " + xy(time2, r + arrowLength, x(time2) - dirX, y(jugglerFrom) + dirY, jugglerFrom);
 	};
 
-	function x(i) { return xoff + i * dx;}
-	function y(i, juggler) { return yoff + juggler * dy;}
-	function xy(i, shorten, towardsX, towardsY, juggler) {
-		let X = x(i);
-		let Y = y(i, juggler);
+	function x(time) { return xoff + time * dx;}
+	function y(juggler) { return yoff + juggler * dy;}
+	function xy(time, shorten, towardsX, towardsY, juggler) {
+		let X = x(time);
+		let Y = y(juggler);
 		if (shorten) {
-			let dx = towardsX - X;
-			let dy = towardsY - Y;
-			let len = Math.sqrt(dx * dx + dy * dy);
+			const dx = towardsX - X;
+			const dy = towardsY - Y;
+			const len = Math.sqrt(dx * dx + dy * dy);
 			X += shorten * dx / len;
 			Y += shorten * dy / len;
 		}
@@ -61,18 +61,18 @@ $: {
 		const throws = jif.throws ? jif.throws : [];
 		for (let i = 0; i < steps; i++) {
 			const th = throws[i % throws.length];
-			let t = th.time + Math.floor(i / throws.length) * jif.period;
-			let jugglerFrom = jif.limbs[th.from].juggler;
-			let jugglerTo = jif.limbs[th.to].juggler;
+			const time = th.time + Math.floor(i / throws.length) * jif.period;
+			const jugglerFrom = jif.limbs[th.from].juggler;
+			const jugglerTo = jif.limbs[th.to].juggler;
 
 			nodes.push({
 				r: r,
-				x: x(t),
-				y: y(t, jugglerFrom),
+				x: x(time),
+				y: y(jugglerFrom),
 				class: (Math.floor(th.from / nJugglers) % 2) ? 'leftHand' : 'rightHand',
 				juggler: jugglerFrom,
 				label: th.label,
-				arrow: arrow(t, th.duration - 2 * nJugglers, jugglerFrom, jugglerTo), // for ladder diagram: don't subtract 2 * nJugglers
+				arrow: arrow(time, th.duration - 2 * nJugglers, jugglerFrom, jugglerTo), // for ladder diagram: don't subtract 2 * nJugglers
 			});
 		}
 		nodes = nodes; // update svelte state
