@@ -13,33 +13,34 @@
 	let dx;
 	const r = 13
 	let nJugglers;
+	let nLines;
 	let width, height;
 	let nodes = {};
 	const arrowLength = 20;
 
-	function arrow(time, step, jugglerFrom, jugglerTo) {
+	function arrow(time, step, fromLine, toLine) {
 		const time2 = time + step;
-		if (jugglerFrom != jugglerTo || Math.abs(step) == nJugglers)
-			return "M" + xy(time, r, x(time2), y(jugglerFrom), jugglerFrom) + " L" + xy(time2, r + arrowLength, x(time), y(jugglerFrom), jugglerTo);
+		if (fromLine != toLine || Math.abs(step) <= jif.timeStretchFactor)
+			return "M" + xy(time, r, x(time2), y(fromLine), fromLine) + " L" + xy(time2, r + arrowLength, x(time), y(fromLine), toLine);
 		const dirX = x(time2) > x(time) ? 1 : -1;
-		const dirY = jugglerFrom ? 1 : -1;
+		const dirY = fromLine ? 1 : -1;
 
 		const offsetX = dirX * dy / 2;
 		const offsetY = dirY * dy / 2;
 
-		const controlPoint1 = (x(time) + offsetX) + "," + (y(jugglerFrom) + offsetY);
-		const controlPoint2 = (x(time2) - offsetX) + "," + (y(jugglerFrom) + offsetY);
-		return "M" + xy(time, r, x(time) + dirX, y(jugglerFrom) + dirY, jugglerFrom)
+		const controlPoint1 = (x(time) + offsetX) + "," + (y(fromLine) + offsetY);
+		const controlPoint2 = (x(time2) - offsetX) + "," + (y(fromLine) + offsetY);
+		return "M" + xy(time, r, x(time) + dirX, y(fromLine) + dirY, fromLine)
 				 + "C" + controlPoint1
 				 + " " + controlPoint2
-				 + " " + xy(time2, r + arrowLength, x(time2) - dirX, y(jugglerFrom) + dirY, jugglerFrom);
+				 + " " + xy(time2, r + arrowLength, x(time2) - dirX, y(fromLine) + dirY, fromLine);
 	};
 
 	function x(time) { return xoff + time * dx;}
-	function y(juggler) { return yoff + juggler * dy;}
-	function xy(time, shorten, towardsX, towardsY, juggler) {
+	function y(line) { return yoff + line * dy;}
+	function xy(time, shorten, towardsX, towardsY, line) {
 		let X = x(time);
-		let Y = y(juggler);
+		let Y = y(line);
 		if (shorten) {
 			const dx = towardsX - X;
 			const dy = towardsY - Y;
@@ -52,27 +53,30 @@
 
 $: {
 		nJugglers = jif.jugglers.length;
-		dx = 70 / nJugglers;
+		dx = 70 / jif.timeStretchFactor;
 
+		nLines = nJugglers;
 		width = steps * dx + 50;
-		height = (nJugglers - (nJugglers > 1 ? 1 : 1.4)) * dy + 2 * yoff;
+		height = (nLines - (nLines > 1 ? 1 : 1.4)) * dy + 2 * yoff;
 
 		nodes = [];
 		const throws = jif.throws ? jif.throws : [];
 		for (let i = 0; i < steps; i++) {
 			const th = throws[i % throws.length];
 			const time = th.time + Math.floor(i / throws.length) * jif.period;
-			const jugglerFrom = jif.limbs[th.from].juggler;
-			const jugglerTo = jif.limbs[th.to].juggler;
+			const fromLimb = jif.limbs[th.from];
+			const isLeft = fromLimb.type && fromLimb.type.match(/left/);
+
+			const fromLine = jif.limbs[th.from].juggler;
+			const toLine = jif.limbs[th.to].juggler;
 
 			nodes.push({
 				r: r,
 				x: x(time),
-				y: y(jugglerFrom),
-				class: (Math.floor(th.from / nJugglers) % 2) ? 'leftHand' : 'rightHand',
-				juggler: jugglerFrom,
+				y: y(fromLine),
+				class: isLeft ? 'left' : 'right',
 				label: th.label,
-				arrow: arrow(time, th.duration - 2 * nJugglers, jugglerFrom, jugglerTo), // for ladder diagram: don't subtract 2 * nJugglers
+				arrow: arrow(time, th.duration - 2 * nJugglers, fromLine, toLine), // for ladder diagram: don't subtract 2 * nJugglers
 			});
 		}
 		nodes = nodes; // update svelte state
@@ -83,8 +87,8 @@ $: {
 	.arrowStroke { stroke:#007bff }
 	.arrowFill   {   fill:#007bff }
 	circle { stroke:#343a40 }
-	circle.rightHand { fill:white }
-	circle.leftHand  { fill:#b7c8d5 }
+	circle.right { fill:white }
+	circle.left  { fill:#b7c8d5 }
 	.nodeLabel { fill: #343a40 }
 </style>
 
