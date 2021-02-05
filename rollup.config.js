@@ -31,9 +31,10 @@ export default {
 		plugins: [
 			replace(Object.assign({'process.browser': true}, replacements)),
 			svelte({
-				dev,
-				hydratable: true,
-				emitCss: true
+				compilerOptions: {
+					dev,
+					hydratable: true
+				}
 			}),
 			resolve({
 				browser: true,
@@ -73,9 +74,12 @@ export default {
 		plugins: [
 			replace(Object.assign({'process.browser': false}, replacements)),
 			svelte({
-				generate: 'ssr',
-				hydratable: true,
-				dev
+				compilerOptions: {
+					dev,
+					generate: 'ssr',
+					hydratable: true
+				},
+				emitCss: false
 			}),
 			resolve({
 				dedupe: ['svelte']

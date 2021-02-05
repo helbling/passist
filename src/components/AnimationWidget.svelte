@@ -60,7 +60,7 @@
 	}
 
 	const onFullscreenChange = e => {
-		isFullscreen = (document.fullscreenElement ?? document.webkitFullscreenElement ?? document.msFullscreenElement) === container;
+		isFullscreen = (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) === container;
 	};
 	onMount(async () => {
 		animation = new Animation(canvas, animationJif, animationOptions, sizeOptions);

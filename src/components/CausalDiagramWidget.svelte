@@ -7,43 +7,44 @@
 	export let url = '';
 
 	let jugglers = {};
-	let xoff = 55;
-	let yoff = 70;
-	let dy = 100;
+	const xoff = 55;
+	const yoff = 70;
+	const dy = 100;
 	let dx;
-	let r = 13
+	const r = 13
 	let nJugglers;
+	let nLines;
 	let width, height;
 	let nodes = {};
 	const arrowLength = 20;
 
-	function arrow(i, step, jugglerFrom, jugglerTo) {
-		var j = i + step;
-		if (jugglerFrom != jugglerTo || Math.abs(step) == nJugglers)
-			return "M" + xy(i, r, x(j), y(j, jugglerFrom), jugglerFrom) + " L" + xy(j, r + arrowLength, x(i), y(i, jugglerFrom), jugglerTo);
-		var dirX = x(j) > x(i) ? 1 : -1;
-		var dirY = jugglerFrom ? 1 : -1;
+	function arrow(time, step, fromLine, toLine) {
+		const time2 = time + step;
+		if (fromLine != toLine || Math.abs(step) <= jif.timeStretchFactor)
+			return "M" + xy(time, r, x(time2), y(fromLine), fromLine) + " L" + xy(time2, r + arrowLength, x(time), y(fromLine), toLine);
+		const dirX = x(time2) > x(time) ? 1 : -1;
+		const dirY = fromLine ? 1 : -1;
 
-		var offsetX = dirX * dy / 2;
-		var offsetY = dirY * dy / 2;
+		const offsetX = dirX * dy / 2;
+		const offsetY = dirY * dy / 2;
 
-		var controlPoint1 = (x(i) + offsetX) + "," + (y(i, jugglerFrom) + offsetY);
-		var controlPoint2 = (x(j) - offsetX) + "," + (y(i, jugglerFrom) + offsetY);
-		return "M" + xy(i, r, x(i) + dirX, y(i, jugglerFrom) + dirY, jugglerFrom)
+		const controlPoint1 = (x(time) + offsetX) + "," + (y(fromLine) + offsetY);
+		const controlPoint2 = (x(time2) - offsetX) + "," + (y(fromLine) + offsetY);
+		return "M" + xy(time, r, x(time) + dirX, y(fromLine) + dirY, fromLine)
 				 + "C" + controlPoint1
 				 + " " + controlPoint2
-				 + " " + xy(j, r + arrowLength, x(j) - dirX, y(i, jugglerFrom) + dirY, jugglerFrom);
+				 + " " + xy(time2, r + arrowLength, x(time2) - dirX, y(fromLine) + dirY, fromLine);
 	};
 
-	function x(i) { return xoff + i * dx;}
-	function y(i, juggler) { return yoff + juggler * dy;}
-	function xy(i, shorten, towardsX, towardsY, juggler) {
-		let X = x(i);
-		let Y = y(i, juggler);
+	function x(time) { return xoff + time * dx;}
+	function y(line) { return yoff + line * dy;}
+	function xy(time, shorten, towardsX, towardsY, line) {
+		let X = x(time);
+		let Y = y(line);
 		if (shorten) {
-			let dx = towardsX - X;
-			let dy = towardsY - Y;
-			let len = Math.sqrt(dx * dx + dy * dy);
+			const dx = towardsX - X;
+			const dy = towardsY - Y;
+			const len = Math.sqrt(dx * dx + dy * dy);
 			X += shorten * dx / len;
 			Y += shorten * dy / len;
 		}
@@ -52,27 +53,30 @@
 
 $: {
 		nJugglers = jif.jugglers.length;
-		dx = 70 / nJugglers;
+		dx = 70 / jif.timeStretchFactor;
 
+		nLines = nJugglers;
 		width = steps * dx + 50;
-		height = (nJugglers - (nJugglers > 1 ? 1 : 1.4)) * dy + 2 * yoff;
+		height = (nLines - (nLines > 1 ? 1 : 1.4)) * dy + 2 * yoff;
 
 		nodes = [];
 		const throws = jif.throws ? jif.throws : [];
 		for (let i = 0; i < steps; i++) {
 			const th = throws[i % throws.length];
-			let t = th.time + Math.floor(i / throws.length) * jif.period;
-			let jugglerFrom = jif.limbs[th.from].juggler;
-			let jugglerTo = jif.limbs[th.to].juggler;
+			const time = th.time + Math.floor(i / throws.length) * jif.period;
+			const fromLimb = jif.limbs[th.from];
+			const isLeft = fromLimb.type && fromLimb.type.match(/left/);
+
+			const fromLine = jif.limbs[th.from].juggler;
+			const toLine = jif.limbs[th.to].juggler;
 
 			nodes.push({
 				r: r,
-				x: x(t),
-				y: y(t, jugglerFrom),
-				class: (Math.floor(th.from / nJugglers) % 2) ? 'leftHand' : 'rightHand',
-				juggler: jugglerFrom,
+				x: x(time),
+				y: y(fromLine),
+				class: isLeft ? 'left' : 'right',
 				label: th.label,
-				arrow: arrow(t, th.duration - 2 * nJugglers, jugglerFrom, jugglerTo), // for ladder diagram: don't subtract 2 * nJugglers
+				arrow: arrow(time, th.duration - 2 * nJugglers, fromLine, toLine), // for ladder diagram: don't subtract 2 * nJugglers
 			});
 		}
 		nodes = nodes; // update svelte state
@@ -83,8 +87,8 @@ $: {
 	.arrowStroke { stroke:#007bff }
 	.arrowFill   {   fill:#007bff }
 	circle { stroke:#343a40 }
-	circle.rightHand { fill:white }
-	circle.leftHand  { fill:#b7c8d5 }
+	circle.right { fill:white }
+	circle.left  { fill:#b7c8d5 }
 	.nodeLabel { fill: #343a40 }
 </style>
 
@@ -114,6 +118,7 @@ $: {
 		fill=none
 	/>
 
+{#if startConfigurations}
 	{#each startConfigurations as j, i}
 		<text
 			x=10
@@ -139,6 +144,7 @@ $: {
 			strke=black
 		>{j.startPropsRight}</text>
 	{/each}
+{/if}
 
 	{#each nodes as n}
 		<circle
