@@ -118,6 +118,7 @@ $: {
 		fill=none
 	/>
 
+{#if startConfigurations}
 	{#each startConfigurations as j, i}
 		<text
 			x=10
@@ -143,6 +144,7 @@ $: {
 			strke=black
 		>{j.startPropsRight}</text>
 	{/each}
+{/if}
 
 	{#each nodes as n}
 		<circle
