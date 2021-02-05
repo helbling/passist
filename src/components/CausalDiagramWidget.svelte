@@ -1,6 +1,7 @@
 <svelte:options namespace=svg />
 
 <script>
+	import { applyPermutation } from './passist.js';
 	export let jif;
 	export let startConfigurations;
 	export let steps = 1;
@@ -63,14 +64,22 @@ $: {
 
 		nodes = [];
 		const throws = jif.throws ? jif.throws : [];
+		const nLimbs = jif.limbs.length;
+		let limbPermutation = [...Array(nLimbs).keys()];
+
 		for (let i = 0; i < steps; i++) {
+			if (i % throws.length == 0 && i > 0 && jif.repetition)
+				limbPermutation = applyPermutation(limbPermutation, jif.repetition.limbPermutation);
+
 			const th = throws[i % throws.length];
 			const time = th.time + Math.floor(i / throws.length) * jif.period;
-			const fromLimb = jif.limbs[th.from];
+			const from = limbPermutation[th.from];
+			const to   = limbPermutation[th.to];
+			const fromLimb = jif.limbs[from];
 			const isLeft = fromLimb.type && fromLimb.type.match(/left/);
 
-			const fromLine = jif.limbs[th.from].juggler;
-			const toLine = jif.limbs[th.to].juggler;
+			const fromLine = jif.limbs[from].juggler;
+			const toLine = jif.limbs[to].juggler;
 
 			nodes.push({
 				r: r,

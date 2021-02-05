@@ -47,6 +47,21 @@ function siteswapUrl(p)
 	return url;
 }
 
+function applyPermutation(array, permutation)
+{
+	console.assert(
+		array.length == permutation.length,
+		"permutation needs to be the same size as array",
+		array,
+		permutation
+	);
+
+	const result = [];
+	for (let i = 0; i < permutation.length; i++)
+		result.push(array[permutation[i]]);
+	return result;
+}
+
 const servertype = {
 	development:'dev',
 	beta:'beta',
@@ -55,4 +70,4 @@ const servertype = {
 
 const jifdev = servertype == 'dev' || servertype == 'alpha';
 
-export { defaults, colors, useLocalStorage, siteswapUrl, servertype, jifdev };
+export { defaults, colors, useLocalStorage, siteswapUrl, applyPermutation, servertype, jifdev };

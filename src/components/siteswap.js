@@ -154,24 +154,33 @@ toJif(options)
 	if (!this.isValid())
 		return jif;
 
-	function lcmArray(array) {
-		function gcd(a, b) { return !b ? a : gcd(b, a % b); }
-		function lcm(a, b) { return (a * b) / gcd(a, b); }
-		let multiple = 1;
-		array.forEach(function(n) {
-			multiple = lcm(multiple, n);
-		});
-		return multiple;
-	}
-	const periods = this.orbits().map(function(orbit) {
-		return orbit.reduce(function(a, b) { return a + b; }, 0); // sum
-	});
-	periods.push(nLimbs);
+// 	function lcmArray(array) {
+// 		function gcd(a, b) { return !b ? a : gcd(b, a % b); }
+// 		function lcm(a, b) { return (a * b) / gcd(a, b); }
+// 		let multiple = 1;
+// 		array.forEach(function(n) {
+// 			multiple = lcm(multiple, n);
+// 		});
+// 		return multiple;
+// 	}
+// 	const periods = this.orbits().map(function(orbit) {
+// 		return orbit.reduce(function(a, b) { return a + b; }, 0); // sum
+// 	});
+// 	const periods = [this.period];
+// 	periods.push(nLimbs); // TODO: remove this and calculate hand permutations as well
 
-	const steps = lcmArray(periods);
+// 	const steps = lcmArray(periods);
+	const steps = this.period;
+	const limbPermutation = [...Array(nLimbs).keys()]
+		.map(i => (i + this.period) % nLimbs);
 
 	jif.period = steps;
 	jif.throws = [];
+	jif.repetition = {
+		period: steps,
+		limbPermutation
+	};
+
 	if (this.period < 1)
 		return jif;
 
