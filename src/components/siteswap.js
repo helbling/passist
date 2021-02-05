@@ -113,13 +113,13 @@ orbits()
 {
 	const visited = [];
 	const result = [];
-	for (let i = 0; i < this.heights.length; i++) {
+	for (let i = 0; i < this.period; i++) {
 		if (visited[i] || this.heights[i] == 0)
 			continue;
 
-		const orbit = [];
+		const orbit = new Array(this.period).fill(0);
 		for (let j = i; !visited[j]; j = ((j + this.heights[j]) % this.period)) {
-			orbit.push(this.heights[j]);
+			orbit[j] = this.heights[j];
 			visited[j] = true;
 		}
 		result.push(orbit);

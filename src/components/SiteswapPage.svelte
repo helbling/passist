@@ -159,6 +159,10 @@ $:	{
 		});
 		return false;
 	}
+
+	function sum(arr) {
+		return arr.reduce(function(a, b) { return a + b; }, 0);
+	}
 </script>
 
 <style>
@@ -201,7 +205,7 @@ $:	{
 	</h2>
 
 	<p>
-		{nProps} props, period {period}, squeezes {startProperties.squeezes}{startProperties.isGroundState ? ', ground state' : ''}
+		{nProps} props, period {period}, squeezes {startProperties.squeezes}{startProperties.isGroundState ? ', ground state' : ''}, orbits: {siteswap.orbits().map(orbit => Siteswap.heightsToString(orbit) + ' (' + (sum(orbit)/period) + ' props)').join(' ')}
 
 		<!--
 		{#if nJugglers > 1}
