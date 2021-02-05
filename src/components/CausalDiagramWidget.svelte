@@ -20,7 +20,9 @@
 
 	function arrow(time, step, fromLine, toLine) {
 		const time2 = time + step;
-		if (fromLine != toLine || Math.abs(step) <= jif.timeStretchFactor)
+
+		// do we need a curved line?
+		if (fromLine != toLine || step && Math.abs(step) <= jif.timeStretchFactor) // TODO: second test should be a collision detection test
 			return "M" + xy(time, r, x(time2), y(fromLine), fromLine) + " L" + xy(time2, r + arrowLength, x(time), y(fromLine), toLine);
 		const dirX = x(time2) > x(time) ? 1 : -1;
 		const dirY = fromLine ? 1 : -1;
@@ -76,7 +78,7 @@ $: {
 				y: y(fromLine),
 				class: isLeft ? 'left' : 'right',
 				label: th.label,
-				arrow: arrow(time, th.duration - 2 * nJugglers, fromLine, toLine), // for ladder diagram: don't subtract 2 * nJugglers
+				arrow: arrow(time, th.duration - 2 * jif.timeStretchFactor, fromLine, toLine), // for ladder diagram: don't subtract 2 * nJugglers
 			});
 		}
 		nodes = nodes; // update svelte state
