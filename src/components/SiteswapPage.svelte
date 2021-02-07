@@ -38,7 +38,7 @@
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
 
 		if (useLocalStorage)
-			propType = localStorage.getItem("propType");
+			propType = localStorage.getItem("propType") || defaults.propType;
 	}
 	$: useLocalStorage && localStorage.setItem("showAnimationWidget", showAnimationWidget ? "true" : "false");
 	$: useLocalStorage && localStorage.setItem("propType", propType);
