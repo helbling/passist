@@ -18,6 +18,8 @@ const onwarn = (warning, onwarn) =>
 	onwarn(warning);
 
 const replacements = {
+	preventAssignment: true,
+
 	'process.env.NODE_ENV': JSON.stringify(mode),
 	'process.widget': false,
 	'pkg.name': JSON.stringify(pkg.name),

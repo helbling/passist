@@ -1,5 +1,6 @@
 <script context="module">
-	import { defaults, useLocalStorage, siteswapUrl } from '../../components/passist.js';
+	import { defaults } from '../../components/passist.js';
+
 	export async function preload({ params, query }) {
 		const nJugglers = parseInt(query.jugglers);
 		return {
@@ -10,6 +11,7 @@
 	}
 </script>
 <script>
+	import { useLocalStorage, siteswapUrl } from '../../components/passist.js';
 	import SiteswapPage from '../../components/SiteswapPage.svelte';
 	export let siteswapInput, nJugglers, fullscreen;
 	let query, url;
