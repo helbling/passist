@@ -13,14 +13,17 @@
 	let handOrderStringDefault = '';
 	let handOrderDragDropVisible = false;
 	let handOrderDragDropElement;
+	let handOrderInput;
 	$: handOrderStringCurrent = handOrderString(handOrder);
 	$: handOrderStringDefault = handOrderString(defaultHandOrder(nJugglers));
 	function handOrderString(handOrder) {
 		return handOrder.map(hand => hand.textShort).join(' ');
 	}
 	function windowOnClick(e) {
-		if (handOrderDragDropVisible && !handOrderDragDropElement.contains(e.target))
+		if (handOrderDragDropVisible && !handOrderDragDropElement.contains(e.target)) {
 			handOrderDragDropVisible = false
+			handOrderInput.blur();
+		}
 	}
 </script>
 
@@ -71,6 +74,7 @@
 				value={handOrderStringCurrent}
 				placeholder={handOrderStringDefault}
 				on:focus={e => { handOrderDragDropVisible = true }}
+				bind:this={handOrderInput}
 			>
 			{#if handOrderDragDropVisible}
 			<div class=hand-drag-drop bind:this={handOrderDragDropElement}>
