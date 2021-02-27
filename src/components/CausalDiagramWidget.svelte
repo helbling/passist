@@ -23,7 +23,7 @@
 
 		// do we need a curved line?
 		if (fromLine != toLine || step && Math.abs(step) <= jif.timeStretchFactor) // TODO: second test should be a collision detection test
-			return "M" + xy(time, r, x(time2), y(fromLine), fromLine) + " L" + xy(time2, r + arrowLength, x(time), y(fromLine), toLine);
+			return "M" + xy(time, r, x(time2), y(toLine), fromLine) + " L" + xy(time2, r + arrowLength, x(time), y(fromLine), toLine);
 		const dirX = x(time2) > x(time) ? 1 : -1;
 		const dirY = fromLine ? 1 : -1;
 
@@ -35,7 +35,7 @@
 		return "M" + xy(time, r, x(time) + dirX, y(fromLine) + dirY, fromLine)
 				 + "C" + controlPoint1
 				 + " " + controlPoint2
-				 + " " + xy(time2, r + arrowLength, x(time2) - dirX, y(fromLine) + dirY, fromLine);
+				 + " " + xy(time2, r + arrowLength, x(time2) - dirX, y(fromLine) + dirY, toLine);
 	};
 
 	function x(time) { return xoff + time * dx;}
