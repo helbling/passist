@@ -56,7 +56,9 @@ function defaultHandOrder(n) {
 	const result = [];
 	for (let i = 0; i < 2 * n; i++) {
 		const juggler = i % n;
-		const right = i < n;
+
+		// alternating right and left for an odd number of jugglers makes the patterns more symmetric (Co Stuifbergen)
+		const right = (n % 2) ? !(i % 2) : i < n;
 		const rightLeft = right ? 'right' : 'left';
 		result.push({
 			juggler,
