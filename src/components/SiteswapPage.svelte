@@ -6,7 +6,7 @@
 	import Icon from './Icon.svelte';
 	import InputField from './InputField.svelte';
 	import { siteswapNames} from './patterns.js';
-	import { defaults, colors, useLocalStorage, siteswapUrl, jifdev } from './passist.js';
+	import { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultHandOrder, jifdev } from './passist.js';
 	import { goto } from '@sapper/app';
 
 	export let siteswapInput = "45678";
@@ -33,6 +33,8 @@
 	let windowHeight;
 	let sharebutton = process.browser === true && 'share' in navigator;
 	let showAnimationWidget = false;
+	let limbs = [];
+	let handOrder = [];
 
 	if (process.browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
@@ -42,6 +44,7 @@
 	}
 	$: useLocalStorage && localStorage.setItem("showAnimationWidget", showAnimationWidget ? "true" : "false");
 	$: useLocalStorage && localStorage.setItem("propType", propType);
+	$: handOrder = defaultHandOrder(nJugglers);
 
 	function shiftLeft() {
 		siteswapShift = (siteswapShift + 1) % period;
@@ -66,12 +69,12 @@ $:	{
 		strippedInput = String(siteswapInput).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
 		originalSiteswap = new Siteswap(strippedInput);
 		siteswap = originalSiteswap.shift(siteswapShift);
-		if (nJugglers > 0) {
+		if (nJugglers > 0 && handOrder.length > 0) {
 			const circleRadius = 1.2 + nJugglers * 0.2;
 			const jugglers = [];
 			for (let i = 0; i < nJugglers; i++) {
 				const juggler = {
-					name: String.fromCharCode(65 + i),
+					name: jugglerName(i),
 				};
 				if (nJugglers == 1) {
 					Object.assign(juggler, {
@@ -89,12 +92,12 @@ $:	{
 				jugglers.push(juggler);
 			}
 
-			const limbs = [];
-			for (let i = 0; i < 2 * nJugglers; i++)
-				limbs.push({
-					juggler:i % nJugglers,
-					type: i < nJugglers ? 'right hand' : 'left hand',
-				});
+			limbs = handOrder.map(function(hand) {
+				const limb = Object.assign({}, hand); // clone
+				delete limb.text;
+				delete limb.textShort;
+				return limb;
+			});
 
 			valid = siteswap.isValid();
 			period = siteswap.period;
@@ -177,6 +180,13 @@ $:	{
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
 
+<SiteswapInput
+	bind:siteswapInput={siteswapInput}
+	bind:nJugglers={nJugglers}
+	bind:valid={valid}
+	bind:handOrder={handOrder}
+	idPrefix=main
+/>
 {#if jifdev}
 	<button class="pure-button jif-button" on:click={e => {
 		localStorage.setItem("jif", JSON.stringify(jif, null, 2)); goto('/jif');
@@ -184,13 +194,6 @@ $:	{
 		<Icon type=code /> JIF
 	</button>
 {/if}
-
-<SiteswapInput
-	bind:siteswapInput={siteswapInput}
-	bind:nJugglers={nJugglers}
-	bind:valid={valid}
-	idPrefix=main
-/>
 
 {#if valid || fullscreen}
 	<h2>
@@ -271,8 +274,8 @@ $:	{
 		<AnimationWidget
 			{jif}
 			initialFullscreen={fullscreen}
-			closeButton=true
-			enableSettings=true
+			closeButton={true}
+			enableSettings={true}
 			{valid}
 			jugglingSpeed={parseFloat(jugglingSpeed)}
 			animationSpeed={parseFloat(animationSpeed)}
@@ -284,6 +287,7 @@ $:	{
 				bind:siteswapInput={siteswapInput}
 				bind:nJugglers={nJugglers}
 				bind:valid={valid}
+				bind:handOrder={handOrder}
 				idPrefix=animation
 			/>
 			<InputField

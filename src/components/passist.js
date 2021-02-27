@@ -47,6 +47,27 @@ function siteswapUrl(p)
 	return url;
 }
 
+function jugglerName(i)
+{
+	return String.fromCharCode(65 + i);
+}
+
+function defaultHandOrder(n) {
+	const result = [];
+	for (let i = 0; i < 2 * n; i++) {
+		const juggler = i % n;
+		const right = i < n;
+		const rightLeft = right ? 'right' : 'left';
+		result.push({
+			juggler,
+			type: rightLeft + ' hand',
+			text: jugglerName(juggler) + ' ' + rightLeft,
+			textShort: jugglerName(juggler) + (right ? 'ᵣ' : 'ₗ'),
+		});
+	}
+	return result;
+}
+
 const servertype = {
 	development:'dev',
 	beta:'beta',
@@ -55,4 +76,4 @@ const servertype = {
 
 const jifdev = servertype == 'dev' || servertype == 'alpha';
 
-export { defaults, colors, useLocalStorage, siteswapUrl, servertype, jifdev };
+export { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultHandOrder, servertype, jifdev };

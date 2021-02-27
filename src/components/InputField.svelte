@@ -47,17 +47,18 @@ if (type == 'number') {
 		flex-wrap: wrap;
 		align-items: stretch;
 	}
+
 	.input-group > *:not(:last-child) { border-top-right-radius:0; border-bottom-right-radius:0; border-right:none }
 	.input-group > *:not(:first-child)  { border-top-left-radius:0; border-bottom-left-radius:0 }
 	input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: searchfield-cancel-button }
 	input[type="number"].digit    { width:3rem !important }
 	input[type="number"].twodigit { width:4rem !important }
 	input[type="search"] { width: 12rem; -webkit-appearance:none  }
-	@media screen and (max-width: 30rem) { input[type="search"] { width: 8rem } }
+	@media screen and (max-width: 30rem) { input[type="search"].siteswap { width: 8rem } }
 	input[type="checkbox"] { width:1.4em; height:1.4em; vertical-align:middle }
 	input.invalid { color:#dc3545 }
 	.input-group-text.checkbox { padding-top:0.1em; padding-bottom:0.1em }
-	label, input {
+	label, :global(.input-group input) {
 		color: #495057;
 		border: 1px solid #ced4da;
 		border-radius: 0.25rem;
