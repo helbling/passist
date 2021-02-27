@@ -95,7 +95,6 @@ getStartProperties(nJugglers)
 	return {
 		isGroundState: isGroundState,
 		squeezes: squeezes,
-		startsWithPass: this.heights[0] % nJugglers ? 1 : 0
 	};
 }
 
@@ -212,56 +211,80 @@ toJif(options)
 	return jif;
 }
 
-startConfigurations(nJugglers)
+startConfigurations(limbs)
 {
 	const period = this.period;
-	nJugglers = +nJugglers; // force integer
-	const startHands = Array.apply(null, Array(nJugglers * 2)).map(function() {return 0;});
+	const nLimbs = limbs.length;
+	const nJugglers = Math.max(...limbs.map(limb => limb.juggler + 1));
+	const startLimbs = Array.apply(null, Array(nLimbs)).map(function() {return 0;});
 	let i = 0;
 	const hasProp = [];
 	for (var missing = this.nProps; missing > 0; i++) {
 		const t = this.heights[i % period];
 		if (t > 0) {
 			if (!hasProp[i]) {
-				startHands[i % (nJugglers * 2)]++;
+				startLimbs[i % nLimbs]++;
 				missing--;
 			}
 			hasProp[i + t] = true;
 		}
 	}
+
+	const juggler2limbs = (new Array(nJugglers)).fill().map(() => []);
+	for (let i = 0; i < nLimbs; i++) {
+		const limb = limbs[i];
+		juggler2limbs[limb.juggler].push(Object.assign({id: i}, limb));
+	}
+
 	const result = new Array(nJugglers);
 	for (let juggler = 0; juggler < nJugglers; juggler++) {
-		const localPeriod = period % nJugglers == 0 ? period / nJugglers : period;
-		const local = new Array(localPeriod);
-		for (let i = 0; i < localPeriod; i++)
-			local[i] = String(this.heights[(juggler + i * nJugglers) % period]);
+		const limbPattern = [...Array(nLimbs).keys()].map(i => limbs[i].juggler == juggler);
+		const symmetric =
+			nLimbs % 2 == 0
+			&&     limbPattern.slice(0, nLimbs / 2).join(',')
+			    == limbPattern.slice(nLimbs / 2   ).join(',');
+
+		const localPeriods = period % nJugglers == 0 ? 1 : (symmetric ? nLimbs / 2 : nLimbs);
+		const localThrows = [];
+		for (let i = 0; i < localPeriods; i++) {
+			for (let j = 0; j < period; j++) {
+				const limbId = (j + i * period) % nLimbs;
+				if (limbPattern[limbId]) {
+					const height = this.heights[j];
+					localThrows.push({
+						height,
+						from: limbs[limbId],
+						to:   limbs[(limbId + height) % nLimbs],
+					});
+				}
+			}
+		}
+
 		const name = function(i) {
 			return String.fromCharCode('A'.charCodeAt(0) + i);
 		};
-		const left = function(i) {
-			return (i / nJugglers) & 1;
-		};
 		result[juggler] = {
-			local: local.map(function(t, i) {
-				const a = juggler + i * nJugglers;
-				const b = a + +t;
+			local: localThrows.map(th => {
 				let desc = '';
-				if (t % nJugglers) {
+				if (th.from.juggler != th.to.juggler) {
 					if (nJugglers > 2)
-						desc += name(b % nJugglers);
-					desc += left(a) == left(b) ? 'X' : '||';
+						desc += name(th.to.juggler);
+					desc += th.from.type == th.to.type ? 'X' : '||';
 					desc = '<sub>' + desc + '</sub>';
 				}
 				return {
-					height: t,
-					siteswap: Siteswap.heightToChar(t),
+					height: th.height,
+					siteswap: Siteswap.heightToChar(th.height),
 					desc: desc ? desc : '&nbsp;'
 				};
 			}),
 			name:  name(juggler),
-			startPropsRight: startHands[juggler],
-			startPropsLeft:  startHands[nJugglers + juggler],
+			startProps: {},
 		};
+	}
+	for (let i = 0; i < nLimbs; i++) {
+		const limb = limbs[i];
+		result[limb.juggler].startProps[limb.type] = startLimbs[i];
 	}
 	return result;
 }

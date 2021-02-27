@@ -123,7 +123,7 @@ $:	{
 
 			localPeriod = period % nJugglers == 0 ? period / nJugglers : period;
 
-			startConfigurations = siteswap.startConfigurations(nJugglers);
+			startConfigurations = siteswap.startConfigurations(limbs);
 
 			prechacthisUrl = 'http://prechacthis.org/info.php?pattern=['
 		 + startConfigurations[0].local.map(function(x) { var h = x.height / 2; return 'p(' + h + (+x.height & 1 ? ',1,' + (h + localPeriod / 2) : ',0,' + h) + ')';}).join(',')
@@ -236,7 +236,7 @@ $:	{
 				</tr>
 				{#each startConfigurations as j}
 					<tr>
-						<th>{j.name} <sub>{j.startPropsLeft}|{j.startPropsRight}</sub></th>
+						<th>{j.name} <sub>{j.startProps['left hand']}|{j.startProps['right hand']}</sub></th>
 						{#each j.local as t}
 							<td>{t.siteswap}{@html t.desc}&nbsp;</td>
 						{/each}

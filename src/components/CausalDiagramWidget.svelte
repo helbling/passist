@@ -144,7 +144,7 @@ $: {
 			font-size=20
 			stroke-width=0px
 			strke=black
-		>{j.startPropsLeft}</text>
+		>{j.startProps['left hand']}</text>
 
 		<text
 			x=20
@@ -152,7 +152,7 @@ $: {
 			font-size=20
 			stroke-width=0px
 			strke=black
-		>{j.startPropsRight}</text>
+		>{j.startProps['right hand']}</text>
 	{/each}
 {/if}
 
