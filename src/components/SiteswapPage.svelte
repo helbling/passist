@@ -162,9 +162,17 @@ $:	{
 	}
 
 	function share() {
+		let title = 'Siteswap ' + strippedInput;
+		if (siteswapName)
+			title += ' (' + siteswapName + ')';
+		title += ', ' + nJugglers + ' jugglers';
+		if (handsInput)
+			title += ', hands: ' + handsInput;
+		title += ' - passist.org';
+
 		navigator.share({
 			url: location.href,
-			title: 'Siteswap ' + strippedInput + (siteswapName ? ' (' + siteswapName + ')' : '') + ' - passist.org',
+			title,
 		});
 		return false;
 	}
