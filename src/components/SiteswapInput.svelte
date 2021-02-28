@@ -21,7 +21,7 @@
 
 	function calculateHandList(handsInput, nJugglers) {
 		const limbs = hands2limbs(handsInput, nJugglers) || defaultLimbs(nJugglers);
-		return handList = limbs.map(limb => jugglerName(limb.juggler) + ' ' + limb.type.split(' ')[0]);
+		return limbs.map(limb => jugglerName(limb.juggler) + ' ' + limb.type.split(' ')[0]);
 	}
 
 	function handsDragDropChanged(e) {
