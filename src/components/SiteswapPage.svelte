@@ -6,7 +6,7 @@
 	import Icon from './Icon.svelte';
 	import InputField from './InputField.svelte';
 	import { siteswapNames} from './patterns.js';
-	import { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, hands2limbs, jifdev } from './passist.js';
+	import { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev } from './passist.js';
 	import { goto } from '@sapper/app';
 
 	export let siteswapInput = "45678";
@@ -45,6 +45,9 @@
 	}
 	$: useLocalStorage && localStorage.setItem("showAnimationWidget", showAnimationWidget ? "true" : "false");
 	$: useLocalStorage && localStorage.setItem("propType", propType);
+
+	// reset hand order when changing nJugglers
+	$: handsInput = limbs2hands(defaultLimbs(nJugglers));
 
 	function shiftLeft() {
 		siteswapShift = (siteswapShift + 1) % period;
