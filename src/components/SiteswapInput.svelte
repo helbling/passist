@@ -45,7 +45,17 @@
 	:global(.dragdroplist > .list > div.item) { margin-bottom:-1px; border-left:none; border-right:none }
 	:global(.dragdroplist > .list > div.item div.content p ) { margin:0 }
 	:global(.dragdroplist div.buttons) { visibility:hidden }
+
+	/* NOTE: copy-pasted from InputField.svelte! */
 	input.invalid { color:#dc3545 }
+	input {
+		color: #495057;
+		border: 1px solid #ced4da;
+		border-radius: 0.25rem;
+		-webkit-box-shadow: inset 0 1px 3px #ddd;
+		        box-shadow: inset 0 1px 3px #ddd;
+		margin:0;
+	}
 </style>
 
 <svelte:window on:pointerdown={windowOnClick}/>

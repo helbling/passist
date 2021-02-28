@@ -58,7 +58,7 @@ if (type == 'number') {
 	input[type="checkbox"] { width:1.4em; height:1.4em; vertical-align:middle }
 	input.invalid { color:#dc3545 }
 	.input-group-text.checkbox { padding-top:0.1em; padding-bottom:0.1em }
-	label, :global(.input-group input) {
+	label, .input-group input {
 		color: #495057;
 		border: 1px solid #ced4da;
 		border-radius: 0.25rem;
