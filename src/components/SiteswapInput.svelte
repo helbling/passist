@@ -1,6 +1,7 @@
 <script>
 	import InputField from './InputField.svelte';
 	import DragDropList from "svelte-dragdroplist";
+	import Icon from './Icon.svelte';
 	import { jugglerName, hands2limbs, limbs2hands, defaultLimbs } from './passist.js';
 
 	export let siteswapInput;
@@ -40,15 +41,12 @@
 
 <style>
 	.hands-input { position:relative; display:grid }
-	.hands-input input {border-top-left-radius:0; border-bottom-left-radius:0 }
-	:global(.dragdroplist) { position:absolute !important; left:0; right:0; z-index:1; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border:1px solid gray; background:white }
-	:global(.dragdroplist > .list > div.item) { margin-bottom:-1px; border-left:none; border-right:none }
-	:global(.dragdroplist > .list > div.item div.content p ) { margin:0 }
-	:global(.dragdroplist div.buttons) { visibility:hidden }
+	.hands-input input {
+		border-top-left-radius:0;
+		border-bottom-left-radius:0;
+		padding-right:1.5em;
 
-	/* NOTE: copy-pasted from InputField.svelte! */
-	input.invalid { color:#dc3545 }
-	input {
+		/* NOTE: copy-pasted from InputField.svelte! */
 		color: #495057;
 		border: 1px solid #ced4da;
 		border-radius: 0.25rem;
@@ -56,6 +54,12 @@
 		        box-shadow: inset 0 1px 3px #ddd;
 		margin:0;
 	}
+	.hands-input input.invalid { color:#dc3545 }
+
+	:global(.dragdroplist) { position:absolute !important; left:0; right:0; z-index:1; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border:1px solid gray; background:white }
+	:global(.dragdroplist > .list > div.item) { margin-bottom:-1px; border-left:none; border-right:none }
+	:global(.dragdroplist > .list > div.item div.content p ) { margin:0 }
+	:global(.dragdroplist div.buttons) { visibility:hidden }
 </style>
 
 <svelte:window on:pointerdown={windowOnClick}/>
@@ -104,6 +108,9 @@
 			<div bind:this={handsDragDropElement} on:pointerup={handsDragDropChanged} >
 				<DragDropList bind:data={handList}/>
 			</div>
+			{/if}
+			{#if handsInput}
+			<Icon type=close on:click={e => {handsInput = '';}}/>
 			{/if}
 		</div>
 	</InputField>

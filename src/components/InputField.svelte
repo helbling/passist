@@ -1,4 +1,5 @@
 <script>
+import Icon from './Icon.svelte';
 
 export let id;
 export let type;
@@ -21,6 +22,7 @@ let inputAttr = {
 	id:        id,
 	class:    'form-control',
 }
+let searchInput;
 
 if (type == 'number') {
 	inputAttr.inputmode = 'number';
@@ -46,14 +48,15 @@ if (type == 'number') {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: stretch;
+		position:relative;
 	}
 
 	.input-group > *:not(:last-child) { border-top-right-radius:0; border-bottom-right-radius:0; border-right:none }
 	.input-group > *:not(:first-child)  { border-top-left-radius:0; border-bottom-left-radius:0 }
-	input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: searchfield-cancel-button }
 	input[type="number"].digit    { width:3rem !important }
 	input[type="number"].twodigit { width:4rem !important }
-	input[type="search"] { width: 12rem; -webkit-appearance:none  }
+	input[type="search"] { width: 12rem; -webkit-appearance:none; padding-right:1.5em }
+	input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none }
 	@media screen and (max-width: 30rem) { input[type="search"].siteswap { width: 8rem } }
 	input[type="checkbox"] { width:1.4em; height:1.4em; vertical-align:middle }
 	input.invalid { color:#dc3545 }
@@ -76,6 +79,8 @@ if (type == 'number') {
 		background-color: #e9ecef;
 	}
 	.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0 }
+
+	:global(.input-group .close) { position:absolute; right:0; top:0; margin:0.7em 0; height:1em }
 </style>
 
 {#if title != label}
@@ -108,7 +113,11 @@ if (type == 'number') {
 	{:else if type == 'custom'}
 		<slot/>
 	{:else if type != 'checkbox'}
+		{#if type == 'search' && value}
+		<Icon type=close on:click={e => {value = ''; searchInput.focus()}}/>
+		{/if}
 		<input
+			bind:this={searchInput}
 			bind:value={value}
 			placeholder={placeholder ? placeholder : label}
 			class:invalid={!valid}
