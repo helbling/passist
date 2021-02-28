@@ -112,6 +112,7 @@ if (type == 'number') {
 			bind:value={value}
 			placeholder={placeholder ? placeholder : label}
 			class:invalid={!valid}
+			spellcheck=false
 			{...inputAttr}
 		>
 	{/if}
