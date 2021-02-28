@@ -39,8 +39,8 @@
 </script>
 
 <style>
-	.hand-order-input { position:relative; display:grid }
-	.hand-order-input input {border-top-left-radius:0; border-bottom-left-radius:0 }
+	.hands-input { position:relative; display:grid }
+	.hands-input input {border-top-left-radius:0; border-bottom-left-radius:0 }
 	:global(.dragdroplist) { position:absolute !important; left:0; right:0; z-index:1; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border:1px solid gray; background:white }
 	:global(.dragdroplist > .list > div.item) { margin-bottom:-1px; border-left:none; border-right:none }
 	:global(.dragdroplist > .list > div.item div.content p ) { margin:0 }
@@ -79,7 +79,7 @@
 		label='Hand order'
 		type=custom
 		>
-		<div class=hand-order-input>
+		<div class=hands-input>
 			<input
 				id={idPrefix + "Hands"}
 				type=search
