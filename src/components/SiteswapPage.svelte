@@ -6,17 +6,19 @@
 	import Icon from './Icon.svelte';
 	import InputField from './InputField.svelte';
 	import { siteswapNames} from './patterns.js';
-	import { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultHandOrder, jifdev } from './passist.js';
+	import { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, hands2limbs, jifdev } from './passist.js';
 	import { goto } from '@sapper/app';
 
 	export let siteswapInput = "45678";
 	export let nJugglers = defaults.nJugglers;
+	export let handsInput = '';
 	export let fullscreen = false;
 	export let url = '';
 
 	let siteswapShift = 0;
 	let siteswap, strippedInput, originalSiteswap;
-	let valid = false;
+	let siteswapValid = false;
+	let handsValid = false;
 	let period;
 	let nProps;
 	let siteswapName;
@@ -34,7 +36,6 @@
 	let sharebutton = process.browser === true && 'share' in navigator;
 	let showAnimationWidget = false;
 	let limbs = [];
-	let handOrder = [];
 
 	if (process.browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
@@ -44,7 +45,6 @@
 	}
 	$: useLocalStorage && localStorage.setItem("showAnimationWidget", showAnimationWidget ? "true" : "false");
 	$: useLocalStorage && localStorage.setItem("propType", propType);
-	$: handOrder = defaultHandOrder(nJugglers);
 
 	function shiftLeft() {
 		siteswapShift = (siteswapShift + 1) % period;
@@ -56,6 +56,7 @@
 		p = Object.assign({
 			siteswapInput: siteswapInput,
 			nJugglers: nJugglers,
+			handsInput: handsInput,
 			fullscreen: fullscreen,
 		}, p);
 		return siteswapUrl(p);
@@ -69,7 +70,7 @@ $:	{
 		strippedInput = String(siteswapInput).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
 		originalSiteswap = new Siteswap(strippedInput);
 		siteswap = originalSiteswap.shift(siteswapShift);
-		if (nJugglers > 0 && handOrder.length > 0) {
+		if (nJugglers > 0) {
 			const circleRadius = 1.2 + nJugglers * 0.2;
 			const jugglers = [];
 			for (let i = 0; i < nJugglers; i++) {
@@ -92,14 +93,12 @@ $:	{
 				jugglers.push(juggler);
 			}
 
-			limbs = handOrder.map(function(hand) {
-				const limb = Object.assign({}, hand); // clone
-				delete limb.text;
-				delete limb.textShort;
-				return limb;
-			});
+			limbs = hands2limbs(handsInput, nJugglers);
+			handsValid = limbs || !handsInput;
+			if (!limbs)
+				limbs = defaultLimbs(nJugglers);
 
-			valid = siteswap.isValid();
+			siteswapValid = siteswap.isValid();
 			period = siteswap.period;
 			nProps = siteswap.nProps;
 			const props = [];
@@ -129,7 +128,7 @@ $:	{
 		 + startConfigurations[0].local.map(function(x) { var h = x.height / 2; return 'p(' + h + (+x.height & 1 ? ',1,' + (h + localPeriod / 2) : ',0,' + h) + ')';}).join(',')
 		 + ']&persons=2';
 		} else {
-			valid = false;
+			siteswapValid = false;
 		}
 	}
 
@@ -181,10 +180,11 @@ $:	{
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
 
 <SiteswapInput
-	bind:siteswapInput={siteswapInput}
-	bind:nJugglers={nJugglers}
-	bind:valid={valid}
-	bind:handOrder={handOrder}
+	bind:siteswapInput
+	bind:nJugglers
+	bind:handsInput
+	bind:siteswapValid
+	bind:handsValid
 	idPrefix=main
 />
 {#if jifdev}
@@ -195,7 +195,7 @@ $:	{
 	</button>
 {/if}
 
-{#if valid || fullscreen}
+{#if siteswapValid || fullscreen}
 	<h2>
 		<!-- TODO: put correct siteswap shift in href -->
 		<!-- svelte-ignore a11y-invalid-attribute -->
@@ -258,7 +258,7 @@ $:	{
 		</div>
 	{/if}
 
-	{#if valid}
+	{#if siteswapValid}
 		<div class=causalDiagram>
 			<CausalDiagramWidget
 				{jif}
@@ -276,7 +276,7 @@ $:	{
 			initialFullscreen={fullscreen}
 			closeButton={true}
 			enableSettings={true}
-			{valid}
+			valid={siteswapValid}
 			jugglingSpeed={parseFloat(jugglingSpeed)}
 			animationSpeed={parseFloat(animationSpeed)}
 			{showOrbits}
@@ -284,10 +284,11 @@ $:	{
 			on:close={e => {showAnimationWidget = false;}}
 		>
 			<SiteswapInput
-				bind:siteswapInput={siteswapInput}
-				bind:nJugglers={nJugglers}
-				bind:valid={valid}
-				bind:handOrder={handOrder}
+				bind:siteswapInput
+				bind:nJugglers
+				bind:handsInput
+				bind:siteswapValid
+				bind:handsValid
 				idPrefix=animation
 			/>
 			<InputField

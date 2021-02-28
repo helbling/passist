@@ -1,28 +1,39 @@
 <script>
 	import InputField from './InputField.svelte';
 	import DragDropList from "svelte-dragdroplist";
-	import { jugglerName, defaultHandOrder } from './passist.js';
+	import { jugglerName, hands2limbs, limbs2hands, defaultLimbs } from './passist.js';
 
 	export let siteswapInput;
 	export let nJugglers;
+	export let handsInput;
 	export let idPrefix;
-	export let valid;
-	export let handOrder = [];
+	export let siteswapValid;
+	export let handsValid;
 
-	let handOrderStringCurrent = '';
-	let handOrderStringDefault = '';
-	let handOrderDragDropVisible = false;
-	let handOrderDragDropElement;
-	let handOrderInput;
-	$: handOrderStringCurrent = handOrderString(handOrder);
-	$: handOrderStringDefault = handOrderString(defaultHandOrder(nJugglers));
-	function handOrderString(handOrder) {
-		return handOrder.map(hand => hand.textShort).join(' ');
+	let handsInputDefault = '';
+	let handsDragDropVisible = false;
+	let handsDragDropElement;
+	let handsInputElement;
+	let handList = [];
+
+	$: handsInputDefault = limbs2hands(defaultLimbs(nJugglers));
+	$: handList = calculateHandList(handsInput, nJugglers);
+
+	function calculateHandList(handsInput, nJugglers) {
+		const limbs = hands2limbs(handsInput, nJugglers) || defaultLimbs(nJugglers);
+		return handList = limbs.map(limb => jugglerName(limb.juggler) + ' ' + limb.type.split(' ')[0]);
 	}
+
+	function handsDragDropChanged(e) {
+		handsInput = handList.join(' ')
+			.replaceAll(/ right/g, 'r')
+			.replaceAll(/ left/g, 'l');
+	}
+
 	function windowOnClick(e) {
-		if (handOrderDragDropVisible && !handOrderDragDropElement.contains(e.target)) {
-			handOrderDragDropVisible = false
-			handOrderInput.blur();
+		if (handsDragDropVisible && !handsDragDropElement.contains(e.target)) {
+			handsDragDropVisible = false
+			handsInputElement.blur();
 		}
 	}
 </script>
@@ -34,6 +45,7 @@
 	:global(.dragdroplist > .list > div.item) { margin-bottom:-1px; border-left:none; border-right:none }
 	:global(.dragdroplist > .list > div.item div.content p ) { margin:0 }
 	:global(.dragdroplist div.buttons) { visibility:hidden }
+	input.invalid { color:#dc3545 }
 </style>
 
 <svelte:window on:pointerdown={windowOnClick}/>
@@ -44,7 +56,7 @@
 		id={idPrefix + "SiteswapInput"}
 		label=Siteswap
 		type=search
-		bind:valid={valid}
+		bind:valid={siteswapValid}
 		attr={{
 			class:     'siteswap',
 			inputmode: 'verbatim',
@@ -69,16 +81,18 @@
 		>
 		<div class=hand-order-input>
 			<input
-				id={idPrefix + "HandOrder"}
-				type=text
-				value={handOrderStringCurrent}
-				placeholder={handOrderStringDefault}
-				on:focus={e => { handOrderDragDropVisible = true }}
-				bind:this={handOrderInput}
+				id={idPrefix + "Hands"}
+				type=search
+				spellcheck=false
+				bind:value={handsInput}
+				placeholder={handsInputDefault}
+				on:focus={e => { handsDragDropVisible = true }}
+				bind:this={handsInputElement}
+				class:invalid={!handsValid}
 			>
-			{#if handOrderDragDropVisible}
-			<div class=hand-drag-drop bind:this={handOrderDragDropElement}>
-				<DragDropList bind:data={handOrder}/>
+			{#if handsDragDropVisible}
+			<div bind:this={handsDragDropElement} on:pointerup={handsDragDropChanged} >
+				<DragDropList bind:data={handList}/>
 			</div>
 			{/if}
 		</div>

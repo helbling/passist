@@ -1,11 +1,19 @@
 <script context="module">
-	import { defaults } from '../../components/passist.js';
+	import { defaults, hands2limbs, limbs2hands } from '../../components/passist.js';
 
 	export async function preload({ params, query }) {
-		const nJugglers = parseInt(query.jugglers);
+		let nJugglers = parseInt(query.jugglers);
+		if (!nJugglers)
+			nJugglers = defaults.nJugglers;
+		let handsInput = query.hands;
+		const limbs = hands2limbs(handsInput, nJugglers);
+		if (limbs)
+			handsInput = limbs2hands(limbs);
+
 		return {
 			siteswapInput: params.siteswap,
-			nJugglers: nJugglers ? nJugglers : defaults.nJugglers,
+			nJugglers,
+			handsInput,
 			fullscreen: parseInt(query.fullscreen),
 		};
 	}
@@ -13,7 +21,7 @@
 <script>
 	import { useLocalStorage, siteswapUrl } from '../../components/passist.js';
 	import SiteswapPage from '../../components/SiteswapPage.svelte';
-	export let siteswapInput, nJugglers, fullscreen;
+	export let siteswapInput, nJugglers, handsInput, fullscreen;
 	let query, url;
 
 	$:  useLocalStorage && siteswapInput && localStorage.setItem("siteswap", siteswapInput);
@@ -22,13 +30,14 @@
 	$: {
 		if (process.browser === true && ('history' in window)) {
 			url = siteswapUrl({
-				siteswapInput: siteswapInput,
-				nJugglers: nJugglers,
-				fullscreen: fullscreen,
+				siteswapInput,
+				nJugglers,
+				handsInput,
+				fullscreen,
 			});
-			history.replaceState({}, '',url);
+			history.replaceState({}, '', url);
 		}
 	}
 </script>
 
-<SiteswapPage bind:siteswapInput={siteswapInput} bind:nJugglers={nJugglers} bind:fullscreen={fullscreen} {url} />
+<SiteswapPage bind:siteswapInput bind:nJugglers bind:handsInput bind:fullscreen {url} />

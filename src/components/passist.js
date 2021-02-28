@@ -43,6 +43,8 @@ function siteswapUrl(p)
 	};
 	if (p.fullscreen)
 		query.fullscreen = 1;
+	if (p.handsInput)
+		query.hands = p.handsInput.replaceAll(/[^a-z]/gi, '');
 	const url = U('/siteswap/' + p.siteswapInput, query);
 	return url;
 }
@@ -52,19 +54,49 @@ function jugglerName(i)
 	return String.fromCharCode(65 + i);
 }
 
-function defaultHandOrder(n) {
+function hands2limbs(hands, nJugglers)
+{
+	if (!hands)
+		return false;
+
+	hands = hands.replaceAll(/[^a-z]/gi, '').toUpperCase();
+	if (hands.length != nJugglers * 4 || !hands.match(/^(.(R|L))*$/i))
+		return false;
+
+	const limbs = [];
+	const seen = {};
+	for (let i = 0; i < hands.length / 2; i++) {
+		const def = hands.slice(i * 2, i * 2 + 2);
+		if (seen[def])
+			return false;
+		seen[def] = true;
+
+		limbs.push({
+			juggler: def.charCodeAt(0) - 65,
+			type: {R:'right', L:'left'}[def[1]] + ' hand',
+		});
+	}
+	return limbs;
+}
+
+function limbs2hands(limbs)
+{
+	return limbs
+		.map(limb => jugglerName(limb.juggler) + limb.type[0])
+		.join(' ');
+}
+
+function defaultLimbs(n)
+{
 	const result = [];
 	for (let i = 0; i < 2 * n; i++) {
 		const juggler = i % n;
 
 		// alternating right and left for an odd number of jugglers makes the patterns more symmetric (Co Stuifbergen)
 		const right = (n % 2) ? !(i % 2) : i < n;
-		const rightLeft = right ? 'right' : 'left';
 		result.push({
 			juggler,
-			type: rightLeft + ' hand',
-			text: jugglerName(juggler) + ' ' + rightLeft,
-			textShort: jugglerName(juggler) + (right ? 'ᵣ' : 'ₗ'),
+			type: (right ? 'right' : 'left') + ' hand',
 		});
 	}
 	return result;
@@ -78,4 +110,4 @@ const servertype = {
 
 const jifdev = servertype == 'dev' || servertype == 'alpha';
 
-export { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultHandOrder, servertype, jifdev };
+export { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, hands2limbs, limbs2hands, defaultLimbs, servertype, jifdev };
