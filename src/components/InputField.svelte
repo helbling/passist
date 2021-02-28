@@ -59,7 +59,7 @@ if (type == 'number') {
 	input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none }
 	@media screen and (max-width: 30rem) { input[type="search"].siteswap { width: 8rem } }
 	input[type="checkbox"] { width:1.4em; height:1.4em; vertical-align:middle }
-	input.invalid { color:#dc3545 }
+	input.invalid { color:#dc3545 !important }
 	.input-group-text.checkbox { padding-top:0.1em; padding-bottom:0.1em }
 	label, .input-group input {
 		color: #495057;
