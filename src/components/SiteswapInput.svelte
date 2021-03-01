@@ -75,7 +75,7 @@
 		id={idPrefix + "SiteswapInput"}
 		label=Siteswap
 		type=search
-		bind:valid={siteswapValid}
+		valid={siteswapValid || !siteswapInput}
 		attr={{
 			class:     'siteswap',
 			inputmode: 'verbatim',
