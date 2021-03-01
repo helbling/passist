@@ -6,6 +6,11 @@
 </script>
 
 <style>
+	:global(body) {
+		overflow: -moz-scrollbars-vertical;
+		overflow-y: scroll;
+	}
+
 	main {
 		position: relative;
 		max-width: 56em;
