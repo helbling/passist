@@ -55,7 +55,7 @@ if (type == 'number') {
 	.input-group > *:not(:first-child)  { border-top-left-radius:0; border-bottom-left-radius:0 }
 	input[type="number"].digit    { width:3rem !important }
 	input[type="number"].twodigit { width:4rem !important }
-	input[type="search"] { width: 12rem; -webkit-appearance:none; padding-right:1.5em }
+	input[type="search"] { width: 12rem; -webkit-appearance:none; padding-right:1.55rem }
 	input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none }
 	@media screen and (max-width: 30rem) { input[type="search"].siteswap { width: 8rem } }
 	input[type="checkbox"] { width:1.4em; height:1.4em; vertical-align:middle }
@@ -80,7 +80,7 @@ if (type == 'number') {
 	}
 	.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0 }
 
-	:global(.input-group .close) { position:absolute; right:0; top:0; margin:0.7em 0; height:1em }
+	:global(.input-group .close) { position:absolute; right:0; top:0; margin:0.7rem 0; height:1rem }
 </style>
 
 {#if title != label}

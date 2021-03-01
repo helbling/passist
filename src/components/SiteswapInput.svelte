@@ -44,7 +44,8 @@
 	.hands-input input {
 		border-top-left-radius:0;
 		border-bottom-left-radius:0;
-		padding-right:1.5em;
+		padding-right:1.55rem;
+		width: 12rem;
 
 		/* NOTE: copy-pasted from InputField.svelte! */
 		color: #495057;
@@ -53,7 +54,11 @@
 		-webkit-box-shadow: inset 0 1px 3px #ddd;
 		        box-shadow: inset 0 1px 3px #ddd;
 		margin:0;
+		border-top-left-radius:0;
+		border-bottom-left-radius:0;
 	}
+	.hands-input input.empty { padding-right:0.3rem }
+	.hands-input input::-webkit-search-cancel-button { -webkit-appearance: none }
 	.hands-input input.invalid { color:#dc3545 }
 
 	:global(.dragdroplist) { position:absolute !important; left:0; right:0; z-index:1; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border:1px solid gray; background:white }
@@ -98,6 +103,7 @@
 				id={idPrefix + "Hands"}
 				type=search
 				spellcheck=false
+				class:empty={!handsInput}
 				bind:value={handsInput}
 				placeholder={handsInputDefault}
 				on:focus={e => { handsDragDropVisible = true }}
