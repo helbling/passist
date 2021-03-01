@@ -15,7 +15,7 @@
     "marked": "^2.0.0",
     "polka": "^1.0.0-next.11",
     "sirv": "^1.0.10",
-    "three": "^0.124.0"
+    "three": "^0.125.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
