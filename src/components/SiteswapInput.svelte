@@ -40,7 +40,7 @@
 </script>
 
 <style>
-	.hands-input { position:relative; display:grid }
+	.hands-input { position:relative }
 	.hands-input input {
 		border-top-left-radius:0;
 		border-bottom-left-radius:0;
