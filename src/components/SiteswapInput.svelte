@@ -56,6 +56,7 @@
 		margin:0;
 		border-top-left-radius:0;
 		border-bottom-left-radius:0;
+		-webkit-appearance:none;
 	}
 	.hands-input input.empty { padding-right:0.3rem }
 	.hands-input input::-webkit-search-cancel-button { -webkit-appearance: none }
