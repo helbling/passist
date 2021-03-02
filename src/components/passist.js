@@ -44,8 +44,8 @@ function siteswapUrl(p)
 	if (p.fullscreen)
 		query.fullscreen = 1;
 	if (p.handsInput)
-		query.hands = p.handsInput.replaceAll(/[^a-z]/gi, '');
-	const url = U('/siteswap/' + ((typeof p.siteswapInput === 'string') ? p.siteswapInput.replaceAll(/[^0-9a-zA-Z]+/g, '') : ''), query);
+		query.hands = p.handsInput.replace(/[^a-z]/gi, '');
+	const url = U('/siteswap/' + ((typeof p.siteswapInput === 'string') ? p.siteswapInput.replace(/[^0-9a-zA-Z]+/g, '') : ''), query);
 	return url;
 }
 
@@ -59,7 +59,7 @@ function hands2limbs(hands, nJugglers)
 	if (!hands)
 		return false;
 
-	hands = hands.replaceAll(/[^a-z]/gi, '').toUpperCase();
+	hands = hands.replace(/[^a-z]/gi, '').toUpperCase();
 	if (hands.length != nJugglers * 4 || !hands.match(/^(.(R|L))*$/i))
 		return false;
 

@@ -27,8 +27,8 @@
 
 	function handsDragDropChanged(e) {
 		handsInput = handList.join(' ')
-			.replaceAll(/ right/g, 'r')
-			.replaceAll(/ left/g, 'l');
+			.replace(/ right/g, 'r')
+			.replace(/ left/g, 'l');
 	}
 
 	function windowOnClick(e) {
