@@ -127,13 +127,17 @@ $:	{
 			});
 			startProperties = siteswap.getStartProperties(nJugglers);
 
-			localPeriod = period % nJugglers == 0 ? period / nJugglers : period;
-
 			startConfigurations = siteswap.startConfigurations(limbs);
 
-			prechacthisUrl = 'http://prechacthis.org/info.php?pattern=['
-		 + startConfigurations[0].local.map(function(x) { var h = x.height / 2; return 'p(' + h + (+x.height & 1 ? ',1,' + (h + localPeriod / 2) : ',0,' + h) + ')';}).join(',')
-		 + ']&persons=2';
+			prechacthisUrl = '';
+			if (nJugglers == 2 && (period % 2) == 1) {
+				prechacthisUrl = 'http://prechacthis.org/info.php?pattern=['
+					+ startConfigurations[0].local.map(x => {
+						var h = x.height / 2;
+						return 'p(' + h + (+x.height & 1 ? ',1,' + (h + period / 2) : ',0,' + h) + ')';
+					}).join(',')
+				+ ']&persons=2';
+			}
 		} else {
 			siteswapValid = false;
 		}
@@ -238,7 +242,7 @@ $:	{
 					<td>Local&nbsp;</td>
 					<td colspan={localPeriod + 1}>Siteswap</td>
 					<td colspan={localPeriod + 1}>
-						{#if nJugglers == 2}
+						{#if prechacthisUrl}
 							<a href={prechacthisUrl}>Prechac</a>
 						{:else}
 							Prechac
