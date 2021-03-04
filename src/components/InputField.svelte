@@ -38,6 +38,11 @@ if (type == 'number') {
 		inputAttr[k] = attr[k];
 }
 
+function blurTargetOnEnter(e) {
+	if (e.key == 'Enter')
+		e.target.blur();
+}
+
 </script>
 
 <style>
@@ -102,6 +107,7 @@ if (type == 'number') {
 			type=number
 			bind:value={value}
 			class="form-control {max && max < 10 ? 'digit' : 'twodigit'}"
+			on:keyup={blurTargetOnEnter}
 			{...inputAttr}
 		>
 	{:else if type == 'select'}
@@ -122,6 +128,7 @@ if (type == 'number') {
 			placeholder={placeholder ? placeholder : label}
 			class:invalid={!valid}
 			spellcheck=false
+			on:keyup={blurTargetOnEnter}
 			{...inputAttr}
 		>
 	{/if}

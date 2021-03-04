@@ -110,6 +110,7 @@
 				on:focus={e => { handsDragDropVisible = true }}
 				bind:this={handsInputElement}
 				class:invalid={!handsValid}
+				on:keyup={e => { if (e.key == 'Enter') { e.target.blur(); handsDragDropVisible = false;}} }
 			>
 			{#if handsDragDropVisible}
 			<div bind:this={handsDragDropElement} on:pointerup={handsDragDropChanged} >
