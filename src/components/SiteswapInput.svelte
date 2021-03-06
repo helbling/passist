@@ -40,7 +40,10 @@
 </script>
 
 <style>
-	.hands-input { position:relative }
+	.hands-input {
+		display: inline-flex;
+		position:relative;
+	}
 	.hands-input input {
 		border-top-left-radius:0;
 		border-bottom-left-radius:0;
@@ -62,7 +65,7 @@
 	.hands-input input::-webkit-search-cancel-button { -webkit-appearance: none }
 	.hands-input input.invalid { color:#dc3545 }
 
-	:global(.dragdroplist) { position:absolute !important; left:0; right:0; z-index:1; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border:1px solid gray; background:white }
+	:global(.dragdroplist) { position:absolute !important; left:0; right:0; top:2.4em; z-index:1; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border:1px solid gray; background:white }
 	:global(.dragdroplist > .list > div.item) { margin-bottom:-1px; border-left:none; border-right:none }
 	:global(.dragdroplist > .list > div.item div.content p ) { margin:0 }
 	:global(.dragdroplist div.buttons) { visibility:hidden }
