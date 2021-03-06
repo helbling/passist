@@ -128,6 +128,7 @@ $:	{
 			startProperties = siteswap.getStartProperties(nJugglers);
 
 			startConfigurations = siteswap.startConfigurations(limbs);
+			localPeriod = startConfigurations[0].local.length;
 
 			prechacthisUrl = '';
 			if (nJugglers == 2 && (period % 2) == 1) {
