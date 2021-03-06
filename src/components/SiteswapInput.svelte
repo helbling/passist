@@ -71,7 +71,7 @@
 	:global(.dragdroplist div.buttons) { visibility:hidden }
 </style>
 
-<svelte:window on:pointerdown={windowOnClick}/>
+<svelte:window on:touchstart={windowOnClick} on:mousedown={windowOnClick}/>
 
 <div class="pure-form form-inline">
 	<InputField
@@ -117,8 +117,12 @@
 				on:keyup={e => { if (e.key == 'Enter') { e.target.blur(); handsDragDropVisible = false;}} }
 			>
 			{#if handsDragDropVisible}
-			<div bind:this={handsDragDropElement} on:pointerup={handsDragDropChanged} >
-				<DragDropList bind:data={handList}/>
+			<div
+				bind:this={handsDragDropElement}
+				on:touchend|capture={handsDragDropChanged}
+				on:mouseup|capture={handsDragDropChanged}
+			>
+				<DragDropList bind:data={handList} />
 			</div>
 			{/if}
 			{#if handsInput}
