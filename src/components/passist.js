@@ -44,7 +44,7 @@ function siteswapUrl(p)
 	if (p.fullscreen)
 		query.fullscreen = 1;
 	if (p.handsInput)
-		query.hands = p.handsInput.replace(/[^a-z]/gi, '');
+		query.hands = p.handsInput.replace(/[^a-z]+/gi, '-');
 	const url = U('/siteswap/' + ((typeof p.siteswapInput === 'string') ? p.siteswapInput.replace(/[^0-9a-zA-Z]+/g, '') : ''), query);
 	return url;
 }
