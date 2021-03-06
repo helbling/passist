@@ -119,6 +119,7 @@
 			{#if handsDragDropVisible}
 			<div
 				bind:this={handsDragDropElement}
+				on:touchstart|capture={e => { handsInputElement.blur(); }}
 				on:touchend|capture={handsDragDropChanged}
 				on:mouseup|capture={handsDragDropChanged}
 			>
