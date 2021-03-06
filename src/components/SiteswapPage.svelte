@@ -195,6 +195,7 @@ $:	{
 	.localThrows td { white-space:nowrap }
 	.jif-button { float:right; margin-left:0.5em }
 	label.pure-button { margin:0 }
+	td.space { padding-left:0.5em }
 </style>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
@@ -241,6 +242,7 @@ $:	{
 			<table>
 				<tr>
 					<td>Local&nbsp;</td>
+					<td class=space />
 					<td colspan={localPeriod + 1}>Siteswap</td>
 					<td colspan={localPeriod + 1}>
 						{#if prechacthisUrl}
@@ -257,15 +259,16 @@ $:	{
 				{#each startConfigurations as j}
 					<tr>
 						<th>{j.name} <sub>{j.startProps['left hand']}|{j.startProps['right hand']}</sub></th>
+						<td class=space />
 						{#each j.local as t}
 							<td>{t.siteswap}{@html t.desc}&nbsp;</td>
 						{/each}
-						<td class=px-3 />
+						<td class=space />
 						{#each j.local as t}
 							<td>{prechac(t.height, nJugglers)}{@html t.desc}</td>
 						{/each}
 						{#if nJugglers == 2}
-							<td class=px-3 />
+							<td class=space />
 							{#each j.local as t}
 								<td>{word(t.height)},&nbsp;</td>
 							{/each}
