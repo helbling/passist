@@ -65,13 +65,6 @@
 		const url = getUrl({fullscreen: e.detail});
 		goto(url);
 	}
-	function handInputDefault(nJugglers) {
-		return '';
-	}
-
-	// reset hand order when changing nJugglers
-	$: handsInput = handInputDefault(nJugglers);
-
 
 $:	{
 		strippedInput = String(siteswapInput).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();

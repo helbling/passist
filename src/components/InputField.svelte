@@ -97,6 +97,7 @@ function blurTargetOnEnter(e) {
 			<input
 				type=checkbox
 				bind:checked={value}
+				on:change
 				{...inputAttr}
 			>
 		{/if}
@@ -108,6 +109,7 @@ function blurTargetOnEnter(e) {
 			bind:value={value}
 			class="form-control {max && max < 10 ? 'digit' : 'twodigit'}"
 			on:keyup={blurTargetOnEnter}
+			on:change
 			{...inputAttr}
 		>
 	{:else if type == 'select'}
@@ -129,6 +131,7 @@ function blurTargetOnEnter(e) {
 			class:invalid={!valid}
 			spellcheck=false
 			on:keyup={blurTargetOnEnter}
+			on:change
 			{...inputAttr}
 		>
 	{/if}

@@ -95,6 +95,7 @@
 		title='Number of jugglers'
 		min=1
 		max=9
+		on:change={e => { handsInput = ''; }}
 		/>
 
 	<InputField
