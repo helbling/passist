@@ -70,9 +70,12 @@ function hands2limbs(hands, nJugglers)
 		if (seen[def])
 			return false;
 		seen[def] = true;
+		const juggler = def.charCodeAt(0) - 65;
+		if (juggler >= nJugglers)
+			return false;
 
 		limbs.push({
-			juggler: def.charCodeAt(0) - 65,
+			juggler,
 			type: {R:'right', L:'left'}[def[1]] + ' hand',
 		});
 	}
