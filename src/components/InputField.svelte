@@ -110,6 +110,7 @@ function blurTargetOnEnter(e) {
 			class="form-control {max && max < 10 ? 'digit' : 'twodigit'}"
 			on:keyup={blurTargetOnEnter}
 			on:change
+			autocomplete=off
 			{...inputAttr}
 		>
 	{:else if type == 'select'}
@@ -130,6 +131,7 @@ function blurTargetOnEnter(e) {
 			placeholder={placeholder ? placeholder : label}
 			class:invalid={!valid}
 			spellcheck=false
+			autocomplete=off
 			on:keyup={blurTargetOnEnter}
 			on:change
 			{...inputAttr}

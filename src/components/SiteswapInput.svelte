@@ -108,6 +108,7 @@
 				id={idPrefix + "Hands"}
 				type=search
 				spellcheck=false
+				autocomplete=off
 				class:empty={!handsInput}
 				bind:value={handsInput}
 				placeholder={handsInputDefault}
