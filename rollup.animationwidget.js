@@ -22,6 +22,7 @@ export default {
 	// external: ['three', 'three/examples/jsm/controls/OrbitControls.js'],
 	plugins: [
 		replace({
+			preventAssignment: true,
 			'process.browser': true,
 			'process.widget': true,
 			'process.env.NODE_ENV': JSON.stringify(mode)

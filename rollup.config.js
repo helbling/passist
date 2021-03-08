@@ -15,9 +15,12 @@ const onwarn = (warning, onwarn) =>
 	(warning.code === 'MISSING_EXPORT' && /'preload'/.test(warning.message)) ||
 	(warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
 	(warning.code === 'UNUSED_EXTERNAL_IMPORT' && warning.source === 'three') ||
+	(warning.plugin === 'css' && warning.message === 'No directory provided. Skipping CSS generation') ||
 	onwarn(warning);
 
 const replacements = {
+	preventAssignment: true,
+
 	'process.env.NODE_ENV': JSON.stringify(mode),
 	'process.widget': false,
 	'pkg.name': JSON.stringify(pkg.name),

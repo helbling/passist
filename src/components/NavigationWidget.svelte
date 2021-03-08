@@ -27,7 +27,7 @@
 		<li class=pure-menu-item class:pure-menu-selected={segment === page.path || !segment && page.path === 'generator'}>
 			<a
 				class=pure-menu-link
-				rel=prefetch
+				sapper:prefetch
 				class:selected={segment === page.path || !segment && page.path === 'generator' }
 				href={page.path}
 			>
