@@ -22,20 +22,28 @@
 		const time2 = time + step;
 
 		// do we need a curved line?
-		if (fromLine != toLine || step && Math.abs(step) <= jif.timeStretchFactor) // TODO: second test should be a collision detection test
-			return "M" + xy(time, r, x(time2), y(fromLine), fromLine) + " L" + xy(time2, r + arrowLength, x(time), y(fromLine), toLine);
-		const dirX = x(time2) > x(time) ? 1 : -1;
+		if (fromLine != toLine || Math.abs(step) >= jif.timeStretchFactor * 0.7 && Math.abs(step) <= jif.timeStretchFactor) // TODO: add collision detection
+			return "M" + xy(time, r, x(time2), y(toLine), fromLine) + " L" + xy(time2, r + arrowLength, x(time), y(fromLine), toLine);
+		let dirX = x(time2) > x(time) ? 1 : -1;
 		const dirY = fromLine ? 1 : -1;
 
-		const offsetX = dirX * dy / 2;
+		let offsetX = dirX * dy / 2;
 		const offsetY = dirY * dy / 2;
+
+		if (step == 0) {
+			offsetX /= 2;
+			dirX /= 2;
+		} else if (Math.abs(step) < jif.timeStretchFactor) {
+			offsetX = 0;
+			dirX = 0;
+		}
 
 		const controlPoint1 = (x(time) + offsetX) + "," + (y(fromLine) + offsetY);
 		const controlPoint2 = (x(time2) - offsetX) + "," + (y(fromLine) + offsetY);
 		return "M" + xy(time, r, x(time) + dirX, y(fromLine) + dirY, fromLine)
 				 + "C" + controlPoint1
 				 + " " + controlPoint2
-				 + " " + xy(time2, r + arrowLength, x(time2) - dirX, y(fromLine) + dirY, fromLine);
+				 + " " + xy(time2, r + arrowLength, x(time2) - dirX, y(fromLine) + dirY, toLine);
 	};
 
 	function x(time) { return xoff + time * dx;}
@@ -136,7 +144,7 @@ $: {
 			font-size=20
 			stroke-width=0px
 			strke=black
-		>{j.startPropsLeft}</text>
+		>{j.startProps['left hand']}</text>
 
 		<text
 			x=20
@@ -144,7 +152,7 @@ $: {
 			font-size=20
 			stroke-width=0px
 			strke=black
-		>{j.startPropsRight}</text>
+		>{j.startProps['right hand']}</text>
 	{/each}
 {/if}
 

@@ -34,6 +34,8 @@ This project builds upon the follwing open source tools. Many thanks to its crea
 - [three.js](https://threejs.org/) for doing all the complicated 3d stuff
 - [bytesize-icons](https://danklammer.com/bytesize-icons/) for the iconset
 - [Pure.css](https://purecss.io/) as a good css base
+- [Svelte-DragDropList](https://github.com/jwlarocque/svelte-dragdroplist) for hand order drag and drop
+
 
 ## License
 

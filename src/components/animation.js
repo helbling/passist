@@ -24,7 +24,7 @@ function propColor(prop, jif)
 function sideFactor(side)
 {
 	// 0: right/positive, 1: left/negative
-	return side ? -1 : 1;
+	return side ? 1 : -1;
 }
 
 function v3(x, y, z)

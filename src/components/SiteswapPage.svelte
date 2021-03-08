@@ -6,17 +6,19 @@
 	import Icon from './Icon.svelte';
 	import InputField from './InputField.svelte';
 	import { siteswapNames} from './patterns.js';
-	import { defaults, colors, useLocalStorage, siteswapUrl, jifdev } from './passist.js';
+	import { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev } from './passist.js';
 	import { goto } from '@sapper/app';
 
 	export let siteswapInput = "45678";
 	export let nJugglers = defaults.nJugglers;
+	export let handsInput = '';
 	export let fullscreen = false;
 	export let url = '';
 
 	let siteswapShift = 0;
 	let siteswap, strippedInput, originalSiteswap;
-	let valid = false;
+	let siteswapValid = false;
+	let handsValid = false;
 	let period;
 	let nProps;
 	let siteswapName;
@@ -33,6 +35,7 @@
 	let windowHeight;
 	let sharebutton = process.browser === true && 'share' in navigator;
 	let showAnimationWidget = false;
+	let limbs = [];
 
 	if (process.browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
@@ -53,6 +56,7 @@
 		p = Object.assign({
 			siteswapInput: siteswapInput,
 			nJugglers: nJugglers,
+			handsInput: handsInput,
 			fullscreen: fullscreen,
 		}, p);
 		return siteswapUrl(p);
@@ -71,7 +75,7 @@ $:	{
 			const jugglers = [];
 			for (let i = 0; i < nJugglers; i++) {
 				const juggler = {
-					name: String.fromCharCode(65 + i),
+					name: jugglerName(i),
 				};
 				if (nJugglers == 1) {
 					Object.assign(juggler, {
@@ -89,14 +93,12 @@ $:	{
 				jugglers.push(juggler);
 			}
 
-			const limbs = [];
-			for (let i = 0; i < 2 * nJugglers; i++)
-				limbs.push({
-					juggler:i % nJugglers,
-					type: i < nJugglers ? 'right hand' : 'left hand',
-				});
+			limbs = hands2limbs(handsInput, nJugglers);
+			handsValid = limbs || !handsInput;
+			if (!limbs)
+				limbs = defaultLimbs(nJugglers);
 
-			valid = siteswap.isValid();
+			siteswapValid = siteswap.isValid();
 			period = siteswap.period;
 			nProps = siteswap.nProps;
 			const props = [];
@@ -118,15 +120,20 @@ $:	{
 			});
 			startProperties = siteswap.getStartProperties(nJugglers);
 
-			localPeriod = period % nJugglers == 0 ? period / nJugglers : period;
+			startConfigurations = siteswap.startConfigurations(limbs);
+			localPeriod = startConfigurations[0].local.length;
 
-			startConfigurations = siteswap.startConfigurations(nJugglers);
-
-			prechacthisUrl = 'http://prechacthis.org/info.php?pattern=['
-		 + startConfigurations[0].local.map(function(x) { var h = x.height / 2; return 'p(' + h + (+x.height & 1 ? ',1,' + (h + localPeriod / 2) : ',0,' + h) + ')';}).join(',')
-		 + ']&persons=2';
+			prechacthisUrl = '';
+			if (nJugglers == 2 && (period % 2) == 1) {
+				prechacthisUrl = 'http://prechacthis.org/info.php?pattern=['
+					+ startConfigurations[0].local.map(x => {
+						var h = x.height / 2;
+						return 'p(' + h + (+x.height & 1 ? ',1,' + (h + period / 2) : ',0,' + h) + ')';
+					}).join(',')
+				+ ']&persons=2';
+			}
 		} else {
-			valid = false;
+			siteswapValid = false;
 		}
 	}
 
@@ -153,9 +160,17 @@ $:	{
 	}
 
 	function share() {
+		let title = 'Siteswap ' + strippedInput;
+		if (siteswapName)
+			title += ' (' + siteswapName + ')';
+		title += ', ' + nJugglers + ' jugglers';
+		if (handsInput)
+			title += ', hands: ' + handsInput;
+		title += ' - passist.org';
+
 		navigator.share({
 			url: location.href,
-			title: 'Siteswap ' + strippedInput + (siteswapName ? ' (' + siteswapName + ')' : '') + ' - passist.org',
+			title,
 		});
 		return false;
 	}
@@ -173,10 +188,19 @@ $:	{
 	.localThrows td { white-space:nowrap }
 	.jif-button { float:right; margin-left:0.5em }
 	label.pure-button { margin:0 }
+	td.space { padding-left:0.5em }
 </style>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
 
+<SiteswapInput
+	bind:siteswapInput
+	bind:nJugglers
+	bind:handsInput
+	bind:siteswapValid
+	bind:handsValid
+	idPrefix=main
+/>
 {#if jifdev}
 	<button class="pure-button jif-button" on:click={e => {
 		localStorage.setItem("jif", JSON.stringify(jif, null, 2)); goto('/jif');
@@ -185,14 +209,7 @@ $:	{
 	</button>
 {/if}
 
-<SiteswapInput
-	bind:siteswapInput={siteswapInput}
-	bind:nJugglers={nJugglers}
-	bind:valid={valid}
-	idPrefix=main
-/>
-
-{#if valid || fullscreen}
+{#if siteswapValid || fullscreen}
 	<h2>
 		<!-- TODO: put correct siteswap shift in href -->
 		<!-- svelte-ignore a11y-invalid-attribute -->
@@ -218,9 +235,10 @@ $:	{
 			<table>
 				<tr>
 					<td>Local&nbsp;</td>
+					<td class=space />
 					<td colspan={localPeriod + 1}>Siteswap</td>
 					<td colspan={localPeriod + 1}>
-						{#if nJugglers == 2}
+						{#if prechacthisUrl}
 							<a href={prechacthisUrl}>Prechac</a>
 						{:else}
 							Prechac
@@ -233,16 +251,17 @@ $:	{
 				</tr>
 				{#each startConfigurations as j}
 					<tr>
-						<th>{j.name} <sub>{j.startPropsLeft}|{j.startPropsRight}</sub></th>
+						<th>{j.name} <sub>{j.startProps['left hand']}|{j.startProps['right hand']}</sub></th>
+						<td class=space />
 						{#each j.local as t}
 							<td>{t.siteswap}{@html t.desc}&nbsp;</td>
 						{/each}
-						<td class=px-3 />
+						<td class=space />
 						{#each j.local as t}
 							<td>{prechac(t.height, nJugglers)}{@html t.desc}</td>
 						{/each}
 						{#if nJugglers == 2}
-							<td class=px-3 />
+							<td class=space />
 							{#each j.local as t}
 								<td>{word(t.height)},&nbsp;</td>
 							{/each}
@@ -255,7 +274,7 @@ $:	{
 		</div>
 	{/if}
 
-	{#if valid}
+	{#if siteswapValid}
 		<div class=causalDiagram>
 			<CausalDiagramWidget
 				{jif}
@@ -271,9 +290,9 @@ $:	{
 		<AnimationWidget
 			{jif}
 			initialFullscreen={fullscreen}
-			closeButton=true
-			enableSettings=true
-			{valid}
+			closeButton={true}
+			enableSettings={true}
+			valid={siteswapValid}
 			jugglingSpeed={parseFloat(jugglingSpeed)}
 			animationSpeed={parseFloat(animationSpeed)}
 			{showOrbits}
@@ -281,9 +300,11 @@ $:	{
 			on:close={e => {showAnimationWidget = false;}}
 		>
 			<SiteswapInput
-				bind:siteswapInput={siteswapInput}
-				bind:nJugglers={nJugglers}
-				bind:valid={valid}
+				bind:siteswapInput
+				bind:nJugglers
+				bind:handsInput
+				bind:siteswapValid
+				bind:handsValid
 				idPrefix=animation
 			/>
 			<InputField
