@@ -275,7 +275,8 @@ startConfigurations(limbs)
 				return {
 					height: th.height,
 					siteswap: Siteswap.heightToChar(th.height),
-					desc: desc ? desc : '&nbsp;'
+					desc: desc ? desc : '&nbsp;',
+					unusual: (th.from.juggler != th.to.juggler) != (th.height % 2 == 1),
 				};
 			}),
 			name:  name(juggler),

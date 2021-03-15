@@ -26,6 +26,7 @@
 	let localPeriod;
 	let prechacthisUrl;
 	let startConfigurations;
+	let unusualThrows = false;
 	let jif;
 	let propType = defaults.propType;
 	let jugglingSpeed = defaults.jugglingSpeed;
@@ -122,6 +123,11 @@ $:	{
 
 			startConfigurations = siteswap.startConfigurations(limbs);
 			localPeriod = startConfigurations[0].local.length;
+			unusualThrows = startConfigurations.some(
+				configuration => configuration.local.some(
+					localthrow => localthrow.unusual
+				)
+			);
 
 			prechacthisUrl = '';
 			if (nJugglers == 2 && (period % 2) == 1) {
@@ -245,7 +251,7 @@ $:	{
 						{/if}
 					</td>
 
-					{#if nJugglers == 2}
+					{#if nJugglers == 2 && !unusualThrows}
 						<td colspan={localPeriod}>Words</td>
 					{/if}
 				</tr>
@@ -260,7 +266,7 @@ $:	{
 						{#each j.local as t}
 							<td>{prechac(t.height, nJugglers)}{@html t.desc}</td>
 						{/each}
-						{#if nJugglers == 2}
+						{#if nJugglers == 2 && !unusualThrows}
 							<td class=space />
 							{#each j.local as t}
 								<td>{word(t.height)},&nbsp;</td>
