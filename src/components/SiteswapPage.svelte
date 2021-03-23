@@ -7,7 +7,8 @@
 	import InputField from './InputField.svelte';
 	import { siteswapNames} from './patterns.js';
 	import { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev } from './passist.js';
-	import { goto } from '@sapper/app';
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/env';
 
 	export let siteswapInput = "45678";
 	export let nJugglers = defaults.nJugglers;
@@ -33,11 +34,11 @@
 	let showOrbits = false;
 	let windowWidth;
 	let windowHeight;
-	let sharebutton = process.browser === true && 'share' in navigator;
+	let sharebutton = browser === true && 'share' in navigator;
 	let showAnimationWidget = false;
 	let limbs = [];
 
-	if (process.browser === true) {
+	if (browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
 
 		if (useLocalStorage)
@@ -112,7 +113,7 @@ $:	{
 
 			jif = siteswap.toJif({
 				name: siteswapName ? siteswapName + " (" + siteswap.toString() + ")" : undefined,
-				generator: pkg.name + '/' + pkg.version,
+				//				generator: pkg.name + '/' + pkg.version,
 				jugglers: jugglers,
 				limbs: limbs,
 				props: props,

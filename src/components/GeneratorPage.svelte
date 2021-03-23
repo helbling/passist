@@ -2,6 +2,7 @@
 	import InputField from './InputField.svelte';
 	import Siteswap from './siteswap.js';
 	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/env';
 
 	export let nProps = 7;
 	export let period = 5;
@@ -65,7 +66,7 @@
 	};
 
 	$: {
-		if (process.browser === true) {
+		if (browser === true) {
 			onchanged({
 				nProps:    nProps,
 				period:    period,

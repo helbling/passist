@@ -1,7 +1,3 @@
-'use strict';
-
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { colors, defaults } from './passist.js';
 
 const hu = 0.21;
@@ -79,7 +75,8 @@ function pirouetteGeometry()
 
 function resourceUrl(url)
 {
-	return (process.widget ? 'https://dev.passist.org' : '') + url;
+	//return (process.widget ? 'https://dev.passist.org' : '') + url;
+	return url;
 }
 
 class Juggler extends THREE.Group

@@ -42,14 +42,14 @@
 <header>
 	<div class="container">
 		<div >
-			<img class="cube" src="images/cube.svg" alt="logo" />
+			<img class="cube" src="/images/cube.svg" alt="logo" />
 		</div>
 		<div style="flex:1">
 			<h1>passist{servertype ? ' ' + servertype : ''}</h1>
 			<h2>passing siteswap assistant</h2>
 		</div>
 		<div>
-			<img class="meeseeks" src="images/mr_meeseeks_proud2.png" alt="mr meeseeks" />
+			<img class="meeseeks" src="/images/mr_meeseeks_proud2.png" alt="mr meeseeks" />
 		</div>
 		<NavigationWidget {segment}/>
 	</div>

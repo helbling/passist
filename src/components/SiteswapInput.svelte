@@ -1,6 +1,7 @@
 <script>
 	import InputField from './InputField.svelte';
-	import DragDropList from "svelte-dragdroplist";
+	// TODO: this currently doesn't work
+	//import DragDropList from "$lib/svelte-dragdroplist";
 	import Icon from './Icon.svelte';
 	import { jugglerName, hands2limbs, limbs2hands, defaultLimbs } from './passist.js';
 
@@ -124,7 +125,9 @@
 				on:touchend|capture={handsDragDropChanged}
 				on:mouseup|capture={handsDragDropChanged}
 			>
+				<!-- TODO
 				<DragDropList bind:data={handList} />
+				-->
 			</div>
 			{/if}
 			{#if handsInput}

@@ -1,3 +1,4 @@
+import { browser, dev } from '$app/env';
 
 const defaults = {
 	siteswap: '86277',
@@ -26,7 +27,7 @@ const colors = {
 	],
 };
 
-const useLocalStorage = process.browser === true && 'localStorage' in window;
+const useLocalStorage = browser === true && 'localStorage' in window;
 
 function U(path, query)
 {
