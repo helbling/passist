@@ -281,7 +281,6 @@ $:	{
 				{jif}
 				{startConfigurations}
 				steps={nJugglers * period * 2}
-				{url}
 			/>
 		</div>
 	{/if}
