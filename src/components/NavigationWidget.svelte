@@ -1,7 +1,9 @@
 <script>
 	import { jifdev } from '../components/passist.js';
+	import { page } from '$app/stores';
 
-	export let segment;
+	let segment = '';
+	$: segment = '/' + $page.path.split('/')[1];
 
 	let pages = [
 		{ path:'/generator', title:'Generator' },
