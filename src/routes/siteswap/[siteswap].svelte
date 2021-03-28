@@ -2,19 +2,21 @@
 	import { defaults, hands2limbs, limbs2hands } from '../../components/passist.js';
 
 	export async function load({ page }) {
-		let nJugglers = parseInt(page.query.jugglers);
+		let nJugglers = parseInt(page.query.get('jugglers'));
 		if (!nJugglers)
 			nJugglers = defaults.nJugglers;
-		let handsInput = page.query.hands;
+		let handsInput = page.query.get('hands');
 		const limbs = hands2limbs(handsInput, nJugglers);
 		if (limbs)
 			handsInput = limbs2hands(limbs);
 
 		return {
-			siteswapInput: page.params.siteswap,
-			nJugglers,
-			handsInput,
-			fullscreen: parseInt(page.query.fullscreen),
+			props: {
+				siteswapInput: page.params.siteswap,
+				nJugglers,
+				handsInput,
+				fullscreen: parseInt(page.query.get('fullscreen')),
+			}
 		};
 	}
 </script>
@@ -29,7 +31,7 @@
 	$:  useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
 
 	$: {
-		if (browser === true && ('history' in window)) {
+		if (browser === true && window && ('history' in window)) {
 			url = siteswapUrl({
 				siteswapInput,
 				nJugglers,
