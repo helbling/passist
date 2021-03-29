@@ -353,7 +353,7 @@ $:	{
 	{/if}
 {:else if siteswapInput}
 	<div>
-		<img src=images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps">
+		<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps" >
 		<p>Invalid Siteswap</p>
 	</div>
 {:else}

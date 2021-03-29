@@ -165,6 +165,6 @@
 	</div>
 {:else if !calculating}
 	<div>
-		<img src=images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps">
+		<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps">
 	</div>
 {/if}
