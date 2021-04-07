@@ -251,7 +251,7 @@ $:	{
 				</tr>
 				{#each startConfigurations as j}
 					<tr>
-						<th>{j.name} <sub>{j.startProps['left hand']}|{j.startProps['right hand']}</sub></th>
+						<th>{j.name} <sub>{j.startProps['left hand'] || 0}|{j.startProps['right hand'] || 0}</sub></th>
 						<td class=space />
 						{#each j.local as t}
 							<td>{t.siteswap}{@html t.desc}&nbsp;</td>
