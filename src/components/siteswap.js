@@ -230,15 +230,14 @@ startConfigurations(limbs)
 		}
 	}
 
-	const juggler2limbs = (new Array(nJugglers)).fill().map(() => []);
-	for (let i = 0; i < nLimbs; i++) {
-		const limb = limbs[i];
-		juggler2limbs[limb.juggler].push(Object.assign({id: i}, limb));
-	}
-
 	const result = new Array(nJugglers);
+	const limbPatterns = [...Array(nJugglers).keys()].map(
+		juggler => limbs.map(limb => limb.juggler == juggler)
+	);
+	const maxNLimbs = Math.max(...limbPatterns.map(p => p.filter(Boolean).length));
+
 	for (let juggler = 0; juggler < nJugglers; juggler++) {
-		const limbPattern = limbs.map(limb => limb.juggler == juggler);
+		const limbPattern = limbPatterns[juggler];
 		const symmetric =
 			nLimbs % 2 == 0
 			&&     limbPattern.slice(0, nLimbs / 2).join(',')
@@ -246,6 +245,7 @@ startConfigurations(limbs)
 
 		const localPeriods = period % nJugglers == 0 ? 1 : (symmetric ? nLimbs / 2 : nLimbs);
 		const localThrows = [];
+		let throwCount = 0;
 		for (let i = 0; i < localPeriods; i++) {
 			for (let j = 0; j < period; j++) {
 				const limbId = (j + i * period) % nLimbs;
@@ -256,6 +256,14 @@ startConfigurations(limbs)
 						from: limbs[limbId],
 						to:   limbs[(limbId + height) % nLimbs],
 					});
+					throwCount++;
+				}
+				if (limbId == nLimbs - 1) {
+					while (throwCount < maxNLimbs) {
+						localThrows.push(null);
+						throwCount++;
+					}
+					throwCount = 0;
 				}
 			}
 		}
@@ -265,6 +273,8 @@ startConfigurations(limbs)
 		};
 		result[juggler] = {
 			local: localThrows.map(th => {
+				if (!th)
+					return null;
 				let desc = '';
 				if (th.from.juggler != th.to.juggler) {
 					if (nJugglers > 2)
