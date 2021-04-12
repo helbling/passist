@@ -238,7 +238,7 @@ startConfigurations(limbs)
 
 	const result = new Array(nJugglers);
 	for (let juggler = 0; juggler < nJugglers; juggler++) {
-		const limbPattern = [...Array(nLimbs).keys()].map(i => limbs[i].juggler == juggler);
+		const limbPattern = limbs.map(limb => limb.juggler == juggler);
 		const symmetric =
 			nLimbs % 2 == 0
 			&&     limbPattern.slice(0, nLimbs / 2).join(',')
