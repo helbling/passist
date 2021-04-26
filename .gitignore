@@ -7,3 +7,4 @@ tmp/
 static/api/animation-widget-standalone.js
 static/api/animation-widget-standalone.js.map
 .svelte/
+build/
