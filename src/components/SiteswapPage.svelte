@@ -9,6 +9,7 @@
 	import { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev } from './passist.js';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/env';
+	import pkg from '../../package.json';
 
 	export let siteswapInput = "45678";
 	export let nJugglers = defaults.nJugglers;
@@ -113,7 +114,7 @@ $:	{
 
 			jif = siteswap.toJif({
 				name: siteswapName ? siteswapName + " (" + siteswap.toString() + ")" : undefined,
-				//				generator: pkg.name + '/' + pkg.version,
+				generator: pkg.name + '/' + pkg.version,
 				jugglers: jugglers,
 				limbs: limbs,
 				props: props,
