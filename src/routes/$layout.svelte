@@ -1,6 +1,6 @@
 <script>
 	import NavigationWidget from '../components/NavigationWidget.svelte';
-	import { servertype } from '../components/passist.js';
+	import { servertype } from '$lib/passist.mjs';
 
 	export let segment;
 </script>

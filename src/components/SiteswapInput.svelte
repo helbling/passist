@@ -3,7 +3,7 @@
 	// TODO: this currently doesn't work
 	import DragDropList from "./DragDropList.svelte";
 	import Icon from './Icon.svelte';
-	import { jugglerName, hands2limbs, limbs2hands, defaultLimbs } from './passist.js';
+	import { jugglerName, hands2limbs, limbs2hands, defaultLimbs } from '$lib/passist.mjs';
 
 	export let siteswapInput;
 	export let nJugglers;

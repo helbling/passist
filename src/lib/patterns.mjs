@@ -1,4 +1,4 @@
-import Siteswap from "./siteswap.js";
+import Siteswap from "$lib/siteswap.mjs";
 
 const knownSiteswaps = [
 	["645", "killer bunny"],

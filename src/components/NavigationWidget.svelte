@@ -1,5 +1,5 @@
 <script>
-	import { jifdev } from '../components/passist.js';
+	import { jifdev } from '$lib/passist.mjs';
 	import { page } from '$app/stores';
 
 	let segment = '';

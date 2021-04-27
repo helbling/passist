@@ -1,5 +1,5 @@
 <script context="module">
-	import { defaults, hands2limbs, limbs2hands } from '../../components/passist.js';
+	import { defaults, hands2limbs, limbs2hands } from '$lib/passist.mjs';
 
 	export async function load({ page }) {
 		let nJugglers = parseInt(page.query.get('jugglers'));
@@ -21,7 +21,7 @@
 	}
 </script>
 <script>
-	import { useLocalStorage, siteswapUrl } from '../../components/passist.js';
+	import { useLocalStorage, siteswapUrl } from '$lib/passist.mjs';
 	import SiteswapPage from '../../components/SiteswapPage.svelte';
 	import { browser } from '$app/env';
 	export let siteswapInput, nJugglers, handsInput, fullscreen;

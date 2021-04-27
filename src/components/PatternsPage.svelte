@@ -1,5 +1,5 @@
 <script>
-	import { knownSiteswaps } from './patterns.js';
+	import { knownSiteswaps } from '$lib/patterns.mjs';
 </script>
 
 <style>

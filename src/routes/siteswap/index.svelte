@@ -1,6 +1,6 @@
 <script>
 	//	import SiteswapPage from '../../components/SiteswapPage.svelte';
-	import { defaults, useLocalStorage, siteswapUrl } from '../../components/passist.js';
+	import { defaults, useLocalStorage, siteswapUrl } from '$lib/passist.mjs';
 	import { goto } from '$app/navigation';
 
 	if (useLocalStorage) {

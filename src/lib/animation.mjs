@@ -1,4 +1,4 @@
-import { colors, defaults } from './passist.js';
+import { colors, defaults } from '$lib/passist.mjs';
 
 const hu = 0.21;
 const jugglerHeight  = 8    * hu;

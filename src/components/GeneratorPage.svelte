@@ -1,6 +1,6 @@
 <script>
 	import InputField from './InputField.svelte';
-	import Siteswap from './siteswap.js';
+	import Siteswap from '$lib/siteswap.mjs';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/env';
 

@@ -2,11 +2,11 @@
 	import SiteswapInput from './SiteswapInput.svelte';
 	import CausalDiagramWidget from './CausalDiagramWidget.svelte';
 	import AnimationWidget from './AnimationWidget.svelte';
-	import Siteswap from './siteswap.js';
+	import Siteswap from '$lib/siteswap.mjs';
 	import Icon from './Icon.svelte';
 	import InputField from './InputField.svelte';
-	import { siteswapNames} from './patterns.js';
-	import { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev } from './passist.js';
+	import { siteswapNames} from '$lib/patterns.mjs';
+	import { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev } from '$lib/passist.mjs';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/env';
 	import pkg from '../../package.json';

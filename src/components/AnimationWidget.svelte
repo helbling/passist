@@ -1,6 +1,6 @@
 <script>
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
-	import { defaults } from './passist.js';
+	import { defaults } from '$lib/passist.mjs';
 	import Icon from './Icon.svelte';
 	import InputField from './InputField.svelte';
 	import { browser } from '$app/env';
@@ -65,7 +65,7 @@
 	onMount(async () => {
 		window.THREE = await import('three');
 		window.OrbitControls = (await import('three/examples/jsm/controls/OrbitControls')).OrbitControls;
-		const Animation = (await import('./animation.js')).default;
+		const Animation = (await import('$lib/animation.mjs')).default;
 
 		animation = new Animation(canvas, animationJif, animationOptions, sizeOptions);
 		loaded = true;
