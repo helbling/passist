@@ -106,11 +106,7 @@ function defaultLimbs(n)
 	return result;
 }
 
-const servertype = {
-	development:'dev',
-	beta:'beta',
-	alpha:'alpha'
-}[process.env.NODE_ENV];
+let servertype = import.meta.env.VITE_SERVERTYPE || (dev ? 'dev' : '');
 
 const jifdev = servertype == 'dev' || servertype == 'alpha';
 
