@@ -2,6 +2,7 @@
   "name": "passist",
   "description": "passing siteswap assistant",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build && rollup -c rollup.animationwidget.js",
