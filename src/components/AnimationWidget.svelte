@@ -63,9 +63,7 @@
 		isFullscreen = (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) === container;
 	};
 	onMount(async () => {
-		window.THREE = await import('three');
-		window.OrbitControls = (await import('three/examples/jsm/controls/OrbitControls')).OrbitControls;
-		const Animation = (await import('$lib/animation.mjs')).default;
+		const Animation = (await import('$lib/animation.mjs')); // dynamic import, only on browser
 
 		animation = new Animation(canvas, animationJif, animationOptions, sizeOptions);
 		loaded = true;
