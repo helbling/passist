@@ -63,7 +63,7 @@
 		isFullscreen = (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) === container;
 	};
 	onMount(async () => {
-		const Animation = (await import('$lib/animation.mjs')); // dynamic import, only on browser
+		const Animation = (await import('$lib/animation.mjs')).default; // dynamic import, only on browser
 
 		animation = new Animation(canvas, animationJif, animationOptions, sizeOptions);
 		loaded = true;
