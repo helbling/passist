@@ -1,4 +1,4 @@
-import { colors, defaults } from '$lib/passist.mjs';
+import defaults from '$lib/defaults.mjs';
 
 import * as THREE from 'three';
 // import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js"; # this does not work (2021-05) as vite treats it as commonjs
@@ -15,6 +15,15 @@ const handLength     = 0.8  * hu;
 const footLength     = 1.5  * hu; // original: 1.14
 const footWidth      = 0.8  * hu; // original: 0.46
 const gravity = -9.8;
+
+const colors = {
+	sky: '#24b59f',
+	horizon: '#eff9b7',
+	fog: '#ffffee',
+	ground1: '#937a24',
+	ground2: '#987d2e',
+	meeseeks: '#5fcaf6',
+};
 
 function propColor(prop, jif)
 {

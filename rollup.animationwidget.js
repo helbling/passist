@@ -1,8 +1,9 @@
+import alias from '@rollup/plugin-alias';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import svelte from 'rollup-plugin-svelte';
+
 
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
@@ -11,21 +12,24 @@ export default {
 	input: './src/components/AnimationWidget.svelte',
 	output: {
 		sourcemap: true,
-		format: 'iife',
+		format: 'esm',
 		name: 'AnimationWidget',
-		//globals: {
-		//	three: 'THREE',
-		//	'three/examples/jsm/controls/OrbitControls.js': 'OrbitControls',
-		//},
-		file: 'static/api/animation-widget-standalone.js',
+ 		file: 'static/api/animation-widget-standalone.js',
+		inlineDynamicImports: true,
 	},
-	// external: ['three', 'three/examples/jsm/controls/OrbitControls.js'],
 	plugins: [
 		replace({
 			preventAssignment: true,
 			'process.browser': true,
 			'process.widget': true,
 			'process.env.NODE_ENV': JSON.stringify(mode)
+		}),
+		alias({
+			entries: {
+				'$lib':     'src/lib',
+				'$app/env': 'src/api/env.js',
+				//'$app':     '.svelte-kit/build/runtime/app',
+			},
 		}),
 		svelte({
 			compilerOptions: {
@@ -48,7 +52,6 @@ export default {
 			browser: true,
 			dedupe: ['svelte']
 		}),
-		commonjs(),
 		terser()
 	],
 	watch: {

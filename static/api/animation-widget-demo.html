@@ -18,8 +18,9 @@
 	<div id="bottom"></div>
 </div>
 
-<script src="https://dev.passist.org/api/animation-widget-standalone.js"></script>
-<script>
+<script type="module">
+
+import AnimationWidget from '/api/animation-widget-standalone.js'
 
 fetch('https://dev.passist.org/api/examples/holy_grail.jif')
 	.then(response => response.json())
