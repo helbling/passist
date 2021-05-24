@@ -1,17 +1,34 @@
 export async function handle({ request, render }) {
 	const response = await render(request);
 
-	// TODO:
-	// ensure Access-Control-Allow-Origin * for *.jif and /images/*
-	// this header is already set in development environment, ist is also there in production?
-	//
 	if (request.path.match(/\.jif$/)) {
 		return {
 			...response,
 			headers: {
 				...response.headers,
-				'Content-Type': 'application/jif+json'
+				'content-type': 'application/jif+json',
+				'access-control-allow-origin': '*',
 			}
+		};
+	} else if (request.path.match(/^\/images\//)) {
+		const headers = {
+			...response.headers,
+			'access-control-allow-origin': '*',
+		};
+		const match = request.path.match(/\.([^.]+)$/);
+		const types = {
+			png: 'image/png',
+			svg: 'image/svg+xml',
+			jpg: 'image/jpeg',
+		};
+		if (match) {
+			const type = types[match[1]];
+			if (type)
+				headers['content-type'] = type;
+		}
+		return {
+			...response,
+			headers
 		};
 	}
 	return response;
