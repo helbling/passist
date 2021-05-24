@@ -4,7 +4,6 @@ import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 import svelte from 'rollup-plugin-svelte';
 
-
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
 
@@ -28,9 +27,8 @@ export default {
 	plugins: [
 		replace({
 			preventAssignment: true,
-			'process.browser': true,
-			'process.widget': true,
-			'process.env.NODE_ENV': JSON.stringify(mode)
+			'import.meta.env.VITE_SERVERTYPE': JSON.stringify(process.env.VITE_SERVERTYPE),
+			'import.meta.env.DEV': dev.toString(),
 		}),
 		alias({
 			entries: {
@@ -60,7 +58,7 @@ export default {
 			browser: true,
 			dedupe: ['svelte']
 		}),
-		terser()
+		!dev && terser(),
 	],
 	watch: {
 		clearScreen: false

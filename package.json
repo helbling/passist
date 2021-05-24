@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "svelte-kit dev",
+    "devwidget": "NODE_ENV=development rollup -c rollup.animationwidget.js",
     "build": "svelte-kit build && rollup -c rollup.animationwidget.js",
     "preview": "svelte-kit preview",
     "api": "rollup -c rollup.animationwidget.js",

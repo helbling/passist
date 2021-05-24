@@ -1,5 +1,13 @@
 import { browser, dev } from '$app/env';
 
+const defaults = {
+	siteswap: '86277',
+	nJugglers: 2,
+	propType: 'club',
+	jugglingSpeed: 2.8,
+	animationSpeed: 0.8,
+};
+
 const useLocalStorage = browser === true && 'localStorage' in window;
 
 function U(path, query)
@@ -79,9 +87,13 @@ function defaultLimbs(n)
 	return result;
 }
 
-let servertype = import.meta.env.VITE_SERVERTYPE || (dev ? 'dev' : '');
+const servertype = import.meta.env.VITE_SERVERTYPE || (dev ? 'dev' : '');
 
 const jifdev = servertype == 'dev' || servertype == 'alpha';
 
-import defaults from '$lib/defaults.mjs';
-export { defaults, useLocalStorage, siteswapUrl, jugglerName, hands2limbs, limbs2hands, defaultLimbs, servertype, jifdev };
+const baseUrl = dev ? '' :
+                'https://'
+                 + (import.meta.env.VITE_SERVERTYPE ? import.meta.env.VITE_SERVERTYPE + '.' : '')
+                 + 'passist.org';
+
+export { defaults, useLocalStorage, siteswapUrl, jugglerName, hands2limbs, limbs2hands, defaultLimbs, servertype, jifdev, baseUrl };

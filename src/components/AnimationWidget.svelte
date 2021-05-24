@@ -1,6 +1,6 @@
 <script>
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
-	import defaults from '$lib/defaults.mjs';
+	import { defaults } from '$lib/passist.mjs';
 	import Icon from './Icon.svelte';
 	import InputField from './InputField.svelte';
 	import { browser } from '$app/env';

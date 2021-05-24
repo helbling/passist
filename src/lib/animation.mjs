@@ -1,4 +1,4 @@
-import defaults from '$lib/defaults.mjs';
+import { defaults, baseUrl } from '$lib/passist.mjs';
 
 import * as THREE from 'three';
 // import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js"; # this does not work (2021-05) as vite treats it as commonjs
@@ -88,8 +88,7 @@ function pirouetteGeometry()
 
 function resourceUrl(url)
 {
-	//return (process.widget ? 'https://dev.passist.org' : '') + url;
-	return url;
+	return baseUrl + url;
 }
 
 class Juggler extends THREE.Group
