@@ -10,13 +10,21 @@ const dev = mode === 'development';
 
 export default {
 	input: './src/components/AnimationWidget.svelte',
-	output: {
-		sourcemap: true,
-		format: 'esm',
-		name: 'AnimationWidget',
- 		file: 'static/api/animation-widget-standalone.js',
-		inlineDynamicImports: true,
-	},
+	output: [
+		{
+			sourcemap: true,
+			format: 'esm',
+			file: 'static/api/animation-widget-standalone.mjs',
+			inlineDynamicImports: true,
+		},
+		{
+			sourcemap: true,
+			format: 'iife',
+			name: 'AnimationWidget',
+			file: 'static/api/animation-widget-standalone.js',
+			inlineDynamicImports: true,
+		}
+	],
 	plugins: [
 		replace({
 			preventAssignment: true,

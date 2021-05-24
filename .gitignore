@@ -4,7 +4,6 @@
 yarn-error.log
 .vscode/
 tmp/
-static/api/animation-widget-standalone.js
-static/api/animation-widget-standalone.js.map
+static/api/animation-widget-standalone.*
 .svelte-kit/
 build/
