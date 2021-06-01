@@ -163,7 +163,7 @@ constructor(faceTexture)
 	this.upperArms = [];
 	this.lowerArms = [];
 	for (let side = 0; side < 2; side++) {
-		const shoulder = new THREE.Object3D();
+		const shoulder = new THREE.Object3D().rotateX(Math.PI / 2).rotateY(sideFactor(side) * Math.PI / 20);
 		shoulder.position.set(sideFactor(side) * hu, shoulderHeight, 0);
 		this.shoulders.push(shoulder);
 		this.add(shoulder);

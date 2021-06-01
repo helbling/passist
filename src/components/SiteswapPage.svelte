@@ -130,7 +130,7 @@ $:	{
 			);
 
 			prechacthisUrl = '';
-			if (nJugglers == 2 && (period % 2) == 1) {
+			if (nJugglers == 2 && limbs.length == 4 && (period % 2) == 1) {
 				prechacthisUrl = 'http://prechacthis.org/info.php?pattern=['
 					+ startConfigurations[0].local.map(x => {
 						var h = x.height / 2;
@@ -257,19 +257,21 @@ $:	{
 				</tr>
 				{#each startConfigurations as j}
 					<tr>
-						<th>{j.name} <sub>{j.startProps['left hand']}|{j.startProps['right hand']}</sub></th>
+						<th>{j.name} <sub>{j.startProps['left hand'] || 0}|{j.startProps['right hand'] || 0}</sub></th>
 						<td class=space />
 						{#each j.local as t}
-							<td>{t.siteswap}{@html t.desc}&nbsp;</td>
+							<td>{#if t}{t.siteswap}{@html t.desc}{/if}&nbsp;</td>
 						{/each}
 						<td class=space />
 						{#each j.local as t}
-							<td>{prechac(t.height, nJugglers)}{@html t.desc}</td>
+							<td>
+								{#if t}{prechac(t.height, nJugglers)}{@html t.desc}{:else}&nbsp;{/if}
+							</td>
 						{/each}
 						{#if nJugglers == 2 && !unusualThrows}
 							<td class=space />
 							{#each j.local as t}
-								<td>{word(t.height)},&nbsp;</td>
+								<td>{#if t}{word(t.height)},{/if}&nbsp;</td>
 							{/each}
 						{/if}
 					</tr>

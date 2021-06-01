@@ -60,7 +60,7 @@ function hands2limbs(hands, nJugglers)
 		return false;
 
 	hands = hands.replace(/[^a-z]/gi, '').toUpperCase();
-	if (hands.length != nJugglers * 4 || !hands.match(/^(.(R|L))*$/i))
+	if ((hands.length % 2) || !hands.match(/^(.(R|L))*$/i))
 		return false;
 
 	const limbs = [];
