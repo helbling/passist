@@ -125,7 +125,7 @@ $:	{
 			localPeriod = startConfigurations[0].local.length;
 			unusualThrows = startConfigurations.some(
 				configuration => configuration.local.some(
-					localthrow => localthrow.unusual
+					localthrow => localthrow && localthrow.unusual
 				)
 			);
 
