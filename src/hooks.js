@@ -1,5 +1,5 @@
-export async function handle({ request, render }) {
-	const response = await render(request);
+export async function handle({ request, resolve }) {
+	const response = await resolve(request);
 
 	if (request.path.match(/\.jif$/)) {
 		return {
