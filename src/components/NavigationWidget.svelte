@@ -1,14 +1,16 @@
 <script>
-	import { jifdev } from '../components/passist.js';
+	import { jifdev } from '$lib/passist.mjs';
+	import { page } from '$app/stores';
 
-	export let segment;
+	let segment = '';
+	$: segment = '/' + $page.path.split('/')[1];
 
 	let pages = [
-		{ path:'generator', title:'Generator' },
-		{ path:'siteswap',  title:'Siteswap' },
-		{ path:'patterns',  title:'Patterns' },
-		jifdev ? { path:'jif',       title:'Jif' } : null,
-		{ path:'about',     title:'About' },
+		{ path:'/generator', title:'Generator' },
+		{ path:'/siteswap',  title:'Siteswap' },
+		{ path:'/patterns',  title:'Patterns' },
+		jifdev ? { path:'/jif',       title:'Jif' } : null,
+		{ path:'/about',     title:'About' },
 	].filter(Boolean);
 </script>
 
@@ -27,7 +29,7 @@
 		<li class=pure-menu-item class:pure-menu-selected={segment === page.path || !segment && page.path === 'generator'}>
 			<a
 				class=pure-menu-link
-				sapper:prefetch
+				sveltekit:prefetch
 				class:selected={segment === page.path || !segment && page.path === 'generator' }
 				href={page.path}
 			>

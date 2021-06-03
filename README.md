@@ -30,7 +30,7 @@ Work in progress..
 This project builds upon the follwing open source tools. Many thanks to its creators!
 
 - [svelte](https://svelte.dev/) for handling state
-- [sapper](https://sapper.svelte.dev/) for building the web application
+- [svelte-kit](https://kit.svelte.dev/) for building the web application
 - [three.js](https://threejs.org/) for doing all the complicated 3d stuff
 - [bytesize-icons](https://danklammer.com/bytesize-icons/) for the iconset
 - [Pure.css](https://purecss.io/) as a good css base

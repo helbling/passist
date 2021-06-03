@@ -1,6 +1,6 @@
 <script>
 	import NavigationWidget from '../components/NavigationWidget.svelte';
-	import { servertype } from '../components/passist.js';
+	import { servertype } from '$lib/passist.mjs';
 
 	export let segment;
 </script>
@@ -39,17 +39,31 @@
 	@media (min-width:1200px){main{max-width:1140px !important}}
 </style>
 
+<svelte:head>
+	<meta name="theme-color" content="#19a2ba">
+	<link rel='stylesheet' href='/pure-2.0.3-min.css'>
+	<link rel='stylesheet' href='/pure-2.0.3-grids-responsive-min.css'>
+	<link rel='stylesheet' href='/global2.css'>
+	<link rel='manifest' href='/manifest.json'>
+	<link rel="shortcut icon" href="/favicon.ico">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="apple-touch-icon" href="/images/icon-192x192.png">
+	<meta http-equiv="Language" content="en">
+	<meta http-equiv="description" content="siteswap generator, find start configurations, causal diagram, patterns">
+	<title>passist - passing siteswap assistant</title>
+</svelte:head>
+
 <header>
 	<div class="container">
 		<div >
-			<img class="cube" src="images/cube.svg" alt="logo" />
+			<img class="cube" src="/images/cube.svg" alt="logo" />
 		</div>
 		<div style="flex:1">
 			<h1>passist{servertype ? ' ' + servertype : ''}</h1>
 			<h2>passing siteswap assistant</h2>
 		</div>
 		<div>
-			<img class="meeseeks" src="images/mr_meeseeks_proud2.png" alt="mr meeseeks" />
+			<img class="meeseeks" src="/images/mr_meeseeks_proud2.png" alt="mr meeseeks" />
 		</div>
 		<NavigationWidget {segment}/>
 	</div>

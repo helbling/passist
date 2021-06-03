@@ -1,9 +1,9 @@
 <script>
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
-	import { defaults } from './passist.js';
-	import Animation from './animation.js';
+	import { defaults } from '$lib/passist.mjs';
 	import Icon from './Icon.svelte';
 	import InputField from './InputField.svelte';
+	import { browser } from '$app/env';
 
 	export let jif;
 	export let teaser = true;
@@ -63,6 +63,8 @@
 		isFullscreen = (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) === container;
 	};
 	onMount(async () => {
+		const Animation = (await import('$lib/animation.mjs')).default; // dynamic import, only on browser
+
 		animation = new Animation(canvas, animationJif, animationOptions, sizeOptions);
 		loaded = true;
 		fpsInterval = setInterval(() => fps = animation.fps, 1000);
@@ -116,13 +118,13 @@
 		if (fpsInterval)
 			clearInterval(fpsInterval);
 
-		if (process.browser === true)
+		if (browser === true)
 			document.removeEventListener("fullscreenchange", onFullscreenChange);
 	});
 
-	$: if (process.browser === true && animation) { animation.updateScene(animationJif, animationOptions); }
-	$: if (process.browser === true && animation) { animation.resize(sizeOptions); }
-	$: if (process.browser === true) { document.body.style.overflow = isMaximized ? 'hidden' : 'auto'; }
+	$: if (browser === true && animation) { animation.updateScene(animationJif, animationOptions); }
+	$: if (browser === true && animation) { animation.resize(sizeOptions); }
+	$: if (browser === true) { document.body.style.overflow = isMaximized ? 'hidden' : 'auto'; }
 
 	function togglePause() {
 		if (animation)

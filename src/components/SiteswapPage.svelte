@@ -2,12 +2,14 @@
 	import SiteswapInput from './SiteswapInput.svelte';
 	import CausalDiagramWidget from './CausalDiagramWidget.svelte';
 	import AnimationWidget from './AnimationWidget.svelte';
-	import Siteswap from './siteswap.js';
+	import Siteswap from '$lib/siteswap.mjs';
 	import Icon from './Icon.svelte';
 	import InputField from './InputField.svelte';
-	import { siteswapNames} from './patterns.js';
-	import { defaults, colors, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev } from './passist.js';
-	import { goto } from '@sapper/app';
+	import { siteswapNames} from '$lib/patterns.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev } from '$lib/passist.mjs';
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/env';
+	import pkg from '../../package.json';
 
 	export let siteswapInput = "45678";
 	export let nJugglers = defaults.nJugglers;
@@ -34,11 +36,22 @@
 	let showOrbits = false;
 	let windowWidth;
 	let windowHeight;
-	let sharebutton = process.browser === true && 'share' in navigator;
+	let sharebutton = browser === true && 'share' in navigator;
 	let showAnimationWidget = false;
 	let limbs = [];
 
-	if (process.browser === true) {
+	const propColors = [
+		'#c0392b', // red
+		'#0c0d5d', // blue
+		'#f45d20', // orange
+		'#ed4694', // pink
+		'#6f5499', // violet
+		'#00dc3c', // green
+		'#ffd700', // yellow
+		'#f2f2f2', // white
+	];
+
+	if (browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
 
 		if (useLocalStorage)
@@ -105,7 +118,7 @@ $:	{
 			const props = [];
 			for (let i = 0; i < nProps; i++)
 				props.push({
-					color: colors.props[i % colors.props.length],
+					color: propColors[i % propColors.length],
 					type: propType,
 				});
 
@@ -288,7 +301,6 @@ $:	{
 				{jif}
 				{startConfigurations}
 				steps={nJugglers * period * 2}
-				{url}
 			/>
 		</div>
 	{/if}
@@ -361,7 +373,7 @@ $:	{
 	{/if}
 {:else if siteswapInput}
 	<div>
-		<img src=images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps">
+		<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps" >
 		<p>Invalid Siteswap</p>
 	</div>
 {:else}

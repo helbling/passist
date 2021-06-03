@@ -4,7 +4,6 @@
 	export let jif;
 	export let startConfigurations;
 	export let steps = 1;
-	export let url = '';
 
 	let jugglers = {};
 	const xoff = 55;
@@ -181,7 +180,7 @@ $: {
 				d={n.arrow}
 				stroke-width=2px
 				fill=none
-				marker-end=url({url}#arrow)
+				marker-end=url(#arrow)
 			/>
 		{/if}
 	{/each}

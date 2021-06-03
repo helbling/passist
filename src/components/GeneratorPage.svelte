@@ -1,7 +1,8 @@
 <script>
 	import InputField from './InputField.svelte';
-	import Siteswap from './siteswap.js';
+	import Siteswap from '$lib/siteswap.mjs';
 	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/env';
 
 	export let nProps = 7;
 	export let period = 5;
@@ -65,7 +66,7 @@
 	};
 
 	$: {
-		if (process.browser === true) {
+		if (browser === true) {
 			onchanged({
 				nProps:    nProps,
 				period:    period,
@@ -164,6 +165,6 @@
 	</div>
 {:else if !calculating}
 	<div>
-		<img src=images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps">
+		<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps">
 	</div>
 {/if}
