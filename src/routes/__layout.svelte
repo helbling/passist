@@ -50,7 +50,6 @@
 	<link rel="apple-touch-icon" href="/images/icon-192x192.png">
 	<meta http-equiv="Language" content="en">
 	<meta http-equiv="description" content="siteswap generator, find start configurations, causal diagram, patterns">
-	<title>passist - passing siteswap assistant</title>
 </svelte:head>
 
 <header>

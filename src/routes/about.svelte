@@ -54,4 +54,9 @@ let markdown = marked(source);
 }
 </style>
 
+<svelte:head>
+	<title>passist - About</title>
+</svelte:head>
+
+
 <div class="markdown">{@html markdown}</div>

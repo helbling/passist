@@ -39,6 +39,7 @@
 	let sharebutton = browser === true && 'share' in navigator;
 	let showAnimationWidget = false;
 	let limbs = [];
+	let title;
 
 	const propColors = [
 		'#c0392b', // red
@@ -84,6 +85,7 @@ $:	{
 		strippedInput = String(siteswapInput).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
 		originalSiteswap = new Siteswap(strippedInput);
 		siteswap = originalSiteswap.shift(siteswapShift);
+
 		if (nJugglers > 0) {
 			const circleRadius = 1.2 + nJugglers * 0.2;
 			const jugglers = [];
@@ -154,6 +156,14 @@ $:	{
 		} else {
 			siteswapValid = false;
 		}
+
+
+		title = 'Siteswap ' + strippedInput;
+		if (siteswapName)
+			title += ' (' + siteswapName + ')';
+		title += ', ' + nJugglers + ' jugglers';
+		if (handsInput)
+			title += ', hands: ' + handsInput;
 	}
 
 	function prechac(x, nJugglers) {
@@ -179,17 +189,9 @@ $:	{
 	}
 
 	function share() {
-		let title = 'Siteswap ' + strippedInput;
-		if (siteswapName)
-			title += ' (' + siteswapName + ')';
-		title += ', ' + nJugglers + ' jugglers';
-		if (handsInput)
-			title += ', hands: ' + handsInput;
-		title += ' - passist.org';
-
 		navigator.share({
 			url: location.href,
-			title,
+			title: title + ' - passist.org',
 		});
 		return false;
 	}
@@ -211,6 +213,10 @@ $:	{
 </style>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
+
+<svelte:head>
+	<title>passist - {title}</title>
+</svelte:head>
 
 <SiteswapInput
 	bind:siteswapInput

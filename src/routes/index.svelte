@@ -2,7 +2,8 @@
 	import GeneratorPage from '../components/GeneratorPage.svelte';
 </script>
 
-<style>
-</style>
+<svelte:head>
+	<title>passist - passing siteswap assistant</title>
+</svelte:head>
 
 <GeneratorPage />

@@ -2,8 +2,8 @@
 	import PatternsPage from '../components/PatternsPage.svelte';
 </script>
 
-<style>
-
-</style>
+<svelte:head>
+	<title>passist - Patterns</title>
+</svelte:head>
 
 <PatternsPage />

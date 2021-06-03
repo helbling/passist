@@ -2,7 +2,9 @@
 	import GeneratorPage from '../components/GeneratorPage.svelte';
 </script>
 
-<style>
-</style>
+<svelte:head>
+	<title>passist - Generator</title>
+</svelte:head>
+
 
 <GeneratorPage />
