@@ -19,9 +19,9 @@ Work in progress..
 
 # Usage
 ```
- npm install
+ npm clean-install
  npm run build
- npm start
+ node build
  open http://localhost:3000
 ```
 
