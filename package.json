@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "svelte-kit dev",
-    "devwidget": "NODE_ENV=development rollup -c rollup.animationwidget.js",
-    "build": "svelte-kit build && rollup -c rollup.animationwidget.js",
+    "devwidget": "NODE_ENV=development rollup -c rollup.api.js",
+    "build": "svelte-kit build && rollup -c rollup.api.js",
     "preview": "svelte-kit preview",
-    "api": "rollup -c rollup.animationwidget.js",
+    "api": "rollup -c rollup.api.js",
     "start": "svelte-kit start",
     "lint": "eslint"
   },

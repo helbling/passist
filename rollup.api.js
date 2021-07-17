@@ -7,23 +7,7 @@ import svelte from 'rollup-plugin-svelte';
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
 
-export default {
-	input: './src/components/AnimationWidget.svelte',
-	output: [
-		{
-			sourcemap: true,
-			format: 'esm',
-			file: 'static/api/animation-widget-standalone.mjs',
-			inlineDynamicImports: true,
-		},
-		{
-			sourcemap: true,
-			format: 'iife',
-			name: 'AnimationWidget',
-			file: 'static/api/animation-widget-standalone.js',
-			inlineDynamicImports: true,
-		}
-	],
+const baseConfig = {
 	plugins: [
 		replace({
 			preventAssignment: true,
@@ -64,3 +48,38 @@ export default {
 		clearScreen: false
 	}
 };
+
+const configs = [
+	{
+		input: './src/components/CausalDiagramWidget.svelte',
+		name: 'CausalDiagramWidget',
+		file: 'static/api/causal-diagram-widget-standalone.mjs',
+	},
+	{
+		input: './src/components/AnimationWidget.svelte',
+		name: 'AnimationWidget',
+		file: 'static/api/animation-widget-standalone.mjs',
+	},
+].map(config => {
+
+	return Object.assign({}, baseConfig, {
+		input: config.input,
+		output: [
+			{
+				sourcemap: true,
+				format: 'esm',
+				file: config.file,
+				inlineDynamicImports: true,
+			},
+			{
+				sourcemap: true,
+				format: 'iife',
+				name: config.name,
+				file: config.file.replace(/\.mjs$/, '.js'),
+				inlineDynamicImports: true,
+			}
+		],
+	});
+});
+
+export default configs;
