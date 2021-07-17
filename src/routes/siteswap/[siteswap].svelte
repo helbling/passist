@@ -43,4 +43,4 @@
 	}
 </script>
 
-<SiteswapPage bind:siteswapInput bind:nJugglers bind:handsInput bind:fullscreen {url} />
+<SiteswapPage bind:siteswapInput bind:nJugglers bind:handsInput bind:fullscreen />

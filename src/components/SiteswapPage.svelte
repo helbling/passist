@@ -15,7 +15,6 @@
 	export let nJugglers = defaults.nJugglers;
 	export let handsInput = '';
 	export let fullscreen = false;
-	export let url = '';
 
 	let siteswapShift = 0;
 	let siteswap, strippedInput, originalSiteswap;
