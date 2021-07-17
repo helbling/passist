@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "name": "(6x,4)*"
+  },
+  "jugglers": [
+    {
+      "name": "A",
+      "position": [ 0, 0, 0 ],
+      "lookAt": [ 0, 0, 1 ]
+    }
+  ],
+  "limbs": [
+    { "juggler": 0, "type": "right hand" },
+    { "juggler": 0, "type": "left hand" }
+  ],
+  "props": [
+    { "color": "#c0392b", "type": "ball" },
+    { "color": "#0c0d5d", "type": "ball" },
+    { "color": "#f45d20", "type": "ball" },
+    { "color": "#ed4694", "type": "ball" },
+    { "color": "#6f5499", "type": "ball" },
+  ],
+  "period": 12,
+  "throws": [
+	  { "time": 0,  "duration": 6, "from": 0, "to": 1, "label": "6x", "prop": 0 },
+	  { "time": 0,  "duration": 4, "from": 1, "to": 1, "label": "4",  "prop": 1 },
+	  { "time": 2,  "duration": 6, "from": 1, "to": 0, "label": "6x", "prop": 2 },
+	  { "time": 2,  "duration": 4, "from": 0, "to": 0, "label": "4",  "prop": 3 },
+
+	  { "time": 4,  "duration": 6, "from": 0, "to": 1, "label": "6x", "prop": 4 },
+	  { "time": 4,  "duration": 4, "from": 1, "to": 1, "label": "4",  "prop": 1 },
+	  { "time": 6,  "duration": 6, "from": 1, "to": 0, "label": "6x", "prop": 0 },
+	  { "time": 6,  "duration": 4, "from": 0, "to": 0, "label": "4",  "prop": 3 },
+
+	  { "time": 8,  "duration": 6, "from": 0, "to": 1, "label": "6x", "prop": 2 },
+	  { "time": 8,  "duration": 4, "from": 1, "to": 1, "label": "4",  "prop": 1 },
+	  { "time": 10, "duration": 6, "from": 1, "to": 0, "label": "6x", "prop": 4 },
+	  { "time": 10, "duration": 4, "from": 0, "to": 0, "label": "4",  "prop": 3 }
+  ]
+}
