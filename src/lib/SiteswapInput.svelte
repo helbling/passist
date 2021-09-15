@@ -1,8 +1,8 @@
 <script>
-	import InputField from './InputField.svelte';
+	import InputField from '$lib/InputField.svelte';
 	// TODO: this currently doesn't work
-	import DragDropList from "./DragDropList.svelte";
-	import Icon from './Icon.svelte';
+	import DragDropList from '$lib/DragDropList.svelte';
+	import Icon from '$lib/Icon.svelte';
 	import { jugglerName, hands2limbs, limbs2hands, defaultLimbs } from '$lib/passist.mjs';
 
 	export let siteswapInput;

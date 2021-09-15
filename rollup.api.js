@@ -51,12 +51,12 @@ const baseConfig = {
 
 const configs = [
 	{
-		input: './src/components/CausalDiagramWidget.svelte',
+		input: './src/lib/CausalDiagramWidget.svelte',
 		name: 'CausalDiagramWidget',
 		file: 'static/api/causal-diagram-widget-standalone.mjs',
 	},
 	{
-		input: './src/components/AnimationWidget.svelte',
+		input: './src/lib/AnimationWidget.svelte',
 		name: 'AnimationWidget',
 		file: 'static/api/animation-widget-standalone.mjs',
 	},

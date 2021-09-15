@@ -22,7 +22,7 @@
 </script>
 <script>
 	import { useLocalStorage, siteswapUrl } from '$lib/passist.mjs';
-	import SiteswapPage from '../../components/SiteswapPage.svelte';
+	import SiteswapPage from '$lib/SiteswapPage.svelte';
 	import { browser } from '$app/env';
 	export let siteswapInput, nJugglers, handsInput, fullscreen;
 	let query, url;

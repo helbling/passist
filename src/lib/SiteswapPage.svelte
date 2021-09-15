@@ -1,10 +1,10 @@
 <script>
-	import SiteswapInput from './SiteswapInput.svelte';
-	import CausalDiagramWidget from './CausalDiagramWidget.svelte';
-	import AnimationWidget from './AnimationWidget.svelte';
+	import SiteswapInput from '$lib/SiteswapInput.svelte';
+	import CausalDiagramWidget from '$lib/CausalDiagramWidget.svelte';
+	import AnimationWidget from '$lib/AnimationWidget.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
-	import Icon from './Icon.svelte';
-	import InputField from './InputField.svelte';
+	import Icon from '$lib/Icon.svelte';
+	import InputField from '$lib/InputField.svelte';
 	import { siteswapNames} from '$lib/patterns.mjs';
 	import { defaults, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev } from '$lib/passist.mjs';
 	import { goto } from '$app/navigation';

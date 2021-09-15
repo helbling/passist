@@ -1,9 +1,9 @@
 <script>
 	import { onMount } from 'svelte';
 	import { useLocalStorage } from '$lib/passist.mjs';
-	import AnimationWidget from './AnimationWidget.svelte';
+	import AnimationWidget from '$lib/AnimationWidget.svelte';
 	/*
-	TODO import CausalDiagramWidget from './CausalDiagramWidget.svelte';
+	TODO import CausalDiagramWidget from '$lib/CausalDiagramWidget.svelte';
 	 */
 
 	let jif;
