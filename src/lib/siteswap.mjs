@@ -408,7 +408,7 @@ static *generate(params)
 			if (height >= 0) {
 				heights[j] = height;
 				if (landing[(j + height) % period]) {
-					console.log("invalid cloze!");
+					throw "invalid cloze!";
 					return;
 				}
 				landing[(j + height) % period] = 1;
