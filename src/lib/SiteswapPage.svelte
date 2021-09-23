@@ -6,7 +6,7 @@
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import { siteswapNames} from '$lib/patterns.mjs';
-	import { defaults, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev, U } from '$lib/passist.mjs';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/env';
 	import pkg from '../../package.json';
@@ -26,6 +26,7 @@
 	let startProperties;
 	let localPeriod;
 	let prechacthisUrl;
+	let alternativesUrl;
 	let startConfigurations;
 	let unusualThrows = false;
 	let jif;
@@ -152,6 +153,13 @@ $:	{
 					}).join(',')
 				+ ']&persons=2';
 			}
+
+
+			const alternativesSiteswap = siteswap.toString().repeat(localPeriod * nJugglers / period);
+			alternativesUrl = U('/siteswap/alternatives', {
+				siteswap: alternativesSiteswap,
+				jugglers: nJugglers,
+			});
 		} else {
 			siteswapValid = false;
 		}
@@ -376,9 +384,14 @@ $:	{
 	{#if sharebutton}
 		<button class="sharebutton pure-button" on:click={share}><Icon type=send /> share</button>
 	{/if}
+
+	{#if siteswapValid}
+		<a href="{alternativesUrl}" class="pure-button">Alternatives</a>
+	{/if}
+
 {:else if siteswapInput}
 	<div>
-		<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps" >
+		<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see an invalid siteswap" >
 		<p>Invalid Siteswap</p>
 	</div>
 {:else}

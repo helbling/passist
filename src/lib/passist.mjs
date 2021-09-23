@@ -6,6 +6,10 @@ const defaults = {
 	propType: 'club',
 	jugglingSpeed: 2.8,
 	animationSpeed: 0.8,
+	period: 5,
+	nProps: 7,
+	minThrow: 2,
+	maxThrow: 10,
 };
 
 const useLocalStorage = browser === true && 'localStorage' in window;
@@ -96,4 +100,4 @@ const baseUrl = dev ? '' :
                  + (import.meta.env.VITE_SERVERTYPE ? import.meta.env.VITE_SERVERTYPE + '.' : '')
                  + 'passist.org';
 
-export { defaults, useLocalStorage, siteswapUrl, jugglerName, hands2limbs, limbs2hands, defaultLimbs, servertype, jifdev, baseUrl };
+export { defaults, useLocalStorage, siteswapUrl, jugglerName, hands2limbs, limbs2hands, defaultLimbs, servertype, jifdev, baseUrl, U };
