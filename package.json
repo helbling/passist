@@ -10,6 +10,7 @@
     "preview": "svelte-kit preview",
     "api": "rollup -c rollup.api.js",
     "start": "svelte-kit start",
+    "test": "uvu tests",
     "lint": "eslint"
   },
   "dependencies": {
