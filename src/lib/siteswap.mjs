@@ -449,10 +449,8 @@ static *generate(params)
 			if (i > 1 && !cloze)
 				maxT = Math.min(heights[0], maxT); // otherwise siteswap would not be canonic anymore
 
-			if (h < 0) {
+			if (h < 0)
 				heights[i] = minT;
-				toFill--;
-			}
 
 			while (heights[i] <= maxT + 1 && landing[(i + heights[i]) % period])
 				heights[i]++;
@@ -469,6 +467,7 @@ static *generate(params)
 			landing[(i + heights[i]) % period] = 1;
 			sum += heights[i];
 
+			toFill--;
 			do {
 				i++
 			} while (skip());
