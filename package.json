@@ -10,6 +10,7 @@
     "preview": "svelte-kit preview",
     "api": "rollup -c rollup.api.js",
     "start": "svelte-kit start",
+    "test": "uvu tests",
     "lint": "eslint"
   },
   "dependencies": {
@@ -36,6 +37,7 @@
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "svelte": "^3.42.1",
-    "svelte-dragdroplist": "^1.1.1"
+    "svelte-dragdroplist": "^1.1.1",
+    "uvu": "^0.5.1"
   }
 }
