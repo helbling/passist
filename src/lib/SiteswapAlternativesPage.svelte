@@ -53,6 +53,9 @@ $:  onSiteswapChange(siteswapInput);
 		clearInterval(generatorInterval);
 	});
 	const onchanged = (params) => {
+		if (!siteswapValid)
+			return;
+
 		ticks = 0;
 		calculating = true;
 		list = [];
