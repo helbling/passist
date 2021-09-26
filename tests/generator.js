@@ -12,7 +12,8 @@ function gen(params, expected) {
 	});
 }
 
-const params = {
+// passing, 2 jugglers
+let params = {
 	nProps:    7,
 	minThrow:  2,
 	maxThrow:  10,
@@ -36,6 +37,56 @@ gen(Object.assign({}, params, { period: 5}),
 		'99692', '99944', 'a2788', 'a2797', 'a2968', 'a6289', 'a6469', 'a6667',
 		'a6784', 'a67a2', 'a6964', 'a7288', 'a7297', 'a7468', 'a7747', 'a7792',
 		'a7a62', 'a8449', 'a8494', 'a8647', 'a8692', 'a8944', 'aa249', 'aa294', 'aa744'
+	]);
+
+
+// solo
+params = {
+	nProps:    3,
+	minThrow:  1,
+	maxThrow:  5,
+	include:   "",
+	exclude:   "",
+	nJugglers: 1
+};
+
+gen(Object.assign({}, params, { period: 2}),
+	[ "42", "51" ]);
+
+gen(Object.assign({}, params, { period: 3}),
+	[
+		"423",
+		"441",
+		"522",
+		"531",
+	]);
+
+gen(Object.assign({}, params, { period: 4}),
+	[
+		"4233",
+		"4413",
+		"5124",
+		"5223",
+		"5241",
+		"5313",
+		"5511",
+	]);
+
+gen(Object.assign({}, params, { period: 5}),
+	[
+		"42333",
+		"42423",
+		"44133",
+		"44142",
+		"51234",
+		"51414",
+		"52233",
+		"52242",
+		"52413",
+		"52512",
+		"53133",
+		"53142",
+		"55113",
 	]);
 
 test.run();
