@@ -7,6 +7,7 @@
 
 	export let siteswapInput;
 	export let nJugglers;
+	export let showHandOrderInput = true;
 	export let handsInput;
 	export let idPrefix;
 	export let siteswapValid;
@@ -99,6 +100,7 @@
 		on:change={e => { handsInput = ''; }}
 		/>
 
+	{#if showHandOrderInput}
 	<InputField
 		id={idPrefix + "HandOrder"}
 		label='Hand order'
@@ -133,4 +135,5 @@
 			{/if}
 		</div>
 	</InputField>
+	{/if}
 </div>

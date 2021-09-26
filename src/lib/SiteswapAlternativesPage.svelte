@@ -110,6 +110,7 @@ $:  onSiteswapChange(siteswapInput);
 		bind:nJugglers
 		bind:siteswapValid
 		idPrefix=animation
+		showHandOrderInput={false}
 	/>
 	<InputField
 		bind:value={nProps}
