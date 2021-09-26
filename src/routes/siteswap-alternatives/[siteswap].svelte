@@ -1,9 +1,11 @@
 <script context="module">
-	export async function load({ page }) {
-		return { props: {
-			siteswapInput: page.query.get('siteswap'),
-			nJugglers: page.query.get('jugglers'),
+	import { defaults } from '$lib/passist.mjs';
 
+	export async function load({ page }) {
+
+		return { props: {
+			siteswapInput: page.params.siteswap,
+			nJugglers: parseInt(page.query.get('jugglers')) || defaults.nJugglers,
 		} }
 	}
 </script>

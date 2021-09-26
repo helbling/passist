@@ -6,7 +6,7 @@
 	$: segment = '/' + $page.path.split('/')[1];
 
 	let pages = [
-		{ path:'/generator', title:'Generator' },
+		{ path:'/siteswap-generator', title:'Generator' },
 		{ path:'/siteswap',  title:'Siteswap' },
 		{ path:'/patterns',  title:'Patterns' },
 		jifdev ? { path:'/jif',       title:'Jif' } : null,

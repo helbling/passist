@@ -156,8 +156,7 @@ $:	{
 
 
 			const alternativesSiteswap = siteswap.toString().repeat(localPeriod * nJugglers / period);
-			alternativesUrl = U('/siteswap/alternatives', {
-				siteswap: alternativesSiteswap,
+			alternativesUrl = U('/siteswap-alternatives/' + alternativesSiteswap, {
 				jugglers: nJugglers,
 			});
 		} else {
