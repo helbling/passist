@@ -35,6 +35,11 @@ function siteswapUrl(p)
 	return url;
 }
 
+function siteswapAlternativesUrl(p)
+{
+	return siteswapUrl(p).replace('/siteswap/', '/siteswap-alternatives/');
+}
+
 function jugglerName(i)
 {
 	return String.fromCharCode(65 + i);
@@ -100,4 +105,17 @@ const baseUrl = dev ? '' :
                  + (import.meta.env.VITE_SERVERTYPE ? import.meta.env.VITE_SERVERTYPE + '.' : '')
                  + 'passist.org';
 
-export { defaults, useLocalStorage, siteswapUrl, jugglerName, hands2limbs, limbs2hands, defaultLimbs, servertype, jifdev, baseUrl, U };
+export {
+	defaults,
+	useLocalStorage,
+	siteswapUrl,
+	siteswapAlternativesUrl,
+	jugglerName,
+	hands2limbs,
+	limbs2hands,
+	defaultLimbs,
+	servertype,
+	jifdev,
+	baseUrl,
+	U,
+};

@@ -6,7 +6,7 @@
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import { siteswapNames} from '$lib/patterns.mjs';
-	import { defaults, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev, U } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev, U } from '$lib/passist.mjs';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/env';
 	import pkg from '../../package.json';
@@ -156,9 +156,12 @@ $:	{
 
 
 			const alternativesSiteswap = siteswap.toString().repeat(localPeriod * nJugglers / period);
-			alternativesUrl = U('/siteswap-alternatives/' + alternativesSiteswap, {
-				jugglers: nJugglers,
+			alternativesUrl = siteswapAlternativesUrl({
+				siteswapInput: alternativesSiteswap,
+				nJugglers,
+				handsInput,
 			});
+
 		} else {
 			siteswapValid = false;
 		}

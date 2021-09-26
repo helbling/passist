@@ -4,7 +4,7 @@
 	import Siteswap from '$lib/siteswap.mjs';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/env';
-	import { defaults, jugglerName } from '$lib/passist.mjs';
+	import { defaults, jugglerName, siteswapUrl } from '$lib/passist.mjs';
 	export let siteswapInput = "";
 	export let nProps = defaults.nProps;
 	export let nJugglers = defaults.nJugglers;
@@ -12,6 +12,7 @@
 	export let maxThrow = defaults.maxThrow;
 	export let include  = '';
 	export let exclude  = '';
+	export let handsInput  = '';
 
 	let siteswap;
 	let strippedInput;
@@ -194,7 +195,7 @@ $:  onSiteswapChange(siteswapInput);
 			<ul class="pure-menu-list pure-g">
 				{#each list as s}
 					<li class="pure-menu-item pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
-						<a class=pure-menu-link href="/siteswap/{s}?jugglers={nJugglers}">
+						<a class=pure-menu-link href={siteswapUrl({siteswapInput:s, nJugglers, handsInput})}>
 							<span class=siteswap>
 								{#each s as c, i}
 									<span class:bold={cloze.heights[i] < 0}>{c}</span>
