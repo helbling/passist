@@ -12,49 +12,25 @@ function gen(params, expected) {
 	});
 }
 
-gen(
-	{
-		nProps:    7,
-		period:    1,
-		minThrow:  2,
-		maxThrow:  10,
-		include:   "",
-		exclude:   "3 5",
-		nJugglers: 2
-	}, ['7']);
+const params = {
+	nProps:    7,
+	minThrow:  2,
+	maxThrow:  10,
+	include:   "",
+	exclude:   "3 5",
+	nJugglers: 2
+};
 
-gen(
-	{
-		nProps:    7,
-		period:    3,
-		minThrow:  2,
-		maxThrow:  10,
-		include:   "",
-		exclude:   "3 5",
-		nJugglers: 2
-	}, [ '867', '948', '966', 'a29', 'a47', 'a74' ]);
+gen(Object.assign({}, params, { period: 1}), ['7']);
 
-gen(
-	{
-		nProps:    7,
-		period:    4,
-		minThrow:  2,
-		maxThrow:  10,
-		include:   "",
-		exclude:   "3 5",
-		nJugglers: 2
-	}, [ "8677", "9667", "9748", "9784", "9928", "9964", "a279", "a774", "a792"]);
+gen(Object.assign({}, params, { period: 3}),
+	[ '867', '948', '966', 'a29', 'a47', 'a74' ]);
 
-gen(
-	{
-		nProps:    7,
-		period:    5,
-		minThrow:  2,
-		maxThrow:  10,
-		include:   "",
-		exclude:   "3 5",
-		nJugglers: 2
-	}, [
+gen(Object.assign({}, params, { period: 4}),
+	[ "8677", "9667", "9748", "9784", "9928", "9964", "a279", "a774", "a792"]);
+
+gen(Object.assign({}, params, { period: 5}),
+	[
 		'86777', '86867', '88847', '92888', '94688', '96677', '96686', '96884',
 		'97478', '97496', '97847', '97892', '97928', '97946', '99494', '99647',
 		'99692', '99944', 'a2788', 'a2797', 'a2968', 'a6289', 'a6469', 'a6667',
