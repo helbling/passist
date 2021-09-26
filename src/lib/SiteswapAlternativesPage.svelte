@@ -100,6 +100,7 @@ $:  onSiteswapChange(siteswapInput);
 	.cloze-input button + button { margin-left: 0.2em }
 	.cloze-input button { font-weight:bold; box-shadow:none; -webkit-box-shadow:none; color:black }
 	.cloze-input .gap { color:darkgray; border-bottom:2px solid black }
+	.bold { font-weight:bold; color:black }
 </style>
 
 
@@ -192,7 +193,13 @@ $:  onSiteswapChange(siteswapInput);
 			<ul class="pure-menu-list pure-g">
 				{#each list as s}
 					<li class="pure-menu-item pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
-						<a class=pure-menu-link href="/siteswap/{s}?jugglers={nJugglers}"><span class=siteswap>{s}</span></a>
+						<a class=pure-menu-link href="/siteswap/{s}?jugglers={nJugglers}">
+							<span class=siteswap>
+								{#each s as c, i}
+									<span class:bold={cloze.heights[i] < 0}>{c}</span>
+								{/each}
+							</span>
+						</a>
 					</li>
 				{/each}
 			</ul>
