@@ -165,5 +165,25 @@ gen(Object.assign({}, params, { nProps:7 }), [
 	"786a7a8527", // a85a7
 ]);
 
+
+// avoid dupes
+gen(Object.assign({}, params, {
+	cloze: new Siteswap('7_7_'),
+	nProps: 7
+}), [
+	"7579",
+	"7777",
+]);
+
+gen(Object.assign({}, params, {
+	cloze: new Siteswap('7_7_7_7_'),
+	nProps: 7
+}), [
+	"75777779",
+	"75797579",
+	"77777777",
+]);
+
+
 test.run();
 

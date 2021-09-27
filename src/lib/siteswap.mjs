@@ -321,11 +321,14 @@ static *generate(params)
 	const period = cloze ? cloze.period : Math.max(1, Math.min(15, parseInt(params.period) || 0));
 	const nJugglers = Math.max(1, Math.min(9, parseInt(params.nJugglers) || 0));
 
-	function isCanonic(siteswap) {
+	function canonic(siteswap) {
 		const shifts = [];
 		for (let i = 0; i < period; i++)
 			shifts.push(siteswap.slice(i) + siteswap.slice(0, i));
-		return shifts.sort()[period - 1] == siteswap;
+		return shifts.sort()[period - 1];
+	}
+	function isCanonic(siteswap) {
+		return canonic(siteswap) == siteswap;
 	}
 	function getHeight(siteswap, i) {
 		const x = siteswap.charCodeAt(i);
@@ -359,15 +362,24 @@ static *generate(params)
 		return includeFilters.every(function(filter) { return (str + str + str).match(filter);});
 	}
 
-	const finalCheck = function(canonic) {
-		// check if it is a smaller period which is repeated
-		if (!cloze) {
+	const seenCanonic = {};
+	const finalCheck = function(siteswap) {
+		if (cloze) {
+			const c = canonic(siteswap);
+			if (seenCanonic[c])
+				return false;
+			seenCanonic[c] = true;
+		} else {
+			if (!isCanonic(siteswap))
+				return false;
+
+			// check if it is a smaller period which is repeated
 			for (let p = 1; p < period; p++) {
 				if (period % p == 0) {
-					// splits canonic into period / i chunks of i characters
+					// splits siteswap into period / i chunks of i characters
 					// if all chunks are equal, we have found a smaller period p
 					if (Array.apply(null, {length: period / p}).map(Function.call, Number).map(function (k) {
-							return canonic.slice(p * k, p * (k + 1));
+							return siteswap.slice(p * k, p * (k + 1));
 						}).every(function (val, i, arr) { return val === arr[0]; }))
 							return false;
 				}
@@ -379,7 +391,7 @@ static *generate(params)
 
 			let nPasses = 0;
 			for (let i = 0; i < period; i++) {
-				if (getHeight(canonic, i) % nJugglers)
+				if (getHeight(siteswap, i) % nJugglers)
 					nPasses++;
 			}
 			// TODO: let user specify nPasses range
@@ -388,7 +400,7 @@ static *generate(params)
 		}
 
 		// check constraints
-		if (exclude(canonic) || !include(canonic))
+		if (exclude(siteswap) || !include(siteswap))
 			return false;
 
 		return true;
@@ -429,7 +441,7 @@ static *generate(params)
 
 		if (i == period) {
 			const c = Siteswap.heightsToString(heights);
-			if ((isCanonic(c) || cloze) && finalCheck(c))
+			if (finalCheck(c))
 				yield c;
 
 			toFill++;
