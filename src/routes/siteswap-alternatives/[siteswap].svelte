@@ -17,6 +17,7 @@
 	import { browser } from '$app/env';
 
 	export let siteswapInput, nJugglers, handsInput;
+	let exclude = nJugglers == 2 ? '3 4.4' : '';
 
 	$:  useLocalStorage && siteswapInput && localStorage.setItem("siteswap-alternatives/siteswap", siteswapInput);
 	$:  useLocalStorage && nJugglers && localStorage.setItem("siteswap-alternatives/nJugglers", nJugglers);
@@ -37,4 +38,4 @@
 	<title>passist - Siteswap - Alternatives</title>
 </svelte:head>
 
-<SiteswapAlternativesPage bind:siteswapInput bind:nJugglers bind:handsInput />
+<SiteswapAlternativesPage bind:siteswapInput bind:nJugglers bind:handsInput bind:exclude />
