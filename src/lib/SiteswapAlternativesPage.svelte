@@ -113,6 +113,7 @@ $:  onSiteswapChange(siteswapInput, nJugglers);
 	.bold { font-weight:bold; color:black }
 </style>
 
+<h2>Siteswap alternatives</h2>
 
 <div class="pure-form form-inline">
 	<SiteswapInput
@@ -169,6 +170,23 @@ $:  onSiteswapChange(siteswapInput, nJugglers);
 
 
 {#if siteswapValid}
+	<h5>Throws to change</h5>
+	{#if splittable}
+		<div class="cloze-shortcuts pure-button-group" role="group">
+			{#each Array.from(Array(+nJugglers).keys()) as i}
+				<button
+					class="pure-button"
+					class:pure-button-active={cloze.heights.every((v, k) => (v < 0) == (k % nJugglers == i))}
+					on:click={(e) => {
+						cloze = new Siteswap(siteswap.heights.map((v, k) => (k % nJugglers == i ? -1 : v) ));
+					}}
+				>
+					Juggler {jugglerName(i)}
+				</button>
+			{/each}
+		</div>
+	{/if}
+
 	<div class=cloze-input>
 		{#each Object.entries(siteswap.heights) as [i, h]}
 			<button
@@ -182,44 +200,33 @@ $:  onSiteswapChange(siteswapInput, nJugglers);
 			</button>
 		{/each}
 	</div>
-	{#if splittable}
-		<div class="cloze-shortcuts pure-button-group" role="group">
-			{#each Array.from(Array(+nJugglers).keys()) as i}
-				<button
-					class="pure-button"
-					class:pure-button-active={cloze.heights.every((v, k) => (v < 0) == (k % nJugglers == i))}
-					on:click={(e) => {
-						cloze = new Siteswap(siteswap.heights.map((v, k) => (k % nJugglers == i ? -1 : v) ));
-					}}
-				>
-					Alternatives for {jugglerName(i)}
-				</button> <!-- NOCOMMIT TODO -->
-			{/each}
-		</div>
-	{/if}
 
-	<h5>{list.length} siteswaps found{ calculating ? ' so far ' + spinner.charAt(ticks % 8) : ' in ' + calctime  + 's'}</h5>
 
-	{#if list.length}
-		<div class=pure-menu>
-			<ul class="pure-menu-list pure-g">
-				{#each list as s}
-					<li class="pure-menu-item pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
-						<a class=pure-menu-link href={siteswapUrl({siteswapInput:s, nJugglers, handsInput})}>
-							<span class=siteswap>
-								{#each s as c, i}
-									<span class:bold={cloze.heights[i] < 0}>{c}</span>
-								{/each}
-							</span>
-						</a>
-					</li>
-				{/each}
-			</ul>
-		</div>
-	{:else if !calculating}
-		<div>
-			<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps">
-		</div>
+	{#if !cloze.heights.filter((v) => v < 0).length}
+		Please choose some throws to change with the buttons above.
+	{:else}
+		<h5>{list.length} siteswaps found{ calculating ? ' so far ' + spinner.charAt(ticks % 8) : ' in ' + calctime  + 's'}</h5>
+		{#if list.length}
+			<div class=pure-menu>
+				<ul class="pure-menu-list pure-g">
+					{#each list as s}
+						<li class="pure-menu-item pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+							<a class=pure-menu-link href={siteswapUrl({siteswapInput:s, nJugglers, handsInput})}>
+								<span class=siteswap>
+									{#each s as c, i}
+										<span class:bold={cloze.heights[i] < 0}>{c}</span>
+									{/each}
+								</span>
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		{:else if !calculating}
+			<div>
+				<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps">
+			</div>
+		{/if}
 	{/if}
 
 {:else}
