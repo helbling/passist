@@ -1,8 +1,8 @@
 <script>
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
 	import { defaults } from '$lib/passist.mjs';
-	import Icon from './Icon.svelte';
-	import InputField from './InputField.svelte';
+	import Icon from '$lib/Icon.svelte';
+	import InputField from '$lib/InputField.svelte';
 	import { browser } from '$app/env';
 
 	export let jif;

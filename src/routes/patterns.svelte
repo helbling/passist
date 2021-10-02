@@ -1,5 +1,5 @@
 <script>
-	import PatternsPage from '../components/PatternsPage.svelte';
+	import PatternsPage from '$lib/PatternsPage.svelte';
 </script>
 
 <svelte:head>

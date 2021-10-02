@@ -1,12 +1,12 @@
 <script>
-	import SiteswapInput from './SiteswapInput.svelte';
-	import CausalDiagramWidget from './CausalDiagramWidget.svelte';
-	import AnimationWidget from './AnimationWidget.svelte';
+	import SiteswapInput from '$lib/SiteswapInput.svelte';
+	import CausalDiagramWidget from '$lib/CausalDiagramWidget.svelte';
+	import AnimationWidget from '$lib/AnimationWidget.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
-	import Icon from './Icon.svelte';
-	import InputField from './InputField.svelte';
+	import Icon from '$lib/Icon.svelte';
+	import InputField from '$lib/InputField.svelte';
 	import { siteswapNames} from '$lib/patterns.mjs';
-	import { defaults, useLocalStorage, siteswapUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev, U } from '$lib/passist.mjs';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/env';
 	import pkg from '../../package.json';
@@ -15,7 +15,6 @@
 	export let nJugglers = defaults.nJugglers;
 	export let handsInput = '';
 	export let fullscreen = false;
-	export let url = '';
 
 	let siteswapShift = 0;
 	let siteswap, strippedInput, originalSiteswap;
@@ -27,6 +26,7 @@
 	let startProperties;
 	let localPeriod;
 	let prechacthisUrl;
+	let alternativesUrl;
 	let startConfigurations;
 	let unusualThrows = false;
 	let jif;
@@ -153,6 +153,15 @@ $:	{
 					}).join(',')
 				+ ']&persons=2';
 			}
+
+
+			const alternativesSiteswap = siteswap.toString().repeat(localPeriod * nJugglers / period);
+			alternativesUrl = siteswapAlternativesUrl({
+				siteswapInput: alternativesSiteswap,
+				nJugglers,
+				handsInput,
+			});
+
 		} else {
 			siteswapValid = false;
 		}
@@ -377,9 +386,16 @@ $:	{
 	{#if sharebutton}
 		<button class="sharebutton pure-button" on:click={share}><Icon type=send /> share</button>
 	{/if}
+
+	{#if siteswapValid}
+		<p>
+			<a href="{alternativesUrl}" class="pure-button">Compatible siteswaps (beta)</a>
+		</p>
+	{/if}
+
 {:else if siteswapInput}
 	<div>
-		<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see no siteswaps" >
+		<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see an invalid siteswap" >
 		<p>Invalid Siteswap</p>
 	</div>
 {:else}

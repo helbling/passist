@@ -1,5 +1,5 @@
 <script>
-	//	import SiteswapPage from '../../components/SiteswapPage.svelte';
+	//	import SiteswapPage from '$lib/SiteswapPage.svelte';
 	import { defaults, useLocalStorage, siteswapUrl } from '$lib/passist.mjs';
 	import { goto } from '$app/navigation';
 

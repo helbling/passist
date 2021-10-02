@@ -1,5 +1,5 @@
 <script>
-	import GeneratorPage from '../components/GeneratorPage.svelte';
+	import GeneratorPage from '$lib/GeneratorPage.svelte';
 </script>
 
 <svelte:head>

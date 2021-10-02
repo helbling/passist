@@ -3,7 +3,7 @@
 <script>
 	export let jif;
 	export let startConfigurations;
-	export let steps = 1;
+	export let steps = jif.period;
 
 	let jugglers = {};
 	const xoff = 55;

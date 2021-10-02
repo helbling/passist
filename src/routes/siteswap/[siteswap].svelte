@@ -22,17 +22,16 @@
 </script>
 <script>
 	import { useLocalStorage, siteswapUrl } from '$lib/passist.mjs';
-	import SiteswapPage from '../../components/SiteswapPage.svelte';
+	import SiteswapPage from '$lib/SiteswapPage.svelte';
 	import { browser } from '$app/env';
 	export let siteswapInput, nJugglers, handsInput, fullscreen;
-	let query, url;
 
 	$:  useLocalStorage && siteswapInput && localStorage.setItem("siteswap", siteswapInput);
 	$:  useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
 
 	$: {
 		if (browser === true && window && ('history' in window)) {
-			url = siteswapUrl({
+			const url = siteswapUrl({
 				siteswapInput,
 				nJugglers,
 				handsInput,
@@ -43,4 +42,4 @@
 	}
 </script>
 
-<SiteswapPage bind:siteswapInput bind:nJugglers bind:handsInput bind:fullscreen {url} />
+<SiteswapPage bind:siteswapInput bind:nJugglers bind:handsInput bind:fullscreen />

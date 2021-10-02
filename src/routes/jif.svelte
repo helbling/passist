@@ -1,5 +1,5 @@
 <script>
-import JifPage from '../components/JifPage.svelte';
+import JifPage from '$lib/JifPage.svelte';
 </script>
 
 <svelte:head>

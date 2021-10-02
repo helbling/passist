@@ -5,10 +5,10 @@ export default class Siteswap {
 constructor(input)
 {
 	if (Array.isArray(input))
-		this.heights = input;
+		this.heights = input.slice(); // clone
 	else
 		this.heights = String(input).split('').map(function(x) {
-			return x.match(/[0-9]/) ? +x : x.charCodeAt(0) - 'a'.charCodeAt(0) + 10;
+			return x.match(/[0-9]/) ? +x : (x == '_' ? -1 : (x.charCodeAt(0) - 'a'.charCodeAt(0) + 10));
 		});
 	this.period = this.heights.length;
 	this.nProps = this.period > 0 ? this.heights.reduce(function(a, b) { return a + b; }, 0) / this.period : 0;
@@ -17,7 +17,7 @@ constructor(input)
 static heightToChar(x)
 {
 	x = +x;
-	return x <= 9 ? String(x) : String.fromCharCode('a'.charCodeAt(0) + x - 10);
+	return x < 0 ? '_' : (x <= 9 ? String(x) : String.fromCharCode('a'.charCodeAt(0) + x - 10));
 }
 
 static heightsToString(heights)
@@ -310,20 +310,25 @@ startConfigurations(limbs)
  *  nJugglers  number of jugglers
  *  include    regular expression the global siteswap must match
  *  exclude    regular expression the global siteswap must not match
+ *  cloze      Siteswap with given fixed siteswap heights, -1 for dynamic
  */
 static *generate(params)
 {
 	const min = Math.max(0, Math.min(35, parseInt(params.minThrow) || 0));
 	const max = Math.max(0, Math.min(35, parseInt(params.maxThrow) || 0));
 	const nProps = Math.max(0, Math.min(35, parseInt(params.nProps) || 0));
-	const period = Math.max(1, Math.min(15, parseInt(params.period) || 0));
+	const cloze = params.cloze;
+	const period = cloze ? cloze.period : Math.max(1, Math.min(15, parseInt(params.period) || 0));
 	const nJugglers = Math.max(1, Math.min(9, parseInt(params.nJugglers) || 0));
 
-	function isCanonic(siteswap) {
+	function canonic(siteswap) {
 		const shifts = [];
 		for (let i = 0; i < period; i++)
 			shifts.push(siteswap.slice(i) + siteswap.slice(0, i));
-		return shifts.sort()[period - 1] == siteswap;
+		return shifts.sort()[period - 1];
+	}
+	function isCanonic(siteswap) {
+		return canonic(siteswap) == siteswap;
 	}
 	function getHeight(siteswap, i) {
 		const x = siteswap.charCodeAt(i);
@@ -347,8 +352,8 @@ static *generate(params)
 		input = input.trim().replace(/s/gi, '[' + selfs.join('') + ']').replace(/p/gi, '[' + passes.join('') + ']');
 		return input ? input.split(/ /) : [];
 	}
-	const excludeFilters = filters(params.exclude);
-	const includeFilters = filters(params.include);
+	const excludeFilters = filters(params.exclude || '');
+	const includeFilters = filters(params.include || '');
 
 	function exclude(str) {
 		return excludeFilters.some(function(filter) { return (str + str + str).match(filter);});
@@ -357,16 +362,27 @@ static *generate(params)
 		return includeFilters.every(function(filter) { return (str + str + str).match(filter);});
 	}
 
-	const finalCheck = function(canonic) {
-		// check if it is a smaller period which is repeated
-		for (let p = 1; p < period; p++) {
-			if (period % p == 0) {
-				// splits canonic into period / i chunks of i characters
-				// if all chunks are equal, we have found a smaller period p
-				if (Array.apply(null, {length: period / p}).map(Function.call, Number).map(function (k) {
-						return canonic.slice(p * k, p * (k + 1));
-					}).every(function (val, i, arr) { return val === arr[0]; }))
-						return false;
+	const seenCanonic = {};
+	const finalCheck = function(siteswap) {
+		if (cloze) {
+			const c = canonic(siteswap);
+			if (seenCanonic[c])
+				return false;
+			seenCanonic[c] = true;
+		} else {
+			if (!isCanonic(siteswap))
+				return false;
+
+			// check if it is a smaller period which is repeated
+			for (let p = 1; p < period; p++) {
+				if (period % p == 0) {
+					// splits siteswap into period / i chunks of i characters
+					// if all chunks are equal, we have found a smaller period p
+					if (Array.apply(null, {length: period / p}).map(Function.call, Number).map(function (k) {
+							return siteswap.slice(p * k, p * (k + 1));
+						}).every(function (val, i, arr) { return val === arr[0]; }))
+							return false;
+				}
 			}
 		}
 
@@ -375,7 +391,7 @@ static *generate(params)
 
 			let nPasses = 0;
 			for (let i = 0; i < period; i++) {
-				if (getHeight(canonic, i) % nJugglers)
+				if (getHeight(siteswap, i) % nJugglers)
 					nPasses++;
 			}
 			// TODO: let user specify nPasses range
@@ -384,7 +400,7 @@ static *generate(params)
 		}
 
 		// check constraints
-		if (exclude(canonic) || !include(canonic))
+		if (exclude(siteswap) || !include(siteswap))
 			return false;
 
 		return true;
@@ -395,6 +411,29 @@ static *generate(params)
 	let sum = 0;
 	let i = 0;
 	let ops = 0;
+	let toFill = period;
+
+	if (cloze) {
+		for (let [j, height] of Object.entries(cloze.heights)) {
+			j = +j;
+			height = +height;
+			if (height >= 0) {
+				heights[j] = height;
+				if (landing[(j + height) % period]) {
+					throw "invalid cloze!";
+					return;
+				}
+				landing[(j + height) % period] = 1;
+				sum += height;
+				toFill--;
+			}
+		}
+	}
+	const skip = () => (cloze && i >= 0 && i < period && cloze.heights[i] >= 0);
+
+	while (skip())
+		i++;
+
 	while (i >= 0) {
 		ops += 1;
 		if (ops % 1000 == 0)
@@ -402,10 +441,13 @@ static *generate(params)
 
 		if (i == period) {
 			const c = Siteswap.heightsToString(heights);
-			if (isCanonic(c) && finalCheck(c))
+			if (finalCheck(c))
 				yield c;
 
-			i--;
+			toFill++;
+			do {
+				i--;
+			} while (skip());
 		} else {
 			const h = heights[i];
 			if (h >= 0) {
@@ -414,9 +456,9 @@ static *generate(params)
 				heights[i]++;
 			}
 
-			let minT = Math.max(min, nProps * period - sum - (period - i - 1) * max);
-			let maxT = Math.min(max, nProps * period - sum - (period - i - 1) * min);
-			if (i > 1)
+			let minT = Math.max(min, nProps * period - sum - (toFill - 1) * max);
+			let maxT = Math.min(max, nProps * period - sum - (toFill - 1) * min);
+			if (i > 1 && !cloze)
 				maxT = Math.min(heights[0], maxT); // otherwise siteswap would not be canonic anymore
 
 			if (h < 0)
@@ -427,14 +469,20 @@ static *generate(params)
 
 			if (heights[i] > maxT) {
 				heights[i] = -1;
-				i--;
+				toFill++;
+				do {
+					i--;
+				} while (skip());
 				continue;
 			}
 
 			landing[(i + heights[i]) % period] = 1;
 			sum += heights[i];
 
-			i++;
+			toFill--;
+			do {
+				i++
+			} while (skip());
 		}
 	}
 }

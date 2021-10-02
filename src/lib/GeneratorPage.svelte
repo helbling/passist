@@ -1,15 +1,16 @@
 <script>
-	import InputField from './InputField.svelte';
+	import InputField from '$lib/InputField.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/env';
+	import { defaults } from '$lib/passist.mjs';
 
-	export let nProps = 7;
-	export let period = 5;
-	export let minThrow = 2;
-	export let maxThrow = 10;
-	export let include = '';
-	export let exclude = '3 5';
+	export let nProps   = defaults.nProps;
+	export let period   = defaults.period;
+	export let minThrow = defaults.minThrow;
+	export let maxThrow = defaults.maxThrow;
+	export let include  = '';
+	export let exclude  = '3 5';
 
 	const spinner = "⣷⣯⣟⡿⢿⣻⣽⣾";
 
