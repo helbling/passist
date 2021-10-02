@@ -113,7 +113,7 @@ $:  onSiteswapChange(siteswapInput, nJugglers);
 	.bold { font-weight:bold; color:black }
 </style>
 
-<h2>Siteswap alternatives</h2>
+<h2>Siteswap alternatives (beta)</h2>
 
 <div class="pure-form form-inline">
 	<SiteswapInput

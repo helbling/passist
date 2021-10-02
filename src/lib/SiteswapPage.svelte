@@ -389,7 +389,7 @@ $:	{
 
 	{#if siteswapValid}
 		<p>
-			<a href="{alternativesUrl}" class="pure-button">Compatible siteswaps</a>
+			<a href="{alternativesUrl}" class="pure-button">Compatible siteswaps (beta)</a>
 		</p>
 	{/if}
 
