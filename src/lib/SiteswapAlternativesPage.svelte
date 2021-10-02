@@ -18,20 +18,27 @@
 	let strippedInput;
 	let siteswapValid = false;
 	let cloze;
+	let splittable = false;
 
 	function onSiteswapChange() {
 		strippedInput = String(siteswapInput).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
 		siteswap = new Siteswap(strippedInput);
 		nProps = siteswap.nProps;
 		cloze = new Siteswap(siteswap.heights); // clone
+		splittable = nJugglers >= 2 && siteswap.period % nJugglers == 0;
+
 		if (nJugglers > 0) {
 			siteswapValid = siteswap.isValid();
+			if (splittable) {
+				for (let i = 0; i < siteswap.period; i += nJugglers)
+					cloze.heights[i] = -1;
+			}
 		} else {
 			siteswapValid = false;
 		}
 	}
 
-$:  onSiteswapChange(siteswapInput);
+$:  onSiteswapChange(siteswapInput, nJugglers);
 
 	const spinner = "⣷⣯⣟⡿⢿⣻⣽⣾";
 
@@ -98,9 +105,11 @@ $:  onSiteswapChange(siteswapInput);
 
 <style>
 	.cloze-input { margin-bottom:1em }
-	.cloze-input button + button { margin-left: 0.2em }
+	.cloze-input button + button, .cloze-shortcuts button + button { margin-left: 0.2em }
 	.cloze-input button { font-weight:bold; box-shadow:none; -webkit-box-shadow:none; color:black }
+	button:focus { background-image:none }
 	.cloze-input .gap { color:darkgray; border-bottom:2px solid black }
+	.cloze-shortcuts { margin-bottom:1em }
 	.bold { font-weight:bold; color:black }
 </style>
 
@@ -173,11 +182,12 @@ $:  onSiteswapChange(siteswapInput);
 			</button>
 		{/each}
 	</div>
-	{#if nJugglers >= 2 && siteswap.period % nJugglers == 0}
-		<div class="pure-button-group" role="group">
+	{#if splittable}
+		<div class="cloze-shortcuts pure-button-group" role="group">
 			{#each Array.from(Array(+nJugglers).keys()) as i}
 				<button
 					class="pure-button"
+					class:pure-button-active={cloze.heights.every((v, k) => (v < 0) == (k % nJugglers == i))}
 					on:click={(e) => {
 						cloze = new Siteswap(siteswap.heights.map((v, k) => (k % nJugglers == i ? -1 : v) ));
 					}}
