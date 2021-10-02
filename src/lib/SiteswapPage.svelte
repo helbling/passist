@@ -388,7 +388,9 @@ $:	{
 	{/if}
 
 	{#if siteswapValid}
-		<a href="{alternativesUrl}" class="pure-button">Alternatives</a>
+		<p>
+			<a href="{alternativesUrl}" class="pure-button">Compatible siteswaps</a>
+		</p>
 	{/if}
 
 {:else if siteswapInput}
