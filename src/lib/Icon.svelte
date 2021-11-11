@@ -2,6 +2,7 @@
 
 <script>
 	export let type;
+	export let fill = false;
 </script>
 
 <style>
@@ -13,7 +14,7 @@
 	width=32
 	height=32
 	viewBox="0 0 32 32"
-	fill=none
+	fill={fill ? 'currentcolor' : 'none'}
 	stroke=currentcolor
 	stroke-linecap=round
 	stroke-linejoin=round
@@ -39,5 +40,13 @@
 		<path d="M28 22 L28 30 4 30 4 22 M16 4 L16 24 M8 12 L16 4 24 12" />
 	{:else if type == 'save'}
 		<path d="M28 22 L28 30 4 30 4 22 M16 4 L16 24 M8 16 L16 24 24 16" />
+	{:else if type == 'trash'}
+		<path d="M28 6 L6 6 8 30 24 30 26 6 4 6 M16 12 L16 24 M21 12 L20 24 M11 12 L12 24 M12 6 L13 2 19 2 20 6" />
+	{:else if type == 'plus'}
+		<path d="M16 2 L16 30 M2 16 L30 16" />
+	{:else if type == 'caret-bottom'}
+		<path d="M30 10 L16 26 2 10 Z" />
+	{:else if type == 'caret-right'}
+		<path d="M10 30 L26 16 10 2 Z" />
 	{/if}
 </svg>
