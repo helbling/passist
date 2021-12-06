@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://passist.org/jif.schema.json",
+  "title": "JIF",
+  "description": "Juggling Interchange Format - an early draft to try out things",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "title": "Meta",
+      "description": "Meta information about the pattern",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "description": "Name of the pattern",
+          "type": "string"
+        }
+      },
+      "default": {}
+    },
+    "jugglers": {
+      "title": "Jugglers",
+      "description": "Descriptions of the jugglers",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "description": "The jugglers name",
+            "type": "string"
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 2,
+            "maxItems": 3
+          },
+          "lookAt": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 2,
+            "maxItems": 3
+          }
+        }
+      }
+    },
+    "limbs": {
+      "title": "Limbs",
+      "description": "Descriptions of the limbs (typically the hands)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "juggler": {
+            "description": "Which juggler id this limb belongs to",
+            "type": "integer",
+            "default": 0
+          },
+          "type": {
+            "description": "type of limb, for example 'right hand', 'left foot', ..",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "props": {
+      "title": "Props",
+      "description": "Descriptions of the used props",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "color": {
+            "description": "main color of the prop",
+            "type": "string"
+          },
+          "type": {
+            "description": "type of prop, for example 'ball', 'club', 'ring', ..",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "throws": {
+      "title": "Throws",
+      "description": "Descriptions of the throws",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "time": {
+            "description": "throw time in beats",
+            "type": "number"
+          },
+          "duration": {
+            "description": "(logical) throw duration in beats",
+            "type": "number"
+          },
+          "from": {
+            "description": "limb id the throw is thrown from",
+            "type": "integer"
+          },
+          "to": {
+            "description": "limb id the throw is thrown to",
+            "type": "integer"
+          },
+          "label": {
+            "description": "a label for the throw to put in diagrams",
+            "type": "string"
+          },
+          "prop": {
+            "description": "prop id",
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "repetitions": {
+      "title": "Repetitions",
+      "description": "repetitions of throws in a time period",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "description": "start time in beats",
+            "type": "number"
+          },
+          "end": {
+            "description": "end time in beats",
+            "type": "number"
+          },
+          "count": {
+            "description": "how many times this sequence is repeated",
+            "type": "integer"
+          },
+          "limbPermutation": {
+            "description": "permutation of the limb ids after every repetition",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "propPermutation": {
+            "description": "permutation of the prop ids after every repetition",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}
