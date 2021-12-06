@@ -389,7 +389,7 @@ $:	{
 
 	{#if siteswapValid}
 		<p>
-			<a href="{alternativesUrl}" class="pure-button">Compatible siteswaps (beta)</a>
+			<a href="{alternativesUrl}" class="pure-button">{#if nJugglers >= 2}Compatible{:else}Similar{/if} siteswaps (beta)</a>
 		</p>
 	{/if}
 

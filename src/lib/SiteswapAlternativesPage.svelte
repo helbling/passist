@@ -38,6 +38,23 @@
 		}
 	}
 
+	function canonic(siteswap) {
+		const period = siteswap.length;
+		const shifts = [];
+		for (let i = 0; i < period; i++)
+			shifts.push(siteswap.slice(i) + siteswap.slice(0, i));
+		return shifts.sort()[period - 1];
+	}
+
+	function splittedSiteswaps(siteswapString) {
+		const localLength = siteswapString.length / nJugglers;
+		const result = Array.from(Array(nJugglers), () => new Array(localLength));
+		[...siteswapString].forEach((c, i) => {
+			result[i % nJugglers][(Math.floor(i / nJugglers) * nJugglers) % localLength] = c;
+		});
+		return result.map((a) => canonic(a.join('')));
+	}
+
 $:  onSiteswapChange(siteswapInput, nJugglers);
 
 	const spinner = "⣷⣯⣟⡿⢿⣻⣽⣾";
@@ -210,7 +227,7 @@ $:  onSiteswapChange(siteswapInput, nJugglers);
 			<div class=pure-menu>
 				<ul class="pure-menu-list pure-g">
 					{#each list as s}
-						<li class="pure-menu-item pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+						<li class="pure-menu-item pure-u-1 pure-u-lg-1-2">
 							<a class=pure-menu-link href={siteswapUrl({siteswapInput:s, nJugglers, handsInput})}>
 								<span class=siteswap>
 									{#each s as c, i}
@@ -218,6 +235,20 @@ $:  onSiteswapChange(siteswapInput, nJugglers);
 									{/each}
 								</span>
 							</a>
+							{#if splittable}
+								<ul class="pure-menu-list pure-g">
+								{#each splittedSiteswaps(s) as splittedSiteswap, jugglerIndex}
+									<li class="pure-menu-item pure-u-lg-1-3">
+										<a
+											class="pure-menu-link"
+											href={siteswapUrl({siteswapInput:splittedSiteswap, nJugglers, handsInput})}
+										>
+											{jugglerName(jugglerIndex)}: {splittedSiteswap}
+										</a>
+									</li>
+								{/each}
+								</ul>
+							{/if}
 						</li>
 					{/each}
 				</ul>
