@@ -14,7 +14,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "fs": "^0.0.1-security",
     "marked": "^4.0.6",
+    "svelte-cubed": "^0.2.1",
     "three": "^0.135.0"
   },
   "devDependencies": {
