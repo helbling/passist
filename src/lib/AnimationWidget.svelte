@@ -161,7 +161,7 @@
 		togglePause();
 	}
 	function onKeyDown(e) {
-		if (e.key == ' ')
+		if (isFull && e.key == ' ')
 			togglePause();
 		if (isFull && e.key == 'Escape')
 			exitFullscreen();
