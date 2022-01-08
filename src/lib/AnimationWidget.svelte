@@ -4,6 +4,7 @@
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import { browser } from '$app/env';
+	import Jif from '$lib/jif.mjs';
 
 	export let jif;
 	export let teaser = true;
@@ -47,7 +48,8 @@
 	let requestFullscreen = maximize;
 	let exitFullscreen = unmaximize;
 
-	$: animationJif = JSON.parse(JSON.stringify(jif)); // deep clone
+
+	$: animationJif = Jif.complete(jif).jif; // add missing things, TODO: show warnings
 	$: pixelRatio = { low:0.5, medium:1, high:2 }[resolution];
 	$: animationOptions = { valid, jugglingSpeed, animationSpeed, showOrbits };
 	$: sizeOptions = { width, height, pixelRatio };
