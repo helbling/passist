@@ -1,6 +1,5 @@
 {
   "timeStretchFactor": 2,
-  "period": 3,
   "throws": [
     {
       "time": 0,
@@ -20,5 +19,9 @@
       "from": 2,
       "to": 3
     }
-  ]
+  ],
+  "repetition": {
+	"period": 3,
+	"limbPermutation": [ 3, 0, 1, 2 ]
+  }
 }

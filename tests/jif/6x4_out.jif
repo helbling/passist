@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "name": "(6x4)*"
+  },
+  "throws": [
+    {
+      "time": 0,
+      "duration": 6,
+      "from": 0,
+      "to": 1,
+      "label": "6x",
+	  "prop": 0
+    },
+    {
+      "time": 0,
+      "duration": 4,
+      "from": 1,
+      "to": 1,
+      "label": "4",
+	  "prop": 1
+    }
+  ],
+  "repetition": {
+    "period": 2,
+    "limbPermutation": [ 1, 0 ],
+	"propPermutation": [ 2, 3, 4, 1, 0 ]
+  },
+  "jugglers": [
+    {
+      "name": "A",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "lookAt": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "limbs": [
+    {
+      "juggler": 0,
+      "type": "right hand"
+    },
+    {
+      "juggler": 0,
+      "type": "left hand"
+    }
+  ],
+  "props": [
+    {
+      "color": "#c0392b",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#f45d20",
+      "type": "club"
+    },
+    {
+      "color": "#ed4694",
+      "type": "club"
+    },
+    {
+      "color": "#6f5499",
+      "type": "club"
+    }
+  ]
+}

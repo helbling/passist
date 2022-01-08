@@ -11,4 +11,7 @@ if (!filename) {
 
 const jif = JSON.parse(fs.readFileSync(filename, 'utf8'))
 
-console.log(JSON.stringify(Jif.complete(jif), null, 2));
+const result = Jif.complete(jif);
+console.log(JSON.stringify(result.jif, null, 2));
+for (const warning of result.warnings)
+	console.error(warning);

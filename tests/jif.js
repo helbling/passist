@@ -9,8 +9,9 @@ function testName(input) {
 
 function completeSuccess(input, jif, warnings = []) {
 	test(testName(input) + ' expecting success', () => {
+		const res = Jif.complete(input);
 		assert.equal(
-			Jif.complete(input),
+			{ jif: res.jif, warnings: res.warnings },
 			{ jif, warnings }
 		);
 	});
@@ -35,7 +36,7 @@ const emptyJif = {
 	limbs:  [],
 	props:  [],
 	throws: [],
-	repetitions:  [],
+	repetition:  {},
 };
 
 completeSuccess('{}', emptyJif);
@@ -54,10 +55,21 @@ completeFail('[]');
 completeFail([]);
 completeFail(null);
 
-
 completeSuccess(
 	read('tests/jif/holygrail_in.jif'),
 	read('tests/jif/holygrail_out.jif'),
+	[],
+);
+
+completeSuccess(
+	read('tests/jif/6x4_in.jif'),
+	read('tests/jif/6x4_out.jif'),
+	[],
+);
+
+completeSuccess(
+	read('tests/jif/swinging_door_in.jif'),
+	read('tests/jif/swinging_door_out.jif'),
 	[],
 );
 
