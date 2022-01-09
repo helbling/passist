@@ -82,7 +82,7 @@
   "repetition": {
     "period": 2,
     "limbPermutation": [ 1, 0, 3, 2 ],
-	"propPermutation": [ 4, 5, 6, 7, 3, 2, 0, 1 ]
+	"propPermutation": [ 4, 5, 6, 7, 2, 3, 1, 0 ]
   },
   "meta": {},
   "props": [

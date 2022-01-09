@@ -296,10 +296,9 @@ function _assignProps({ jif, warnings })
 		if (!throw_.iteration)
 			jif.throws[index].prop = prop;
 		if (period) {
-			// TODO: fix propPermutation for swinging door!
 			propOrder.push(prop);
-			if (index >= period) {
-				const fromProp = propOrder[index - period];
+			if (index >= jif.throws.length) {
+				const fromProp = propOrder[index - jif.throws.length];
 				if (typeof propPermutation[fromProp] == 'undefined') {
 					propPermutation[fromProp] = prop;
 					permutationCount++;
