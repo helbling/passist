@@ -1,0 +1,112 @@
+{
+  "meta": {
+    "name": "5 ball split multiplex"
+  },
+  "highLevelDescription": {
+    "type": "siteswap",
+    "description": "[54][22]2"
+  },
+  "throws": [
+    {
+      "time": 0,
+      "duration": 5,
+      "from": 0,
+      "to": 1,
+      "label": "5",
+      "prop": 0
+    },
+    {
+      "time": 0,
+      "duration": 4,
+      "from": 0,
+      "to": 0,
+      "label": "4",
+      "prop": 1
+    },
+    {
+      "time": 1,
+      "duration": 2,
+      "from": 1,
+      "to": 1,
+      "label": "2",
+      "prop": 2
+    },
+    {
+      "time": 1,
+      "duration": 2,
+      "from": 1,
+      "to": 1,
+      "label": "2",
+      "prop": 3
+    },
+    {
+      "time": 2,
+      "duration": 2,
+      "from": 0,
+      "to": 0,
+      "label": "2",
+      "prop": 4
+    }
+  ],
+  "repetition": {
+    "period": 3,
+    "limbPermutation": [
+      1,
+      0
+    ],
+    "propPermutation": [
+      2,
+      3,
+      4,
+      1,
+      0
+    ]
+  },
+  "jugglers": [
+    {
+      "name": "A",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "lookAt": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "limbs": [
+    {
+      "juggler": 0,
+      "type": "right hand"
+    },
+    {
+      "juggler": 0,
+      "type": "left hand"
+    }
+  ],
+  "props": [
+    {
+      "color": "#c0392b",
+      "type": "ball"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "ball"
+    },
+    {
+      "color": "#f45d20",
+      "type": "ball"
+    },
+    {
+      "color": "#ed4694",
+      "type": "ball"
+    },
+    {
+      "color": "#6f5499",
+      "type": "ball"
+    }
+  ]
+}

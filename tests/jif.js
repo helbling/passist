@@ -7,9 +7,9 @@ function testName(input) {
 	return (typeof input) + ' ' + (typeof input == 'string' ? input : JSON.stringify(input));
 }
 
-function completeSuccess(input, jif, warnings = []) {
+function completeSuccess(input, options, jif, warnings = []) {
 	test(testName(input) + ' expecting success', () => {
-		const res = Jif.complete(input);
+		const res = Jif.complete(input, options);
 		assert.equal(
 			{ jif: res.jif, warnings: res.warnings },
 			{ jif, warnings }
@@ -39,12 +39,12 @@ const emptyJif = {
 	repetition:  {},
 };
 
-completeSuccess('{}', emptyJif);
-completeSuccess({},   emptyJif);
+completeSuccess('{}', {}, emptyJif);
+completeSuccess({},   {}, emptyJif);
 completeSuccess({
 	meta: 'invalid',
 	jugglers: 'invalid',
-}, emptyJif, [
+}, {}, emptyJif, [
 	"meta is not an object",
 	"jugglers is not an array"
 ]);
@@ -57,19 +57,29 @@ completeFail(null);
 
 completeSuccess(
 	read('tests/jif/holygrail_in.jif'),
+	{},
 	read('tests/jif/holygrail_out.jif'),
 	[],
 );
 
 completeSuccess(
 	read('tests/jif/6x4_in.jif'),
+	{},
 	read('tests/jif/6x4_out.jif'),
 	[],
 );
 
 completeSuccess(
 	read('tests/jif/swinging_door_in.jif'),
+	{},
 	read('tests/jif/swinging_door_out.jif'),
+	[],
+);
+
+completeSuccess(
+	read('tests/jif/5ball_split_multiplex_in.jif'),
+	{ propType: 'ball' },
+	read('tests/jif/5ball_split_multiplex_out.jif'),
 	[],
 );
 

@@ -220,7 +220,7 @@ function _ensureEnoughProps({ jif, warnings, nProps })
 	}
 }
 
-function _completePropDetails({ jif, warnings })
+function _completePropDetails({ jif, warnings, options })
 {
 	const propColors = [
 		'#c0392b', // red
@@ -241,7 +241,7 @@ function _completePropDetails({ jif, warnings })
 		if (typeof prop.type != 'string') {
 			if (prop.type !== undefined)
 				warnings.push(`prop[${index}].type is not a string`);
-			prop.type = 'club';
+			prop.type = options.propType;
 		}
 	});
 }
@@ -347,10 +347,10 @@ export default class Jif
 	 *
 	 * throws exception in case of errors
 	 *
-	 * TODO: add options (prop type, etc)
-	 *
 	 */
-	static complete(jif) {
+	static complete(jif, options = {}) {
+		options = Object.assign({propType: 'club'}, options);
+
 		const warnings = [];
 		jif = Jif.parse(jif);
 
@@ -372,7 +372,7 @@ export default class Jif
 
 		const { nProps, initialProps } = _assignProps({ jif, warnings });
 		_ensureEnoughProps({   jif, warnings, nProps });
-		_completePropDetails({ jif, warnings });
+		_completePropDetails({ jif, warnings, options });
 
 		return { jif, warnings, initialProps };
 	}
