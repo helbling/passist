@@ -37,6 +37,7 @@ const emptyJif = {
 	props:  [],
 	throws: [],
 	repetition:  {},
+	"timeStretchFactor": 1
 };
 
 completeSuccess('{}', {}, emptyJif);

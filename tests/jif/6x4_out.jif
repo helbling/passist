@@ -71,5 +71,6 @@
       "color": "#6f5499",
       "type": "club"
     }
-  ]
+  ],
+  "timeStretchFactor": 1
 }

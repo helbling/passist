@@ -361,6 +361,9 @@ export default class Jif
 		_enforceType({ jif, warnings, key: 'throws',     type: 'array'  });
 		_enforceType({ jif, warnings, key: 'repetition', type: 'object' });
 
+		if (typeof jif.timeStretchFactor != 'number')
+			jif.timeStretchFactor = 1;
+
 		_ensureEnoughLimbs({      jif, warnings });
 		_ensureEnoughJugglers({   jif, warnings });
 
