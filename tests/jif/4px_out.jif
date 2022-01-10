@@ -1,10 +1,30 @@
 {
   "jugglers": [
     {
-      "name": "A"
+      "name": "A",
+      "position": [
+        1.6,
+        0,
+        0
+      ],
+      "lookAt": [
+        0,
+        0,
+        0
+      ]
     },
     {
-      "name": "B"
+      "name": "B",
+      "position": [
+        -1.6,
+        0,
+        0
+      ],
+      "lookAt": [
+        0,
+        0,
+        0
+      ]
     }
   ],
   "limbs": [
@@ -35,19 +55,19 @@
       "type": "club"
     },
     {
-      "color": "#0c0d5d",
-      "type": "club"
-    },
-    {
-      "color": "#0c0d5d",
-      "type": "club"
-    },
-    {
       "color": "#f45d20",
       "type": "club"
     },
     {
       "color": "#f45d20",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
       "type": "club"
     },
     {
@@ -64,38 +84,38 @@
       "time": 0,
       "duration": 4,
       "from": 0,
-      "to": 3,
-      "label": "4p straigt A->B"
+      "to": 2,
+      "label": "4px A->B",
+      "prop": 0
     },
     {
       "time": 0,
       "duration": 4,
       "from": 2,
-      "to": 1,
-      "label": "4p straigt B->A"
-    },
-    {
-      "time": 0,
-      "duration": 4,
-      "from": 1,
       "to": 0,
-      "label": "4x A"
-    },
-    {
-      "time": 0,
-      "duration": 4,
-      "from": 3,
-      "to": 2,
-      "label": "4x B"
+      "label": "4px B->A",
+      "prop": 1
     }
   ],
   "repetition": {
-    "period": 2,
+    "period": 1,
     "limbPermutation": [
       1,
       0,
       3,
       2
+    ],
+    "propPermutation": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      1,
+      0
     ]
-  }
+  },
+  "meta": {},
+  "timeStretchFactor": 1
 }

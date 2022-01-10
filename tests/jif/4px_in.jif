@@ -1,11 +1,7 @@
 {
   "jugglers": [
-    {
-      "name": "A"
-    },
-    {
-      "name": "B"
-    }
+    { "name": "A" },
+    { "name": "B" }
   ],
   "limbs": [
     {
@@ -35,19 +31,19 @@
       "type": "club"
     },
     {
-      "color": "#0c0d5d",
-      "type": "club"
-    },
-    {
-      "color": "#0c0d5d",
-      "type": "club"
-    },
-    {
       "color": "#f45d20",
       "type": "club"
     },
     {
       "color": "#f45d20",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
       "type": "club"
     },
     {
@@ -64,38 +60,19 @@
       "time": 0,
       "duration": 4,
       "from": 0,
-      "to": 3,
-      "label": "4p straigt A->B"
+      "to": 2,
+      "label": "4px A->B"
     },
     {
       "time": 0,
       "duration": 4,
       "from": 2,
-      "to": 1,
-      "label": "4p straigt B->A"
-    },
-    {
-      "time": 0,
-      "duration": 4,
-      "from": 1,
       "to": 0,
-      "label": "4x A"
-    },
-    {
-      "time": 0,
-      "duration": 4,
-      "from": 3,
-      "to": 2,
-      "label": "4x B"
+      "label": "4px B->A"
     }
   ],
   "repetition": {
-    "period": 2,
-    "limbPermutation": [
-      1,
-      0,
-      3,
-      2
-    ]
+    "period": 1,
+    "limbPermutation": [ 1, 0, 3, 2 ]
   }
 }

@@ -64,6 +64,13 @@ completeSuccess(
 );
 
 completeSuccess(
+	read('tests/jif/holygrail_in.jif'),
+	{ "expand": 1 },
+	read('tests/jif/holygrail_expanded.jif'),
+	[],
+);
+
+completeSuccess(
 	read('tests/jif/6x4_in.jif'),
 	{},
 	read('tests/jif/6x4_out.jif'),
@@ -74,6 +81,13 @@ completeSuccess(
 	read('tests/jif/swinging_door_in.jif'),
 	{},
 	read('tests/jif/swinging_door_out.jif'),
+	[],
+);
+
+completeSuccess(
+	read('tests/jif/4px_in.jif'),
+	{},
+	read('tests/jif/4px_out.jif'),
 	[],
 );
 
