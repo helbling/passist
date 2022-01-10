@@ -736,9 +736,9 @@ updateScene(jif, options)
 		limbs: [],
 		props: [],
 	}, jif);
-	this.beatsPerSecond = options.jugglingSpeed * jif.timeStretchFactor;
-	const periodSeconds = this.periodSeconds = jif.period / this.beatsPerSecond;
 	const timeStretchFactor = jif.timeStretchFactor ? jif.timeStretchFactor : 1;
+	this.beatsPerSecond = options.jugglingSpeed * timeStretchFactor;
+	const periodSeconds = this.periodSeconds = jif.repetition.period / this.beatsPerSecond;
 	const nProps = jif.props.length;
 
 	this.cleanup();
