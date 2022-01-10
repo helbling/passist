@@ -9,9 +9,13 @@ if (!filename) {
 	process.exit(1)
 }
 
+let options = {};
+if (process.argv[3])
+	options = JSON.parse(process.argv[3]);
+
 const jif = JSON.parse(fs.readFileSync(filename, 'utf8'))
 
-const result = Jif.complete(jif);
+const result = Jif.complete(jif, options);
 console.log(JSON.stringify(result.jif, null, 2));
 for (const warning of result.warnings)
 	console.error(warning);
