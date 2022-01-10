@@ -316,6 +316,35 @@ function _assignProps({ jif, warnings })
 	return { nProps, initialProps };
 }
 
+function _lcmArray(array) {
+	function gcd(a, b) { return !b ? a : gcd(b, a % b); }
+	function lcm(a, b) { return (a * b) / gcd(a, b); }
+	let multiple = 1;
+	array.forEach(function(n) {
+		multiple = lcm(multiple, n);
+	});
+	return multiple;
+}
+
+function _permutationLoopLengths(permutation) {
+	const visited = [];
+	const result = [];
+	for (let i = 0; i < permutation.length; i++) {
+		if (visited[i] == 0)
+			continue;
+
+		const orbit = [];
+		for (let j = i; !visited[j]; j = permutation[j]) {
+			orbit.push(j);
+			visited[j] = true;
+		}
+		if (orbit.length)
+			result.push(orbit.length);
+	}
+
+	return result;
+}
+
 export default class Jif
 {
 	/**
@@ -349,7 +378,10 @@ export default class Jif
 	 *
 	 */
 	static complete(jif, options = {}) {
-		options = Object.assign({propType: 'club'}, options);
+		options = Object.assign({
+			propType: 'club',
+			expand: false,
+		}, options);
 
 		const warnings = [];
 		jif = Jif.parse(jif);
@@ -377,27 +409,62 @@ export default class Jif
 		_ensureEnoughProps({   jif, warnings, nProps });
 		_completePropDetails({ jif, warnings, options });
 
+		if (options.expand && jif.repetition) {
+
+			// TODO: enforce repetition..
+
+			const periodCount = _lcmArray([
+				..._permutationLoopLengths(jif.repetition.limbPermutation),
+				..._permutationLoopLengths(jif.repetition.propPermutation),
+			]);
+
+			var throws_ = [];
+			for (const throw_ of Jif.generateThrows(jif)) {
+
+				if (throw_.iteration >= periodCount)
+					break;
+
+				throws_.push(throw_);
+			}
+			jif.throws = throws_;
+
+			jif.repetition = {
+				period: jif.repetition.period * periodCount,
+				limbPermutation: [...Array(jif.limbs.length).keys()],
+				propPermutation: [...Array(jif.props.length).keys()],
+			};
+		}
+
 		return { jif, warnings, initialProps };
 	}
 
 	static * generateThrows(jif) {
 		const period = jif.repetition && jif.repetition.period;
 		let limbPermutation = [...Array(jif.limbs.length).keys()];
+		let propPermutation;
+		if (Array.isArray(jif.props) && jif.repetition && jif.repetition.propPermutation)
+			propPermutation = [...Array(jif.props.length).keys()];
 		let iteration = 0;
 		let baseTime = 0;
 		while (true) {
 			for (const throw_ of jif.throws) {
-				yield Object.assign({}, throw_, {
+				const overwrite = {
 					time: baseTime + throw_.time,
 					to:   limbPermutation[throw_.to],
 					from: limbPermutation[throw_.from],
 					iteration,
-				});
+				};
+				if (propPermutation && typeof throw_.prop != 'undefined') {
+					overwrite.prop = propPermutation[throw_.prop];
+				}
+				yield Object.assign({}, throw_, overwrite);
 			}
 			if (!period)
 				break;
 			baseTime += period;
 			limbPermutation = limbPermutation.map(v => jif.repetition.limbPermutation[v]);
+			if (propPermutation)
+				propPermutation = propPermutation.map(v => jif.repetition.propPermutation[v]);
 			iteration++;
 		}
 	}
