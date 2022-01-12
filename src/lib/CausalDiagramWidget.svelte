@@ -3,7 +3,7 @@
 <script>
 	export let jif;
 	export let startConfigurations;
-	export let steps = jif.period;
+	export let steps = jif.repetition.period;
 
 	let jugglers = {};
 	const xoff = 55;
@@ -72,7 +72,7 @@ $: {
 		const throws = jif.throws ? jif.throws : [];
 		for (let i = 0; i < steps; i++) {
 			const th = throws[i % throws.length];
-			const time = th.time + Math.floor(i / throws.length) * jif.period;
+			const time = th.time + Math.floor(i / throws.length) * jif.repetition.period;
 			const fromLimb = jif.limbs[th.from];
 			const isLeft = fromLimb.type && fromLimb.type.match(/left/);
 
