@@ -169,7 +169,12 @@ toJif(options)
 
 	const steps = lcmArray(periods);
 
+	// TODO: simplify
 	jif.period = steps;
+	jif.repetition = {
+		period: steps,
+		limbPermutation: [...Array(jif.limbs.length).keys()],
+	};
 	jif.throws = [];
 	if (this.period < 1)
 		return jif;
