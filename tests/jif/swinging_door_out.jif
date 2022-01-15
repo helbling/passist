@@ -1,0 +1,123 @@
+{
+  "jugglers": [
+    {
+      "name": "A",
+      "position": [
+        1.6,
+        0,
+        0
+      ],
+      "lookAt": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "B",
+      "position": [
+        -1.6,
+        0,
+        0
+      ],
+      "lookAt": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "limbs": [
+    {
+      "juggler": 0,
+      "type": "right hand"
+    },
+    {
+      "juggler": 0,
+      "type": "left hand"
+    },
+    {
+      "juggler": 1,
+      "type": "right hand"
+    },
+    {
+      "juggler": 1,
+      "type": "left hand"
+    }
+  ],
+  "props": [
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#f45d20",
+      "type": "club"
+    },
+    {
+      "color": "#f45d20",
+      "type": "club"
+    },
+    {
+      "color": "#f45d20",
+      "type": "club"
+    },
+    {
+      "color": "#f45d20",
+      "type": "club"
+    }
+  ],
+  "throws": [
+    {
+      "time": 0,
+      "duration": 4,
+      "from": 0,
+      "to": 3,
+      "label": "4p straigt A->B",
+      "prop": 0
+    },
+    {
+      "time": 0,
+      "duration": 4,
+      "from": 2,
+      "to": 1,
+      "label": "4p straigt B->A",
+      "prop": 1
+    },
+    {
+      "time": 0,
+      "duration": 4,
+      "from": 1,
+      "to": 0,
+      "label": "4x A",
+      "prop": 2
+    },
+    {
+      "time": 0,
+      "duration": 4,
+      "from": 3,
+      "to": 2,
+      "label": "4x B",
+      "prop": 3
+    }
+  ],
+  "repetition": {
+    "period": 2,
+    "limbPermutation": [ 1, 0, 3, 2 ],
+	"propPermutation": [ 4, 5, 6, 7, 2, 3, 1, 0 ]
+  },
+  "meta": {},
+  "timeStretchFactor": 1
+}

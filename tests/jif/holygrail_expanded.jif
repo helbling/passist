@@ -1,0 +1,388 @@
+{
+  "timeStretchFactor": 2,
+  "throws": [
+    {
+      "time": 0,
+      "duration": 9,
+      "from": 0,
+      "to": 1,
+      "prop": 0,
+      "iteration": 0
+    },
+    {
+      "time": 1,
+      "duration": 7,
+      "from": 1,
+      "to": 0,
+      "prop": 1,
+      "iteration": 0
+    },
+    {
+      "time": 2,
+      "duration": 5,
+      "from": 2,
+      "to": 3,
+      "prop": 2,
+      "iteration": 0
+    },
+    {
+      "time": 3,
+      "duration": 9,
+      "from": 3,
+      "to": 0,
+      "prop": 3,
+      "iteration": 1
+    },
+    {
+      "time": 4,
+      "duration": 7,
+      "from": 0,
+      "to": 3,
+      "prop": 4,
+      "iteration": 1
+    },
+    {
+      "time": 5,
+      "duration": 5,
+      "from": 1,
+      "to": 2,
+      "prop": 5,
+      "iteration": 1
+    },
+    {
+      "time": 6,
+      "duration": 9,
+      "from": 2,
+      "to": 3,
+      "prop": 6,
+      "iteration": 2
+    },
+    {
+      "time": 7,
+      "duration": 7,
+      "from": 3,
+      "to": 2,
+      "prop": 2,
+      "iteration": 2
+    },
+    {
+      "time": 8,
+      "duration": 5,
+      "from": 0,
+      "to": 1,
+      "prop": 1,
+      "iteration": 2
+    },
+    {
+      "time": 9,
+      "duration": 9,
+      "from": 1,
+      "to": 2,
+      "prop": 0,
+      "iteration": 3
+    },
+    {
+      "time": 10,
+      "duration": 7,
+      "from": 2,
+      "to": 1,
+      "prop": 5,
+      "iteration": 3
+    },
+    {
+      "time": 11,
+      "duration": 5,
+      "from": 3,
+      "to": 0,
+      "prop": 4,
+      "iteration": 3
+    },
+    {
+      "time": 12,
+      "duration": 9,
+      "from": 0,
+      "to": 1,
+      "prop": 3,
+      "iteration": 4
+    },
+    {
+      "time": 13,
+      "duration": 7,
+      "from": 1,
+      "to": 0,
+      "prop": 1,
+      "iteration": 4
+    },
+    {
+      "time": 14,
+      "duration": 5,
+      "from": 2,
+      "to": 3,
+      "prop": 2,
+      "iteration": 4
+    },
+    {
+      "time": 15,
+      "duration": 9,
+      "from": 3,
+      "to": 0,
+      "prop": 6,
+      "iteration": 5
+    },
+    {
+      "time": 16,
+      "duration": 7,
+      "from": 0,
+      "to": 3,
+      "prop": 4,
+      "iteration": 5
+    },
+    {
+      "time": 17,
+      "duration": 5,
+      "from": 1,
+      "to": 2,
+      "prop": 5,
+      "iteration": 5
+    },
+    {
+      "time": 18,
+      "duration": 9,
+      "from": 2,
+      "to": 3,
+      "prop": 0,
+      "iteration": 6
+    },
+    {
+      "time": 19,
+      "duration": 7,
+      "from": 3,
+      "to": 2,
+      "prop": 2,
+      "iteration": 6
+    },
+    {
+      "time": 20,
+      "duration": 5,
+      "from": 0,
+      "to": 1,
+      "prop": 1,
+      "iteration": 6
+    },
+    {
+      "time": 21,
+      "duration": 9,
+      "from": 1,
+      "to": 2,
+      "prop": 3,
+      "iteration": 7
+    },
+    {
+      "time": 22,
+      "duration": 7,
+      "from": 2,
+      "to": 1,
+      "prop": 5,
+      "iteration": 7
+    },
+    {
+      "time": 23,
+      "duration": 5,
+      "from": 3,
+      "to": 0,
+      "prop": 4,
+      "iteration": 7
+    },
+    {
+      "time": 24,
+      "duration": 9,
+      "from": 0,
+      "to": 1,
+      "prop": 6,
+      "iteration": 8
+    },
+    {
+      "time": 25,
+      "duration": 7,
+      "from": 1,
+      "to": 0,
+      "prop": 1,
+      "iteration": 8
+    },
+    {
+      "time": 26,
+      "duration": 5,
+      "from": 2,
+      "to": 3,
+      "prop": 2,
+      "iteration": 8
+    },
+    {
+      "time": 27,
+      "duration": 9,
+      "from": 3,
+      "to": 0,
+      "prop": 0,
+      "iteration": 9
+    },
+    {
+      "time": 28,
+      "duration": 7,
+      "from": 0,
+      "to": 3,
+      "prop": 4,
+      "iteration": 9
+    },
+    {
+      "time": 29,
+      "duration": 5,
+      "from": 1,
+      "to": 2,
+      "prop": 5,
+      "iteration": 9
+    },
+    {
+      "time": 30,
+      "duration": 9,
+      "from": 2,
+      "to": 3,
+      "prop": 3,
+      "iteration": 10
+    },
+    {
+      "time": 31,
+      "duration": 7,
+      "from": 3,
+      "to": 2,
+      "prop": 2,
+      "iteration": 10
+    },
+    {
+      "time": 32,
+      "duration": 5,
+      "from": 0,
+      "to": 1,
+      "prop": 1,
+      "iteration": 10
+    },
+    {
+      "time": 33,
+      "duration": 9,
+      "from": 1,
+      "to": 2,
+      "prop": 6,
+      "iteration": 11
+    },
+    {
+      "time": 34,
+      "duration": 7,
+      "from": 2,
+      "to": 1,
+      "prop": 5,
+      "iteration": 11
+    },
+    {
+      "time": 35,
+      "duration": 5,
+      "from": 3,
+      "to": 0,
+      "prop": 4,
+      "iteration": 11
+    }
+  ],
+  "repetition": {
+    "period": 36,
+    "limbPermutation": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "propPermutation": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "meta": {},
+  "jugglers": [
+    {
+      "name": "A",
+      "position": [
+        1.6,
+        0,
+        0
+      ],
+      "lookAt": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "B",
+      "position": [
+        -1.6,
+        0,
+        0
+      ],
+      "lookAt": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "limbs": [
+    {
+      "juggler": 0,
+      "type": "right hand"
+    },
+    {
+      "juggler": 1,
+      "type": "right hand"
+    },
+    {
+      "juggler": 0,
+      "type": "left hand"
+    },
+    {
+      "juggler": 1,
+      "type": "left hand"
+    }
+  ],
+  "props": [
+    {
+      "color": "#c0392b",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#f45d20",
+      "type": "club"
+    },
+    {
+      "color": "#ed4694",
+      "type": "club"
+    },
+    {
+      "color": "#6f5499",
+      "type": "club"
+    },
+    {
+      "color": "#00dc3c",
+      "type": "club"
+    },
+    {
+      "color": "#ffd700",
+      "type": "club"
+    }
+  ]
+}

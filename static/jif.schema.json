@@ -120,38 +120,27 @@
         }
       }
     },
-    "repetitions": {
-      "title": "Repetitions",
-      "description": "repetitions of throws in a time period",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "start": {
-            "description": "start time in beats",
-            "type": "number"
-          },
-          "end": {
-            "description": "end time in beats",
-            "type": "number"
-          },
-          "count": {
-            "description": "how many times this sequence is repeated",
+    "repetition": {
+      "title": "Repetition",
+      "description": "repetition of throws",
+      "type": "object",
+      "properties": {
+        "period": {
+          "description": "repetition period",
+          "type": "integer"
+        },
+        "limbPermutation": {
+          "description": "permutation of the limb ids after every repetition",
+          "type": "array",
+          "items": {
             "type": "integer"
-          },
-          "limbPermutation": {
-            "description": "permutation of the limb ids after every repetition",
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "propPermutation": {
-            "description": "permutation of the prop ids after every repetition",
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
+          }
+        },
+        "propPermutation": {
+          "description": "permutation of the prop ids after every repetition",
+          "type": "array",
+          "items": {
+            "type": "integer"
           }
         }
       }

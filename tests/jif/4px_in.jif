@@ -1,0 +1,78 @@
+{
+  "jugglers": [
+    { "name": "A" },
+    { "name": "B" }
+  ],
+  "limbs": [
+    {
+      "juggler": 0,
+      "type": "right hand"
+    },
+    {
+      "juggler": 0,
+      "type": "left hand"
+    },
+    {
+      "juggler": 1,
+      "type": "right hand"
+    },
+    {
+      "juggler": 1,
+      "type": "left hand"
+    }
+  ],
+  "props": [
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#f45d20",
+      "type": "club"
+    },
+    {
+      "color": "#f45d20",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#f45d20",
+      "type": "club"
+    },
+    {
+      "color": "#f45d20",
+      "type": "club"
+    }
+  ],
+  "throws": [
+    {
+      "time": 0,
+      "duration": 4,
+      "from": 0,
+      "to": 2,
+      "label": "4px A->B"
+    },
+    {
+      "time": 0,
+      "duration": 4,
+      "from": 2,
+      "to": 0,
+      "label": "4px B->A"
+    }
+  ],
+  "repetition": {
+    "period": 1,
+    "limbPermutation": [ 1, 0, 3, 2 ]
+  }
+}
