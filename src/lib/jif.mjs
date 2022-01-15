@@ -160,25 +160,26 @@ function _completeRepetition({ jif, warnings })
 	const defaultLimbPermutation = [...Array(jif.limbs.length).keys()];
 	const defaultPropPermutation = [...Array(jif.props.length).keys()];
 
-	if (typeof rep == 'object' && rep.period) {
-		if (!Array.isArray(rep.limbPermutation)) {
-			if (typeof rep.limbPermutation != 'undefined')
-				warnings.push("repetition.limbPermutation has unexpected type, setting to identity");
-			rep.limbPermutation = defaultLimbPermutation;
-		} else if (rep.limbPermutation.length != jif.limbs.length) {
-			rep.limbPermutation = defaultLimbPermutation;
-			warnings.push("invalid size of repetition.limbPermutation, setting to identity");
-		}
+	if (typeof rep == 'object') {
+		if (rep.period) {
+			if (!Array.isArray(rep.limbPermutation)) {
+				if (typeof rep.limbPermutation != 'undefined')
+					warnings.push("repetition.limbPermutation has unexpected type, setting to identity");
+				rep.limbPermutation = defaultLimbPermutation;
+			} else if (rep.limbPermutation.length != jif.limbs.length) {
+				rep.limbPermutation = defaultLimbPermutation;
+				warnings.push("invalid size of repetition.limbPermutation, setting to identity");
+			}
 
-		if (!Array.isArray(rep.propPermutation)) {
-			if (typeof rep.propPermutation != 'undefined')
-				warnings.push("repetition.propPermutation has unexpected type, setting to identity");
-			rep.propPermutation = defaultPropPermutation;
-		} else if (rep.propPermutation.length != jif.limbs.length) {
-			rep.propPermutation = defaultPropPermutation;
-			warnings.push("invalid size of repetition.propPermutation, setting to identity");
+			if (!Array.isArray(rep.propPermutation)) {
+				if (typeof rep.propPermutation != 'undefined')
+					warnings.push("repetition.propPermutation has unexpected type, setting to identity");
+				rep.propPermutation = defaultPropPermutation;
+			} else if (rep.propPermutation.length != jif.limbs.length) {
+				rep.propPermutation = defaultPropPermutation;
+				warnings.push("invalid size of repetition.propPermutation, setting to identity");
+			}
 		}
-
 	} else if (typeof rep != 'undefined') {
 		delete jif.repetition;
 		warnings.push("repetition is not an object, removing repetition");
