@@ -93,6 +93,7 @@
 		<Icon type=load /> load
 	</button>
 	<a
+		href="/jif"
 		bind:this={savelink}
 		class="save pure-button"
 		download={(name || "pattern").trim().replaceAll(/\W+/g, "_") + ".jif"}
