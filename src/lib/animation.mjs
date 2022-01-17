@@ -545,8 +545,12 @@ constructor(canvas, jif, animationOptions, sizeOptions)
 		antialias:true,
 	});
 	this.renderer.setClearColor(new THREE.Color(0xffffff));
-	this.renderer.outputEncoding = THREE.GammaEncoding;
-	this.renderer.gammaFactor = 2.2;
+
+	// to have similar colors as before with
+	//   outputEncoding = THREE.GammaEncoding
+	//   gammaFactor = 2.2
+	this.renderer.outputEncoding = THREE.sRGBEncoding;
+
 
 	this.camera = new THREE.PerspectiveCamera(45, sizeOptions.width / sizeOptions.height, 0.1, 10000);
 	this.camera.position.set(0, 2, 10);

@@ -16,7 +16,7 @@
   "dependencies": {
     "heap-js": "^2.1.6",
     "marked": "^4.0.10",
-    "three": "^0.135.0"
+    "three": "^0.136.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
