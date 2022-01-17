@@ -1,8 +1,6 @@
 <script>
 	import NavigationWidget from '$lib/NavigationWidget.svelte';
 	import { servertype } from '$lib/passist.mjs';
-
-	export let segment;
 </script>
 
 <style>
@@ -64,7 +62,7 @@
 		<div>
 			<img class="meeseeks" src="/images/mr_meeseeks_proud2.png" alt="mr meeseeks" />
 		</div>
-		<NavigationWidget {segment}/>
+		<NavigationWidget />
 	</div>
 </header>
 <main>

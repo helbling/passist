@@ -3,7 +3,10 @@
 	import { page } from '$app/stores';
 
 	let segment = '';
-	$: segment = '/' + $page.path.split('/')[1];
+	$: {
+		const pathname = $page?.url?.pathname || '';
+		segment = '/' + pathname.split('/')[1];
+	}
 
 	let pages = [
 		{ path:'/siteswap-generator', title:'Generator' },
@@ -12,6 +15,7 @@
 		jifdev ? { path:'/jif',       title:'Jif' } : null,
 		{ path:'/about',     title:'About' },
 	].filter(Boolean);
+
 </script>
 
 <style>
@@ -25,15 +29,15 @@
 
 <nav class="pure-menu pure-menu-horizontal">
 	<ul class=pure-menu-list>
-		{#each pages as page}
-		<li class=pure-menu-item class:pure-menu-selected={segment === page.path || !segment && page.path === 'generator'}>
+		{#each pages as p}
+		<li class=pure-menu-item class:pure-menu-selected={segment === p.path || !segment && p.path === 'generator'}>
 			<a
 				class=pure-menu-link
 				sveltekit:prefetch
-				class:selected={segment === page.path || !segment && page.path === 'generator' }
-				href={page.path}
+				class:selected={segment === p.path || !segment && p.path === 'generator' }
+				href={p.path}
 			>
-				{page.title}
+				{p.title}
 			</a>
 		</li>
 		{/each}

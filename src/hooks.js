@@ -1,7 +1,9 @@
 export async function handle({ request, resolve }) {
 	const response = await resolve(request);
 
-	if (request.path.match(/\.jif$/)) {
+	const path = request?.url?.pathname || '';
+
+	if (path.match(/\.jif$/)) {
 		return {
 			...response,
 			headers: {
@@ -10,12 +12,12 @@ export async function handle({ request, resolve }) {
 				'access-control-allow-origin': '*',
 			}
 		};
-	} else if (request.path.match(/^\/images\//)) {
+	} else if (path.match(/^\/images\//)) {
 		const headers = {
 			...response.headers,
 			'access-control-allow-origin': '*',
 		};
-		const match = request.path.match(/\.([^.]+)$/);
+		const match = path.match(/\.([^.]+)$/);
 		const types = {
 			png: 'image/png',
 			svg: 'image/svg+xml',
