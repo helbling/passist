@@ -1,12 +1,12 @@
 <script context="module">
 	import { defaults } from '$lib/passist.mjs';
 
-	export async function load({ page }) {
+	export async function load({ url, params }) {
 
 		return { props: {
-			siteswapInput: page.params.siteswap,
-			nJugglers: parseInt(page.query.get('jugglers')) || defaults.nJugglers,
-			handsInput: page.query.get('hands') || ''
+			siteswapInput: params.siteswap,
+			nJugglers: parseInt(url.searchParams.get('jugglers')) || defaults.nJugglers,
+			handsInput: url.searchParams.get('hands') || ''
 		} }
 	}
 </script>
