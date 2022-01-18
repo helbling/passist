@@ -9,37 +9,38 @@ const grammar = `
   // see https://jugglinglab.org/html/ssnotation.html
 
   Pattern
-	= _ beats:( Beat / Passing )+ _ { return beats; }
+	= _ beats:Solo+    _ star:Star _ { return { type:"solo", star, beats }; }
+	/ _ beats:Passing+ _ star:Star _ { return { type:"passing", star, beats }; }
+
+  Star
+    = "*" { return true }
 
   Passing
-    = "<" _ head:Beat tail:( _ "|" _ Beat )* _ ">" _ {
+    = "<" _ head:Solo tail:( _ "|" _ Solo )* _ ">" _ {
   	  return { passing: [head, ...tail.map(x => x[3])] };
       }
 
-  Beat
-    = Hand / Sync
-
+  Solo
+    = Multiplex / Sync
 
   Sync
-    = "(" _ left:Hand _ "," _ right:Hand _ ")" _ {
+    = _ "(" _ left:Multiplex _ "," _ right:Multiplex _ ")" _ {
         return [ "sync", [right, left] ];
       }
 
-
-  Hand
-    = m:Multiplex { return ['hand', m[1]]; }
-      / t:Throw   { return ['hand', [t]]; }
-
   Multiplex
-    =   "[" _ t:Throw+ _ "]" _ { return ['multiplex', t]; }
+    =  _ "[" _ t:Throw+ _ "]" _ { return  t; }
+    /  _ t:Throw                { return [t]; }
 
   Throw
-    = height:Height _ cross:Cross ? _ pass:Pass ? _ { return { height, pass, cross }; }
+    = height:Height _ x:X _ p:P     _ { return { height, p, x }; }
+    / height:Height _ p:P _ x:X     _ { return { height, p, x }; }
+	/ height:Height _ p:P ? _ x:X ? _ { return { height, p, x }; }
 
-  Pass
+  P "pass flag"
     = "p" { return true }
 
-  Cross
+  X "x flag"
     = "x" { return true }
 
   Height "height"
