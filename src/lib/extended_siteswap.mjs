@@ -9,8 +9,8 @@ const grammar = `
   // see https://jugglinglab.org/html/ssnotation.html
 
   Pattern
-	= _ beats:Solo+    _ star:Star _ { return { type:"solo", star, beats }; }
-	/ _ beats:Passing+ _ star:Star _ { return { type:"passing", star, beats }; }
+	= _ beats:Solo+    _ star:Star? _ { return { type:"solo", star, beats }; }
+	/ _ beats:Passing+ _ star:Star? _ { return { type:"passing", star, beats }; }
 
   Star
     = "*" { return true }
@@ -21,11 +21,16 @@ const grammar = `
       }
 
   Solo
-    = Multiplex / Sync
+    = Async / Sync
+
+  Async
+    = _ m:Multiplex _ _ {
+        return [ "async", m ];
+      }
 
   Sync
     = _ "(" _ left:Multiplex _ "," _ right:Multiplex _ ")" _ {
-        return [ "sync", [right, left] ];
+        return [ "sync", [left, right] ];
       }
 
   Multiplex
