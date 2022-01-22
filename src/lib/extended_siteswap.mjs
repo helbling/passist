@@ -16,7 +16,7 @@ const grammar = `
     = "*" { return true }
 
   Passing
-    = "<" _ head:Solo tail:( _ "|" _ Solo )* _ ">" _ {
+    = "<" _ head:Solo+ tail:( _ "|" _ Solo+ )* _ ">" _ {
   	  return { passing: [head, ...tail.map(x => x[3])] };
       }
 
@@ -60,12 +60,12 @@ var parser = peg.generate(grammar);
 
 export default class ExtendedSiteswap {
 
-constructor(input)
+constructor(input, options = {})
 {
 	this.input = input;
 	try {
 		this.ast = parser.parse(input);
-		console.log(JSON.stringify(this.ast, null, 2));
+		this.jif = this.toJif(options);
 	} catch (e) {
 		this.error = e;
 	}
@@ -82,7 +82,7 @@ toString()
 }
 
 
-toJif(options)
+toJif(options = {})
 {
 	const pattern = this.toString();
 
@@ -103,6 +103,14 @@ toJif(options)
 	if (!this.isValid())
 		return jif;
 
+	let nLimbs = 2;
+	if (options.nJugglers)
+		nLimbs = options.nJugglers * 2;
+	
+// 	if (ast.
+
+
+	const throws = [];
 // 	for (let i = 0; i < steps; i++) {
 // 		const height = heights[i % this.period];
 // 		const t = {

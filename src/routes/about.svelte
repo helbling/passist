@@ -36,10 +36,14 @@ This project builds upon the follwing open source tools. Many thanks to its crea
 - [Pure.css](https://purecss.io/) as a good css base
 - [Svelte-DragDropList](https://github.com/jwlarocque/svelte-dragdroplist) for hand order drag and drop
 
+# Pattern sources
+
+- [Well known siteswaps](https://github.com/ckaestne/CompatSiteswaps/blob/master/named-siteswaps.txt) from Christian Kästner
+- [Juggling Lab](https://jugglinglab.org/) from Jack Boyce for a list of extended siteswaps
 
 ## License
 
-Copyright 2021 Christian Helbling
+Copyright 2022 Christian Helbling
 
 Licensed under the GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 
