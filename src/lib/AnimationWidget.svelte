@@ -49,7 +49,7 @@
 	let exitFullscreen = unmaximize;
 
 
-	$: animationJif = Jif.complete(jif).jif; // add missing things, TODO: show warnings
+	$: animationJif = Jif.complete(jif, { expand:true } ).jif; // add missing things, TODO: show warnings
 	$: pixelRatio = { low:0.5, medium:1, high:2 }[resolution];
 	$: animationOptions = { valid, jugglingSpeed, animationSpeed, showOrbits };
 	$: sizeOptions = { width, height, pixelRatio };

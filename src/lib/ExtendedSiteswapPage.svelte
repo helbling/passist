@@ -7,7 +7,7 @@
 	import { browser } from '$app/env';
 	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
 
-	export let patternInput = "(a, [33p])";
+	export let patternInput = "22[43][54]";
 	export let fullscreen = false;
 	let pattern;
 	let patternValid = false;
@@ -20,7 +20,7 @@
 	let windowWidth;
 	let windowHeight;
 	let limbs = [];
-	let title;
+	let title = "extended siteswap test page";
 
 
 	let patterns = [
@@ -376,10 +376,12 @@ $:	{
 	<h2>{pattern.toString()}</h2>
 	-->
 
+	<!--
 	<h3>AST:</h3>
 	<pre>
 		{JSON.stringify(pattern.ast, null, 2)}
 	</pre>
+	-->
 	<h3>JIF:</h3>
 	<!--
 	{#if patternValid}
@@ -391,70 +393,16 @@ $:	{
 	{/if}
 	-->
 	<pre>
-	{JSON.stringify(jif, null, 2)}
+	{JSON.stringify(pattern.jif, null, 2)}
 	</pre>
 
-	<!--
 	<div class=animation-wrapper style="width:{windowWidth > 1000 ? 1000 : windowWidth - 32}px; height:300px">
 		<AnimationWidget
-			{jif}
-			initialFullscreen={fullscreen}
-			closeButton={true}
-			enableSettings={true}
+			jif={pattern.jif}
 			valid={patternValid}
-			jugglingSpeed={parseFloat(jugglingSpeed)}
-			animationSpeed={parseFloat(animationSpeed)}
-			{showOrbits}
 		>
-			<InputField
-				bind:value={patternInput}
-				id=patternInput
-				label=Pattern
-				type=search
-				valid={patternValid || !patternInput}
-				attr={{
-					class:     'siteswap',
-					inputmode: 'verbatim',
-					size:      20,
-				}}
-			/>
-
-			<InputField
-				id=proptype
-				type=custom
-				label="Prop type"
-			>
-				<label class="pure-button" class:pure-button-active={propType == 'ball'}>
-					<input type="radio" bind:group={propType} value="ball" autocomplete="off"> Balls
-				</label>
-				<label class="pure-button" class:pure-button-active={propType == 'club'}>
-					<input type="radio" bind:group={propType} value="club" autocomplete="off"> Clubs
-				</label>
-			</InputField>
-			<InputField
-				bind:value={jugglingSpeed}
-				type=number
-				id=jugglingspeed
-				label='Juggling speed'
-				step=0.1
-			/>
-			<InputField
-				bind:value={animationSpeed}
-				type=number
-				id=animationspeed
-				label='Animation speed'
-				step=0.1
-				min=0.1
-			/>
-			<InputField
-				id=orbits
-				bind:value={showOrbits}
-				type=checkbox
-				label="Show orbits"
-			/>
 		</AnimationWidget>
 	</div>
-	-->
 
 {:else if patternInput}
 	<div>

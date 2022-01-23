@@ -1,6 +1,8 @@
 'use strict';
 
 import peg from 'pegjs';
+import Siteswap from './siteswap.mjs';
+import Jif from './jif.mjs';
 
 const grammar = `
   // jugglinglab pattern grammar for pegjs
@@ -25,12 +27,12 @@ const grammar = `
 
   Async
     = _ m:Multiplex _ _ {
-        return [ "async", m ];
+        return { type:"async", throws:m };
       }
 
   Sync
     = _ "(" _ left:Multiplex _ "," _ right:Multiplex _ ")" _ {
-        return [ "sync", [left, right] ];
+        return { type:"sync", left, right };
       }
 
   Multiplex
@@ -38,9 +40,9 @@ const grammar = `
     /  _ t:Throw                { return [t]; }
 
   Throw
-    = height:Height _ x:X _ p:P     _ { return { height, p, x }; }
-    / height:Height _ p:P _ x:X     _ { return { height, p, x }; }
-	/ height:Height _ p:P ? _ x:X ? _ { return { height, p, x }; }
+    = duration:Duration _ x:X _ p:P     _ { return { duration, p, x }; }
+    / duration:Duration _ p:P _ x:X     _ { return { duration, p, x }; }
+	/ duration:Duration _ p:P ? _ x:X ? _ { return { duration, p, x }; }
 
   P "pass flag"
     = "p" { return true }
@@ -48,7 +50,7 @@ const grammar = `
   X "x flag"
     = "x" { return true }
 
-  Height "height"
+  Duration "duration"
     = _ char:[0-9a-o] { return (char.match(/[0-9]/) ? +char : (char.charCodeAt(0) - 'a'.charCodeAt(0) + 10)); }
 
   _ "whitespace"
@@ -57,6 +59,74 @@ const grammar = `
 
 var parser = peg.generate(grammar);
 
+function label(t)
+{
+	let result = Siteswap.heightToChar(t.duration);
+	for (const key of ['p', 'x'])
+		if (t[key])
+			result += key;
+}
+
+function addTo(jifThrow, astThrow, nLimbs)
+{
+	let to = jifThrow.from;
+
+	// cross throws
+	if (astThrow.x ^ (astThrow.duration & 1))
+		to ^= 1;
+
+	// passes
+	if (astThrow.p)
+		to = (to + 2) % nLimbs;
+
+	jifThrow.to = to;
+
+	return jifThrow;
+}
+
+function beats2throws(beats, {nLimbs = 2, from = 0 } = {}) {
+	const throws = [];
+	const initialFrom = from;
+	let time = 0;
+	for (const beat of beats) {
+
+		if (beat.type == 'async') {
+			for (const t of beat.throws)
+				throws.push(addTo({
+					time,
+					duration: t.duration,
+					label: label(t),
+					from,
+				}, t, nLimbs));
+
+			from ^= 1;
+			time++;
+		} else if (beat.type == 'sync') {
+			for (const t of beat.left)
+				throws.push(addTo({
+					time,
+					duration: t.duration,
+					from: from | 1,
+					label: label(t),
+				}, t, nLimbs));
+
+			for (const t of beat.right)
+				throws.push(addTo({
+					time,
+					duration: t.duration,
+					from: from & ~1,
+					label: label(t),
+				}, t, nLimbs));
+
+			from = initialFrom;
+			time+=2;
+		} else {
+			throw "beat.type '" + beat.type + "' not handled";
+
+		}
+	}
+	return { throws, time };
+}
 
 export default class ExtendedSiteswap {
 
@@ -69,6 +139,7 @@ constructor(input, options = {})
 	} catch (e) {
 		this.error = e;
 	}
+	this.isVanillaSiteswap = ExtendedSiteswap.isVanillaSiteswap(input);
 }
 
 isValid()
@@ -104,30 +175,38 @@ toJif(options = {})
 		return jif;
 
 	let nLimbs = 2;
-	if (options.nJugglers)
-		nLimbs = options.nJugglers * 2;
-	
-// 	if (ast.
 
+	const ast = this.ast;
 
-	const throws = [];
-// 	for (let i = 0; i < steps; i++) {
-// 		const height = heights[i % this.period];
-// 		const t = {
-// 			time: i,
-// 			duration: height,
-// 			from: i % nLimbs,
-// 			to:  (i + height) % nLimbs,
-// 			label: Siteswap.heightToChar(height)
-// 		};
-// 		if (options.flipTwos && (height > 1.5 * jif.timeStretchFactor && height < 2.5 * jif.timeStretchFactor))
-// 			t.spins = 1;
-//
-// 		throwsAtTime.push(t);
-// 		jif.throws.push(t);
-// 	}
+	let throws;
+	let period;
+	if (ast.type == 'solo') {
+		({ throws, time: period } = beats2throws(ast.beats));
+	} else { // ast.type == 'passing'
+		// TODO
+	}
+
+	const repetition = { period };
+
+	if (ast.star)
+		repetition.limbPermutation = [...Array(nLimbs).keys()].map(limb => limb ^ 1);
+
+	jif.limbs = [];
+	for (let i = 0; i < nLimbs; i++) {
+		jif.limbs.push({
+			juggler: Math.floor(i / 2),
+			type: ((i & 1) ? 'left' : 'right') + ' hand',
+		});
+	}
+
+	jif.throws = throws;
+	jif.repetition = repetition;
 
 	return jif;
+}
+
+static isVanillaSiteswap(input) {
+	return !!input.match(/^[\s0-9a-z]+$/i);
 }
 
 }
