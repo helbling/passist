@@ -322,7 +322,8 @@ function _assignProps({ jif, warnings })
 					propPermutation[fromProp] = prop;
 					permutationCount++;
 				} else {
-					console.assert(propPermutation[fromProp] == prop);
+					if (propPermutation[fromProp] != prop)
+						throw "permutation calculation inconsistent..";
 				}
 			}
 		}
