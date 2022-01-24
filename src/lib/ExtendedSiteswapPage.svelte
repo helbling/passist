@@ -7,7 +7,8 @@
 	import { browser } from '$app/env';
 	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
 
-	export let patternInput = "22[43][54]";
+	//export let patternInput = "22[43][54]";
+	export let patternInput = "<3p3|3p3><3|3>";
 	export let fullscreen = false;
 	let pattern;
 	let patternValid = false;

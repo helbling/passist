@@ -11,15 +11,15 @@ const grammar = `
   // see https://jugglinglab.org/html/ssnotation.html
 
   Pattern
-	= _ beats:Solo+    _ star:Star? _ { return { type:"solo", star, beats }; }
-	/ _ beats:Passing+ _ star:Star? _ { return { type:"passing", star, beats }; }
+    = _ beats:Solo+       _ star:Star? _ { return { type:"solo",    star, beats    }; }
+    / _ passings:Passing+ _ star:Star? _ { return { type:"passing", star, passings }; }
 
   Star
     = "*" { return true }
 
   Passing
     = "<" _ head:Solo+ tail:( _ "|" _ Solo+ )* _ ">" _ {
-  	  return { passing: [head, ...tail.map(x => x[3])] };
+        return [head, ...tail.map(x => x[3])];
       }
 
   Solo
@@ -65,6 +65,7 @@ function label(t)
 	for (const key of ['p', 'x'])
 		if (t[key])
 			result += key;
+	return result;
 }
 
 function addTo(jifThrow, astThrow, nLimbs)
@@ -84,10 +85,9 @@ function addTo(jifThrow, astThrow, nLimbs)
 	return jifThrow;
 }
 
-function beats2throws(beats, {nLimbs = 2, from = 0 } = {}) {
+function beats2throws(beats, {nLimbs = 2, from = 0, time = 0 } = {}) {
 	const throws = [];
 	const initialFrom = from;
-	let time = 0;
 	for (const beat of beats) {
 
 		if (beat.type == 'async') {
@@ -178,17 +178,45 @@ toJif(options = {})
 
 	const ast = this.ast;
 
-	let throws;
+	let throws = [];
 	let period;
 	if (ast.type == 'solo') {
 		({ throws, time: period } = beats2throws(ast.beats));
 	} else { // ast.type == 'passing'
-		// TODO
+		let time = 0;
+		const nJugglers = ast.passings[0].length;
+		nLimbs = nJugglers * 2;
+
+		for (const passing of ast.passings) {
+			if (passing.length != nJugglers)
+				throw "passing must always have the same number of jugglers";
+
+			const byJuggler = passing.map(
+				(passing, juggler) =>
+					beats2throws(
+						passing, {
+							nLimbs,
+							from: juggler * 2 + (time & 1),
+							time,
+						}
+					)
+			);
+			const passingTime = byJuggler[0].time;
+			if (!byJuggler.every(x => x.time == passingTime))
+				throw "passing must have the same number of beats for every juggler";
+
+			byJuggler.forEach(({ throws:jugglerThrows }, juggler) => {
+				throws.push(...jugglerThrows);
+			});
+
+			time = passingTime;
+		}
+		period = time;
 	}
 
 	const repetition = { period };
 
-	if (ast.star)
+	if (ast.star || (period & 1))
 		repetition.limbPermutation = [...Array(nLimbs).keys()].map(limb => limb ^ 1);
 
 	jif.limbs = [];
