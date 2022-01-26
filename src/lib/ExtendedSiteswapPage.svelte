@@ -343,7 +343,7 @@ $:	{
 </script>
 
 <style>
-	/*.causalDiagram { overflow-x:auto; margin-bottom:1em }*/
+	.causalDiagram { overflow-x:auto; margin-bottom:1em }
 	label.pure-button { margin:0 }
 	.patterns { float:right; width:20em; height:70vh; overflow-y:scroll }
 	.patterns li { list-style-type: none; padding: 0; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
@@ -388,19 +388,11 @@ $:	{
 	</pre>
 	-->
 	<h3>JIF:</h3>
-	<!--
-	{#if patternValid}
-		<div class=causalDiagram>
-			<CausalDiagramWidget
-				{jif}
-			/>
-		</div>
-	{/if}
-	-->
-	<pre>
-	{JSON.stringify(pattern.jif, null, 2)}
-	</pre>
-
+	<div class=causalDiagram>
+		<CausalDiagramWidget
+			jif={pattern.jif}
+		/>
+	</div>
 	<div class=animation-wrapper style="width:{windowWidth > 1000 ? 1000 : windowWidth - 32}px; height:300px">
 		<AnimationWidget
 			jif={pattern.jif}
@@ -408,6 +400,11 @@ $:	{
 		>
 		</AnimationWidget>
 	</div>
+
+	<pre>
+	{JSON.stringify(pattern.jif, null, 2)}
+	</pre>
+
 
 {:else if patternInput}
 	<div>

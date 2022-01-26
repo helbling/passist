@@ -3,7 +3,8 @@
 <script>
 	export let jif;
 	export let startConfigurations;
-	export let steps = jif.repetition.period;
+	export let steps; // = jif.repetition.period;
+	import Jif from '$lib/jif.mjs';
 
 	let jugglers = {};
 	const xoff = 55;
@@ -11,17 +12,20 @@
 	const dy = 100;
 	let dx;
 	const r = 13
+	let _jif;
 	let nJugglers;
+	let timeStretchFactor;
 	let nLines;
 	let width, height;
 	let nodes = {};
+
 	const arrowLength = 20;
 
 	function arrow(time, step, fromLine, toLine) {
 		const time2 = time + step;
 
 		// do we need a curved line?
-		if (fromLine != toLine || Math.abs(step) >= jif.timeStretchFactor * 0.7 && Math.abs(step) <= jif.timeStretchFactor) // TODO: add collision detection
+		if (fromLine != toLine || Math.abs(step) >= timeStretchFactor * 0.7 && Math.abs(step) <= timeStretchFactor) // TODO: add collision detection
 			return "M" + xy(time, r, x(time2), y(toLine), fromLine) + " L" + xy(time2, r + arrowLength, x(time), y(fromLine), toLine);
 		let dirX = x(time2) > x(time) ? 1 : -1;
 		const dirY = fromLine ? 1 : -1;
@@ -32,7 +36,7 @@
 		if (step == 0) {
 			offsetX /= 2;
 			dirX /= 2;
-		} else if (Math.abs(step) < jif.timeStretchFactor) {
+		} else if (Math.abs(step) < timeStretchFactor) {
 			offsetX = 0;
 			dirX = 0;
 		}
@@ -61,23 +65,28 @@
 	}
 
 $: {
-		nJugglers = jif.jugglers.length;
-		dx = 70 / jif.timeStretchFactor;
+		_jif = Jif.complete(jif, { expand:true, props:false } ).jif;
+		if (!steps)
+			steps = _jif.throws.length;
+
+		timeStretchFactor = _jif.timeStretchFactor;
+		nJugglers = _jif.jugglers.length;
+		dx = 70 / timeStretchFactor;
 
 		nLines = nJugglers;
 		width = steps * dx + 50;
 		height = (nLines - (nLines > 1 ? 1 : 1.4)) * dy + 2 * yoff;
 
 		nodes = [];
-		const throws = jif.throws ? jif.throws : [];
+		const throws = _jif.throws;
 		for (let i = 0; i < steps; i++) {
 			const th = throws[i % throws.length];
-			const time = th.time + Math.floor(i / throws.length) * jif.repetition.period;
-			const fromLimb = jif.limbs[th.from];
+			const time = th.time + Math.floor(i / throws.length) * _jif.repetition.period;
+			const fromLimb = _jif.limbs[th.from];
 			const isLeft = fromLimb.type && fromLimb.type.match(/left/);
 
-			const fromLine = jif.limbs[th.from].juggler;
-			const toLine = jif.limbs[th.to].juggler;
+			const fromLine = _jif.limbs[th.from].juggler;
+			const toLine = _jif.limbs[th.to].juggler;
 
 			nodes.push({
 				r: r,
@@ -85,7 +94,7 @@ $: {
 				y: y(fromLine),
 				class: isLeft ? 'left' : 'right',
 				label: th.label,
-				arrow: arrow(time, th.duration - 2 * jif.timeStretchFactor, fromLine, toLine), // for ladder diagram: don't subtract 2 * nJugglers
+				arrow: arrow(time, th.duration - 2 * timeStretchFactor, fromLine, toLine), // for ladder diagram: don't subtract 2 * nJugglers
 			});
 		}
 		nodes = nodes; // update svelte state

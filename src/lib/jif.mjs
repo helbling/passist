@@ -401,6 +401,7 @@ export default class Jif
 		options = Object.assign({
 			propType: 'club',
 			expand: false,
+			props: true,
 		}, options);
 
 		const warnings = [];
@@ -425,9 +426,13 @@ export default class Jif
 		_completeRepetition({     jif, warnings });
 		_completeThrowDetails({   jif, warnings });
 
-		const { nProps, initialProps } = _assignProps({ jif, warnings });
-		_ensureEnoughProps({   jif, warnings, nProps });
-		_completePropDetails({ jif, warnings, options });
+		let initialProps;
+		if (options.props) {
+			let nProps;
+			({ nProps, initialProps } = _assignProps({ jif, warnings }));
+			_ensureEnoughProps({   jif, warnings, nProps });
+			_completePropDetails({ jif, warnings, options });
+		}
 
 		if (options.expand && jif.repetition) {
 
@@ -435,7 +440,7 @@ export default class Jif
 
 			const periodCount = _lcmArray([
 				..._permutationLoopLengths(jif.repetition.limbPermutation),
-				..._permutationLoopLengths(jif.repetition.propPermutation),
+				...(options.props ? _permutationLoopLengths(jif.repetition.propPermutation) : []),
 			]);
 
 			var throws_ = [];
