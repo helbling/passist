@@ -15,9 +15,14 @@
   },
   "dependencies": {
     "heap-js": "^2.1.6",
+<<<<<<< HEAD
+    "marked": "^4.0.10",
     "pegjs": "^0.10.0",
+    "three": "^0.136.0"
+=======
     "marked": "^4.0.12",
     "three": "^0.137.0"
+>>>>>>> main
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.9",
