@@ -69,7 +69,7 @@ $: {
 
 <style>
 .save:hover { text-decoration: none }
-.causalDiagram { overflow-x:auto; margin-bottom:1em }
+/*.causalDiagram { overflow-x:auto; margin-bottom:1em }*/
 </style>
 
 <h1>Editor - work in progress..</h1>
@@ -80,6 +80,7 @@ $: {
 		<Icon type=load /> load
 	</button>
 	<a
+		href="/editor"
 		bind:this={savelink}
 		class="save pure-button"
 		download={(name || "pattern").trim().replaceAll(/\W+/g, "_") + ".jif"}

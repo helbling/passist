@@ -1,21 +1,21 @@
 <script context="module">
 	import { defaults, hands2limbs, limbs2hands } from '$lib/passist.mjs';
 
-	export async function load({ page }) {
-		let nJugglers = parseInt(page.query.get('jugglers'));
+	export async function load({ url, params }) {
+		let nJugglers = parseInt(url.searchParams.get('jugglers'));
 		if (!nJugglers)
 			nJugglers = defaults.nJugglers;
-		let handsInput = page.query.get('hands');
+		let handsInput = url.searchParams.get('hands');
 		const limbs = hands2limbs(handsInput, nJugglers);
 		if (limbs)
 			handsInput = limbs2hands(limbs);
 
 		return {
 			props: {
-				siteswapInput: page.params.siteswap,
+				siteswapInput: params.siteswap,
 				nJugglers,
 				handsInput,
-				fullscreen: parseInt(page.query.get('fullscreen')),
+				fullscreen: parseInt(url.searchParams.get('fullscreen')),
 			}
 		};
 	}

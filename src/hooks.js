@@ -1,7 +1,9 @@
-export async function handle({ request, resolve }) {
-	const response = await resolve(request);
+export async function handle({ event, resolve }) {
+	const response = await resolve(event);
 
-	if (request.path.match(/\.jif$/)) {
+	const path = event.url?.pathname || '';
+
+	if (path.match(/\.jif$/)) {
 		return {
 			...response,
 			headers: {
@@ -10,12 +12,10 @@ export async function handle({ request, resolve }) {
 				'access-control-allow-origin': '*',
 			}
 		};
-	} else if (request.path.match(/^\/images\//)) {
-		const headers = {
-			...response.headers,
-			'access-control-allow-origin': '*',
-		};
-		const match = request.path.match(/\.([^.]+)$/);
+	} else if (path.match(/^\/images\//)) {
+		response.headers.set('access-control-allow-origin', '*');
+
+		const match = path.match(/\.([^.]+)$/);
 		const types = {
 			png: 'image/png',
 			svg: 'image/svg+xml',
@@ -24,12 +24,8 @@ export async function handle({ request, resolve }) {
 		if (match) {
 			const type = types[match[1]];
 			if (type)
-				headers['content-type'] = type;
+				response.headers.set('content-type', type);
 		}
-		return {
-			...response,
-			headers
-		};
 	}
 	return response;
 }
