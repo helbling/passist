@@ -94,7 +94,7 @@ $: {
 				y: y(fromLine),
 				class: isLeft ? 'left' : 'right',
 				label: th.label,
-				arrow: arrow(time, th.duration - 2 * timeStretchFactor, fromLine, toLine), // for ladder diagram: don't subtract 2 * nJugglers
+				arrow: arrow(time, th.duration - 2 * timeStretchFactor, fromLine, toLine), // for ladder diagram: don't subtract 2 * timeStretchFactor
 			});
 		}
 		nodes = nodes; // update svelte state
