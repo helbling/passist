@@ -266,6 +266,7 @@ function _completePropDetails({ jif, warnings, options })
 }
 
 /**
+ *
  * assign props to throws
  *
  * NOTE: if props are only partially assigned, they will be overwritten
@@ -344,6 +345,118 @@ function _lcmArray(array) {
 		multiple = lcm(multiple, n);
 	});
 	return multiple;
+}
+
+/**
+ * complete orbits if not given
+ */
+function _completeOrbits({ jif, warnings })
+{
+	// https://stackoverflow.com/a/17369245
+	function countDecimals(x) {
+		if (Math.floor(x) === x)
+			return 0;
+
+		var str = '' + x;
+		if (str.indexOf(".") !== -1 && str.indexOf("-") !== -1) {
+			return str.split("-")[1] || 0;
+		} else if (str.indexOf(".") !== -1) {
+			return str.split(".")[1].length || 0;
+		}
+		return str.split("-")[1] || 0;
+	}
+
+	const timePrecision = Math.max(
+		0,
+		...jif.throws.map(t => countDecimals(t.time)),
+		...jif.throws.map(t => countDecimals(t.duration))
+	);
+
+	function getKey(thr0w, type) {
+		let time = thr0w.time + (type == 'catch' ? thr0w.duration : 0);
+		if (jif.repetition.period)
+			time = time % jif.repetition.period;
+		return time.toFixed(timePrecision);
+	}
+
+
+	if (!Array.isArray(jif.orbits))
+		jif.orbits = [];
+
+	let warning;
+	let seenThrowId = [];
+	for (const orbit of jif.orbits) {
+		for (const throwId of orbit) {
+			if (!Number.isInteger(throwId)) {
+				warning = `orbit throw id is not an integer: ${throwId}`;
+				break;
+			} else if (throwId < 0 || throwId >= jif.throws.length) {
+				warning = `orbit throw id out of range: ${throwId}`;
+				break;
+			} else if (seenThrowId[throwId]) {
+				warning = `throw id ${throwId} twice in orbits, overwriting all orbits`;
+				break;
+			}
+			seenThrowId[throwId] = true;
+		}
+
+		// check correctness of orbit
+		for (let i = 0; i < orbit.length; i++) {
+			const currentThrow = jif.throws[orbit[i]];
+			const nextThrow = jif.throws[orbit[(i + 1) % orbit.length]];
+			if (getKey(currentThrow, 'catch') != getKey(nextThrow, 'throw')) {
+				warning = `throws ${currentThrow} and ${nextThrow} cannot be after each other in the same orbit, overwriting all orbits`;
+				break;
+			}
+		}
+
+		if (warning)
+			break;
+	}
+	if (warning) {
+		jif.orbits = [];
+		seenThrowId = [];
+		warnings.push(warning);
+	}
+
+
+	// NOTE: we will use .toFixed(timePrecision) to avoid running into
+	//       precision problems like 0.1 + 0.2 == 0.30000000000000004
+	const time2events = {};
+	for (const [throwId, thr0w] of jif.throws.entries()) {
+		for (const type of ['throw', 'catch']) {
+			const key = getKey(thr0w, type);
+
+			if (!time2events.hasOwnProperty(key))
+				time2events[key] = { throw:[], catch:[] };
+
+			time2events[key][type].push(throwId);
+		}
+	}
+
+	for (const [time, events] of Object.entries(time2events)) {
+		if (events.throw.length != events.catch.length)
+			throw `cannot calculate orbits - different number of throws and catches at time ${time}`;
+	}
+
+	for (const [throwId, thr0w] of jif.throws.entries()) {
+		if (seenThrowId[throwId])
+			continue;
+		const orbit = [];
+		let current = throwId;
+		let key;
+		do {
+			seenThrowId[current] = true;
+			orbit.push(current);
+
+			key = getKey(jif.throws[current], 'catch');
+			current = time2events[key]['throw'].filter(id => !seenThrowId[id])[0];
+		} while (typeof current != 'undefined');
+
+		console.assert(key == getKey(jif.throws[throwId], 'throw')); // orbit should be a loop!
+
+		jif.orbits.push(orbit);
+	}
 }
 
 function _permutationLoopLengths(permutation) {
