@@ -7,8 +7,8 @@
 	import { browser } from '$app/env';
 	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
 
-	//export let patternInput = "22[43][54]";
-	export let patternInput = "<3p3|3p3><3|3>";
+	export let patternInput = "22[43][54]";
+	//export let patternInput = "<3p3|3p3><3|3>";
 	export let fullscreen = false;
 	let pattern;
 	let patternValid = false;
@@ -381,18 +381,18 @@ $:	{
 	<h2>{pattern.toString()}</h2>
 	-->
 
-	<!--
-	<h3>AST:</h3>
-	<pre>
-		{JSON.stringify(pattern.ast, null, 2)}
-	</pre>
-	-->
-	<h3>JIF:</h3>
-	<div class=causalDiagram>
-		<CausalDiagramWidget
-			jif={pattern.jif}
-		/>
-	</div>
+	<!-- <h3>AST:</h3> -->
+	<!-- <pre> -->
+	<!-- 	{JSON.stringify(pattern.ast, null, 2)} -->
+	<!-- </pre> -->
+
+	<!-- <h3>JIF:</h3> -->
+	<!-- <div class=causalDiagram> -->
+	<!-- 	<CausalDiagramWidget -->
+	<!-- 		jif={pattern.jif} -->
+	<!-- 	/> -->
+	<!-- </div> -->
+
 	<div class=animation-wrapper style="width:{windowWidth > 1000 ? 1000 : windowWidth - 32}px; height:300px">
 		<AnimationWidget
 			jif={pattern.jif}

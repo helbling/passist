@@ -170,15 +170,6 @@ function _completeRepetition({ jif, warnings })
 				rep.limbPermutation = defaultLimbPermutation;
 				warnings.push("invalid size of repetition.limbPermutation, setting to identity");
 			}
-
-			if (!Array.isArray(rep.propPermutation)) {
-				if (typeof rep.propPermutation != 'undefined')
-					warnings.push("repetition.propPermutation has unexpected type, setting to identity");
-				rep.propPermutation = defaultPropPermutation;
-			} else if (rep.propPermutation.length != jif.limbs.length) {
-				rep.propPermutation = defaultPropPermutation;
-				warnings.push("invalid size of repetition.propPermutation, setting to identity");
-			}
 		}
 	} else if (typeof rep != 'undefined') {
 		delete jif.repetition;
@@ -263,78 +254,6 @@ function _completePropDetails({ jif, warnings, options })
 			prop.type = options.propType;
 		}
 	});
-}
-
-/**
- *
- * assign props to throws
- *
- * NOTE: if props are only partially assigned, they will be overwritten
- */
-function _assignProps({ jif, warnings })
-{
-	if (jif.throws.every(t => typeof t.prop != 'undefined')) // TODO: in case of repetition: test prop relabelling as well..
-		return 1 + Math.max(...jif.throws.map(t => t.prop)); // already assigned 
-
-	let nProps = 0;
-
-	const holding = jif.limbs.map(() => []);
-	const initialProps = jif.limbs.map(() => []);
-
-	const catches = new Heap((a, b) => a.time - b.time);
-
-	let lastIteration = -1;
-	let unassignedCount = 1;
-	let index = 0;
-	let propOrder = [];
-	const period = jif.repetition && jif.repetition.period;
-	const propPermutation = [];
-	let permutationCount = 0;
-
-	for (const throw_ of Jif.generateThrows(jif)) {
-		if (throw_.iteration != lastIteration) {
-			if (!unassignedCount && permutationCount == nProps)
-				break;
-			lastIteration = throw_.iteration;
-			unassignedCount = 0;
-		}
-		while (catches.length && catches.peek().time <= throw_.time) {
-			const catch_ = catches.pop();
-			holding[catch_.to].push(catch_.prop);
-		}
-		const from = throw_.from;
-		let prop;
-		if (holding[from].length) {
-			prop = holding[from].shift();
-		} else {
-			prop = nProps;
-			initialProps[from].push(prop);
-			nProps++;
-			unassignedCount++;
-		}
-		catches.push({time: throw_.time + throw_.duration, to: throw_.to, prop});
-		if (!throw_.iteration)
-			jif.throws[index].prop = prop;
-		if (period) {
-			propOrder.push(prop);
-			if (index >= jif.throws.length) {
-				const fromProp = propOrder[index - jif.throws.length];
-				if (typeof propPermutation[fromProp] == 'undefined') {
-					propPermutation[fromProp] = prop;
-					permutationCount++;
-				} else {
-					if (propPermutation[fromProp] != prop)
-						throw "permutation calculation inconsistent..";
-				}
-			}
-		}
-		index++;
-	}
-
-	if (period)
-		jif.repetition.propPermutation = propPermutation;
-
-	return { nProps, initialProps };
 }
 
 function _lcmArray(array) {
@@ -459,6 +378,17 @@ function _completeOrbits({ jif, warnings })
 	}
 }
 
+function _nProps(jif)
+{
+	if (jif.repetition)
+		return jif.throws
+			.map(t => t.duration)
+			.reduce((a, b) => a + b, 0)
+			/ jif.repetition.period;
+	else
+		return jif.orbits.length; // without repetition, every orbit is for exactly one prop
+}
+
 function _permutationLoopLengths(permutation) {
 	const visited = [];
 	const result = [];
@@ -476,6 +406,17 @@ function _permutationLoopLengths(permutation) {
 	}
 
 	return result;
+}
+
+function _orbitPeriod(orbit, jif) {
+	return orbit
+		.map(throwId => jif.throws[throwId].duration)
+		.reduce((a, b) => a + b, 0)
+		/ jif.repetition.period;
+}
+
+function _orbitPeriods(jif) {
+	return jif.orbits.map(orbit => _orbitPeriod(orbit, jif));
 }
 
 export default class Jif
@@ -505,7 +446,6 @@ export default class Jif
 	 * returns:
 	 *  jif:          completed jif
 	 *  warnings:     array of warnings
-	 *  initialProps: list of props per limb to start with
 	 *
 	 * throws exception in case of errors
 	 *
@@ -539,21 +479,17 @@ export default class Jif
 		_completeRepetition({     jif, warnings });
 		_completeThrowDetails({   jif, warnings });
 
-		let initialProps;
 		if (options.props) {
-			let nProps;
-			({ nProps, initialProps } = _assignProps({ jif, warnings }));
+			_completeOrbits({ jif, warnings })
+			const nProps = _nProps(jif);
 			_ensureEnoughProps({   jif, warnings, nProps });
 			_completePropDetails({ jif, warnings, options });
 		}
 
 		if (options.expand && jif.repetition) {
-
-			// TODO: enforce repetition..
-
 			const periodCount = _lcmArray([
-				..._permutationLoopLengths(jif.repetition.limbPermutation),
-				...(options.props ? _permutationLoopLengths(jif.repetition.propPermutation) : []),
+				...(jif.repetition.limbPermutation ? _permutationLoopLengths(jif.repetition.limbPermutation) : []),
+				..._orbitPeriods(jif)
 			]);
 
 			var throws_ = [];
@@ -569,40 +505,53 @@ export default class Jif
 			jif.repetition = {
 				period: jif.repetition.period * periodCount,
 				limbPermutation: [...Array(jif.limbs.length).keys()],
-				propPermutation: [...Array(jif.props.length).keys()],
 			};
 		}
 
-		return { jif, warnings, initialProps };
+		return { jif, warnings };
 	}
 
 	static * generateThrows(jif) {
 		const period = jif.repetition && jif.repetition.period;
 		let limbPermutation = [...Array(jif.limbs.length).keys()];
-		let propPermutation;
-		if (Array.isArray(jif.props) && jif.repetition && jif.repetition.propPermutation)
-			propPermutation = [...Array(jif.props.length).keys()];
 		let iteration = 0;
 		let baseTime = 0;
+
+		// TODO: prop assignment without repetition
+
+		const orbits = jif.orbits ? jif.orbits : [];
+		const iteration2prop = [];
+		let prop = 0;
+		for (const orbit of orbits) {
+			const orbitPeriod = _orbitPeriod(orbit, jif);
+			let time = jif.throws[orbit[0]].time;
+			for (const throwId of orbit) {
+				iteration2prop[throwId] = ((time, prop) => (
+					_iteration => prop + ((Math.floor(time / period) - _iteration + orbitPeriod) % orbitPeriod)
+				))(time, prop);
+				time += jif.throws[throwId].duration;
+			}
+			prop += orbitPeriod;
+		}
+
 		while (true) {
-			for (const throw_ of jif.throws) {
+			for (let throwId = 0; throwId < jif.throws.length; throwId++) {
+				const thr0w = jif.throws[throwId];
+
 				const overwrite = {
-					time: baseTime + throw_.time,
-					to:   limbPermutation[throw_.to],
-					from: limbPermutation[throw_.from],
+					time: baseTime + thr0w.time,
+					to:   limbPermutation[thr0w.to],
+					from: limbPermutation[thr0w.from],
 					iteration,
 				};
-				if (propPermutation && typeof throw_.prop != 'undefined') {
-					overwrite.prop = propPermutation[throw_.prop];
-				}
-				yield Object.assign({}, throw_, overwrite);
+				if (iteration2prop[throwId])
+					overwrite.prop = iteration2prop[throwId](iteration);
+				yield Object.assign({}, thr0w, overwrite);
 			}
 			if (!period)
 				break;
 			baseTime += period;
 			limbPermutation = limbPermutation.map(v => jif.repetition.limbPermutation[v]);
-			if (propPermutation)
-				propPermutation = propPermutation.map(v => jif.repetition.propPermutation[v]);
 			iteration++;
 		}
 	}
