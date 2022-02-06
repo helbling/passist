@@ -158,7 +158,6 @@ function _completeRepetition({ jif, warnings })
 	const rep = jif.repetition;
 
 	const defaultLimbPermutation = [...Array(jif.limbs.length).keys()];
-	const defaultPropPermutation = [...Array(jif.props.length).keys()];
 
 	if (typeof rep == 'object') {
 		if (rep.period) {
@@ -295,7 +294,7 @@ function _completeOrbits({ jif, warnings })
 		let time = thr0w.time + (type == 'catch' ? thr0w.duration : 0);
 		if (jif.repetition.period)
 			time = time % jif.repetition.period;
-		return time.toFixed(timePrecision);
+		return time.toFixed(timePrecision) + '|' + thr0w[type == 'catch' ? 'to' : 'from'];
 	}
 
 
@@ -359,7 +358,7 @@ function _completeOrbits({ jif, warnings })
 	}
 
 	for (const [throwId, thr0w] of jif.throws.entries()) {
-		if (seenThrowId[throwId])
+		if (seenThrowId[throwId] || !jif.throws[throwId].duration)
 			continue;
 		const orbit = [];
 		let current = throwId;
@@ -479,39 +478,41 @@ export default class Jif
 		_completeRepetition({     jif, warnings });
 		_completeThrowDetails({   jif, warnings });
 
-		if (options.props) {
-			_completeOrbits({ jif, warnings })
-			const nProps = _nProps(jif);
-			_ensureEnoughProps({   jif, warnings, nProps });
-			_completePropDetails({ jif, warnings, options });
-		}
-
-		if (options.expand && jif.repetition) {
-			const periodCount = _lcmArray([
-				...(jif.repetition.limbPermutation ? _permutationLoopLengths(jif.repetition.limbPermutation) : []),
-				..._orbitPeriods(jif)
-			]);
-
-			var throws_ = [];
-			for (const throw_ of Jif.generateThrows(jif)) {
-
-				if (throw_.iteration >= periodCount)
-					break;
-
-				throws_.push(throw_);
+		if ((options.expand || options.props) && jif.repetition) {
+			if (jif.repetition.limbPermutation) {
+				const periodCount = _lcmArray(
+					_permutationLoopLengths(jif.repetition.limbPermutation)
+				);
+				jif.throws = Array.from(Jif.generateThrows({ jif, periodCount }));
+				jif.repetition.period *= periodCount;
+				jif.repetition.limbPermutation = [...Array(jif.limbs.length).keys()];
 			}
-			jif.throws = throws_;
 
-			jif.repetition = {
-				period: jif.repetition.period * periodCount,
-				limbPermutation: [...Array(jif.limbs.length).keys()],
-			};
+
+			if (options.props) {
+				_completeOrbits({ jif, warnings })
+				const nProps = _nProps(jif);
+				_ensureEnoughProps({   jif, warnings, nProps });
+				_completePropDetails({ jif, warnings, options });
+
+				if (options.expand) {
+					const periodCount = _lcmArray(
+						_orbitPeriods(jif)
+					);
+					jif.throws = Array.from(Jif.generateThrows({ jif, periodCount }));
+					jif.repetition.period *= periodCount;
+
+					// NOCOMMIT we should instead set the correct full orbits, to make sure a second complete/expand call does not modify anything!
+					delete jif.orbits;
+				}
+			}
 		}
+		// TODO: handle options.props in no repetition case
 
 		return { jif, warnings };
 	}
 
-	static * generateThrows(jif) {
+	static * generateThrows({jif, periodCount = 0}) {
 		const period = jif.repetition && jif.repetition.period;
 		let limbPermutation = [...Array(jif.limbs.length).keys()];
 		let iteration = 0;
@@ -553,6 +554,9 @@ export default class Jif
 			baseTime += period;
 			limbPermutation = limbPermutation.map(v => jif.repetition.limbPermutation[v]);
 			iteration++;
+
+			if (periodCount && iteration >= periodCount)
+				break;
 		}
 	}
 }

@@ -401,9 +401,9 @@ $:	{
 		</AnimationWidget>
 	</div>
 
-	<pre>
-	{JSON.stringify(pattern.jif, null, 2)}
-	</pre>
+	<!-- <pre> -->
+	<!-- {JSON.stringify(pattern.jif, null, 2)} -->
+	<!-- </pre> -->
 
 
 {:else if patternInput}
