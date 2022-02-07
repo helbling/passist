@@ -6,9 +6,9 @@
 	import { defaults, useLocalStorage, U } from '$lib/passist.mjs';
 	import { browser } from '$app/env';
 	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
+	import Jif from '$lib/jif.mjs';
 
-	export let patternInput = "22[43][54]";
-	//export let patternInput = "<3p3|3p3><3|3>";
+	export let patternInput = "27[54]61";
 	export let fullscreen = false;
 	let pattern;
 	let patternValid = false;
@@ -31,7 +31,7 @@
 		'<(4x,4px)|(4x,4px)>',
 		'<(4x,4px)|(4x,4px)>*',
 		'003',
-		'<(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)|(2,2)>',
+		'<(4,4)|(4,4)|(4,4)|(4,4)|(4,4)|(4,4)|(4,4)>',
 		'22[43][54]',
 		'22[43][64]4',
 		'22[43][65]3',
@@ -338,7 +338,6 @@
 $:	{
 		pattern = new ExtendedSiteswap(patternInput);
 		patternValid = pattern.isValid();
-	console.log('valid', patternValid);
 	}
 
 </script>
@@ -346,7 +345,7 @@ $:	{
 <style>
 	.causalDiagram { overflow-x:auto; margin-bottom:1em }
 	label.pure-button { margin:0 }
-	.patterns { float:right; width:20em; height:70vh; overflow-y:scroll }
+	.patterns { float:right; width:20em; height:20vh; overflow-y:scroll }
 	.patterns li { list-style-type: none; padding: 0; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 </style>
 
@@ -377,6 +376,8 @@ $:	{
 	}}
 		/>
 
+<div style="clear:both"></div>
+
 {#if patternValid || fullscreen}
 	<!--
 	<h2>{pattern.toString()}</h2>
@@ -387,13 +388,6 @@ $:	{
 	<!-- 	{JSON.stringify(pattern.ast, null, 2)} -->
 	<!-- </pre> -->
 
-	<!-- <h3>JIF:</h3> -->
-	<!-- <div class=causalDiagram> -->
-	<!-- 	<CausalDiagramWidget -->
-	<!-- 		jif={pattern.jif} -->
-	<!-- 	/> -->
-	<!-- </div> -->
-
 	<div class=animation-wrapper style="width:{windowWidth > 1000 ? 1000 : windowWidth - 32}px; height:300px">
 		<AnimationWidget
 			jif={pattern.jif}
@@ -402,10 +396,23 @@ $:	{
 		</AnimationWidget>
 	</div>
 
-	<!-- <pre> -->
-	<!-- {JSON.stringify(pattern.jif, null, 2)} -->
-	<!-- </pre> -->
+	<h3>Causal diagram:</h3>
+	<div class=causalDiagram>
+		<CausalDiagramWidget
+			jif={pattern.jif}
+		/>
+	</div>
 
+
+	<h3>JIF</h3>
+	<pre>
+	{JSON.stringify(pattern.jif, null, 2)}
+	</pre>
+
+	<h3>Expanded</h3>
+	<pre>
+	{JSON.stringify(Jif.complete(pattern.jif, { props:true, expand:true } ), null, 2)}
+	</pre>
 
 {:else if patternInput}
 	<div>
