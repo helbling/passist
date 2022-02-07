@@ -7,7 +7,7 @@ function _mod(n, m) {
 function _enforceType({jif, warnings, key, type })
 {
 	if (type != 'object' && type != 'array')
-		throw `type ${type} not implemented`;
+		throw new Error(`type ${type} not implemented`);
 
 	const empty = type == 'object' ? {} : [];
 
@@ -359,7 +359,7 @@ function _completeOrbits({ jif, warnings })
 
 	for (const [time, events] of Object.entries(time2events)) {
 		if (events.throw.length != events.catch.length)
-			throw `cannot calculate orbits - different number of throws and catches at time ${time}`;
+			throw new Error(`cannot calculate orbits - different number of throws and catches at time ${time}`);
 	}
 
 	for (const [throwId, thr0w] of jif.throws.entries()) {
@@ -376,7 +376,8 @@ function _completeOrbits({ jif, warnings })
 			current = time2events[key]['throw'].filter(id => !seenThrowId[id])[0];
 		} while (typeof current != 'undefined');
 
-		console.assert(key == getKey(jif.throws[throwId], 'throw')); // orbit should be a loop!
+		if (key != getKey(jif.throws[throwId]))
+			throw new Error("should not happen: orbit is not a loop!");
 
 		jif.orbits.push(orbit);
 	}
@@ -435,10 +436,10 @@ export default class Jif
 		else if (typeof jif == 'object')
 			jif = JSON.parse(JSON.stringify(jif)); // deep clone
 		else
-			throw 'failed to parse jif, unexpected type: ' + typeof jif;
+			throw new Error(`failed to parse jif, unexpected type: ${typeof jif}`);
 
 		if (Array.isArray(jif))
-			throw 'failed to parse jif, should be an object, not an array';
+			throw new Error(`failed to parse jif, should be an object, not an array`);
 
 		return jif;
 	}

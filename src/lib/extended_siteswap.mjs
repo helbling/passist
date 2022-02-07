@@ -134,16 +134,27 @@ constructor(input, options = {})
 	this.input = input;
 	try {
 		this.ast = parser.parse(input);
-		this.jif = this.toJif(options);
 	} catch (e) {
 		this.error = e;
 	}
+	this.jif = this.toJif(options);
 	this.isVanillaSiteswap = ExtendedSiteswap.isVanillaSiteswap(input);
 }
 
 isValid()
 {
-	return !this.error;
+	if (this.error)
+		return false;
+
+	try {
+		console.log(Jif.complete(this.jif, { expand:true, props:true }));
+	} catch (e) {
+		console.log(e);
+
+		return false;
+	}
+
+	return true;
 }
 
 toString()
@@ -170,7 +181,7 @@ toJif(options = {})
 		props:    options.props,
 	};
 
-	if (!this.isValid())
+	if (this.error)
 		return jif;
 
 	let nLimbs = 2;
