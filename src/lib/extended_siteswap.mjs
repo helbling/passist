@@ -31,8 +31,8 @@ const grammar = `
       }
 
   Sync
-    = _ "(" _ left:Multiplex _ "," _ right:Multiplex _ ")" _ {
-        return { type:"sync", left, right };
+    = _ "(" _ left:Multiplex _ "," _ right:Multiplex _ ")" short:"!"? _ {
+        return { type:"sync", left, right, short:!!short };
       }
 
   Multiplex
@@ -119,10 +119,9 @@ function beats2throws(beats, {nLimbs = 2, from = 0, time = 0 } = {}) {
 				}, t, nLimbs));
 
 			from = initialFrom;
-			time+=2;
+			time += beat.short ? 1 : 2;
 		} else {
 			throw "beat.type '" + beat.type + "' not handled";
-
 		}
 	}
 	return { throws, time };
