@@ -1,5 +1,9 @@
 import { Heap } from 'heap-js';
 
+function _mod(n, m) {
+	return ((n % m) + m) % m;
+}
+
 function _enforceType({jif, warnings, key, type })
 {
 	if (type != 'object' && type != 'array')
@@ -267,6 +271,7 @@ function _lcmArray(array) {
 
 /**
  * complete orbits if not given
+ * TODO: optimize for short periods to see magic props
  */
 function _completeOrbits({ jif, warnings })
 {
@@ -528,7 +533,7 @@ export default class Jif
 			let time = jif.throws[orbit[0]].time;
 			for (const throwId of orbit) {
 				iteration2prop[throwId] = ((time, prop) => (
-					_iteration => prop + ((Math.floor(time / period) - _iteration + orbitPeriod) % orbitPeriod)
+					_iteration => prop + _mod(Math.floor(time / period) - _iteration, orbitPeriod)
 				))(time, prop);
 				time += jif.throws[throwId].duration;
 			}
