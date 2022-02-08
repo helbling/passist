@@ -147,10 +147,8 @@ isValid()
 		return false;
 
 	try {
-		console.log(Jif.complete(this.jif, { expand:true, props:true }));
+		Jif.complete(this.jif, { expand:true, props:true });
 	} catch (e) {
-		console.log(e);
-
 		return false;
 	}
 
