@@ -549,7 +549,6 @@ export default class Jif
 					time: baseTime + thr0w.time,
 					to:   limbPermutation[thr0w.to],
 					from: limbPermutation[thr0w.from],
-					iteration,
 				};
 				if (iteration2prop[throwId])
 					overwrite.prop = iteration2prop[throwId](iteration);
