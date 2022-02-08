@@ -137,7 +137,13 @@ constructor(input, options = {})
 	} catch (e) {
 		this.error = e;
 	}
-	this.jif = this.toJif(options);
+
+	// NOTE second try/catch needed as we still get a basic jif if we had an error above
+	try {
+		this.jif = this.toJif(options);
+	} catch (e) {
+		this.error = e;
+	}
 	this.isVanillaSiteswap = ExtendedSiteswap.isVanillaSiteswap(input);
 }
 
