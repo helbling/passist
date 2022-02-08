@@ -340,7 +340,7 @@ static *generate(params)
 		else if (x >= 97 && x <= 122)
 			return x - 87;
 		else
-			throw "invalid character in siteswap: " + siteswap.charAt(i);
+			throw new Error(`invalid character in siteswap: ${siteswap.charAt(i)}`);
 	}
 
 	function filters(input) {
@@ -423,7 +423,7 @@ static *generate(params)
 			if (height >= 0) {
 				heights[j] = height;
 				if (landing[(j + height) % period]) {
-					throw "invalid cloze!";
+					throw new Error("invalid cloze!");
 					return;
 				}
 				landing[(j + height) % period] = 1;

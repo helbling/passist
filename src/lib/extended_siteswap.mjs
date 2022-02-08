@@ -121,7 +121,7 @@ function beats2throws(beats, {nLimbs = 2, from = 0, time = 0 } = {}) {
 			from = initialFrom;
 			time += beat.short ? 1 : 2;
 		} else {
-			throw "beat.type '" + beat.type + "' not handled";
+			throw new Error(`beat.type '$(beat.type)' not handled`);
 		}
 	}
 	return { throws, time };
@@ -197,7 +197,7 @@ toJif(options = {})
 
 		for (const passing of ast.passings) {
 			if (passing.length != nJugglers)
-				throw "passing must always have the same number of jugglers";
+				throw new Error("passing must always have the same number of jugglers");
 
 			const byJuggler = passing.map(
 				(passing, juggler) =>
@@ -211,7 +211,7 @@ toJif(options = {})
 			);
 			const passingTime = byJuggler[0].time;
 			if (!byJuggler.every(x => x.time == passingTime))
-				throw "passing must have the same number of beats for every juggler";
+				throw new Error("passing must have the same number of beats for every juggler");
 
 			byJuggler.forEach(({ throws:jugglerThrows }, juggler) => {
 				throws.push(...jugglerThrows);
