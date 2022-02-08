@@ -7,6 +7,7 @@
 	import { browser } from '$app/env';
 	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
 	import Jif from '$lib/jif.mjs';
+	import { syncPassings} from '$lib/patterns.mjs';
 
 	export let patternInput = "27[54]61";
 	export let fullscreen = false;
@@ -23,13 +24,8 @@
 	let limbs = [];
 	let title = "extended siteswap test page";
 
-
 	let patterns = [
-		'<3p33|3p33>',
-		'<(3p,3p)!|(0,0)!><(0,0)!|(3p,3p)!>',
-		'<4p|4p>',
-		'<(4x,4px)|(4x,4px)>',
-		'<(4x,4px)|(4x,4px)>*',
+		...syncPassings.map(x => x[0]),
 		'003',
 		'<(4,4)|(4,4)|(4,4)|(4,4)|(4,4)|(4,4)|(4,4)>',
 		'22[43][54]',

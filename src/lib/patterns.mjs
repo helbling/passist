@@ -1,5 +1,8 @@
 import Siteswap from "$lib/siteswap.mjs";
 
+// vanilla siteswaps
+
+// 2 person passings
 const knownSiteswaps = [
 	["645", "killer bunny"],
 	["744", "5 club one count"],
@@ -87,4 +90,24 @@ for (var i in knownSiteswaps) {
 	siteswapNames[new Siteswap(ss[0]).canonicString()] = ss[1];
 }
 
-export { knownSiteswaps, siteswapNames };
+
+// extended siteswaps
+
+// 2 person passing
+const syncPassings = [
+	['<3p|3p>', 'one-count'],
+	['<(3p,3p)!|(0,0)!><(0,0)!|(3p,3p)!>', 'synchronous one-count'],
+	['<3p3|3p3>', 'two-count'],
+	['<3p33|3p33>', 'three-count'],
+	['<3p33|234p>', 'three-count vs early double'],
+	['<3p333|3p333>', 'four-count'],
+	['<3p333 3p33 3p3 3p 3p3 3p33|3p333 3p33 3p3 3p 3p3 3p33>', 'count-down'],
+
+	// TODO: make the following patterns use singles..
+	['<4p|4p>', 'double treff'],
+	['<(4x,4px)|(4x,4px)>', '8 club two count sync with doubles'],
+	['<(4x,4px)|(4x,4px)>*', 'swinging door with doubles'],
+];
+
+
+export { knownSiteswaps, siteswapNames, syncPassings };
