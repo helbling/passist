@@ -199,7 +199,7 @@ function _completeThrowDetails({ jif, warnings })
 		&& typeof t.from     == 'number'
 		&& typeof t.to       == 'number'
 		&& t.time     >= 0
-		&& t.duration >= 0
+		&& t.duration > 0
 		&& t.from  >= 0
 		&& t.to    >= 0
 		&& t.from  < nLimbs
