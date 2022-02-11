@@ -193,7 +193,7 @@ function _completeThrowDetails({ jif, warnings })
 		&& typeof t.from     == 'number'
 		&& typeof t.to       == 'number'
 		&& t.time     >= 0
-		&& t.duration >= 0
+		&& t.duration > 0
 		&& t.from  >= 0
 		&& t.to    >= 0
 		&& t.from  < nLimbs
@@ -201,8 +201,8 @@ function _completeThrowDetails({ jif, warnings })
 	);
 
 	if (filtered.length < jif.throws.length) {
-		jif.throws = filtered;
 		warnings.push((jif.throws.length - filtered.length) + " throws non well-formed - skipped");
+		jif.throws = filtered;
 	}
 
 	// sort by time (stable sort on modern browsers)
