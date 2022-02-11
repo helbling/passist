@@ -207,8 +207,8 @@ function _completeThrowDetails({ jif, warnings })
 	);
 
 	if (filtered.length < jif.throws.length) {
-		jif.throws = filtered;
 		warnings.push((jif.throws.length - filtered.length) + " throws non well-formed - skipped");
+		jif.throws = filtered;
 	}
 
 	// sort by time (stable sort on modern browsers)
