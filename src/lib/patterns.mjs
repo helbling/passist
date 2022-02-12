@@ -66,7 +66,7 @@ const knownSiteswaps = [
 	["89742", "The One to Concentrate"],
 	["9789788", "Milk Duds"],
 	["9647772", "Odnom"],
-	["a2747", "aa7 Warmup Pattern"],
+	["a2747", "a77 Warmup Pattern"],
 	["9797888", "8 Club Vitoria"],
 	["7966786", "Aspirin"],
 	["7966966", "Placebo"],
@@ -79,6 +79,9 @@ const knownSiteswaps = [
 	["9794884", "James' special day"],
 	["b7575", "Ark of the Covenant"],
 	["d757575", "Temple of Doom"],
+	["95524", "Dragon cat"],
+	["64555", "Funky magazine rack"],
+	["966777777", "Double BANANA"],
 ];
 
 var siteswapNames = {}
