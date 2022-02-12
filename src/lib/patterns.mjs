@@ -1,9 +1,11 @@
 import Siteswap from "$lib/siteswap.mjs";
+import ExtendedSiteswap from "$lib/extended_siteswap.mjs";
 
-// vanilla siteswaps
+const patterns = [];
 
-// 2 person passings
-const knownSiteswaps = [
+// 2 person vanilla siteswaps list from Christian Kästner
+// https://github.com/ckaestne/CompatSiteswaps/blob/master/named-siteswaps.txt
+const kaestnersKnownSiteswaps = [
 	["645", "killer bunny"],
 	["744", "5 club one count"],
 	["726", "5 club one count"],
@@ -88,15 +90,20 @@ const knownSiteswaps = [
 ];
 
 var siteswapNames = {}
-for (var i in knownSiteswaps) {
-	var ss = knownSiteswaps[i];
-	siteswapNames[new Siteswap(ss[0]).canonicString()] = ss[1];
+for (const [notation, name] of kaestnersKnownSiteswaps) {
+	const siteswap = new Siteswap(notation);
+	siteswapNames['2|' + siteswap.canonicString()] = name;
+	patterns.push({
+		nJugglers: 2,
+		nProps: siteswap.nProps,
+		type: 'vanilla_siteswap',
+		notation,
+		name,
+		source: 'known_siteswaps',
+	});
 }
 
-
-// extended siteswaps
-
-// 2 person passing
+// 2 person extended siteswaps
 const syncPassings = [
 	['<3p|3p>', 'one-count'],
 	['<(3p,3p)!|(0,0)!><(0,0)!|(3p,3p)!>', 'synchronous one-count'],
@@ -112,5 +119,16 @@ const syncPassings = [
 	['<(4x,4px)|(4x,4px)>*', 'swinging door with doubles'],
 ];
 
+for (const [notation, name] of syncPassings) {
+	const extendedSiteswap = new ExtendedSiteswap(notation);
+	siteswapNames['2|' + notation] = name;
+	patterns.push({
+		nJugglers: 2,
+		nProps: extendedSiteswap.nProps(),
+		type: 'extended_siteswap',
+		notation,
+		name,
+	});
+}
 
-export { knownSiteswaps, siteswapNames, syncPassings };
+export { patterns, siteswapNames };

@@ -153,7 +153,7 @@ isValid()
 		return false;
 
 	try {
-		Jif.complete(this.jif, { expand:true, props:true });
+		this.completeJif = Jif.complete(this.jif, { expand:true, props:true }).jif;
 	} catch (e) {
 		return false;
 	}
@@ -245,6 +245,13 @@ toJif(options = {})
 	jif.repetition = repetition;
 
 	return jif;
+}
+
+nProps() {
+	if (!this.isValid())
+		return NaN;
+
+	return this.completeJif.props.length;
 }
 
 static isVanillaSiteswap(input) {

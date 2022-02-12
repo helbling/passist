@@ -123,7 +123,7 @@ $:	{
 					type: propType,
 				});
 
-			siteswapName = siteswapNames[siteswap.canonicString()];
+			siteswapName = siteswapNames[nJugglers + '|' + siteswap.canonicString()];
 
 			jif = siteswap.toJif({
 				name: siteswapName ? siteswapName + " (" + siteswap.toString() + ")" : undefined,
