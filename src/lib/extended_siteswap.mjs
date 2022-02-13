@@ -149,7 +149,7 @@ constructor(input, options = {})
 
 isValid()
 {
-	if (this.error)
+	if (this.error || !this.jif)
 		return false;
 
 	try {
@@ -200,6 +200,9 @@ toJif(options = {})
 		let time = 0;
 		const nJugglers = ast.passings[0].length;
 		nLimbs = nJugglers * 2;
+
+		this.nJugglers = nJugglers;
+		this.nLimbs = nLimbs;
 
 		for (const passing of ast.passings) {
 			if (passing.length != nJugglers)

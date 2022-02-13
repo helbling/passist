@@ -7,6 +7,7 @@
 
 	export let siteswapInput;
 	export let nJugglers;
+	export let showNJugglers = true;
 	export let showHandOrderInput = true;
 	export let handsInput;
 	export let idPrefix;
@@ -89,6 +90,8 @@
 			size:      10,
 		}}
 		/>
+
+	{#if showNJugglers}
 	<InputField
 		bind:value={nJugglers}
 		id={idPrefix + "NJugglers"}
@@ -99,6 +102,7 @@
 		max=9
 		on:change={e => { handsInput = ''; }}
 		/>
+	{/if}
 
 	{#if showHandOrderInput}
 	<InputField

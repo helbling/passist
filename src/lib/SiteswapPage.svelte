@@ -3,6 +3,7 @@
 	import CausalDiagramWidget from '$lib/CausalDiagramWidget.svelte';
 	import AnimationWidget from '$lib/AnimationWidget.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
+	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import { siteswapNames} from '$lib/patterns.mjs';
@@ -16,7 +17,7 @@
 	export let fullscreen = false;
 
 	let siteswapShift = 0;
-	let siteswap, strippedInput, originalSiteswap;
+	let siteswap, extendedSiteswap, strippedInput, originalSiteswap;
 	let siteswapValid = false;
 	let handsValid = false;
 	let period;
@@ -81,97 +82,118 @@
 	}
 
 $:	{
-		strippedInput = String(siteswapInput).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
-		originalSiteswap = new Siteswap(strippedInput);
-		siteswap = originalSiteswap.shift(siteswapShift);
+		if (ExtendedSiteswap.isVanillaSiteswap(siteswapInput)) {
+			extendedSiteswap = undefined;
 
-		if (nJugglers > 0) {
-			const circleRadius = 1.2 + nJugglers * 0.2;
-			const jugglers = [];
-			for (let i = 0; i < nJugglers; i++) {
-				const juggler = {
-					name: jugglerName(i),
-				};
-				if (nJugglers == 1) {
-					Object.assign(juggler, {
-						position: [0, 0, 0],
-						lookAt:   [0, 0, 1],
-					});
-				} else {
-					const a = Math.PI * 2 * i / nJugglers;
-					const round = x => Math.round(x * 1000) / 1000;
-					Object.assign(juggler, {
-						position: [round(circleRadius * Math.cos(a)), 0, round(circleRadius * Math.sin(a))],
-						lookAt:   [0, 0, 0],
-					});
+			strippedInput = String(siteswapInput).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
+			originalSiteswap = new Siteswap(strippedInput);
+			siteswap = originalSiteswap.shift(siteswapShift);
+
+			if (nJugglers > 0) {
+				const circleRadius = 1.2 + nJugglers * 0.2;
+				const jugglers = [];
+				for (let i = 0; i < nJugglers; i++) {
+					const juggler = {
+						name: jugglerName(i),
+					};
+					if (nJugglers == 1) {
+						Object.assign(juggler, {
+							position: [0, 0, 0],
+							lookAt:   [0, 0, 1],
+						});
+					} else {
+						const a = Math.PI * 2 * i / nJugglers;
+						const round = x => Math.round(x * 1000) / 1000;
+						Object.assign(juggler, {
+							position: [round(circleRadius * Math.cos(a)), 0, round(circleRadius * Math.sin(a))],
+							lookAt:   [0, 0, 0],
+						});
+					}
+					jugglers.push(juggler);
 				}
-				jugglers.push(juggler);
-			}
 
-			limbs = hands2limbs(handsInput, nJugglers);
-			handsValid = limbs || !handsInput;
-			if (!limbs)
-				limbs = defaultLimbs(nJugglers);
+				limbs = hands2limbs(handsInput, nJugglers);
+				handsValid = limbs || !handsInput;
+				if (!limbs)
+					limbs = defaultLimbs(nJugglers);
 
-			siteswapValid = siteswap.isValid();
-			period = siteswap.period;
-			nProps = siteswap.nProps;
-			const props = [];
-			for (let i = 0; i < nProps; i++)
-				props.push({
-					color: propColors[i % propColors.length],
-					type: propType,
+				siteswapValid = siteswap.isValid();
+				period = siteswap.period;
+				nProps = siteswap.nProps;
+				const props = [];
+				for (let i = 0; i < nProps; i++)
+					props.push({
+						color: propColors[i % propColors.length],
+						type: propType,
+					});
+
+				siteswapName = siteswapNames[nJugglers + '|' + siteswap.canonicString()];
+
+				jif = siteswap.toJif({
+					name: siteswapName ? siteswapName + " (" + siteswap.toString() + ")" : undefined,
+					generator: 'passist', // TODO: put version of package.json here again
+					jugglers: jugglers,
+					limbs: limbs,
+					props: props,
+					flipTwos: true
+				});
+				startProperties = siteswap.getStartProperties(nJugglers);
+
+				startConfigurations = siteswap.startConfigurations(limbs);
+				localPeriod = startConfigurations[0].local.length;
+				unusualThrows = startConfigurations.some(
+					configuration => configuration.local.some(
+						localthrow => localthrow && localthrow.unusual
+					)
+				);
+
+				prechacthisUrl = '';
+				if (nJugglers == 2 && limbs.length == 4 && (period % 2) == 1) {
+					prechacthisUrl = 'http://prechacthis.org/info.php?pattern=['
+						+ startConfigurations[0].local.map(x => {
+							var h = x.height / 2;
+							return 'p(' + h + (+x.height & 1 ? ',1,' + (h + period / 2) : ',0,' + h) + ')';
+						}).join(',')
+					+ ']&persons=2';
+				}
+
+
+				const alternativesSiteswap = siteswap.toString().repeat(localPeriod * nJugglers / period);
+				alternativesUrl = siteswapAlternativesUrl({
+					siteswapInput: alternativesSiteswap,
+					nJugglers,
+					handsInput,
 				});
 
-			siteswapName = siteswapNames[nJugglers + '|' + siteswap.canonicString()];
-
-			jif = siteswap.toJif({
-				name: siteswapName ? siteswapName + " (" + siteswap.toString() + ")" : undefined,
-				generator: 'passist', // TODO: put version of package.json here again
-				jugglers: jugglers,
-				limbs: limbs,
-				props: props,
-				flipTwos: true
-			});
-			startProperties = siteswap.getStartProperties(nJugglers);
-
-			startConfigurations = siteswap.startConfigurations(limbs);
-			localPeriod = startConfigurations[0].local.length;
-			unusualThrows = startConfigurations.some(
-				configuration => configuration.local.some(
-					localthrow => localthrow && localthrow.unusual
-				)
-			);
-
-			prechacthisUrl = '';
-			if (nJugglers == 2 && limbs.length == 4 && (period % 2) == 1) {
-				prechacthisUrl = 'http://prechacthis.org/info.php?pattern=['
-					+ startConfigurations[0].local.map(x => {
-						var h = x.height / 2;
-						return 'p(' + h + (+x.height & 1 ? ',1,' + (h + period / 2) : ',0,' + h) + ')';
-					}).join(',')
-				+ ']&persons=2';
+			} else {
+				siteswapValid = false;
 			}
 
 
-			const alternativesSiteswap = siteswap.toString().repeat(localPeriod * nJugglers / period);
-			alternativesUrl = siteswapAlternativesUrl({
-				siteswapInput: alternativesSiteswap,
-				nJugglers,
-				handsInput,
-			});
-
+			title = 'Siteswap ' + strippedInput;
+			if (siteswapName)
+				title += ' (' + siteswapName + ')';
+			title += ', ' + nJugglers + ' jugglers';
+			if (handsInput)
+				title += ', hands: ' + handsInput;
 		} else {
-			siteswapValid = false;
+			extendedSiteswap = new ExtendedSiteswap(siteswapInput);
+			siteswap = originalSiteswap = undefined;
+			siteswapValid = extendedSiteswap.isValid();
+			siteswapName = siteswapNames[extendedSiteswap.nJugglers + '|' + extendedSiteswap.toString()];
+
+			if (siteswapValid) {
+				jif = extendedSiteswap.toJif({
+					name: siteswapName ? siteswapName + " (" + extendedSiteswap.toString() + ")" : undefined,
+					generator: 'passist', // TODO: put version of package.json here again
+					// jugglers: jugglers,
+					// limbs: limbs,
+					// props: props,
+					flipTwos: true, // TODO: implement this
+				});
+				nProps = extendedSiteswap.nProps();
+			}
 		}
-
-
-		title = 'Siteswap ' + strippedInput;
-		if (siteswapName)
-			title += ' (' + siteswapName + ')';
-		title += ', ' + nJugglers + ' jugglers';
-		if (handsInput)
-			title += ', hands: ' + handsInput;
 	}
 
 	function prechac(x, nJugglers) {
@@ -232,9 +254,11 @@ $:	{
 	bind:handsInput
 	bind:siteswapValid
 	bind:handsValid
+	showNJugglers={!extendedSiteswap}
+	showHandOrderInput={!extendedSiteswap}
 	idPrefix=main
 />
-{#if jifdev}
+{#if jifdev && siteswapValid}
 	<button class="pure-button jif-button" on:click={e => {
 		localStorage.setItem("jif", JSON.stringify(jif, null, 2)); goto('/jif');
 	}}>
@@ -243,6 +267,7 @@ $:	{
 {/if}
 
 {#if siteswapValid || fullscreen}
+	{#if siteswap}
 	<h2>
 		<!-- TODO: put correct siteswap shift in href -->
 		<!-- svelte-ignore a11y-invalid-attribute -->
@@ -307,6 +332,17 @@ $:	{
 			</table>
 
 		</div>
+	{/if}
+
+	{:else}
+
+		{#if siteswapName}
+			<h2>{siteswapName}</h2>
+		{/if}
+
+		<p>
+		{nProps} props
+		</p>
 	{/if}
 
 	{#if siteswapValid}
@@ -386,7 +422,7 @@ $:	{
 		<button class="sharebutton pure-button" on:click={share}><Icon type=send /> share</button>
 	{/if}
 
-	{#if siteswapValid}
+	{#if siteswapValid && siteswap}
 		<p>
 			<a href="{alternativesUrl}" class="pure-button">{#if nJugglers >= 2}Compatible{:else}Similar{/if} siteswaps (beta)</a>
 		</p>
@@ -396,6 +432,12 @@ $:	{
 	<div>
 		<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see an invalid siteswap" >
 		<p>Invalid Siteswap</p>
+
+		{#if extendedSiteswap && extendedSiteswap.error}
+			<p>
+			{extendedSiteswap.error}
+			</p>
+		{/if}
 	</div>
 {:else}
 	<!-- empty string: no output -->
