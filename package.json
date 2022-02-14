@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "heap-js": "^2.1.6",
-    "pegjs": "^0.10.0",
     "marked": "^4.0.12",
+    "peggy": "^1.2.0",
     "three": "^0.137.0"
   },
   "devDependencies": {

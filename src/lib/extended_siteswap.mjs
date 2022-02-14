@@ -1,11 +1,11 @@
 'use strict';
 
-import peg from 'pegjs';
+import * as peggy from 'peggy';
 import Siteswap from './siteswap.mjs';
 import Jif from './jif.mjs';
 
 const grammar = `
-  // jugglinglab pattern grammar for pegjs
+  // jugglinglab pattern grammar for peggy
   // =====================================
   //
   // see https://jugglinglab.org/html/ssnotation.html
@@ -57,7 +57,7 @@ const grammar = `
     = [ \\t\\n\\r]*
 `
 
-var parser = peg.generate(grammar);
+var parser = peggy.generate(grammar);
 
 function label(t)
 {
