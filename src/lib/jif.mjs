@@ -357,9 +357,12 @@ function _completeOrbits({ jif, warnings })
 		}
 	}
 
-	for (const [time, events] of Object.entries(time2events)) {
-		if (events.throw.length != events.catch.length)
-			throw new Error(`cannot calculate orbits - different number of throws and catches at time ${time}`);
+	for (const [key, events] of Object.entries(time2events)) {
+		if (events.throw.length != events.catch.length) {
+			const [time, limbId] = key.split('|');
+			const limb = jif.limbs[limbId];
+			throw new Error(`cannot calculate orbits - different number of throws and catches at time ${time}, juggler ${1 + limb.juggler} ${limb.type}`);
+		}
 	}
 
 	for (const [throwId, thr0w] of jif.throws.entries()) {
