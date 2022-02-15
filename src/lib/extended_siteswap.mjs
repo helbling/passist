@@ -155,6 +155,7 @@ isValid()
 	try {
 		this.completeJif = Jif.complete(this.jif, { expand:true, props:true }).jif;
 	} catch (e) {
+		this.error = e;
 		return false;
 	}
 
