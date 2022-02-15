@@ -361,7 +361,7 @@ function _completeOrbits({ jif, warnings })
 		if (events.throw.length != events.catch.length) {
 			const [time, limbId] = key.split('|');
 			const limb = jif.limbs[limbId];
-			throw new Error(`cannot calculate orbits - different number of throws and catches at time ${time}, juggler ${1 + limb.juggler} ${limb.type}`);
+			throw new Error(`cannot calculate orbits - different number of throws and catches at time ${time}, juggler ${1 + limb.juggler} ${limb.type}, throws: ${events.throw.length}, catches: ${events.catch.length}`);
 		}
 	}
 
