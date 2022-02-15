@@ -44,10 +44,10 @@ const grammar = `
     / duration:Duration _ p:P _ x:X     _ { return { duration, p, x }; }
 	/ duration:Duration _ p:P ? _ x:X ? _ { return { duration, p, x }; }
 
-  P "pass flag"
+  P
     = "p" { return true }
 
-  X "x flag"
+  X
     = "x" { return true }
 
   Duration "duration"
