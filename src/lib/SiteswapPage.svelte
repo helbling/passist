@@ -436,6 +436,9 @@ $:	{
 		{#if extendedSiteswap && extendedSiteswap.error}
 			<p>
 			{extendedSiteswap.error}
+			{#if extendedSiteswap.error.snippet}
+				<pre>{extendedSiteswap.error.snippet}</pre>
+			{/if}
 			</p>
 		{/if}
 	</div>

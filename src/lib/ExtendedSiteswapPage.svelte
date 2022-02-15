@@ -418,6 +418,9 @@ $:	{
 		<p>Invalid Pattern</p>
 		{#if pattern.error}
 			{pattern.error}
+			{#if pattern.error.snippet}
+				<pre>{pattern.error.snippet}</pre>
+			{/if}
 
 		{/if}
 

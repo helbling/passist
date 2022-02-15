@@ -85,7 +85,8 @@ function addTo(jifThrow, astThrow, nLimbs)
 	return jifThrow;
 }
 
-function beats2throws(beats, {nLimbs = 2, from = 0, time = 0 } = {}) {
+function beats2throws(beats, {nLimbs = 2, from = 0, time = 0 } = {})
+{
 	const throws = [];
 	const initialFrom = from;
 	for (const beat of beats) {
@@ -127,6 +128,23 @@ function beats2throws(beats, {nLimbs = 2, from = 0, time = 0 } = {}) {
 	return { throws, time };
 }
 
+// inspired by function format() of
+// https://github.com/peggyjs/peggy/blob/main/lib/grammar-error.js
+function error_snippet(location, input)
+{
+	let str = "";
+	const s = location.start;
+	const e = location.end;
+	const lines = input.split(/\r\n|\n|\r/g);
+	const line = lines[s.line - 1];
+	const last = s.line === e.line ? e.column : line.length + 1;
+	str += `${line}\n${"".padEnd(s.column - 1)}${"".padEnd(Math.max(1, last - s.column), "^")}`;
+
+	return str;
+}
+
+
+
 export default class ExtendedSiteswap {
 
 constructor(input, options = {})
@@ -135,6 +153,8 @@ constructor(input, options = {})
 	try {
 		this.ast = parser.parse(input);
 	} catch (e) {
+		if (e.location)
+			e.snippet = error_snippet(e.location, input);
 		this.error = e;
 	}
 
