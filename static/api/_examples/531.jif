@@ -48,11 +48,7 @@
   "timeStretchFactor": 1,
   "valid": true,
   "repetition": {
-    "period": 3,
-    "limbPermutation": [
-      1,
-      0
-    ]
+    "period": 6
   },
   "throws": [
     {
@@ -74,6 +70,27 @@
       "duration": 1,
       "from": 0,
       "to": 1,
+      "label": "1"
+    },
+    {
+      "time": 3,
+      "duration": 5,
+      "from": 1,
+      "to": 0,
+      "label": "5"
+    },
+    {
+      "time": 4,
+      "duration": 3,
+      "from": 0,
+      "to": 1,
+      "label": "3"
+    },
+    {
+      "time": 5,
+      "duration": 1,
+      "from": 1,
+      "to": 0,
       "label": "1"
     }
   ]
