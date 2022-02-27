@@ -38,6 +38,6 @@ This project builds upon the follwing open source tools. Many thanks to its crea
 
 # License
 
-Copyright 2021 Christian Helbling
+Copyright 2021 Christian Helbling (helch at [same five letters again] dot ch)
 
 Licensed under the GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
