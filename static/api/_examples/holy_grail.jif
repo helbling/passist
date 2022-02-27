@@ -84,295 +84,36 @@
   ],
   "timeStretchFactor": 2,
   "valid": true,
-  "period": 36,
+  "repetition": {
+    "period": 3,
+    "limbPermutation": [
+      3,
+      0,
+      1,
+      2
+    ]
+  },
   "throws": [
     {
       "time": 0,
       "duration": 9,
       "from": 0,
       "to": 1,
-      "label": "9",
-      "prop": 0
+      "label": "9"
     },
     {
       "time": 1,
       "duration": 7,
       "from": 1,
       "to": 0,
-      "label": "7",
-      "prop": 1
+      "label": "7"
     },
     {
       "time": 2,
       "duration": 5,
       "from": 2,
       "to": 3,
-      "label": "5",
-      "prop": 2
-    },
-    {
-      "time": 3,
-      "duration": 9,
-      "from": 3,
-      "to": 0,
-      "label": "9",
-      "prop": 3
-    },
-    {
-      "time": 4,
-      "duration": 7,
-      "from": 0,
-      "to": 3,
-      "label": "7",
-      "prop": 4
-    },
-    {
-      "time": 5,
-      "duration": 5,
-      "from": 1,
-      "to": 2,
-      "label": "5",
-      "prop": 5
-    },
-    {
-      "time": 6,
-      "duration": 9,
-      "from": 2,
-      "to": 3,
-      "label": "9",
-      "prop": 6
-    },
-    {
-      "time": 7,
-      "duration": 7,
-      "from": 3,
-      "to": 2,
-      "label": "7",
-      "prop": 2
-    },
-    {
-      "time": 8,
-      "duration": 5,
-      "from": 0,
-      "to": 1,
-      "label": "5",
-      "prop": 1
-    },
-    {
-      "time": 9,
-      "duration": 9,
-      "from": 1,
-      "to": 2,
-      "label": "9",
-      "prop": 0
-    },
-    {
-      "time": 10,
-      "duration": 7,
-      "from": 2,
-      "to": 1,
-      "label": "7",
-      "prop": 5
-    },
-    {
-      "time": 11,
-      "duration": 5,
-      "from": 3,
-      "to": 0,
-      "label": "5",
-      "prop": 4
-    },
-    {
-      "time": 12,
-      "duration": 9,
-      "from": 0,
-      "to": 1,
-      "label": "9",
-      "prop": 3
-    },
-    {
-      "time": 13,
-      "duration": 7,
-      "from": 1,
-      "to": 0,
-      "label": "7",
-      "prop": 1
-    },
-    {
-      "time": 14,
-      "duration": 5,
-      "from": 2,
-      "to": 3,
-      "label": "5",
-      "prop": 2
-    },
-    {
-      "time": 15,
-      "duration": 9,
-      "from": 3,
-      "to": 0,
-      "label": "9",
-      "prop": 6
-    },
-    {
-      "time": 16,
-      "duration": 7,
-      "from": 0,
-      "to": 3,
-      "label": "7",
-      "prop": 4
-    },
-    {
-      "time": 17,
-      "duration": 5,
-      "from": 1,
-      "to": 2,
-      "label": "5",
-      "prop": 5
-    },
-    {
-      "time": 18,
-      "duration": 9,
-      "from": 2,
-      "to": 3,
-      "label": "9",
-      "prop": 0
-    },
-    {
-      "time": 19,
-      "duration": 7,
-      "from": 3,
-      "to": 2,
-      "label": "7",
-      "prop": 2
-    },
-    {
-      "time": 20,
-      "duration": 5,
-      "from": 0,
-      "to": 1,
-      "label": "5",
-      "prop": 1
-    },
-    {
-      "time": 21,
-      "duration": 9,
-      "from": 1,
-      "to": 2,
-      "label": "9",
-      "prop": 3
-    },
-    {
-      "time": 22,
-      "duration": 7,
-      "from": 2,
-      "to": 1,
-      "label": "7",
-      "prop": 5
-    },
-    {
-      "time": 23,
-      "duration": 5,
-      "from": 3,
-      "to": 0,
-      "label": "5",
-      "prop": 4
-    },
-    {
-      "time": 24,
-      "duration": 9,
-      "from": 0,
-      "to": 1,
-      "label": "9",
-      "prop": 6
-    },
-    {
-      "time": 25,
-      "duration": 7,
-      "from": 1,
-      "to": 0,
-      "label": "7",
-      "prop": 1
-    },
-    {
-      "time": 26,
-      "duration": 5,
-      "from": 2,
-      "to": 3,
-      "label": "5",
-      "prop": 2
-    },
-    {
-      "time": 27,
-      "duration": 9,
-      "from": 3,
-      "to": 0,
-      "label": "9",
-      "prop": 0
-    },
-    {
-      "time": 28,
-      "duration": 7,
-      "from": 0,
-      "to": 3,
-      "label": "7",
-      "prop": 4
-    },
-    {
-      "time": 29,
-      "duration": 5,
-      "from": 1,
-      "to": 2,
-      "label": "5",
-      "prop": 5
-    },
-    {
-      "time": 30,
-      "duration": 9,
-      "from": 2,
-      "to": 3,
-      "label": "9",
-      "prop": 3
-    },
-    {
-      "time": 31,
-      "duration": 7,
-      "from": 3,
-      "to": 2,
-      "label": "7",
-      "prop": 2
-    },
-    {
-      "time": 32,
-      "duration": 5,
-      "from": 0,
-      "to": 1,
-      "label": "5",
-      "prop": 1
-    },
-    {
-      "time": 33,
-      "duration": 9,
-      "from": 1,
-      "to": 2,
-      "label": "9",
-      "prop": 6
-    },
-    {
-      "time": 34,
-      "duration": 7,
-      "from": 2,
-      "to": 1,
-      "label": "7",
-      "prop": 5
-    },
-    {
-      "time": 35,
-      "duration": 5,
-      "from": 3,
-      "to": 0,
-      "label": "5",
-      "prop": 4
+      "label": "5"
     }
   ]
 }

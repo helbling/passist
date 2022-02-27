@@ -47,55 +47,34 @@
   ],
   "timeStretchFactor": 1,
   "valid": true,
-  "period": 6,
+  "repetition": {
+    "period": 3,
+    "limbPermutation": [
+      1,
+      0
+    ]
+  },
   "throws": [
     {
       "time": 0,
       "duration": 5,
       "from": 0,
       "to": 1,
-      "label": "5",
-      "prop": 0
+      "label": "5"
     },
     {
       "time": 1,
       "duration": 3,
       "from": 1,
       "to": 0,
-      "label": "3",
-      "prop": 1
+      "label": "3"
     },
     {
       "time": 2,
       "duration": 1,
       "from": 0,
       "to": 1,
-      "label": "1",
-      "prop": 2
-    },
-    {
-      "time": 3,
-      "duration": 5,
-      "from": 1,
-      "to": 0,
-      "label": "5",
-      "prop": 2
-    },
-    {
-      "time": 4,
-      "duration": 3,
-      "from": 0,
-      "to": 1,
-      "label": "3",
-      "prop": 1
-    },
-    {
-      "time": 5,
-      "duration": 1,
-      "from": 1,
-      "to": 0,
-      "label": "1",
-      "prop": 0
+      "label": "1"
     }
   ]
 }
