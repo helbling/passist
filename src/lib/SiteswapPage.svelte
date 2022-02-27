@@ -274,7 +274,7 @@ $:	{
 						{#if prechacthisUrl}
 							<a href={prechacthisUrl}>Prechac</a>
 						{:else}
-							Prechac
+							Local
 						{/if}
 					</td>
 
