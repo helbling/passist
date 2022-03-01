@@ -355,18 +355,23 @@ $:	{
 			</InputField>
 			<InputField
 				bind:value={jugglingSpeed}
-				type=number
+				type=range
 				id=jugglingspeed
 				label='Juggling speed'
 				step=0.1
+				min=1
+				max=10
+				defaultValue={defaults.jugglingSpeed}
 			/>
 			<InputField
 				bind:value={animationSpeed}
-				type=number
+				type=range
 				id=animationspeed
 				label='Animation speed'
 				step=0.1
 				min=0.1
+				max=2
+				defaultValue={defaults.animationSpeed}
 			/>
 			<InputField
 				id=orbits

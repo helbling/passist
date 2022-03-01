@@ -9,6 +9,7 @@ export let value = '';
 export let min = undefined;
 export let max = undefined;
 export let step = undefined;
+export let defaultValue = undefined;
 export let placeholder = undefined;
 export let valid = true;
 export let values = {};
@@ -24,14 +25,16 @@ let inputAttr = {
 }
 let searchInput;
 
-if (type == 'number') {
-	inputAttr.inputmode = 'number';
+if (type == 'number' || type == 'range') {
 	inputAttr.min = min ? min : 0;
 	if (max)
 		inputAttr.max = max;
 	if (step)
 		inputAttr.step = step;
-	inputAttr.class += (max && max < 10) ? ' digit' : ' twodigit';
+	if (type == 'number') {
+		inputAttr.inputmode = 'number';
+		inputAttr.class += (max && max < 10) ? ' digit' : ' twodigit';
+	}
 } else {
 	inputAttr.placeholder = placeholder ? placeholder : label;
 	for (const k in attr)
@@ -66,7 +69,7 @@ function blurTargetOnEnter(e) {
 	input[type="checkbox"] { width:1.4em; height:1.4em; vertical-align:middle }
 	input.invalid { color:#dc3545 !important }
 	.input-group-text.checkbox { padding-top:0.1em; padding-bottom:0.1em }
-	label, .input-group input {
+	label, .input-group input, .reset {
 		color: #495057;
 		border: 1px solid #ced4da;
 		border-radius: 0.25rem;
@@ -74,6 +77,8 @@ function blurTargetOnEnter(e) {
 		        box-shadow: inset 0 1px 3px #ddd;
 		margin:0;
 	}
+	.range { background-color: #e9ecef; display:flex; height:2.4em }
+	.reset { background-color: #e9ecef }
 	label {
 		padding: 0.4em 0.75em;
 		margin: 0;
@@ -119,6 +124,24 @@ function blurTargetOnEnter(e) {
 				<option value={v}>{v}</option>
 			{/each}
 		</select>
+	{:else if type == 'range'}
+		<label> {value} </label>
+		<div class=range>
+			<input
+				{id}
+				class=range
+				type=range
+				bind:value={value}
+				on:change
+				autocomplete=off
+				{...inputAttr}
+			>
+		</div>
+			{#if value != defaultValue}
+			<button class=reset on:click={e => value = defaultValue}>
+				<Icon type=reload/>
+			</button>
+			{/if}
 	{:else if type == 'custom'}
 		<slot/>
 	{:else if type != 'checkbox'}
