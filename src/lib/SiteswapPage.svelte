@@ -218,6 +218,7 @@ $:	{
 	.jif-button { float:right; margin-left:0.5em }
 	label.pure-button { margin:0 }
 	td.space { padding-left:0.5em }
+	.animation-controls { display:flex; flex-flow:row wrap }
 </style>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
@@ -360,7 +361,7 @@ $:	{
 				label='Juggling speed'
 				step=0.1
 				min=1
-				max=10
+				max=5
 				defaultValue={defaults.jugglingSpeed}
 			/>
 			<InputField
@@ -381,6 +382,18 @@ $:	{
 			/>
 		</AnimationWidget>
 	</div>
+	<p class=animation-controls>
+		<InputField
+			bind:value={animationSpeed}
+			type=range
+			id=animationspeed
+			label='Animation speed'
+			step=0.1
+			min=0.1
+			max=2
+			defaultValue={defaults.animationSpeed}
+		/>
+	</p>
 
 	{:else}
 		<button class="pure-button" on:click={e => {showAnimationWidget = true;}}>Show Animation</button>
@@ -388,7 +401,9 @@ $:	{
 
 
 	{#if sharebutton}
-		<button class="sharebutton pure-button" on:click={share}><Icon type=send /> share</button>
+		<p>
+			<button class="sharebutton pure-button" on:click={share}><Icon type=send /> share</button>
+		</p>
 	{/if}
 
 	{#if siteswapValid}

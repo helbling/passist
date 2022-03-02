@@ -69,7 +69,7 @@ function blurTargetOnEnter(e) {
 	input[type="checkbox"] { width:1.4em; height:1.4em; vertical-align:middle }
 	input.invalid { color:#dc3545 !important }
 	.input-group-text.checkbox { padding-top:0.1em; padding-bottom:0.1em }
-	label, .input-group input, .reset {
+	label, .input-group input, .reset, .range-value {
 		color: #495057;
 		border: 1px solid #ced4da;
 		border-radius: 0.25rem;
@@ -77,8 +77,9 @@ function blurTargetOnEnter(e) {
 		        box-shadow: inset 0 1px 3px #ddd;
 		margin:0;
 	}
-	.range { background-color: #e9ecef; display:flex; height:2.4em }
-	.reset { background-color: #e9ecef }
+	.range, .range-value, .reset { background-color: #e9ecef; }
+	.range { display:flex; height:2.4em }
+	.range-value { min-width: 3em; text-align:center; padding:0.4em }
 	label {
 		padding: 0.4em 0.75em;
 		margin: 0;
@@ -125,7 +126,7 @@ function blurTargetOnEnter(e) {
 			{/each}
 		</select>
 	{:else if type == 'range'}
-		<label> {value} </label>
+		<div class=range-value> {value} </div>
 		<div class=range>
 			<input
 				{id}
