@@ -61,7 +61,7 @@
 	function save() {
 		if (!jif)
 			return;
-		var data = new Blob([jifOutput], {type: 'application/jif+json'});
+		var data = new Blob([jifString], {type: 'application/jif+json'});
 		var url = window.URL.createObjectURL(data);
 		savelink.href = url;
 	}
