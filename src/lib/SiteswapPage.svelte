@@ -54,11 +54,14 @@
 	if (browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
 
-		if (useLocalStorage)
+		if (useLocalStorage) {
 			propType = localStorage.getItem("propType") || defaults.propType;
+			animationSpeed = localStorage.getItem("animationSpeed") || defaults.animationSpeed;
+		}
 	}
 	$: useLocalStorage && localStorage.setItem("showAnimationWidget", showAnimationWidget ? "true" : "false");
 	$: useLocalStorage && localStorage.setItem("propType", propType);
+	$: useLocalStorage && localStorage.setItem("animationSpeed", animationSpeed);
 
 	function shiftLeft() {
 		siteswapShift = (siteswapShift + 1) % period;
