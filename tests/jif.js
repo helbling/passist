@@ -98,4 +98,11 @@ completeSuccess(
 	[],
 );
 
+completeSuccess(
+	read('tests/jif/mild_madness_sync_in.jif'),
+	{},
+	read('tests/jif/mild_madness_sync_out.jif'),
+	[],
+);
+
 test.run();
