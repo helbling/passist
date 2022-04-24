@@ -98,4 +98,18 @@ completeSuccess(
 	[],
 );
 
+completeSuccess(
+	read('tests/jif/mild_madness_sync_in.jif'),
+	{},
+	read('tests/jif/mild_madness_sync_out.jif'),
+	[],
+);
+
+completeSuccess(
+	read('tests/jif/4count_vs_3count_in.jif'),
+	{},
+	read('tests/jif/4count_vs_3count_out.jif'),
+	[],
+);
+
 test.run();

@@ -84,7 +84,9 @@
   ],
   "timeStretchFactor": 2,
   "valid": true,
-  "period": 36,
+  "repetition": {
+    "period": 36
+  },
   "throws": [
     {
       "time": 0,

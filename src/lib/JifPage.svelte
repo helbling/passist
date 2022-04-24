@@ -1,7 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
-	import { useLocalStorage } from '$lib/passist.mjs';
+	import { useLocalStorage, defaults } from '$lib/passist.mjs';
 	import AnimationWidget from '$lib/AnimationWidget.svelte';
+	import InputField from '$lib/InputField.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import Jif from '$lib/jif.mjs';
 
@@ -17,6 +18,7 @@
 	let name;
 	let error = '';
 	let warnings = [];
+	let animationSpeed = defaults.animationSpeed;
 
 	if (useLocalStorage)
 		jifString = localStorage.getItem('jif', null);
@@ -61,7 +63,7 @@
 	function save() {
 		if (!jif)
 			return;
-		var data = new Blob([jifOutput], {type: 'application/jif+json'});
+		var data = new Blob([jifString], {type: 'application/jif+json'});
 		var url = window.URL.createObjectURL(data);
 		savelink.href = url;
 	}
@@ -75,6 +77,7 @@
 	.invalid { color:#dc3545 }
 	.error   { color:red }
 	.warnings { color:orange }
+	.animation-controls { display:flex; flex-flow:row wrap }
 </style>
 
 <div class=horizontal-split>
@@ -83,7 +86,22 @@
 
 <div class="right" >
 {#if jif}
-	<AnimationWidget {jif} />
+	<AnimationWidget
+		{jif}
+		animationSpeed={parseFloat(animationSpeed)}
+	/>
+	<p class=animation-controls>
+		<InputField
+			bind:value={animationSpeed}
+			type=range
+			id=animationspeed
+			label='Animation speed'
+			step=0.1
+			min=0.1
+			max=2
+			defaultValue={defaults.animationSpeed}
+		/>
+	</p>
 {/if}
 </div>
 

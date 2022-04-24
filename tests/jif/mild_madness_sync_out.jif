@@ -1,0 +1,158 @@
+{
+  "limbs": [
+    {
+      "juggler": 0,
+      "type": "right hand"
+    },
+    {
+      "juggler": 0,
+      "type": "left hand"
+    },
+    {
+      "juggler": 1,
+      "type": "right hand"
+    },
+    {
+      "juggler": 1,
+      "type": "left hand"
+    }
+  ],
+  "repetition": {
+    "period": 3,
+    "limbPermutation": [
+      3,
+      2,
+      0,
+      1
+    ],
+    "propPermutation": [
+      0,
+      1,
+      2,
+      5,
+      4,
+      3
+    ]
+  },
+  "throws": [
+    {
+      "time": 0,
+      "duration": 3,
+      "from": 0,
+      "to": 3,
+      "spins": 1,
+      "label": "pass",
+      "prop": 0
+    },
+    {
+      "time": 0,
+      "duration": 3,
+      "from": 2,
+      "to": 0,
+      "spins": 1,
+      "label": "pass",
+      "prop": 1
+    },
+    {
+      "time": 1,
+      "duration": 3,
+      "from": 1,
+      "to": 2,
+      "spins": 1,
+      "label": "pass",
+      "prop": 2
+    },
+    {
+      "time": 1,
+      "duration": 1,
+      "from": 0,
+      "to": 1,
+      "spins": 0,
+      "label": "zip",
+      "prop": 3
+    },
+    {
+      "time": 1,
+      "duration": 3,
+      "from": 3,
+      "to": 1,
+      "spins": 1,
+      "label": "pass",
+      "prop": 4
+    },
+    {
+      "time": 2,
+      "duration": 3,
+      "from": 1,
+      "to": 0,
+      "spins": 1,
+      "label": "self",
+      "prop": 3
+    },
+    {
+      "time": 2,
+      "duration": 2,
+      "from": 2,
+      "to": 3,
+      "spins": 1,
+      "label": "self",
+      "prop": 5
+    }
+  ],
+  "meta": {},
+  "jugglers": [
+    {
+      "name": "A",
+      "position": [
+        1.6,
+        0,
+        0
+      ],
+      "lookAt": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "B",
+      "position": [
+        -1.6,
+        0,
+        0
+      ],
+      "lookAt": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "props": [
+    {
+      "color": "#c0392b",
+      "type": "club"
+    },
+    {
+      "color": "#0c0d5d",
+      "type": "club"
+    },
+    {
+      "color": "#f45d20",
+      "type": "club"
+    },
+    {
+      "color": "#ed4694",
+      "type": "club"
+    },
+    {
+      "color": "#6f5499",
+      "type": "club"
+    },
+    {
+      "color": "#00dc3c",
+      "type": "club"
+    }
+  ],
+  "timeStretchFactor": 1
+}

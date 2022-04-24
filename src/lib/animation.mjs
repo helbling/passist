@@ -891,7 +891,8 @@ updateScene(jif, options)
 	for (const t of jif.throws) {
 		if (t.duration > 0) {
 			const soloHeight = t.duration / timeStretchFactor;
-			t.dwell = (soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5)) * timeStretchFactor;
+			if (!('dwell' in t))
+				t.dwell = (soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5)) * timeStretchFactor;
 			if (!('spins' in t))
 				t.spins = Math.max(0, Math.floor(soloHeight - 2));
 

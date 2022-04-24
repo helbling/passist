@@ -55,11 +55,14 @@
 	if (browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
 
-		if (useLocalStorage)
+		if (useLocalStorage) {
 			propType = localStorage.getItem("propType") || defaults.propType;
+			animationSpeed = localStorage.getItem("animationSpeed") || defaults.animationSpeed;
+		}
 	}
 	$: useLocalStorage && localStorage.setItem("showAnimationWidget", showAnimationWidget ? "true" : "false");
 	$: useLocalStorage && localStorage.setItem("propType", propType);
+	$: useLocalStorage && localStorage.setItem("animationSpeed", animationSpeed);
 
 	function shiftLeft() {
 		siteswapShift = (siteswapShift + 1) % period;
@@ -236,10 +239,12 @@ $:	{
 	a.arrow { color:inherit; text-decoration:none; cursor:pointer }
 	.sharebutton { margin-top:1em }
 	.localThrows { overflow-x:auto; margin-bottom:1em }
+	.animationWidget { max-width:100%; overflow-x:auto; overflow-y:hidden }
 	.localThrows td { white-space:nowrap }
 	.jif-button { float:right; margin-left:0.5em }
 	label.pure-button { margin:0 }
 	td.space { padding-left:0.5em }
+	.animation-controls { display:flex; flex-flow:row wrap }
 </style>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
@@ -299,7 +304,7 @@ $:	{
 						{#if prechacthisUrl}
 							<a href={prechacthisUrl}>Prechac</a>
 						{:else}
-							Prechac
+							Local
 						{/if}
 					</td>
 
@@ -356,62 +361,81 @@ $:	{
 	{/if}
 
 	{#if showAnimationWidget}
-	<div class=animation-wrapper style="width:{windowWidth > 1000 ? 1000 : windowWidth - 32}px; height:300px">
-		<AnimationWidget
-			{jif}
-			initialFullscreen={fullscreen}
-			closeButton={true}
-			enableSettings={true}
-			valid={siteswapValid}
-			jugglingSpeed={parseFloat(jugglingSpeed)}
-			animationSpeed={parseFloat(animationSpeed)}
-			{showOrbits}
-			on:fullscreenchange={onFullscreenChange}
-			on:close={e => {showAnimationWidget = false;}}
-		>
-			<SiteswapInput
-				bind:siteswapInput
-				bind:nJugglers
-				bind:handsInput
-				bind:siteswapValid
-				bind:handsValid
-				idPrefix=animation
-			/>
-			<InputField
-				id=proptype
-				type=custom
-				label="Prop type"
+	<div class="animationWidget">
+		<div style="width:{windowWidth > 1032 ? 1000 : windowWidth - 32}px; height:300px">
+			<AnimationWidget
+				{jif}
+				initialFullscreen={fullscreen}
+				closeButton={true}
+				enableSettings={true}
+				valid={siteswapValid}
+				jugglingSpeed={parseFloat(jugglingSpeed)}
+				animationSpeed={parseFloat(animationSpeed)}
+				{showOrbits}
+				on:fullscreenchange={onFullscreenChange}
+				on:close={e => {showAnimationWidget = false;}}
 			>
-				<label class="pure-button" class:pure-button-active={propType == 'ball'}>
-					<input type="radio" bind:group={propType} value="ball" autocomplete="off"> Balls
-				</label>
-				<label class="pure-button" class:pure-button-active={propType == 'club'}>
-					<input type="radio" bind:group={propType} value="club" autocomplete="off"> Clubs
-				</label>
-			</InputField>
-			<InputField
-				bind:value={jugglingSpeed}
-				type=number
-				id=jugglingspeed
-				label='Juggling speed'
-				step=0.1
-			/>
-			<InputField
-				bind:value={animationSpeed}
-				type=number
-				id=animationspeed
-				label='Animation speed'
-				step=0.1
-				min=0.1
-			/>
-			<InputField
-				id=orbits
-				bind:value={showOrbits}
-				type=checkbox
-				label="Show orbits"
-			/>
-		</AnimationWidget>
+			<SiteswapInput
+					bind:siteswapInput
+					bind:nJugglers
+					bind:handsInput
+					bind:siteswapValid
+					bind:handsValid
+					idPrefix=animation
+				/>
+				<InputField
+					id=proptype
+					type=custom
+					label="Prop type"
+				>
+					<label class="pure-button" class:pure-button-active={propType == 'ball'}>
+						<input type="radio" bind:group={propType} value="ball" autocomplete="off"> Balls
+					</label>
+					<label class="pure-button" class:pure-button-active={propType == 'club'}>
+						<input type="radio" bind:group={propType} value="club" autocomplete="off"> Clubs
+					</label>
+				</InputField>
+				<InputField
+					bind:value={jugglingSpeed}
+					type=range
+					id=jugglingspeed
+					label='Juggling speed'
+					step=0.1
+					min=1
+					max=5
+					defaultValue={defaults.jugglingSpeed}
+				/>
+				<InputField
+					bind:value={animationSpeed}
+					type=range
+					id=animationspeed
+					label='Animation speed'
+					step=0.1
+					min=0.1
+					max=2
+					defaultValue={defaults.animationSpeed}
+				/>
+				<InputField
+					id=orbits
+					bind:value={showOrbits}
+					type=checkbox
+					label="Show orbits"
+				/>
+			</AnimationWidget>
+		</div>
 	</div>
+	<p class=animation-controls>
+		<InputField
+			bind:value={animationSpeed}
+			type=range
+			id=animationspeed
+			label='Animation speed'
+			step=0.1
+			min=0.1
+			max=2
+			defaultValue={defaults.animationSpeed}
+		/>
+	</p>
 
 	{:else}
 		<button class="pure-button" on:click={e => {showAnimationWidget = true;}}>Show Animation</button>
@@ -419,7 +443,9 @@ $:	{
 
 
 	{#if sharebutton}
-		<button class="sharebutton pure-button" on:click={share}><Icon type=send /> share</button>
+		<p>
+			<button class="sharebutton pure-button" on:click={share}><Icon type=send /> share</button>
+		</p>
 	{/if}
 
 	{#if siteswapValid && siteswap}

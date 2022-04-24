@@ -4,14 +4,8 @@ export async function handle({ event, resolve }) {
 	const path = event.url?.pathname || '';
 
 	if (path.match(/\.jif$/)) {
-		return {
-			...response,
-			headers: {
-				...response.headers,
-				'content-type': 'application/jif+json',
-				'access-control-allow-origin': '*',
-			}
-		};
+		response.headers.set('content-type', 'application/jif+json');
+		response.headers.set('access-control-allow-origin', '*');
 	} else if (path.match(/^\/images\//)) {
 		response.headers.set('access-control-allow-origin', '*');
 

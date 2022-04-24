@@ -9,6 +9,7 @@ export let value = '';
 export let min = undefined;
 export let max = undefined;
 export let step = undefined;
+export let defaultValue = undefined;
 export let placeholder = undefined;
 export let valid = true;
 export let values = {};
@@ -24,14 +25,16 @@ let inputAttr = {
 }
 let searchInput;
 
-if (type == 'number') {
-	inputAttr.inputmode = 'number';
+if (type == 'number' || type == 'range') {
 	inputAttr.min = min ? min : 0;
 	if (max)
 		inputAttr.max = max;
 	if (step)
 		inputAttr.step = step;
-	inputAttr.class += (max && max < 10) ? ' digit' : ' twodigit';
+	if (type == 'number') {
+		inputAttr.inputmode = 'number';
+		inputAttr.class += (max && max < 10) ? ' digit' : ' twodigit';
+	}
 } else {
 	inputAttr.placeholder = placeholder ? placeholder : label;
 	for (const k in attr)
@@ -56,8 +59,28 @@ function blurTargetOnEnter(e) {
 		position:relative;
 	}
 
-	.input-group > *:not(:last-child) { border-top-right-radius:0; border-bottom-right-radius:0; border-right:none }
-	.input-group > *:not(:first-child)  { border-top-left-radius:0; border-bottom-left-radius:0 }
+	.input-group.direction-row > *:not(:last-child) {
+		border-top-right-radius:0;
+		border-bottom-right-radius:0;
+		border-right:none
+	}
+	.input-group.direction-row > *:not(:first-child) {
+		border-top-left-radius:0;
+		border-bottom-left-radius:0
+	}
+	.input-group.direction-column > *:not(:last-child) {
+		border-bottom-right-radius:0;
+		border-bottom-left-radius:0;
+		border-bottom:none
+	}
+	.input-group.direction-column > *:not(:first-child) {
+		border-top:none;
+		border-top-left-radius:0;
+		border-top-right-radius:0;
+	}
+
+	.input-group.direction-column { flex-direction: column }
+
 	input[type="number"].digit    { width:3rem !important }
 	input[type="number"].twodigit { width:4rem !important }
 	input[type="search"] { width: 12rem; -webkit-appearance:none; padding-right:1.55rem }
@@ -66,14 +89,22 @@ function blurTargetOnEnter(e) {
 	input[type="checkbox"] { width:1.4em; height:1.4em; vertical-align:middle }
 	input.invalid { color:#dc3545 !important }
 	.input-group-text.checkbox { padding-top:0.1em; padding-bottom:0.1em }
-	label, .input-group input {
+	label, .input-group.direction-row input, .input-group.direction-column > div {
 		color: #495057;
 		border: 1px solid #ced4da;
 		border-radius: 0.25rem;
-		-webkit-box-shadow: inset 0 1px 3px #ddd;
-		        box-shadow: inset 0 1px 3px #ddd;
 		margin:0;
 	}
+	.input-group.direction-row label, .input-group.direction-row input {
+		-webkit-box-shadow: inset 0 1px 3px #ddd;
+		        box-shadow: inset 0 1px 3px #ddd;
+	}
+	.reset { border:none }
+	.input-group.type-range label { min-width:12em; text-align:left }
+	.range, .reset { background-color: #e9ecef; }
+	.range { display:flex; height:2.4em }
+	.range input { width:9em; border:none }
+	.range-value { display:inline-block; min-width:2.5em; text-align:right; padding-left:1em }
 	label {
 		padding: 0.4em 0.75em;
 		margin: 0;
@@ -91,7 +122,7 @@ function blurTargetOnEnter(e) {
 {#if title != label}
 <label class=sr-only for={id}>{title}</label>
 {/if}
-<div class="input-group {id}">
+<div class="input-group {id} type-{type} direction-{type == 'range' ? 'column' : 'row'}">
 	<label for={id}>
 		{#if type == 'checkbox'}
 			<input
@@ -101,7 +132,11 @@ function blurTargetOnEnter(e) {
 				{...inputAttr}
 			>
 		{/if}
-		{label}</label>
+		{label}
+		{#if type == 'range'}
+			<span class=range-value> {value} </span>
+		{/if}
+	</label>
 	{#if type == 'number'}
 		<input
 			{id}
@@ -119,6 +154,23 @@ function blurTargetOnEnter(e) {
 				<option value={v}>{v}</option>
 			{/each}
 		</select>
+	{:else if type == 'range'}
+		<div class=range>
+			<input
+				{id}
+				class=range
+				type=range
+				bind:value={value}
+				on:change
+				autocomplete=off
+				{...inputAttr}
+			>
+			{#if value != defaultValue}
+			<button class=reset on:click={e => value = defaultValue}>
+				<Icon type=reload/>
+			</button>
+			{/if}
+		</div>
 	{:else if type == 'custom'}
 		<slot/>
 	{:else if type != 'checkbox'}

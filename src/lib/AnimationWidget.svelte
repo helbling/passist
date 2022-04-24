@@ -181,7 +181,26 @@
 	.position-top    { top:1ex }
 	.position-left   { left:1ex }
 	.position-right  { right:1ex }
-	.settings { position:absolute; z-index:20; top:5ex; left:1ex; max-width:calc(100% - 2ex); max-height:calc(100% - 7ex); overflow:auto; display:flex; flex-direction:column; align-items:flex-start; background-color:rgba(0,0,0,0.2); padding:1em; border-radius:0.5em; margin-top:1ex }
+	.position-bottom { bottom:1ex }
+	.settings-outer {
+		position:absolute;
+		z-index:20;
+		top:5ex;
+		left:1ex;
+		max-width:calc(100% - 2ex);
+		max-height:calc(100% - 7ex);
+		align-items:flex-start;
+		background-color:rgba(0,0,0,0.2);
+		padding:1em;
+		border-radius:0.5em;
+		margin-top:1ex;
+		overflow:auto
+	}
+	.settings {
+		display:flex;
+		flex-direction:column;
+		align-items:start;
+	}
 	.teaserForeground   { position:absolute; top:0; bottom:0; left:0; right:0; z-index:21; cursor:pointer }
 	.message { color:white; background-color:rgba(0,0,0,0.2); pointer-events:none; position:absolute; bottom:2ex; left:50%; transform:translateX(-50%); padding:0 1ex; border-radius:1ex; z-index:21  }
 	label.pure-button { margin:0 }
@@ -216,31 +235,34 @@
 			<Icon type=settings on:click={e => showSettings = !showSettings}/>
 		</div>
 		{#if showSettings}
-		<div class="settings pure-form form-inline">
-			<slot></slot>
+		<div class="settings-outer">
+			<div class="settings pure-form form-inline">
+				<slot></slot>
 
-			<div class=fps>
-				FPS: {fps}
+				<div class=fps>
+					FPS: {fps}
+				</div>
+				<InputField
+					id=resolution
+					type=custom
+					label="Resolution"
+				>
+					<label class="pure-button" class:pure-button-active={resolution == 'low'}>
+						<input type="radio" bind:group={resolution} value="low" autocomplete="off"> low
+					</label>
+					<label class="pure-button" class:pure-button-active={resolution == 'medium'}>
+						<input type="radio" bind:group={resolution} value="medium" autocomplete="off"> medium
+					</label>
+					<label class="pure-button" class:pure-button-active={resolution == 'high'}>
+						<input type="radio" bind:group={resolution} value="high" autocomplete="off"> high
+					</label>
+				</InputField>
 			</div>
-			<InputField
-				id=resolution
-				type=custom
-				label="Resolution"
-			>
-				<label class="pure-button" class:pure-button-active={resolution == 'low'}>
-					<input type="radio" bind:group={resolution} value="low" autocomplete="off"> low
-				</label>
-				<label class="pure-button" class:pure-button-active={resolution == 'medium'}>
-					<input type="radio" bind:group={resolution} value="medium" autocomplete="off"> medium
-				</label>
-				<label class="pure-button" class:pure-button-active={resolution == 'high'}>
-					<input type="radio" bind:group={resolution} value="high" autocomplete="off"> high
-				</label>
-			</InputField>
 		</div>
 
 		{/if}
 	{/if}
+
 	{/if}
 	{#if valid}
 		{#if teaser && !isFull}
@@ -248,6 +270,12 @@
 				{#if closeButton}
 				<div class="controls position-top position-left" on:click|stopPropagation={dispatch('close', !isFull)}>
 					<Icon type=close/>
+				</div>
+				<div
+					class="controls position-bottom position-left"
+					on:click|stopPropagation={e => togglePause()}
+				>
+					<Icon type={paused ? 'play' : 'pause'} />
 				</div>
 				{/if}
 				{#if loaded}
