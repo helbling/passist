@@ -3,7 +3,7 @@
 	import InputField from '$lib/InputField.svelte';
 	let filter = '';
 	let knownSiteswapsFiltered;
-	const normalize = s => ('' + s).toLowerCase().replaceAll(/[^a-z0-9]+/g, '').replaceAll(' ', '');
+	const normalize = s => ('' + s).toLowerCase().replace(/[^a-z0-9]+/g, '').replaceAll(' ', '');
 	$: knownSiteswapsFiltered = knownSiteswaps.filter(a => a.some(x => normalize(x).includes(normalize(filter))));
 </script>
 
