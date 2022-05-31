@@ -35,6 +35,8 @@
 
 	main {max-width:none !important }
 	@media (min-width:1200px){main{max-width:1140px !important}}
+
+	:global(.pure-menu-link) { letter-spacing: normal }
 </style>
 
 <svelte:head>
