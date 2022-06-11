@@ -24,9 +24,9 @@ function U(path, query)
 
 function siteswapUrl(p)
 {
-	const query = {
-		jugglers: p.nJugglers,
-	};
+	const query = {};
+	if (p.nJugglers)
+		query.jugglers = p.nJugglers;
 	if (p.fullscreen)
 		query.fullscreen = 1;
 	if (p.handsInput)
