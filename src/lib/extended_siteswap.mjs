@@ -1,6 +1,6 @@
 'use strict';
 
-import * as peggy from 'peggy';
+import peggy from 'peggy';
 import Siteswap from './siteswap.mjs';
 import Jif from './jif.mjs';
 
