@@ -82,6 +82,7 @@ const knownSiteswaps = [
 	["95524", "Dragon cat"],
 	["64555", "Funky magazine rack"],
 	["966777777", "Double BANANA"],
+	["94949", "Erdnussflips"],
 ];
 
 var siteswapNames = {}
