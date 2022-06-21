@@ -185,6 +185,8 @@ $:	{
 			siteswapValid = extendedSiteswap.isValid();
 			siteswapName = siteswapNames[extendedSiteswap.nJugglers + '|' + extendedSiteswap.toString()];
 
+			title = 'Extended Siteswap ' + siteswapInput;
+
 			if (siteswapValid) {
 				jif = extendedSiteswap.toJif({
 					name: siteswapName ? siteswapName + " (" + extendedSiteswap.toString() + ")" : undefined,
@@ -346,7 +348,10 @@ $:	{
 		{/if}
 
 		<p>
-		{nProps} props
+			Extended Siteswap, {nProps} props
+		</p>
+		<p>
+			Note: Support for extended siteswaps is new and might still have some bugs and rough edges..
 		</p>
 	{/if}
 
