@@ -1,7 +1,7 @@
 import { promises } from 'fs';
 import { baseUrl } from '$lib/passist';
 
-export async function get() {
+export async function GET() {
 	return {
 		headers:{
 			'content-type': 'text/html',
