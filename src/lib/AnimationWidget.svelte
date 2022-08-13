@@ -75,7 +75,7 @@
 			const requestFS = (
 				container.requestFullscreen ||
 				container.mozRequestFullScreen ||
-				container.webkitRequestFullscreen ||
+				/*container.webkitRequestFullscreen ||*/
 				container.msRequestFullscreen ||
 				maximize
 			).bind(container);

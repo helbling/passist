@@ -188,8 +188,13 @@ toJif(options)
 			to:  (i + height) % nLimbs,
 			label: Siteswap.heightToChar(height)
 		};
-		if (options.flipTwos && (height > 1.5 * jif.timeStretchFactor && height < 2.5 * jif.timeStretchFactor))
+		if (
+			options.flipTwos
+			&& (jif.limbs[t.from].juggler == jif.limbs[t.to].juggler) // throw is a self
+			&& (height > 1.5 * jif.timeStretchFactor && height < 2.5 * jif.timeStretchFactor)
+		) {
 			t.spins = 1;
+		}
 
 		throwsAtTime.push(t);
 		jif.throws.push(t);
