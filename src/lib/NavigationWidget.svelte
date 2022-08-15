@@ -11,6 +11,7 @@
 	let pages = [
 		{ path:'/siteswap-generator', title:'Generator' },
 		{ path:'/siteswap',  title:'Siteswap' },
+		{ path:'/extended-siteswap',  title:'Extended siteswap' },
 		{ path:'/patterns',  title:'Patterns' },
 		jifdev ? { path:'/jif',       title:'Jif' } : null,
 		{ path:'/about',     title:'About' },

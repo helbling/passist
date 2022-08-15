@@ -31,9 +31,20 @@ function siteswapUrl(p)
 		query.fullscreen = 1;
 	if (p.handsInput)
 		query.hands = p.handsInput.replace(/[^a-z]+/gi, '-');
-	const url = U('/siteswap/' + ((typeof p.siteswapInput === 'string') ? encodeURI(p.siteswapInput) : ''), query);
-	// console.log(p, url);
-	return url;
+	return U('/siteswap/' + ((typeof p.siteswapInput === 'string') ? encodeURI(p.siteswapInput) : ''), query);
+}
+
+function extendedSiteswapUrl(p)
+{
+	const query = {};
+	if (p.nJugglers)
+		query.jugglers = p.nJugglers;
+	if (p.fullscreen)
+		query.fullscreen = 1;
+	const path = ((typeof p.siteswapInput === 'string') ? p.siteswapInput : '');
+//		.replace(/^<(.*)>$/, '\\1')
+//		.replace(/|/, '/')
+	return U('/estended-siteswap/' + encodeURI(path), query);
 }
 
 function siteswapAlternativesUrl(p)
@@ -110,6 +121,7 @@ export {
 	defaults,
 	useLocalStorage,
 	siteswapUrl,
+	extendedSiteswapUrl,
 	siteswapAlternativesUrl,
 	jugglerName,
 	hands2limbs,
