@@ -4,7 +4,9 @@
 	import { browser } from '$app/env';
 
 	export let data;
-	$: ({ siteswapInput, nJugglers, handsInput, fullscreen } = data);
+
+	let siteswapInput, nJugglers, handsInput, fullscreen;
+	({ siteswapInput, nJugglers, handsInput, fullscreen } = data);
 
 	$:  useLocalStorage && siteswapInput && localStorage.setItem("siteswap", siteswapInput);
 	$:  useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);

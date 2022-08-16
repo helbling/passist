@@ -7,7 +7,7 @@ function pattern(siteswap, params = {}) {
 	return '[`' + siteswap + (params.nJugglers ? ' (' + params.nJugglers + ' juggler' + (params.nJugglers != 1 ? 's' : '') + ')' : '') + '`](' + siteswapUrl(params) + ')';
 }
 
-export let source = `
+let source = `
 
 ## Siteswap notation
 
