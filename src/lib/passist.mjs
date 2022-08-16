@@ -44,7 +44,7 @@ function extendedSiteswapUrl(p)
 	const path = ((typeof p.siteswapInput === 'string') ? p.siteswapInput : '');
 //		.replace(/^<(.*)>$/, '\\1')
 //		.replace(/|/, '/')
-	return U('/estended-siteswap/' + encodeURI(path), query);
+	return U('/extended-siteswap/' + encodeURI(path), query);
 }
 
 function siteswapAlternativesUrl(p)
