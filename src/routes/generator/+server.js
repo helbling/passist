@@ -1,9 +1,8 @@
 export async function GET({ params }) {
-	return {
+	return new Response('Moved Permanently', {
 		status: 301,
-		body: 'Moved Permanently',
 		headers: {
 			Location: '/siteswap-generator',
 		}
-	};
+	});
 }

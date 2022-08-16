@@ -1,14 +1,5 @@
-<script context="module">
-	export function load({ error, status }) {
-		return {
-			props: { error, status }
-		};
-	}
-</script>
-
 <script>
-	export let status;
-	export let error;
+	import { page } from '$app/stores';
 </script>
 
 <style>
@@ -19,16 +10,16 @@
 </style>
 
 <svelte:head>
-	<title>{status}</title>
+	<title>{$page.status}</title>
 </svelte:head>
 
-<h1>{status}</h1>
+<h1>{$page.status}</h1>
 
 <img src='/images/mr_meeseeks_shocked_small.png' alt='mr meeseeks is shocked to see no siteswaps' />
 
-<p>{error.message}</p>
+<p>{$page.error.message}</p>
 
 <!-- stack not visible in production, see https://kit.svelte.dev/docs#layouts-error-pages -->
-{#if error.stack}
-	<pre>{error.stack}</pre>
+{#if $page.error.stack}
+	<pre>{$page.error.stack}</pre>
 {/if}
