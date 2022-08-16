@@ -1,6 +1,6 @@
 <script>
 import { marked } from 'marked';
-export let source = `
+let source = `
 
 ## Purpose
 This is the passing siteswap assistant helping you to find, start and animate [passing](https://en.wikipedia.org/wiki/Passing_(juggling)) patterns. 
