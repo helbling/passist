@@ -1,7 +1,7 @@
 <script>
 	import SiteswapAlternativesPage from '$lib/SiteswapAlternativesPage.svelte';
 	import { useLocalStorage, siteswapAlternativesUrl } from '$lib/passist.mjs';
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 
 	export let data;
 	$: ({siteswapInput, nJugglers, handsInput} = data);

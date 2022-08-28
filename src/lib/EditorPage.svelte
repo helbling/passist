@@ -5,7 +5,7 @@
 	import schema from '../../static/jif.schema.json';
 	import CausalDiagramWidget from '$lib/CausalDiagramWidget.svelte';
 	import AnimationWidget from '$lib/AnimationWidget.svelte';
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 
 	let jifOutput = '{}';
 	let jif = {};

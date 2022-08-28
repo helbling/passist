@@ -3,7 +3,7 @@
 	import { defaults } from '$lib/passist.mjs';
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 	import Jif from '$lib/jif.mjs';
 
 	export let jif;

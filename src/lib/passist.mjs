@@ -1,4 +1,4 @@
-import { browser, dev } from '$app/env';
+import { browser, dev } from '$app/environment';
 
 const defaults = {
 	siteswap: '86277',

@@ -3,7 +3,7 @@
 	import SiteswapInput from '$lib/SiteswapInput.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
 	import { onMount, onDestroy } from 'svelte';
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 	import { defaults, jugglerName, siteswapUrl } from '$lib/passist.mjs';
 	export let siteswapInput = "";
 	export let nProps = defaults.nProps;
