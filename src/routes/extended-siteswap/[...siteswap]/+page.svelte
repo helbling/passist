@@ -1,7 +1,7 @@
 <script>
 	import { useLocalStorage, extendedSiteswapUrl } from '$lib/passist.mjs';
 	import ExtendedSiteswapPage from '$lib/ExtendedSiteswapPage.svelte';
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 
 	export let data;
 	let siteswapInput, nJugglers, fullscreen;

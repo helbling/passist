@@ -7,7 +7,7 @@
 	import { siteswapNames} from '$lib/patterns.mjs';
 	import { defaults, useLocalStorage, extendedSiteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, jifdev, U } from '$lib/passist.mjs';
 	import { goto } from '$app/navigation';
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 
 	export let siteswapInput = "<3p33|324p>";
 	export let nJugglers = 2;
