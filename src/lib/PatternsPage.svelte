@@ -62,7 +62,7 @@ $: {
 	{#if extendedSiteswaps.length}
 		{#each extendedSiteswaps as pattern}
 			<li class="pure-menu-item pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
-				<a class=pure-menu-link href="/siteswap/{pattern.notation}?jugglers=2">
+				<a class=pure-menu-link href="/extended-siteswap/{pattern.notation}">
 					<span class=siteswap>{pattern.notation}</span>
 					<span class=name>{pattern.name}</span>
 				</a>

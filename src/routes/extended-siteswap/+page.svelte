@@ -2,7 +2,7 @@
 	import { defaults, useLocalStorage, siteswapUrl } from '$lib/passist.mjs';
 	import { goto } from '$app/navigation';
 
-	goto('/extended-siteswap/abc/def?foo=bar'); // NOCOMMIT
+	goto('/extended-siteswap/3p33|234p'); // TODO use localStorage
 	/*
 	if (useLocalStorage) {
 		goto(siteswapUrl({

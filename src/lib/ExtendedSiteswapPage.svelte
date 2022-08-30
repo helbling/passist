@@ -9,10 +9,11 @@
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
 
-	export let siteswapInput = "<3p33|324p>";
+	export let siteswapInputs = [];
 	export let nJugglers = 2;
 	export let fullscreen = false;
 
+	let siteswapInput = '';
 	let extendedSiteswap;
 	let siteswapValid = false;
 	let nProps;
@@ -52,10 +53,12 @@
 	$: useLocalStorage && localStorage.setItem("propType", propType);
 	$: useLocalStorage && localStorage.setItem("animationSpeed", animationSpeed);
 
+	$: siteswapInput = '<' + siteswapInputs.join('|') + '>';
+
 	function getUrl(p = {}) {
 		p = Object.assign({
-			siteswapInput: siteswapInput,
-			nJugglers: nJugglers,
+			siteswapInputs,
+			nJugglers,
 			fullscreen: fullscreen,
 		}, p);
 		return extendedSiteswapUrl(p);
@@ -109,7 +112,7 @@ $: {
 </svelte:head>
 
 <ExtendedSiteswapInput
-	bind:siteswapInput
+	bind:siteswapInputs
 	bind:nJugglers
 	bind:siteswapValid
 	idPrefix=main
@@ -154,7 +157,7 @@ $: {
 				on:close={e => {showAnimationWidget = false;}}
 			>
 			<ExtendedSiteswapInput
-					bind:siteswapInput
+					bind:siteswapInputs
 					bind:nJugglers
 					bind:siteswapValid
 					idPrefix=animation

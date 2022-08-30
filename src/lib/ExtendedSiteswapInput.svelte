@@ -3,30 +3,28 @@
 	import Icon from '$lib/Icon.svelte';
 	import { jugglerName, defaultLimbs } from '$lib/passist.mjs';
 
-	export let siteswapInput;
-	export let nJugglers;
-	export let showNJugglers = true;
+	export let siteswapInputs = [];
+	export let nJugglers = 2;
 	export let idPrefix;
 	export let siteswapValid;
+
+$: {
+	const firstInput = siteswapInputs[0];
+	if (firstInput) {
+		for (let i = 1; i < nJugglers; i++) {
+			if (siteswapInputs[i] === undefined)
+				siteswapInputs[i] = firstInput;
+		}
+	}
+}
+$: {
+	if (nJugglers < siteswapInputs.length)
+		siteswapInputs = siteswapInputs.slice(0, nJugglers);
+}
 
 </script>
 
 <div class="pure-form form-inline">
-	<InputField
-		bind:value={siteswapInput}
-		id={idPrefix + "SiteswapInput"}
-		label=Siteswap
-		type=search
-		valid={siteswapValid || !siteswapInput}
-		attr={{
-			class:     'siteswap',
-			inputmode: 'verbatim',
-			pattern:   '[0-9a-zA-Z ]+',
-			size:      10,
-		}}
-		/>
-
-	{#if showNJugglers}
 	<InputField
 		bind:value={nJugglers}
 		id={idPrefix + "NJugglers"}
@@ -36,5 +34,23 @@
 		min=1
 		max=9
 		/>
-	{/if}
+
+
+  {#each Array(nJugglers) as _,i }
+	<InputField
+		bind:value={siteswapInputs[i]}
+		id={idPrefix + "SiteswapInput" + i}
+		label={jugglerName(i)}
+		type=search
+		valid={siteswapValid || !siteswapInputs[i]}
+		attr={{
+			class:     'siteswap',
+			inputmode: 'verbatim',
+			pattern:   '[0-9a-zA-Z ]+',
+			size:      10,
+		}}
+		on:change={siteswapInputs = siteswapInputs}
+		/>
+	{/each}
+
 </div>

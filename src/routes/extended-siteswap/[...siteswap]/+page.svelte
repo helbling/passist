@@ -4,16 +4,16 @@
 	import { browser } from '$app/environment';
 
 	export let data;
-	let siteswapInput, nJugglers, fullscreen;
-	({siteswapInput, nJugglers, fullscreen} = data);
+	let siteswapInputs, nJugglers, fullscreen;
+	({siteswapInputs, nJugglers, fullscreen} = data);
 
-	$:  useLocalStorage && siteswapInput && localStorage.setItem("extendedSiteswap", siteswapInput);
-	$:  useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
+	// $:  useLocalStorage && siteswapInputs && localStorage.setItem("extendedSiteswap", siteswapInputs);
+	// $:  useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
 
 	$: {
 		if (browser === true && window && ('history' in window)) {
 			const url = extendedSiteswapUrl({
-				siteswapInput,
+				siteswapInputs,
 				nJugglers,
 				fullscreen,
 			});
@@ -22,4 +22,4 @@
 	}
 </script>
 
-<ExtendedSiteswapPage bind:siteswapInput bind:nJugglers bind:fullscreen />
+<ExtendedSiteswapPage bind:siteswapInputs bind:nJugglers bind:fullscreen />

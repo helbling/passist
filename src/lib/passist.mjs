@@ -41,10 +41,7 @@ function extendedSiteswapUrl(p)
 		query.jugglers = p.nJugglers;
 	if (p.fullscreen)
 		query.fullscreen = 1;
-	const path = ((typeof p.siteswapInput === 'string') ? p.siteswapInput : '');
-//		.replace(/^<(.*)>$/, '\\1')
-//		.replace(/|/, '/')
-	return U('/extended-siteswap/' + encodeURI(path), query);
+	return U('/extended-siteswap/' + encodeURI(p.siteswapInputs.join('/')), query);
 }
 
 function siteswapAlternativesUrl(p)
