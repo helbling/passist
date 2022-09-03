@@ -187,6 +187,10 @@ toString()
 	return this.input;
 }
 
+toUrl()
+{
+	return '/extended-siteswap/' + ExtendedSiteswap.stringToUrl(this.input);
+}
 
 toJif(options = {})
 {
@@ -222,7 +226,6 @@ toJif(options = {})
 		const nJugglers = ast.passings[0].length;
 		nLimbs = nJugglers * 2;
 
-		this.nJugglers = nJugglers;
 		this.nLimbs = nLimbs;
 
 		for (const passing of ast.passings) {
@@ -271,11 +274,19 @@ toJif(options = {})
 	return jif;
 }
 
-nProps() {
+nProps()
+{
 	if (!this.isValid())
 		return NaN;
 
 	return this.completeJif.props.length;
+}
+
+nJugglers()
+{
+	if (this.ast && this.ast.passings)
+		return this.ast.passings[0].length
+	return 1;
 }
 
 static isVanillaSiteswap(input) {

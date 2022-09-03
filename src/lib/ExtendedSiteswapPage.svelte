@@ -135,7 +135,7 @@ $: {
 	{/if}
 
 	<p>
-		Extended Siteswap, {nProps} props
+		Extended Siteswap, {nProps} props, {extendedSiteswap.nJugglers()} juggler{extendedSiteswap.nJugglers() > 1 ? 's' : ''}
 	</p>
 	<p>
 		Note: Support for extended siteswaps is new and might still have some bugs and rough edges..

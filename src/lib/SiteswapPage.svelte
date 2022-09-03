@@ -184,10 +184,10 @@ $:	{
 			siteswap = originalSiteswap = undefined;
 			siteswapValid = extendedSiteswap.isValid();
 			siteswapName = siteswapNames[extendedSiteswap.nJugglers + '|' + extendedSiteswap.toString()];
-
 			title = 'Extended Siteswap ' + siteswapInput;
 
 			if (siteswapValid) {
+				/*
 				jif = extendedSiteswap.toJif({
 					name: siteswapName ? siteswapName + " (" + extendedSiteswap.toString() + ")" : undefined,
 					generator: 'passist', // TODO: put version of package.json here again
@@ -196,6 +196,7 @@ $:	{
 					// props: props,
 					flipTwos: true, // TODO: implement this
 				});
+				 */
 				nProps = extendedSiteswap.nProps();
 			}
 		}
@@ -265,7 +266,7 @@ $:	{
 	showHandOrderInput={!extendedSiteswap}
 	idPrefix=main
 />
-{#if jifdev && siteswapValid}
+{#if jifdev && siteswapValid && jif}
 	<button class="pure-button jif-button" on:click={e => {
 		localStorage.setItem("jif", JSON.stringify(jif, null, 2)); goto('/jif');
 	}}>
@@ -339,20 +340,6 @@ $:	{
 			</table>
 
 		</div>
-	{/if}
-
-	{:else}
-
-		{#if siteswapName}
-			<h2>{siteswapName}</h2>
-		{/if}
-
-		<p>
-			Extended Siteswap, {nProps} props
-		</p>
-		<p>
-			Note: Support for extended siteswaps is new and might still have some bugs and rough edges..
-		</p>
 	{/if}
 
 	{#if siteswapValid}
@@ -459,6 +446,19 @@ $:	{
 		</p>
 	{/if}
 
+
+{:else if extendedSiteswap && siteswapValid }
+
+		<h2>{extendedSiteswap.toString()} {siteswapName ? siteswapName : ''}</h2>
+
+		<p>
+			Extended Siteswap, {nProps} props, {extendedSiteswap.nJugglers()} juggler{extendedSiteswap.nJugglers() > 1 ? 's' : ''}
+		</p>
+		<p>
+			<a href="{extendedSiteswap.toUrl()}" class="pure-button">Show</a>
+		</p>
+	{/if}
+
 {:else if siteswapInput}
 	<div>
 		<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see an invalid siteswap" >
@@ -474,5 +474,5 @@ $:	{
 		{/if}
 	</div>
 {:else}
-	<!-- empty string: no output -->
+	<!-- empty string as input: no output -->
 {/if}
