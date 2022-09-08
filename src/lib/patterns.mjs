@@ -21,7 +21,7 @@ const knownSiteswaps = [
 	["77772", "Martin's one count (async)"],
 	["77722", "parsnip"],
 	["77222", "inverted parsnip"],
-	["77466666", "Jim's 3 count (async)"],
+	["7746666", "Jim's 3 count (async)"],
 	["77466", "Jim's 2 count (async)"],
 	["774", "Jim's 1 count (async)"],
 	["7777266", "Mild Madness (async)"],
