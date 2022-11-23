@@ -114,6 +114,7 @@ function blurTargetOnEnter(e) {
 		white-space: nowrap;
 		background-color: #e9ecef;
 	}
+	select { height: auto }
 	.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0 }
 
 	:global(.input-group .close) { position:absolute; right:0; top:0; margin:0.7rem 0; height:1rem }
@@ -150,8 +151,8 @@ function blurTargetOnEnter(e) {
 		>
 	{:else if type == 'select'}
 		<select bind:value={value}>
-			{#each values as v}
-				<option value={v}>{v}</option>
+			{#each values as [k, v]}
+				<option value={k}>{v}</option>
 			{/each}
 		</select>
 	{:else if type == 'range'}

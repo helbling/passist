@@ -10,6 +10,7 @@
 
 	let pages = [
 		{ path:'/siteswap-generator', title:'Generator' },
+		{ path:'/pattern',  title:'Pattern' },
 		{ path:'/siteswap',  title:'Siteswap' },
 		{ path:'/extended-siteswap',  title:'Extended siteswap' },
 		{ path:'/patterns',  title:'Patterns' },
