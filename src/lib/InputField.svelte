@@ -123,7 +123,7 @@ function blurTargetOnEnter(e) {
 <label class=sr-only for={id}>{title}</label>
 {/if}
 <div class="input-group {id} type-{type} direction-{type == 'range' ? 'column' : 'row'}">
-	<label for={id}>
+	<label for={id} {title}>
 		{#if type == 'checkbox'}
 			<input
 				type=checkbox
