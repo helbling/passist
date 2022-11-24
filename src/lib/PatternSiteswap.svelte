@@ -3,7 +3,7 @@
 	import SiteswapInput from '$lib/SiteswapInput.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
 	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
-	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, jifdev, U } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, coloredProps, jifdev, U } from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let nJugglers = defaults.nJugglers;
@@ -25,19 +25,6 @@
 	let startConfigurations;
 	let unusualThrows = false;
 	let limbs = [];
-
-	// TODO move jugglers / limbs / props to more general place
-	const propColors = [
-		'#c0392b', // red
-		'#0c0d5d', // blue
-		'#f45d20', // orange
-		'#ed4694', // pink
-		'#6f5499', // violet
-		'#00dc3c', // green
-		'#ffd700', // yellow
-		'#f2f2f2', // white
-	];
-
 
 	$:{
 		// TODO: extended siteswap as well
@@ -78,19 +65,13 @@
 				valid = siteswap.isValid();
 				period = siteswap.period;
 				nProps = siteswap.nProps;
-				const props = [];
-				for (let i = 0; i < nProps; i++)
-					props.push({
-						color: propColors[i % propColors.length],
-						type: propType,
-					});
 
 				jif = siteswap.toJif({
 					name: siteswapName ? siteswapName + " (" + siteswap.toString() + ")" : undefined,
 					generator: 'passist', // TODO: put version of package.json here again
 					jugglers: jugglers,
 					limbs: limbs,
-					props: props,
+					props: coloredProps(nProps, propType),
 					flipTwos: true
 				});
 
