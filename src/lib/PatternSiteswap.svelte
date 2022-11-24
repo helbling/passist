@@ -169,7 +169,7 @@
 	td.space { padding-left:0.5em }
 </style>
 
-<PatternResult> <!-- TODO add {valid} -->
+<PatternResult {valid} {jif} {startConfigurations}>
 	<SiteswapInput
 		slot=input
 		{nJugglers}

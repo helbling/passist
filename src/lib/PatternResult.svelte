@@ -6,20 +6,85 @@
 	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
-	import { defaults } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, jifdev } from '$lib/passist.mjs';
+	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
 
-	export let nJugglers = defaults.nJugglers;
 	export let jif = {};
 	export let valid = false;
 	export let fullscreen = false;
 	export let startConfigurations = {};
 	export let causalDiagramSteps = 10; // TODO
-	export let showAnimationWidget = false;
-
+	let propType = defaults.propType;
+	let jugglingSpeed = defaults.jugglingSpeed;
 	let animationSpeed = defaults.animationSpeed;
+	let showOrbits = false;
+	let windowWidth;
+	let windowHeight;
+	let sharebutton = browser === true && 'share' in navigator;
+	let showAnimationWidget = false;
+	let limbs = [];
+	let title;
+
+	if (browser === true) {
+		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
+
+		if (useLocalStorage) {
+			propType = localStorage.getItem("propType") || defaults.propType;
+			animationSpeed = localStorage.getItem("animationSpeed") || defaults.animationSpeed;
+		}
+	}
+	$: useLocalStorage && localStorage.setItem("showAnimationWidget", showAnimationWidget ? "true" : "false");
+	$: useLocalStorage && localStorage.setItem("propType", propType);
+	$: useLocalStorage && localStorage.setItem("animationSpeed", animationSpeed);
+
+	function share() {
+		navigator.share({
+			url: location.href,
+			title: title + ' - passist.org',
+		});
+		return false;
+	}
+
+	// TODO: handle urls and title
+	// function getUrl(p = {}) {
+	// 	p = Object.assign({
+	// 		siteswapInput: input,
+	// 		nJugglers: nJugglers,
+	// 		handsInput: handsInput,
+	// 		fullscreen: fullscreen,
+	// 	}, p);
+	// 	return siteswapUrl(p);
+	// }
+	function onFullscreenChange(e) {
+		// const url = getUrl({fullscreen: e.detail});
+		// goto(url);
+	}
 </script>
 
+<style>
+	.causalDiagram { overflow-x:auto; margin-bottom:1em }
+	.sharebutton { margin-top:1em }
+	.animationWidget { max-width:100%; overflow-x:auto; overflow-y:hidden }
+	.jif-button { float:right; margin-left:0.5em }
+	.animation-controls { display:flex; flex-flow:row wrap }
+</style>
+
+<svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
+
+<svelte:head>
+	<title>passist - {title}</title>
+</svelte:head>
+
 <slot name="input"/>
+
+{#if jifdev && valid && jif}
+	<button class="pure-button jif-button" on:click={e => {
+		localStorage.setItem("jif", JSON.stringify(jif, null, 2)); goto('/jif');
+	}}>
+		<Icon type=code /> JIF
+	</button>
+{/if}
 
 <slot name="info"/>
 
@@ -28,7 +93,7 @@
 		<CausalDiagramWidget
 			{jif}
 			{startConfigurations}
-			steps={cauaslDiagramSteps}
+			steps={causalDiagramSteps}
 		/>
 	</div>
 {/if}
