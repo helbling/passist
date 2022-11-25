@@ -3,7 +3,7 @@
 	import SiteswapInput from '$lib/SiteswapInput.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
 	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
-	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, coloredProps, jifdev, U } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let nJugglers = defaults.nJugglers;
@@ -71,7 +71,7 @@
 					generator: 'passist', // TODO: put version of package.json here again
 					jugglers: jugglers,
 					limbs: limbs,
-					props: coloredProps(nProps, propType),
+					props: valid ? Array.from(Array(nProps), () => { return {}; }) : [],
 					flipTwos: true
 				});
 
@@ -160,6 +160,17 @@
 		bind:handsInput
 		bind:handsValid
 		idPrefix=main
+	/>
+
+	<SiteswapInput
+		slot=animation_input
+		{nJugglers}
+		showNJugglers={false}
+		siteswapValid={valid}
+		bind:siteswapInput={input}
+		bind:handsInput
+		bind:handsValid
+		idPrefix=animation
 	/>
 
 	<div slot=info>

@@ -145,7 +145,6 @@ toJif(options)
 		jugglers: options.jugglers,
 		limbs:    options.limbs,
 		props:    options.props,
-
 		timeStretchFactor: nLimbs / 2,
 	};
 

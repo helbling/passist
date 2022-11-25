@@ -38,6 +38,31 @@
 	$: useLocalStorage && localStorage.setItem("propType", propType);
 	$: useLocalStorage && localStorage.setItem("animationSpeed", animationSpeed);
 
+	const propColors = [
+		'#c0392b', // red
+		'#0c0d5d', // blue
+		'#f45d20', // orange
+		'#ed4694', // pink
+		'#6f5499', // violet
+		'#00dc3c', // green
+		'#ffd700', // yellow
+		'#f2f2f2', // white
+	];
+
+	function colorProps(props, propType)
+	{
+		return props.map((v, k) => {
+			if (!v.color)
+				v.color = propColors[k % propColors.length];
+			v.type = propType;
+			return v;
+		});
+	}
+	$: {
+		if (jif && jif.props)
+			jif.props = colorProps(jif.props, propType);
+	}
+
 	function share() {
 		navigator.share({
 			url: location.href,
@@ -98,7 +123,7 @@
 	</div>
 {/if}
 
-{#if valid || fullscreen}
+{#if valid || fullscreen} <!-- TODO: show animation widget if invalid jif as well -->
 
 {#if showAnimationWidget}
 <div class="animationWidget">
@@ -115,8 +140,45 @@
 			on:fullscreenchange={onFullscreenChange}
 			on:close={e => {showAnimationWidget = false;}}
 		>
-			<!-- INPUT -->
-			<!-- Animation Options -->
+			<slot name="animation_input"/>
+			<InputField
+				id=proptype
+				type=custom
+				label="Prop type"
+			>
+				<label class="pure-button" class:pure-button-active={propType == 'ball'}>
+					<input type="radio" bind:group={propType} value="ball" autocomplete="off"> Balls
+				</label>
+				<label class="pure-button" class:pure-button-active={propType == 'club'}>
+					<input type="radio" bind:group={propType} value="club" autocomplete="off"> Clubs
+				</label>
+			</InputField>
+			<InputField
+				bind:value={jugglingSpeed}
+				type=range
+				id=jugglingspeed
+				label='Juggling speed'
+				step=0.1
+				min=1
+				max=5
+				defaultValue={defaults.jugglingSpeed}
+			/>
+			<InputField
+				bind:value={animationSpeed}
+				type=range
+				id=animationspeed
+				label='Animation speed'
+				step=0.1
+				min=0.1
+				max=2
+				defaultValue={defaults.animationSpeed}
+			/>
+			<InputField
+				id=orbits
+				bind:value={showOrbits}
+				type=checkbox
+				label="Show orbits"
+			/>
 		</AnimationWidget>
 	</div>
 </div>

@@ -105,27 +105,6 @@ function defaultLimbs(n)
 	return result;
 }
 
-const propColors = [
-	'#c0392b', // red
-	'#0c0d5d', // blue
-	'#f45d20', // orange
-	'#ed4694', // pink
-	'#6f5499', // violet
-	'#00dc3c', // green
-	'#ffd700', // yellow
-	'#f2f2f2', // white
-];
-
-function coloredProps(nProps, propType)
-{
-	const props = [];
-	for (let i = 0; i < nProps; i++)
-		props.push({
-			color: propColors[i % propColors.length],
-			type: propType,
-		});
-	return props;
-}
 
 const servertype = import.meta.env.VITE_SERVERTYPE || (dev ? 'dev' : '');
 
@@ -146,7 +125,6 @@ export {
 	hands2limbs,
 	limbs2hands,
 	defaultLimbs,
-	coloredProps,
 	servertype,
 	jifdev,
 	baseUrl,
