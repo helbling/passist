@@ -32,8 +32,8 @@
 		{#each pages as p}
 		<li class=pure-menu-item class:pure-menu-selected={segment === p.path || !segment && p.path === 'generator'}>
 			<a
+				data-sveltekit-preload-data="hover"
 				class=pure-menu-link
-				sveltekit:prefetch
 				class:selected={segment === p.path || !segment && p.path === 'generator' }
 				href={p.path}
 			>
