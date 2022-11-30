@@ -1,10 +1,13 @@
 <script>
 	import InputField from '$lib/InputField.svelte';
 	import PatternSiteswap from '$lib/PatternSiteswap.svelte';
+	import PatternSimultaneousSiteswap from '$lib/PatternSimultaneousSiteswap.svelte';
 	import { defaults } from '$lib/passist.mjs';
 
 	export let nJugglers = defaults.nJugglers;
-	export let notation = 'siteswap';
+	export let notation = 'simultaneous';
+	let component = PatternSiteswap;
+
 	const notations = [
 		{
 			key:  'siteswap',
@@ -22,6 +25,12 @@
 	$: notationTexts = notations.filter(
 		(n) => nJugglers >= (n.minJugglers ?? 1)
 	).map((n) => [n.key, n.text]);
+	$: {
+		component = {
+			siteswap: PatternSiteswap,
+			simultaneous: PatternSimultaneousSiteswap,
+		}[notation] ?? PatternSiteswap;
+	}
 </script>
 
 <div class="pure-form form-inline">
@@ -45,6 +54,4 @@
 		/>
 </div>
 
-{#if notation == 'siteswap'}
-	<PatternSiteswap {nJugglers}/>
-{/if}
+<svelte:component {nJugglers} this={component}/>

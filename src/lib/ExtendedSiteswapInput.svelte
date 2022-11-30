@@ -7,6 +7,7 @@
 	export let nJugglers = 2;
 	export let idPrefix;
 	export let siteswapValid;
+	export let showNJugglers = true;
 
 $: {
 	const firstInput = siteswapInputs[0];
@@ -25,6 +26,8 @@ $: {
 </script>
 
 <div class="pure-form form-inline">
+
+{#if showNJugglers}
 	<InputField
 		bind:value={nJugglers}
 		id={idPrefix + "NJugglers"}
@@ -34,9 +37,10 @@ $: {
 		min=1
 		max=9
 		/>
+{/if}
 
 
-  {#each Array(nJugglers) as _,i }
+{#each Array(nJugglers) as _,i }
 	<InputField
 		bind:value={siteswapInputs[i]}
 		id={idPrefix + "SiteswapInput" + i}

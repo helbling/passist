@@ -13,7 +13,7 @@
 	export let jif = {};
 	export let valid = false;
 	export let fullscreen = false;
-	export let startConfigurations = {};
+	export let startConfigurations = false;
 	export let causalDiagramSteps = 10; // TODO
 	let propType = defaults.propType;
 	let jugglingSpeed = defaults.jugglingSpeed;
@@ -113,7 +113,7 @@
 
 <slot name="info"/>
 
-{#if valid}
+{#if valid && startConfigurations}
 	<div class=causalDiagram>
 		<CausalDiagramWidget
 			{jif}

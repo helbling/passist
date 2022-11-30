@@ -12,7 +12,6 @@
 	export let jif = {};
 	export let shift = 0;
 	export let handsInput = '';
-	export let propType = defaults.propType;
 	let handsValid = false;
 	let siteswap, extendedSiteswap, strippedInput, originalSiteswap;
 	let period;
