@@ -19,7 +19,7 @@ function U(path, query)
 	const queryPart = Object.entries(query).map(
 		([key, val]) => `${key}=${encodeURIComponent(val)}`
 	).join('&');
-	return path + (queryPart ? '?' + queryPart : '');
+	return path + (queryPart ? (path.match(/\?/) ? '&' : '?') + queryPart : '');
 }
 
 function siteswapUrl(p)

@@ -25,6 +25,7 @@
 	let unusualThrows = false;
 	let limbs = [];
 	let title;
+	let url;
 
 	$:{
 		// TODO: extended siteswap as well
@@ -110,10 +111,18 @@
 				title += ', ' + nJugglers + ' jugglers';
 				if (handsInput)
 					title += ', hands: ' + handsInput;
+
+
 			} else {
 				valid = false;
 
 			}
+
+			url = siteswapUrl({
+					siteswapInput: input,
+					nJugglers: nJugglers,
+					handsInput: handsInput,
+			});
 	}
 
 	function shiftLeft() {
@@ -145,7 +154,6 @@
 	function sum(arr) {
 		return arr.reduce(function(a, b) { return a + b; }, 0);
 	}
-
 </script>
 
 <style>
@@ -156,7 +164,7 @@
 	td.space { padding-left:0.5em }
 </style>
 
-<PatternResult {valid} {jif} {startConfigurations} {title}>
+<PatternResult {valid} {jif} {startConfigurations} {title} {url}>
 	<SiteswapInput
 		slot=input
 		{nJugglers}

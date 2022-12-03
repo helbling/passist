@@ -6,7 +6,7 @@
 	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
-	import { defaults, useLocalStorage, siteswapUrl, jifdev } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, jifdev, U } from '$lib/passist.mjs';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 
@@ -16,6 +16,7 @@
 	export let startConfigurations = false;
 	export let causalDiagramSteps = 10; // TODO
 	export let title;
+	export let url;
 	let propType = defaults.propType;
 	let jugglingSpeed = defaults.jugglingSpeed;
 	let animationSpeed = defaults.animationSpeed;
@@ -25,6 +26,7 @@
 	let sharebutton = browser === true && 'share' in navigator;
 	let showAnimationWidget = false;
 	let limbs = [];
+	let fullUrl;
 
 	if (browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
@@ -62,6 +64,15 @@
 		if (jif && jif.props)
 			jif.props = colorProps(jif.props, propType);
 	}
+	$: {
+		const params = {};
+		if (fullscreen)
+			params.fullscreen = 1;
+		fullUrl = U(url, params);
+		console.log('fullurl:', fullUrl);
+		if (browser === true && window && ('history' in window))
+			history.replaceState({}, '', fullUrl);
+	}
 
 	function share() {
 		navigator.share({
@@ -71,20 +82,10 @@
 		return false;
 	}
 
-	// TODO: handle urls
-	// function getUrl(p = {}) {
-	// 	p = Object.assign({
-	// 		siteswapInput: input,
-	// 		nJugglers: nJugglers,
-	// 		handsInput: handsInput,
-	// 		fullscreen: fullscreen,
-	// 	}, p);
-	// 	return siteswapUrl(p);
-	// }
 	function onFullscreenChange(e) {
-		// const url = getUrl({fullscreen: e.detail});
-		// goto(url);
+		fullscreen = e.detail;
 	}
+
 </script>
 
 <style>

@@ -2,7 +2,7 @@
 	import PatternResult from '$lib/PatternResult.svelte';
 	import ExtendedSiteswapInput from '$lib/ExtendedSiteswapInput.svelte';
 	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
-	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, U} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let nJugglers = defaults.nJugglers;
@@ -15,6 +15,7 @@
 	let nProps;
 	let siteswapName;
 	let title;
+	let url;
 
 	// TODO: make sure causal diagram works
 
@@ -24,6 +25,7 @@
 		valid = extendedSiteswap.isValid();
 		siteswapName = siteswapNames[extendedSiteswap.nJugglers + '|' + extendedSiteswap.toString()];
 		title = 'Extended Siteswap ' + notation;
+		url = U('/simultaneous-siteswap/' + input.join('/'), {});
 
 		if (valid) {
 			jif = extendedSiteswap.toJif({
@@ -37,7 +39,7 @@
 	}
 </script>
 
-<PatternResult {valid} {jif} {title}>
+<PatternResult {valid} {jif} {title} {url}>
 
 	<ExtendedSiteswapInput
 		showNJugglers={false}
