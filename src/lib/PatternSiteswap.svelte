@@ -24,6 +24,7 @@
 	let startConfigurations;
 	let unusualThrows = false;
 	let limbs = [];
+	let title;
 
 	$:{
 		// TODO: extended siteswap as well
@@ -102,7 +103,13 @@
 					handsInput,
 				});
 
-			siteswapName = siteswapNames[nJugglers + '|' + siteswap.canonicString()];
+				siteswapName = siteswapNames[nJugglers + '|' + siteswap.canonicString()];
+				title = 'Siteswap ' + strippedInput;
+				if (siteswapName)
+					title += ' (' + siteswapName + ')';
+				title += ', ' + nJugglers + ' jugglers';
+				if (handsInput)
+					title += ', hands: ' + handsInput;
 			} else {
 				valid = false;
 
@@ -149,7 +156,7 @@
 	td.space { padding-left:0.5em }
 </style>
 
-<PatternResult {valid} {jif} {startConfigurations}>
+<PatternResult {valid} {jif} {startConfigurations} {title}>
 	<SiteswapInput
 		slot=input
 		{nJugglers}

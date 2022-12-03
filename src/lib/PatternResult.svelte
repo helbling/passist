@@ -15,6 +15,7 @@
 	export let fullscreen = false;
 	export let startConfigurations = false;
 	export let causalDiagramSteps = 10; // TODO
+	export let title;
 	let propType = defaults.propType;
 	let jugglingSpeed = defaults.jugglingSpeed;
 	let animationSpeed = defaults.animationSpeed;
@@ -24,7 +25,6 @@
 	let sharebutton = browser === true && 'share' in navigator;
 	let showAnimationWidget = false;
 	let limbs = [];
-	let title;
 
 	if (browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
@@ -71,7 +71,7 @@
 		return false;
 	}
 
-	// TODO: handle urls and title
+	// TODO: handle urls
 	// function getUrl(p = {}) {
 	// 	p = Object.assign({
 	// 		siteswapInput: input,

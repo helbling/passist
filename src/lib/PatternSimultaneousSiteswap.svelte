@@ -37,7 +37,7 @@
 	}
 </script>
 
-<PatternResult {valid} {jif}>
+<PatternResult {valid} {jif} {title}>
 
 	<ExtendedSiteswapInput
 		showNJugglers={false}
