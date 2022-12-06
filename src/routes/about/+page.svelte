@@ -29,8 +29,8 @@ You're welcome to contribute or fill bug reports there.
 
 This project builds upon the follwing open source tools. Many thanks to its creators!
 
-- [svelte](https://svelte.dev/) for handling state
-- [svelte-kit](https://kit.svelte.dev/) for building the web application
+- [Svelte](https://svelte.dev/) for handling state
+- [SvelteKit](https://kit.svelte.dev/) for building the web application
 - [three.js](https://threejs.org/) for doing all the complicated 3d stuff
 - [bytesize-icons](https://danklammer.com/bytesize-icons/) for the iconset
 - [Pure.css](https://purecss.io/) as a good css base
