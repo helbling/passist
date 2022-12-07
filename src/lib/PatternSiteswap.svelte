@@ -12,6 +12,7 @@
 	export let jif = {};
 	export let shift = 0;
 	export let handsInput = '';
+	export let init;
 	let handsValid = false;
 	let siteswap, extendedSiteswap, strippedInput, originalSiteswap;
 	let period;
@@ -26,6 +27,16 @@
 	let limbs = [];
 	let title;
 	let url;
+
+	if (init) {
+		input = init.params.input;
+
+		const handsParam = init.url.searchParams.get('hands');
+		const limbs = hands2limbs(handsParam, nJugglers);
+		if (limbs)
+			handsInput = limbs2hands(limbs);
+
+	}
 
 	$:{
 		// TODO: extended siteswap as well
@@ -164,7 +175,7 @@
 	td.space { padding-left:0.5em }
 </style>
 
-<PatternResult {valid} {jif} {startConfigurations} {title} {url}>
+<PatternResult {valid} {jif} {startConfigurations} {title} {url} {init} >
 	<SiteswapInput
 		slot=input
 		{nJugglers}

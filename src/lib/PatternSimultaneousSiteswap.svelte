@@ -9,6 +9,7 @@
 	export let input = ['3p33', '234p'];
 	export let valid = false;
 	export let jif = {};
+	export let init;
 	let notation = '';
 	let extendedSiteswap;
 	let period;
@@ -16,6 +17,9 @@
 	let siteswapName;
 	let title;
 	let url;
+	if (init)
+		input = init.params.input.split('/');
+
 
 	// TODO: make sure causal diagram works
 
@@ -39,7 +43,7 @@
 	}
 </script>
 
-<PatternResult {valid} {jif} {title} {url}>
+<PatternResult {valid} {jif} {title} {url} {init}>
 
 	<ExtendedSiteswapInput
 		showNJugglers={false}

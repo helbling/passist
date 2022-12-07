@@ -6,14 +6,14 @@
 	$: {
 		const pathname = $page?.url?.pathname || '';
 		segment = '/' + pathname.split('/')[1];
+		if (segment == '/siteswap' || segment == '/simultaneous-siteswap')
+			segment = '/pattern';
 	}
 
 	let pages = [
 		{ path:'/siteswap-generator', title:'Generator' },
 		{ path:'/pattern',  title:'Pattern' },
-		{ path:'/siteswap',  title:'Siteswap' },
-		{ path:'/extended-siteswap',  title:'Extended siteswap' },
-		{ path:'/patterns',  title:'Patterns' },
+		{ path:'/patterns',  title:'Pattern List' },
 		jifdev ? { path:'/jif',       title:'Jif' } : null,
 		{ path:'/about',     title:'About' },
 	].filter(Boolean);

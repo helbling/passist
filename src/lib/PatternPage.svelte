@@ -6,8 +6,38 @@
 
 	export let nJugglers = defaults.nJugglers;
 	export let notation = 'simultaneous';
-	let component = PatternSiteswap;
+	export let init;
 
+	if (init) {
+		const nJugglersUrl = parseInt(init.url.searchParams.get('jugglers'));
+		if (nJugglersUrl && nJugglersUrl >= 1)
+			nJugglers = nJugglersUrl;
+
+		// TODO
+	//let url, params;
+	//({ url, params } = data);
+
+	//let siteswapInput, nJugglers, handsInput, fullscreen;
+	//({ siteswapInput, nJugglers, handsInput, fullscreen } = data);
+
+	//	$:  useLocalStorage && siteswapInput && localStorage.setItem("siteswap", siteswapInput);
+	//	$:  useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
+	//
+	//	$: {
+	//		if (browser === true && window && ('history' in window)) {
+	//			const url = siteswapUrl({
+	//				siteswapInput,
+	//				nJugglers,
+	//				handsInput,
+	//				fullscreen,
+	//			});
+	//			history.replaceState({}, '', url);
+	//		}
+	//	}
+
+	}
+
+	let component = PatternSiteswap;
 	const notations = [
 		{
 			key:  'siteswap',
@@ -54,4 +84,4 @@
 		/>
 </div>
 
-<svelte:component {nJugglers} this={component}/>
+<svelte:component this={component} {nJugglers} {init} />

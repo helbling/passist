@@ -17,6 +17,7 @@
 	export let causalDiagramSteps = 10; // TODO
 	export let title;
 	export let url;
+	export let init;
 	let propType = defaults.propType;
 	let jugglingSpeed = defaults.jugglingSpeed;
 	let animationSpeed = defaults.animationSpeed;
@@ -27,6 +28,10 @@
 	let showAnimationWidget = false;
 	let limbs = [];
 	let fullUrl;
+
+
+	if (init && init.url.searchParams.has('fullscreen'))
+		fullscreen = parseInt(init.url.searchParams.get('fullscreen'))
 
 	if (browser === true) {
 		showAnimationWidget = useLocalStorage ? localStorage.getItem("showAnimationWidget") != "false" : true; // NOTE localStorage always saves strings
