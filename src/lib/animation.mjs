@@ -81,7 +81,7 @@ function pirouetteGeometry()
 		points.push(path.getPoint(i / (samples - 1)));
 
 	const factor = 0.52 / 79.97; // 79.97 units, 0.52m irl
-	return new THREE.LatheBufferGeometry(points)
+	return new THREE.LatheGeometry(points)
 		.scale(factor, factor, factor)
 		.center();
 }
@@ -143,7 +143,7 @@ constructor(faceTexture)
 	this.add(head);
 
 	const torso = new THREE.Mesh(
-		new THREE.TubeBufferGeometry(
+		new THREE.TubeGeometry(
 			new THREE.LineCurve3(
 				v3(0, shoulderHeight, 0),
 				v3(0, crotchHeight, 0)
@@ -154,15 +154,15 @@ constructor(faceTexture)
 	torso.scale.z = 0.6;
 	this.add(torso);
 
-	const sphere = new THREE.SphereBufferGeometry(0.5, 16, 10);
+	const sphere = new THREE.SphereGeometry(0.5, 16, 10);
 
-	const upperArmGeometry = new THREE.TubeBufferGeometry(
+	const upperArmGeometry = new THREE.TubeGeometry(
 		new THREE.LineCurve3(
 			v3(0, 0, 0),
 			v3(0, 0, upperArmLength)
 		), 2, 0.3 * hu, 16, false
 	);
-	const lowerArmGeometry = new THREE.TubeBufferGeometry(
+	const lowerArmGeometry = new THREE.TubeGeometry(
 		new THREE.LineCurve3(
 			v3(0, 0, 0),
 			v3(0, 0, lowerArmLength)
@@ -206,7 +206,7 @@ constructor(faceTexture)
 	}
 
 	const rightLeg = new THREE.Mesh(
-		new THREE.TubeBufferGeometry(
+		new THREE.TubeGeometry(
 			new THREE.LineCurve3(
 				v3(- hu / 2, crotchHeight, 0),
 				v3(- hu, 0, 0)
@@ -648,7 +648,7 @@ static createGrassTileMesh()
 	tex.minFilter = THREE.NearestFilter;
 	tex.encoding = THREE.sRGBEncoding;
 	return new THREE.Mesh(
-		new THREE.CircleBufferGeometry(groundStretch * groundRepeat, 32).rotateX(-Math.PI / 2),
+		new THREE.CircleGeometry(groundStretch * groundRepeat, 32).rotateX(-Math.PI / 2),
 		new THREE.MeshToonMaterial({map:tex}),
 	);
 }
@@ -656,7 +656,7 @@ static createGrassTileMesh()
 static createSkyMesh()
 {
 	return new THREE.Mesh(
-		new THREE.SphereBufferGeometry( 4000, 32, 15 ),
+		new THREE.SphereGeometry( 4000, 32, 15 ),
 		new THREE.ShaderMaterial({
 			uniforms: {
 				"topColor":    { value: new THREE.Color(colors.sky) },
@@ -795,7 +795,7 @@ updateScene(jif, options)
 
 		const mesh = type == 'ball' ?
 			new THREE.Mesh(
-				new THREE.SphereBufferGeometry( 0.04, 10, 10 ),
+				new THREE.SphereGeometry( 0.04, 10, 10 ),
 				new THREE.MeshToonMaterial({color: color} )
 			)
 			: new THREE.Mesh(
@@ -933,7 +933,7 @@ updateScene(jif, options)
 
 			if (options.showOrbits) {
 				this.scene.add(new THREE.Mesh(
-					new THREE.TubeBufferGeometry(t.throwCurve, 32, 0.01, 16, false),
+					new THREE.TubeGeometry(t.throwCurve, 32, 0.01, 16, false),
 					new THREE.MeshToonMaterial({ color:propColor(jif.props[t.prop], jif) }),
 				));
 			}
@@ -973,7 +973,7 @@ updateScene(jif, options)
 				this.hands[dwellCurve.hand].positionCurves.push(dwellCurve);
 				if (options.showOrbits)
 					this.scene.add(new THREE.Mesh(
-						new THREE.TubeBufferGeometry(dwellCurve, 32, 0.01, 16, false),
+						new THREE.TubeGeometry(dwellCurve, 32, 0.01, 16, false),
 						new THREE.MeshToonMaterial({ color:propColor(jif.props[prop], jif) }),
 					));
 				positionCurves.push(dwellCurve);

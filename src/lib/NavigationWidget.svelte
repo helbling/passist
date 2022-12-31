@@ -27,13 +27,12 @@
 	}
 </style>
 
-<nav class="pure-menu pure-menu-horizontal">
+<nav class="pure-menu pure-menu-horizontal" data-sveltekit-preload-data="hover">
 	<ul class=pure-menu-list>
 		{#each pages as p}
 		<li class=pure-menu-item class:pure-menu-selected={segment === p.path || !segment && p.path === 'generator'}>
 			<a
 				class=pure-menu-link
-				sveltekit:prefetch
 				class:selected={segment === p.path || !segment && p.path === 'generator' }
 				href={p.path}
 			>
