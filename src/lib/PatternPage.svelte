@@ -56,6 +56,10 @@
 		(n) => nJugglers >= (n.minJugglers ?? 1)
 	).map((n) => [n.key, n.text]);
 	$: {
+		if (nJugglers == 1 && notation == 'simultaneous')
+			notation = 'siteswap';
+	}
+	$: {
 		component = {
 			siteswap: PatternSiteswap,
 			simultaneous: PatternSimultaneousSiteswap,
