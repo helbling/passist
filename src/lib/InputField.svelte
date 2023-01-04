@@ -129,7 +129,7 @@ function blurTargetOnEnter(e) {
 			<input
 				type=checkbox
 				bind:checked={value}
-				on:change
+				on:input
 				{...inputAttr}
 			>
 		{/if}
@@ -145,7 +145,7 @@ function blurTargetOnEnter(e) {
 			bind:value={value}
 			class="form-control {max && max < 10 ? 'digit' : 'twodigit'}"
 			on:keyup={blurTargetOnEnter}
-			on:change
+			on:input
 			autocomplete=off
 			{...inputAttr}
 		>
@@ -162,7 +162,7 @@ function blurTargetOnEnter(e) {
 				class=range
 				type=range
 				bind:value={value}
-				on:change
+				on:input
 				autocomplete=off
 				{...inputAttr}
 			>
@@ -186,7 +186,7 @@ function blurTargetOnEnter(e) {
 			spellcheck=false
 			autocomplete=off
 			on:keyup={blurTargetOnEnter}
-			on:change
+			on:input
 			{...inputAttr}
 		>
 	{/if}

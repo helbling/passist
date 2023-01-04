@@ -9,6 +9,8 @@
 	export let siteswapValid;
 	export let showNJugglers = true;
 
+	let individualPatterns = false;
+
 $: {
 	const firstInput = siteswapInputs[0];
 	if (firstInput) {
@@ -39,8 +41,8 @@ $: {
 		/>
 {/if}
 
-
-{#each Array(nJugglers) as _,i }
+{#if individualPatterns}
+	{#each Array(nJugglers) as _,i }
 	<InputField
 		bind:value={siteswapInputs[i]}
 		id={idPrefix + "SiteswapInput" + i}
@@ -53,8 +55,34 @@ $: {
 			pattern:   '[0-9a-zA-Z ]+',
 			size:      10,
 		}}
-		on:change={siteswapInputs = siteswapInputs}
+		on:input={e => { siteswapInputs = siteswapInputs }}
 		/>
 	{/each}
+
+{:else}
+	<InputField
+		bind:value={siteswapInputs[0]}
+		id={idPrefix + "SiteswapInput"}
+		label='Siteswap'
+		type=search
+		valid={siteswapValid || !siteswapInputs[0]}
+		attr={{
+			class:     'siteswap',
+			inputmode: 'verbatim',
+			pattern:   '[0-9a-zA-Z ]+',
+			size:      10,
+		}}
+		on:input={e => { siteswapInputs = Array(nJugglers).fill(siteswapInputs[0])} }
+		/>
+
+{/if}
+
+<InputField
+	bind:value={individualPatterns}
+	id={idPrefix + "individualPatterns"}
+	type=checkbox
+	label='individual'
+	title='individual patterns'
+	/>
 
 </div>
