@@ -11,7 +11,11 @@
 
 	let individualPatterns = false;
 
+	if (siteswapInputs.length > 1)
+		individualPatterns = !siteswapInputs.every(s => s == siteswapInputs[0]);
+
 $: {
+	// set unset input field to first input
 	const firstInput = siteswapInputs[0];
 	if (firstInput) {
 		for (let i = 1; i < nJugglers; i++) {
@@ -21,8 +25,14 @@ $: {
 	}
 }
 $: {
+	// make sure length of siteswapInputs is not greater than nJugglers
 	if (nJugglers < siteswapInputs.length)
 		siteswapInputs = siteswapInputs.slice(0, nJugglers);
+}
+
+$: {
+	if (!individualPatterns)
+		siteswapInputs = Array(nJugglers).fill(siteswapInputs[0]);
 }
 
 </script>
@@ -72,7 +82,6 @@ $: {
 			pattern:   '[0-9a-zA-Z ]+',
 			size:      10,
 		}}
-		on:input={e => { siteswapInputs = Array(nJugglers).fill(siteswapInputs[0])} }
 		/>
 
 {/if}
