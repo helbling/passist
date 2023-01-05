@@ -8,8 +8,7 @@
 	export let idPrefix;
 	export let siteswapValid;
 	export let showNJugglers = true;
-
-	let individualPatterns = false;
+	export let individualPatterns = false;
 
 	if (siteswapInputs.length > 1)
 		individualPatterns = !siteswapInputs.every(s => s == siteswapInputs[0]);

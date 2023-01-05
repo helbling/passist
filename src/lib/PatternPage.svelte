@@ -2,40 +2,25 @@
 	import InputField from '$lib/InputField.svelte';
 	import PatternSiteswap from '$lib/PatternSiteswap.svelte';
 	import PatternSimultaneousSiteswap from '$lib/PatternSimultaneousSiteswap.svelte';
-	import { defaults } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage } from '$lib/passist.mjs';
 
 	export let nJugglers = defaults.nJugglers;
-	export let notation = 'simultaneous';
-	export let init;
+	export let notation = defaults.notation;
+	export let init = undefined;
 
 	if (init) {
 		const nJugglersUrl = parseInt(init.url.searchParams.get('jugglers'));
 		if (nJugglersUrl && nJugglersUrl >= 1)
 			nJugglers = nJugglersUrl;
-
-		// TODO
-	//let url, params;
-	//({ url, params } = data);
-
-	//let siteswapInput, nJugglers, handsInput, fullscreen;
-	//({ siteswapInput, nJugglers, handsInput, fullscreen } = data);
+		else if (notation == 'simultaneous' && init.params.input)
+			nJugglers = init.params.input.split('/').length;
 
 	//	$:  useLocalStorage && siteswapInput && localStorage.setItem("siteswap", siteswapInput);
-	//	$:  useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
-	//
-	//	$: {
-	//		if (browser === true && window && ('history' in window)) {
-	//			const url = siteswapUrl({
-	//				siteswapInput,
-	//				nJugglers,
-	//				handsInput,
-	//				fullscreen,
-	//			});
-	//			history.replaceState({}, '', url);
-	//		}
-	//	}
-
+	} else if (notation) {
+			notation = localStorage.getItem('notation') || defaults.notation;
 	}
+	$:  useLocalStorage && notation && localStorage.setItem("notation", notation);
+	$:  useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
 
 	let component = PatternSiteswap;
 	const notations = [

@@ -74,7 +74,6 @@
 		if (fullscreen)
 			params.fullscreen = 1;
 		fullUrl = U(url, params);
-		console.log('fullurl:', fullUrl);
 		if (browser === true && window && ('history' in window))
 			history.replaceState({}, '', fullUrl);
 	}

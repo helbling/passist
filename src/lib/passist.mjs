@@ -1,6 +1,7 @@
 import { browser, dev } from '$app/environment';
 
 const defaults = {
+	notation: 'siteswap',
 	siteswap: '86277',
 	nJugglers: 2,
 	propType: 'club',

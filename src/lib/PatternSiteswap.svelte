@@ -7,7 +7,7 @@
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let nJugglers = defaults.nJugglers;
-	export let input = '975';
+	export let input = defaults.siteswap;
 	export let valid = false;
 	export let jif = {};
 	export let shift = 0;
@@ -35,8 +35,12 @@
 		const limbs = hands2limbs(handsParam, nJugglers);
 		if (limbs)
 			handsInput = limbs2hands(limbs);
-
+	} else if (useLocalStorage) {
+			input = localStorage.getItem('siteswap') || defaults.siteswap;
 	}
+
+	// TODO: sticky handsInput
+	$: useLocalStorage && input && localStorage.setItem("siteswap", input);
 
 	$:{
 		// TODO: extended siteswap as well

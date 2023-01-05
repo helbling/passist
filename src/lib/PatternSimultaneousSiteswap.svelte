@@ -17,9 +17,26 @@
 	let siteswapName;
 	let title;
 	let url;
-	if (init)
-		input = init.params.input.split('/');
+	let individualPatterns = false;
 
+	function unserialize(str) { return str.split('/'); }
+	function serialize(input) { return input.join('/'); }
+
+	if (init) {
+		input = unserialize(init.params.input);
+		if (init.url.searchParams.get('jugglers')) {
+			individualPatterns = false;
+			input = Array(nJugglers).fill(input[0])
+		} else {
+			individualPatterns = true;
+		}
+	} else if (useLocalStorage) {
+		const localStorageInput = localStorage.getItem('simultaneous-siteswap');
+		if (localStorageInput)
+			input = unserialize(localStorageInput);
+	}
+
+	$: useLocalStorage && input.every(x => x) && localStorage.setItem("simultaneous-siteswap", serialize(input));
 
 	// TODO: make sure causal diagram works
 
@@ -29,7 +46,10 @@
 		valid = extendedSiteswap.isValid();
 		siteswapName = siteswapNames[extendedSiteswap.nJugglers + '|' + extendedSiteswap.toString()];
 		title = 'Extended Siteswap ' + notation;
-		url = U('/simultaneous-siteswap/' + input.join('/'), {});
+		if (individualPatterns)
+			url = U('/simultaneous-siteswap/' + serialize(input), {});
+		else
+			url = U('/simultaneous-siteswap/' + input[0], {jugglers:nJugglers});
 
 		if (valid) {
 			jif = extendedSiteswap.toJif({
@@ -38,7 +58,6 @@
 				flipTwos: true, // TODO: implement this
 			});
 			nProps = extendedSiteswap.nProps();
-			console.log(jif, nProps);
 		}
 	}
 </script>
@@ -49,6 +68,7 @@
 		showNJugglers={false}
 		slot=input
 		bind:siteswapInputs={input}
+		bind:individualPatterns
 		bind:siteswapValid={valid}
 		{nJugglers}
 		idPrefix=main
