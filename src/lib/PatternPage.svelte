@@ -14,8 +14,6 @@
 			nJugglers = nJugglersUrl;
 		else if (notation == 'simultaneous' && init.params.input)
 			nJugglers = init.params.input.split('/').length;
-
-	//	$:  useLocalStorage && siteswapInput && localStorage.setItem("siteswap", siteswapInput);
 	} else if (notation) {
 			notation = localStorage.getItem('notation') || defaults.notation;
 	}
@@ -31,19 +29,11 @@
 		{
 			key:  'simultaneous',
 			text: 'Simult. Siteswaps',
-			minJugglers: 2,
 		},
 		// prechac: 'Prechac',
 		// social: 'Social Siteswap',
 	];
-	let notationTexts = {};
-	$: notationTexts = notations.filter(
-		(n) => nJugglers >= (n.minJugglers ?? 1)
-	).map((n) => [n.key, n.text]);
-	$: {
-		if (nJugglers == 1 && notation == 'simultaneous')
-			notation = 'siteswap';
-	}
+	const notationTexts = notations.map((n) => [n.key, n.text]);
 	$: {
 		component = {
 			siteswap: PatternSiteswap,
