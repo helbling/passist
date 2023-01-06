@@ -1,5 +1,6 @@
 <script>
 	import InputField from '$lib/InputField.svelte';
+	import Icon from '$lib/Icon.svelte';
 	import PatternSiteswap from '$lib/PatternSiteswap.svelte';
 	import PatternSimultaneousSiteswap from '$lib/PatternSimultaneousSiteswap.svelte';
 	import { defaults, useLocalStorage } from '$lib/passist.mjs';
@@ -42,6 +43,10 @@
 	}
 </script>
 
+<style>
+	a.help-link :global(svg) { width:1.5em; height:1.5em }
+</style>
+
 <div class="pure-form form-inline">
 	<InputField
 		bind:value={nJugglers}
@@ -60,7 +65,11 @@
 		values={notationTexts}
 		label='Notation'
 		title='Pattern notation'
-		/>
+	>
+		<a slot=append class="pure-button jif-button help-link" href="/{notation}-notation">
+			<Icon type=info />
+		</a>
+	</InputField>
 </div>
 
 <svelte:component this={component} bind:nJugglers {init} />

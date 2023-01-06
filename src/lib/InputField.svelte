@@ -190,4 +190,6 @@ function blurTargetOnEnter(e) {
 			{...inputAttr}
 		>
 	{/if}
+
+	<slot name=append />
 </div>
