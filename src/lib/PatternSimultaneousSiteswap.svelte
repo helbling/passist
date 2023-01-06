@@ -76,7 +76,7 @@
 		slot=input
 		bind:siteswapInputs={input}
 		bind:individualPatterns
-		bind:siteswapValid={valid}
+		siteswapValid={valid}
 		{nJugglers}
 		idPrefix=main
 	/>
@@ -84,7 +84,7 @@
 		showNJugglers={false}
 		slot=animation_input
 		bind:siteswapInputs={input}
-		bind:siteswapValid={valid}
+		siteswapValid={valid}
 		{nJugglers}
 		idPrefix=animation
 	/>
