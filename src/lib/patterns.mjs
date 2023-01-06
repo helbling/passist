@@ -113,6 +113,7 @@ const syncPassings = [
 	['<3p33|234p>', 'three-count vs early double'],
 	['<3p333|3p333>', 'four-count'],
 	['<3p333 3p33 3p3 3p 3p3 3p33|3p333 3p33 3p3 3p 3p3 3p33>', 'count-down'],
+	['<(3p,4)(4, 3p)|(0,0)!(3px,4)(4,3px)!>', 'Scratch your head'],
 
 	// TODO: make the following patterns use singles..
 	['<4p|4p>', 'double treff'],
