@@ -19,8 +19,14 @@
 	let url;
 	let individualPatterns = false;
 
-	function unserialize(str) { return str.split('/'); }
-	function serialize(input) { return input.join('/'); }
+	function unserialize(str) {
+		if (str.match(/^<.*>$/))
+			return str.slice(1, -1).split('|');
+		return str.split('/');
+	}
+	function serialize(input) {
+		return input.join('/');
+	}
 
 	if (init) {
 		input = unserialize(init.params.input);
@@ -29,6 +35,7 @@
 			input = Array(nJugglers).fill(input[0])
 		} else {
 			individualPatterns = true;
+			nJugglers = input.length;
 		}
 	} else if (useLocalStorage) {
 		const localStorageInput = localStorage.getItem('simultaneous-siteswap');

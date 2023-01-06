@@ -12,8 +12,8 @@
 		const nJugglersUrl = parseInt(init.url.searchParams.get('jugglers'));
 		if (nJugglersUrl && nJugglersUrl >= 1)
 			nJugglers = nJugglersUrl;
-		else if (notation == 'simultaneous' && init.params.input)
-			nJugglers = init.params.input.split('/').length;
+		// else if (notation == 'simultaneous' && init.params.input)
+		//	nJugglers = init.params.input.split('/').length;
 	} else if (notation) {
 			notation = localStorage.getItem('notation') || defaults.notation;
 	}
@@ -63,4 +63,4 @@
 		/>
 </div>
 
-<svelte:component this={component} {nJugglers} {init} />
+<svelte:component this={component} bind:nJugglers {init} />

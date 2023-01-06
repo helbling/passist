@@ -10,8 +10,8 @@
 	export let showNJugglers = true;
 	export let individualPatterns = false;
 
-	if (siteswapInputs.length > 1)
-		individualPatterns = !siteswapInputs.every(s => s == siteswapInputs[0]);
+	// if (siteswapInputs.length > 1)
+	//     individualPatterns = !siteswapInputs.every(s => s == siteswapInputs[0]);
 
 $: {
 	// set unset input field to first input
