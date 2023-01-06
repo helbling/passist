@@ -6,18 +6,18 @@
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let nJugglers = defaults.nJugglers;
-	export let input = ['3p33', '234p'];
-	export let valid = false;
 	export let jif = {};
 	export let init;
-	let notation = '';
+	export let input = ['3p33', '234p'];
+	export let valid = false;
+	let individualPatterns = true;
+	let extendedSiteswapNotation = '';
 	let extendedSiteswap;
 	let period;
 	let nProps;
 	let siteswapName;
 	let title;
 	let url;
-	let individualPatterns = false;
 
 	function unserialize(str) {
 		if (str.match(/^<.*>$/))
@@ -39,8 +39,10 @@
 		}
 	} else if (useLocalStorage) {
 		const localStorageInput = localStorage.getItem('simultaneous-siteswap');
-		if (localStorageInput)
+		if (localStorageInput) {
 			input = unserialize(localStorageInput);
+			individualPatterns = true; // TODO: save/restore that one as well! (save full url?)
+		}
 	}
 
 	$: useLocalStorage && input.every(x => x) && localStorage.setItem("simultaneous-siteswap", serialize(input));
@@ -48,11 +50,11 @@
 	// TODO: make sure causal diagram works
 
 	$:{
-		notation = '<' + input.join('|') + '>';
-		extendedSiteswap = new ExtendedSiteswap(notation);
+		extendedSiteswapNotation = '<' + input.join('|') + '>';
+		extendedSiteswap = new ExtendedSiteswap(extendedSiteswapNotation);
 		valid = extendedSiteswap.isValid();
 		siteswapName = siteswapNames[extendedSiteswap.nJugglers + '|' + extendedSiteswap.toString()];
-		title = 'Extended Siteswap ' + notation;
+		title = 'Extended Siteswap ' + extendedSiteswapNotation;
 		if (individualPatterns)
 			url = U('/simultaneous-siteswap/' + serialize(input), {});
 		else
@@ -93,7 +95,7 @@
 
 	{#if valid}
 		<p>
-			{notation} - {nProps} props
+			{extendedSiteswapNotation} - {nProps} props
 		</p>
 		<p>
 			Note: Support for simultaneous siteswaps is new and might still have some bugs and rough edges..
