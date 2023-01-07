@@ -2,7 +2,6 @@
 	import PatternResult from '$lib/PatternResult.svelte';
 	import SiteswapInput from '$lib/SiteswapInput.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
-	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
 	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
@@ -14,7 +13,7 @@
 	export let handsInput = '';
 	export let init;
 	let handsValid = false;
-	let siteswap, extendedSiteswap, strippedInput, originalSiteswap;
+	let siteswap, strippedInput, originalSiteswap;
 	let period;
 	let nProps;
 	let siteswapName;
