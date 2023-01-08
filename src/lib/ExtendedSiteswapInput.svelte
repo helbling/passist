@@ -50,6 +50,16 @@ $: {
 		/>
 {/if}
 
+{#if nJugglers > 1}
+<InputField
+	bind:value={individualPatterns}
+	id={idPrefix + "individualPatterns"}
+	type=checkbox
+	label='individual'
+	title='individual patterns'
+	/>
+{/if}
+
 {#if individualPatterns}
 	{#each Array(nJugglers) as _,i }
 	<InputField
@@ -84,13 +94,5 @@ $: {
 		/>
 
 {/if}
-
-<InputField
-	bind:value={individualPatterns}
-	id={idPrefix + "individualPatterns"}
-	type=checkbox
-	label='individual'
-	title='individual patterns'
-	/>
 
 </div>
