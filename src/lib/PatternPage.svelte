@@ -2,7 +2,7 @@
 	import InputField from '$lib/InputField.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import PatternSiteswap from '$lib/PatternSiteswap.svelte';
-	import PatternSimultaneousSiteswap from '$lib/PatternSimultaneousSiteswap.svelte';
+	import PatternExtendedSiteswap from '$lib/PatternExtendedSiteswap.svelte';
 	import { defaults, useLocalStorage } from '$lib/passist.mjs';
 
 	export let nJugglers = defaults.nJugglers;
@@ -13,8 +13,6 @@
 		const nJugglersUrl = parseInt(init.url.searchParams.get('jugglers'));
 		if (nJugglersUrl && nJugglersUrl >= 1)
 			nJugglers = nJugglersUrl;
-		// else if (notation == 'simultaneous' && init.params.input)
-		//	nJugglers = init.params.input.split('/').length;
 	} else if (notation) {
 			notation = localStorage.getItem('notation') || defaults.notation;
 	}
@@ -28,8 +26,8 @@
 			text: 'Global Siteswap',
 		},
 		{
-			key:  'simultaneous',
-			text: 'Simult. Siteswaps',
+			key:  'extended',
+			text: 'Extended Siteswaps',
 		},
 		// prechac: 'Prechac',
 		// social: 'Social Siteswap',
@@ -38,7 +36,7 @@
 	$: {
 		component = {
 			siteswap: PatternSiteswap,
-			simultaneous: PatternSimultaneousSiteswap,
+			extended: PatternExtendedSiteswap,
 		}[notation] ?? PatternSiteswap;
 	}
 </script>

@@ -6,7 +6,7 @@
 	$: {
 		const pathname = $page?.url?.pathname || '';
 		segment = '/' + pathname.split('/')[1];
-		if (segment == '/siteswap' || segment == '/simultaneous-siteswap')
+		if (segment == '/siteswap' || segment == '/extended-siteswap')
 			segment = '/pattern';
 	}
 

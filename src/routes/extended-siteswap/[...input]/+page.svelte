@@ -3,4 +3,4 @@
 	export let data;
 </script>
 
-<PatternPage notation=simultaneous init={data} />
+<PatternPage notation=extended init={data} />

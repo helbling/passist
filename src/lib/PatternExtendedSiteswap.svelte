@@ -38,14 +38,14 @@
 			nJugglers = input.length;
 		}
 	} else if (useLocalStorage) {
-		const localStorageInput = localStorage.getItem('simultaneous-siteswap');
+		const localStorageInput = localStorage.getItem('extended-siteswap');
 		if (localStorageInput) {
 			input = unserialize(localStorageInput);
 			individualPatterns = true; // TODO: save/restore that one as well! (save full url?)
 		}
 	}
 
-	$: useLocalStorage && input.every(x => x) && localStorage.setItem("simultaneous-siteswap", serialize(input));
+	$: useLocalStorage && input.every(x => x) && localStorage.setItem("extended-siteswap", serialize(input));
 
 	// TODO: make sure causal diagram works
 
@@ -56,9 +56,9 @@
 		siteswapName = siteswapNames[extendedSiteswap.nJugglers + '|' + extendedSiteswap.toString()];
 		title = 'Extended Siteswap ' + extendedSiteswapNotation;
 		if (individualPatterns)
-			url = U('/simultaneous-siteswap/' + serialize(input), {});
+			url = U('/extended-siteswap/' + serialize(input), {});
 		else
-			url = U('/simultaneous-siteswap/' + input[0], {jugglers:nJugglers});
+			url = U('/extended-siteswap/' + input[0], {jugglers:nJugglers});
 
 		if (valid) {
 			jif = extendedSiteswap.toJif({
@@ -98,7 +98,7 @@
 			{extendedSiteswapNotation} - {nProps} props
 		</p>
 		<p>
-			Note: Support for simultaneous siteswaps is new and might still have some bugs and rough edges..
+			Note: Support for extended siteswaps is new and might still have some bugs and rough edges..
 		</p>
 
 	{:else}
