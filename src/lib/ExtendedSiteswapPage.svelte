@@ -5,11 +5,11 @@
 	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, U} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
-	export let nJugglers = defaults.nJugglers;
-	export let jif = {};
 	export let init;
-	export let input = ['3p33', '234p'];
-	export let valid = false;
+	let nJugglers = defaults.nJugglers;
+	let jif = {};
+	let input = ['3p33', '234p'];
+	let valid = false;
 	let individualPatterns = true;
 	let extendedSiteswapNotation = '';
 	let extendedSiteswap;
@@ -27,10 +27,12 @@
 	function serialize(input) {
 		return input.join('/');
 	}
-
 	if (init) {
 		input = unserialize(init.params.input);
-		if (init.url.searchParams.get('jugglers')) {
+
+		const nJugglersUrl = parseInt(init.url.searchParams.get('jugglers'));
+		if (nJugglersUrl && nJugglersUrl >= 1) {
+			nJugglers = nJugglersUrl;
 			individualPatterns = false;
 			input = Array(nJugglers).fill(input[0])
 		} else {
@@ -38,14 +40,16 @@
 			nJugglers = input.length;
 		}
 	} else if (useLocalStorage) {
-		const localStorageInput = localStorage.getItem('extended-siteswap');
+		nJugglers = localStorage.getItem('extended-siteswap/nJugglers') || defaults.nJugglers;
+		const localStorageInput = localStorage.getItem('extended-siteswap/input');
 		if (localStorageInput) {
 			input = unserialize(localStorageInput);
 			individualPatterns = true; // TODO: save/restore that one as well! (save full url?)
 		}
 	}
 
-	$: useLocalStorage && input.every(x => x) && localStorage.setItem("extended-siteswap", serialize(input));
+	$: useLocalStorage && nJugglers && localStorage.setItem("extended-siteswap/nJugglers", nJugglers);
+	$: useLocalStorage && input.every(x => x) && localStorage.setItem("extended-siteswap/input", serialize(input));
 
 	// TODO: make sure causal diagram works
 
@@ -74,12 +78,11 @@
 <PatternResult {valid} {jif} {title} {url} {init}>
 
 	<ExtendedSiteswapInput
-		showNJugglers={false}
 		slot=input
+		bind:nJugglers
 		bind:siteswapInputs={input}
 		bind:individualPatterns
 		siteswapValid={valid}
-		{nJugglers}
 		idPrefix=main
 	/>
 	<ExtendedSiteswapInput

@@ -1,9 +1,6 @@
 <script>
-	import SiteswapInput from '$lib/SiteswapInput.svelte';
 	import CausalDiagramWidget from '$lib/CausalDiagramWidget.svelte';
 	import AnimationWidget from '$lib/AnimationWidget.svelte';
-	import Siteswap from '$lib/siteswap.mjs';
-	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import { defaults, useLocalStorage, jifdev, U } from '$lib/passist.mjs';

@@ -5,13 +5,13 @@
 	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
-	export let nJugglers = defaults.nJugglers;
-	export let input = defaults.siteswap;
-	export let valid = false;
-	export let jif = {};
-	export let shift = 0;
-	export let handsInput = '';
 	export let init;
+	let nJugglers = defaults.nJugglers;
+	let input = defaults.siteswap;
+	let valid = false;
+	let jif = {};
+	let shift = 0;
+	let handsInput = '';
 	let handsValid = false;
 	let siteswap, strippedInput, originalSiteswap;
 	let period;
@@ -30,19 +30,26 @@
 	if (init) {
 		input = init.params.input;
 
+		const nJugglersUrl = parseInt(init.url.searchParams.get('jugglers'));
+		if (nJugglersUrl && nJugglersUrl >= 1)
+			nJugglers = nJugglersUrl;
+
 		const handsParam = init.url.searchParams.get('hands');
 		const limbs = hands2limbs(handsParam, nJugglers);
 		if (limbs)
 			handsInput = limbs2hands(limbs);
 	} else if (useLocalStorage) {
 			input = localStorage.getItem('siteswap') || defaults.siteswap;
+			nJugglers = localStorage.getItem('nJugglers') || defaults.nJugglers;
 	}
 
-	// TODO: sticky handsInput
+
 	$: useLocalStorage && input && localStorage.setItem("siteswap", input);
+	$: useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
+	// TODO: sticky handsInput
 
 	$:{
-		// TODO: extended siteswap as well
+		// TODO: add hint/link when entering extended siteswap
 		// TODO: shift
 
 			strippedInput = String(input).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
@@ -181,9 +188,8 @@
 <PatternResult {valid} {jif} {startConfigurations} {title} {url} {init} >
 	<SiteswapInput
 		slot=input
-		{nJugglers}
-		showNJugglers={false}
 		siteswapValid={valid}
+		bind:nJugglers
 		bind:siteswapInput={input}
 		bind:handsInput
 		bind:handsValid

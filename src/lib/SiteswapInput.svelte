@@ -77,6 +77,19 @@
 <svelte:window on:touchstart={windowOnClick} on:mousedown={windowOnClick}/>
 
 <div class="pure-form form-inline">
+	{#if showNJugglers}
+	<InputField
+		bind:value={nJugglers}
+		id={idPrefix + "NJugglers"}
+		type=number
+		label='👥'
+		title='Number of jugglers'
+		min=1
+		max=9
+		on:change={e => { handsInput = ''; }}
+		/>
+	{/if}
+
 	<InputField
 		bind:value={siteswapInput}
 		id={idPrefix + "SiteswapInput"}
@@ -90,19 +103,6 @@
 			size:      10,
 		}}
 		/>
-
-	{#if showNJugglers}
-	<InputField
-		bind:value={nJugglers}
-		id={idPrefix + "NJugglers"}
-		type=number
-		label='👥'
-		title='Number of jugglers'
-		min=1
-		max=9
-		on:change={e => { handsInput = ''; }}
-		/>
-	{/if}
 
 	{#if showHandOrderInput}
 	<InputField
