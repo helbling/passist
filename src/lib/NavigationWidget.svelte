@@ -12,10 +12,10 @@
 
 	let pages = [
 		{ path:'/siteswap-generator', title:'Generator' },
-		{ path:'/pattern',  title:'Pattern' },
-		{ path:'/patterns',  title:'Pattern List' },
+		{ path:'/pattern',            title:'Pattern' },
+		{ path:'/pattern-list',       title:'Pattern List' },
 		jifdev ? { path:'/jif',       title:'Jif' } : null,
-		{ path:'/about',     title:'About' },
+		{ path:'/about',              title:'About' },
 	].filter(Boolean);
 
 </script>
