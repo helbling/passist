@@ -126,7 +126,7 @@
 
 	$: if (browser === true && animation) { animation.updateScene(animationJif, animationOptions); }
 	$: if (browser === true && animation) { animation.resize(sizeOptions); }
-	$: if (browser === true) { document.body.style.overflow = isMaximized ? 'hidden' : 'auto'; }
+	$: if (browser === true) { document.body.style.overflow = isMaximized ? 'hidden' : null; }
 
 	function togglePause() {
 		if (animation)
