@@ -1,7 +1,6 @@
 <script>
 	import InputField from '$lib/InputField.svelte';
-	import Icon from '$lib/Icon.svelte';
-	import { jugglerName, defaultLimbs } from '$lib/passist.mjs';
+	import { jugglerName } from '$lib/passist.mjs';
 
 	export let siteswapInputs = [];
 	export let nJugglers = 2;
@@ -74,7 +73,7 @@ $: {
 			pattern:   '[0-9a-zA-Z ]+',
 			size:      10,
 		}}
-		on:input={e => { siteswapInputs = siteswapInputs }}
+		on:input={() => { siteswapInputs = siteswapInputs }}
 		/>
 	{/each}
 

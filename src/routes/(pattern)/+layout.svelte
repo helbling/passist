@@ -18,7 +18,7 @@
 </script>
 
 <style>
-	nav { margin-top:-1em; margin-bottom:1em; border-bottom:1px solid lightgray }
+	nav { margin-top:-1em; margin-bottom:1em; border-bottom:1px solid lightgray; overflow-x:auto }
 	.pure-menu-selected, .pure-menu-link:focus { font-weight:bold }
 	.pure-menu-link { color:#212529 }
 	@media (max-width:30em) {
