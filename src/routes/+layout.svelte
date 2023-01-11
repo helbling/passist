@@ -1,5 +1,5 @@
 <script>
-	import { jifdev } from '$lib/passist.mjs';
+	import { jifdev, appName } from '$lib/passist.mjs';
 	import { page } from '$app/stores';
 
 	let segment = '';
@@ -55,10 +55,13 @@
 	.pure-menu-selected, .pure-menu-link:focus { background:#fff }
 	.pure-menu-link { color:#212529 }
 	nav { position:absolute; bottom: 0; overflow-x:auto }
+	@media (max-width:38em) {
+		.title { display:none }
+	}
 	@media (max-width:34em) {
 		.pure-menu-link { padding: .5em .5em }
 	}
-	img.cube { width:32px; height:32px; margin:-8px 0}
+	img.cube { width:24px; height:24px; margin:-6px 0}
 </style>
 
 <svelte:head>
@@ -87,6 +90,7 @@
 					>
 						{#if p.path == '/'}
 							<img class="cube" src="/images/cube.svg" alt="Home" title="Home">
+							<span class="title">{appName}</span>
 						{:else}
 							{p.title}
 						{/if}

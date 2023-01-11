@@ -115,19 +115,23 @@ const baseUrl = dev ? '' :
                 'https://'
                  + (import.meta.env.VITE_SERVERTYPE ? import.meta.env.VITE_SERVERTYPE + '.' : '')
                  + 'passist.org';
+const appName = 'passist' + (servertype ? ' ' + servertype : '');
+const appShortDescription = 'passing siteswap assistant';
 
 export {
-	defaults,
-	useLocalStorage,
-	siteswapUrl,
-	extendedSiteswapUrl,
-	siteswapAlternativesUrl,
-	jugglerName,
-	hands2limbs,
-	limbs2hands,
-	defaultLimbs,
-	servertype,
-	jifdev,
+	appName,
+	appShortDescription,
 	baseUrl,
+	defaultLimbs,
+	defaults,
+	extendedSiteswapUrl,
+	hands2limbs,
+	jifdev,
+	jugglerName,
+	limbs2hands,
+	servertype,
+	siteswapAlternativesUrl,
+	siteswapUrl,
 	U,
+	useLocalStorage,
 };

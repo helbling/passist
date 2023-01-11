@@ -101,6 +101,7 @@ for (const [notation, name] of kaestnersKnownSiteswaps) {
 		notation,
 		name,
 		source: 'known_siteswaps',
+		url: '/siteswap/' + notation + '?jugglers=2'
 	});
 }
 
@@ -130,6 +131,7 @@ for (const [notation, name] of syncPassings) {
 		type: 'extended_siteswap',
 		notation,
 		name,
+		url: '/extended-siteswap/' + notation
 	});
 }
 

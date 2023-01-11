@@ -1,26 +1,35 @@
 <script>
-	import { servertype } from '$lib/passist.mjs';
+	import { appName, appShortDescription } from '$lib/passist.mjs';
+	import { patterns } from '$lib/patterns.mjs';
+	const randomPatternUrl = patterns[Math.floor(Math.random() * patterns.length)].url;
 </script>
 
 <style>
 	h2 { font-size:1.25rem}
-	/*
-	.cube     { height:5.5rem; }
-	.meeseeks { height:6rem; }
-	 */
+	.page  { text-align:center }
+	.title { display:inline-block; text-align:left }
+	.meeseeks img { height:8rem; }
+	.cube img     { width:10rem; }
+	.cube  { margin-bottom:2em }
 </style>
 
 
 <svelte:head>
-	<title>passist - passing siteswap assistant</title>
+	<title>{appName} - {appShortDescription}</title>
 </svelte:head>
 
-<h1>passist{servertype ? ' ' + servertype : ''}</h1>
-<h2>passing siteswap assistant</h2>
-
-<!--
-	<img class="cube" src="/images/cube.svg" alt="logo" />
-	<img class="meeseeks" src="/images/mr_meeseeks_proud2.png" alt="mr meeseeks" />
-
-	TODO: add some fancy content here!
-	-->
+<div class=page>
+	<p class=meeseeks>
+		<img src="/images/mr_meeseeks_proud2.png" alt="mr meeseeks" />
+	</p>
+	<div class=title>
+		<h1>{appName}</h1>
+		<h2>{appShortDescription}</h2>
+	</div>
+	<p class=cube>
+		<img src="/images/cube.svg" alt="logo" />
+	</p>
+	<p>
+		<a class=pure-button href="{randomPatternUrl}">Random Pattern</a>
+	</p>
+</div>
