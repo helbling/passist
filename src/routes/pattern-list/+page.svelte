@@ -1,9 +1,10 @@
 <script>
-	import PatternListPage from '$lib/PatternListPage.svelte';
+import { appName } from '$lib/passist.mjs';
+import PatternListPage from '$lib/PatternListPage.svelte';
 </script>
 
 <svelte:head>
-	<title>passist - Patterns</title>
+	<title>{appName} - Patterns</title>
 </svelte:head>
 
 <PatternListPage />

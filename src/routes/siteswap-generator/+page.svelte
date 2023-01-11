@@ -1,9 +1,10 @@
 <script>
-	import GeneratorPage from '$lib/GeneratorPage.svelte';
+import { appName } from '$lib/passist.mjs';
+import GeneratorPage from '$lib/GeneratorPage.svelte';
 </script>
 
 <svelte:head>
-	<title>passist - Generator</title>
+	<title>{appName} - Generator</title>
 </svelte:head>
 
 

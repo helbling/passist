@@ -1,4 +1,5 @@
 <script>
+import { appName } from '$lib/passist.mjs';
 import { marked } from 'marked';
 let source = `
 
@@ -59,7 +60,7 @@ let markdown = marked(source);
 </style>
 
 <svelte:head>
-	<title>passist - About</title>
+	<title>{appName} - About</title>
 </svelte:head>
 
 

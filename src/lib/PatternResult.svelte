@@ -3,7 +3,7 @@
 	import AnimationWidget from '$lib/AnimationWidget.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
-	import { defaults, useLocalStorage, jifdev, U } from '$lib/passist.mjs';
+	import { appName, defaults, useLocalStorage, jifdev, U } from '$lib/passist.mjs';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 
@@ -100,7 +100,7 @@
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
 
 <svelte:head>
-	<title>passist - {title}</title>
+	<title>{appName} - {title}</title>
 </svelte:head>
 
 <slot name="input"/>

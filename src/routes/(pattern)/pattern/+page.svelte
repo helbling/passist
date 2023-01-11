@@ -1,6 +1,6 @@
 <script>
 import { marked } from 'marked';
-import { siteswapUrl, extendedSiteswapUrl } from '$lib/passist.mjs';
+import { appName, siteswapUrl, extendedSiteswapUrl } from '$lib/passist.mjs';
 
 function patternLink(siteswap, url, params = {}) {
 	return '[`'
@@ -77,7 +77,7 @@ let markdown = marked(source);
 </style>
 
 <svelte:head>
-	<title>passist - Siteswap notation</title>
+	<title>{appName} - Siteswap notation</title>
 </svelte:head>
 
 <div class="markdown">{@html markdown}</div>

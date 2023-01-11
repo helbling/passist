@@ -1,4 +1,5 @@
 <script>
+	import { appName } from '$lib/passist.mjs';
 	import { page } from '$app/stores';
 </script>
 
@@ -10,7 +11,7 @@
 </style>
 
 <svelte:head>
-	<title>{$page.status}</title>
+	<title>{$page.status} - {appName}</title>
 </svelte:head>
 
 <h1>{$page.status}</h1>
