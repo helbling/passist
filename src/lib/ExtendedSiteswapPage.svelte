@@ -104,6 +104,20 @@
 			Note: Support for extended siteswaps is new and might still have some bugs and rough edges..
 		</p>
 
+	{:else if input.every(x => x)}
+		<div>
+				<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see an invalid siteswap" >
+				<p>Invalid Extended Siteswap</p>
+
+				{#if extendedSiteswap && extendedSiteswap.error}
+						<p>
+						{extendedSiteswap.error}
+						{#if extendedSiteswap.error.snippet}
+								<pre>{extendedSiteswap.error.snippet}</pre>
+						{/if}
+						</p>
+				{/if}
+		</div>
 	{:else}
 		<!-- empty string as input: no output -->
 	{/if}
