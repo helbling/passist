@@ -54,8 +54,8 @@
 	// TODO: make sure causal diagram works
 
 	$:{
-		extendedSiteswapNotation = '<' + input.join('|') + '>';
-		extendedSiteswap = new ExtendedSiteswap(extendedSiteswapNotation);
+		extendedSiteswap = new ExtendedSiteswap(input);
+		extendedSiteswapNotation = ExtendedSiteswap.notation;
 		valid = extendedSiteswap.isValid();
 		siteswapName = siteswapNames[extendedSiteswap.nJugglers + '|' + extendedSiteswap.toString()];
 		title = 'Extended Siteswap ' + extendedSiteswapNotation;
@@ -67,7 +67,6 @@
 		if (valid) {
 			jif = extendedSiteswap.toJif({
 				name: siteswapName ? siteswapName + " (" + extendedSiteswap.toString() + ")" : undefined,
-				generator: 'passist', // TODO: put version of package.json here again
 				flipTwos: true, // TODO: implement this
 			});
 			nProps = extendedSiteswap.nProps();

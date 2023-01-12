@@ -147,15 +147,55 @@ function error_snippet(location, input)
 
 export default class ExtendedSiteswap {
 
+/**
+ *  constructs a new extended siteswap
+ *  params:
+ *  - input: can be one of:
+ *     - a plain string with a pattern according to the grammar above
+ *     - an array of strings with solo patterns according to the grammer above
+ *     - TODO: some way to specify a repeated pattern..
+ *  - options: object with the following optional keys:
+ *     - jugglers/limbs/props according to the JIF specification
+ *     - name: pattern name
+ *
+ */
 constructor(input, options = {})
 {
-	this.input = input;
-	try {
-		this.ast = parser.parse(input);
-	} catch (e) {
-		if (e.location)
-			e.snippet = error_snippet(e.location, input);
-		this.error = e;
+	if (typeof input === 'string') {
+		this.notation = input;
+		try {
+			this.ast = parser.parse(input);
+		} catch (e) {
+			if (e.location)
+				e.snippet = error_snippet(e.location, input);
+			this.error = e;
+		}
+		this.isVanillaSiteswap = ExtendedSiteswap.isVanillaSiteswap(input);
+	} else if (Array.isArray(input)) {
+		this.notation = input.length == 1 ? input[0] : '<' + input.join('|') + '>';
+		// TODO handle case of nJugglers == 1 -> no passing ast..
+		const errors = [];
+		const asts = [];
+		input.forEach((solo, j) => {
+			try {
+				const soloAst = parser.parse(solo);
+				if (soloAst.type == 'solo')
+					asts.push(soloAst.beats);
+				else
+					errors.push(`siteswap for juggler {j} is no solo siteswap`);
+			} catch (e) {
+				if (e.location)
+					e.snippet = error_snippet(e.location, solo);
+				errors.push(e);
+			}
+			this.ast = {
+				type: 'passing',
+				passings: [asts],
+			};
+
+		});
+		if (errors.length)
+			this.error = errors.join('\n');
 	}
 
 	// NOTE second try/catch needed as we still get a basic jif if we had an error above
@@ -164,7 +204,6 @@ constructor(input, options = {})
 	} catch (e) {
 		this.error = e;
 	}
-	this.isVanillaSiteswap = ExtendedSiteswap.isVanillaSiteswap(input);
 }
 
 isValid()
@@ -184,12 +223,12 @@ isValid()
 
 toString()
 {
-	return this.input;
+	return this.notation;
 }
 
 toUrl()
 {
-	return '/extended-siteswap/' + ExtendedSiteswap.stringToUrl(this.input);
+	return '/extended-siteswap/' + ExtendedSiteswap.stringToUrl(this.notation);
 }
 
 toJif(options = {})
@@ -199,7 +238,7 @@ toJif(options = {})
 	const jif = {
 		meta: {
 			name: options.name ? options.name : 'extended siteswap ' + pattern,
-			generator: options.generator,
+			generator: 'passist', // TODO: put version of package.json here again
 		},
 		highLevelDescription: {
 			type: 'extendedSiteswap',
@@ -289,8 +328,8 @@ nJugglers()
 	return 1;
 }
 
-static isVanillaSiteswap(input) {
-	return !!input.match(/^[\s0-9a-z]+$/i);
+static isVanillaSiteswap(notation) {
+	return !!notation.match(/^[\s0-9a-z]+$/i);
 }
 
 static stringToUrl(s) {
