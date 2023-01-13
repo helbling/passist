@@ -11,7 +11,7 @@
 	let input = ['3p33', '234p'];
 	let valid = false;
 	let individualPatterns = true;
-	let extendedSiteswapNotation = '';
+	let extendedSiteswapString = '';
 	let extendedSiteswap;
 	let period;
 	let nProps;
@@ -55,10 +55,10 @@
 
 	$:{
 		extendedSiteswap = new ExtendedSiteswap(input);
-		extendedSiteswapNotation = ExtendedSiteswap.notation;
+		extendedSiteswapString = extendedSiteswap.toString();
 		valid = extendedSiteswap.isValid();
-		siteswapName = siteswapNames[extendedSiteswap.nJugglers + '|' + extendedSiteswap.toString()];
-		title = 'Extended Siteswap ' + extendedSiteswapNotation;
+		siteswapName = siteswapNames[extendedSiteswap.nJugglers() + '|' + extendedSiteswap.notation];
+		title = 'Extended Siteswap ' + extendedSiteswapString;
 		if (individualPatterns)
 			url = U('/extended-siteswap/' + serialize(input), {});
 		else
@@ -97,7 +97,10 @@
 
 	{#if valid}
 		<p>
-			{extendedSiteswapNotation} - {nProps} props
+			{extendedSiteswapString}{siteswapName ? ' - ' + siteswapName : ''}
+		</p>
+		<p>
+			{nProps} props
 		</p>
 		<p>
 			Note: Support for extended siteswaps is new and might still have some bugs and rough edges..

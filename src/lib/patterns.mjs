@@ -122,8 +122,9 @@ const syncPassings = [
 	['<(4x,4px)|(4x,4px)>*', 'swinging door with doubles'],
 ];
 
-for (const [notation, name] of syncPassings) {
-	const extendedSiteswap = new ExtendedSiteswap(notation);
+for (const [input, name] of syncPassings) {
+	const extendedSiteswap = new ExtendedSiteswap(input);
+	const notation = extendedSiteswap.notation;
 	siteswapNames['2|' + notation] = name;
 	patterns.push({
 		nJugglers: 2,
@@ -131,7 +132,7 @@ for (const [notation, name] of syncPassings) {
 		type: 'extended_siteswap',
 		notation,
 		name,
-		url: '/extended-siteswap/' + notation
+		url: extendedSiteswap.toUrl(),
 	});
 }
 

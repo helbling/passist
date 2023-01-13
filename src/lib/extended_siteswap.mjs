@@ -182,7 +182,7 @@ constructor(input, options = {})
 				if (soloAst.type == 'solo')
 					asts.push(soloAst.beats);
 				else
-					errors.push(`siteswap for juggler {j} is no solo siteswap`);
+					errors.push(`siteswap for juggler ${j} is no solo siteswap`);
 			} catch (e) {
 				if (e.location)
 					e.snippet = error_snippet(e.location, solo);
