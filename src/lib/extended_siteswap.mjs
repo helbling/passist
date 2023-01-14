@@ -370,8 +370,6 @@ static isVanillaSiteswap(notation)
 
 static stringToUrl(s)
 {
-	// TODO: properly handle things like
-	// <(3p,3p)!|(0,0)!><(0,0)!|(3p,3p)!>
 	return s.replace(/^<(.*)>$/, '$1').replaceAll('|', '/');
 }
 
