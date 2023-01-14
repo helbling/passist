@@ -5,6 +5,12 @@ import Siteswap from './siteswap.mjs';
 import Jif from './jif.mjs';
 
 const grammar = `
+
+{{
+	function zip(rows) { // https://stackoverflow.com/a/10284006
+		return rows[0].map((_,c)=>rows.map(row=>row[c]));
+	}
+}}
   // jugglinglab pattern grammar for peggy
   // =====================================
   //
@@ -12,7 +18,12 @@ const grammar = `
 
   Pattern
     = _ beats:Solo+       _ star:Star? _ { return { type:"solo",    star, beats    }; }
-    / _ passings:Passing+ _ star:Star? _ { return { type:"passing", star, passings }; }
+    / _ passings:Passing+ _ star:Star? _ {
+		if (!passings.every(x => x.length == passings[0].length))
+			throw new Error("not all passings have the same number of jugglers");
+        return { type:"passing", star,
+                 beats: zip(passings).map(arrays => [].concat(...arrays)) };
+        }
 
   Star
     = "*" { return true }
@@ -143,6 +154,34 @@ function error_snippet(location, input)
 	return str;
 }
 
+function throwsToNotation(thr0ws)
+{
+	return thr0ws.map(thr0w => '' + thr0w.duration + (thr0w.p ? 'p' : '') + (thr0w.x ? 'x' : '')).join('');
+}
+
+function astToNotation(ast)
+{
+	if (ast.type == 'passing') {
+		return '<' + ast.beats.map(soloBeats => astToNotation({type:'solo', beats:soloBeats})).join('|') + '>';
+	} else if (ast.type == 'solo') {
+		return ast.beats.map((beat) => {
+			if (beat.type == 'async') {
+				let out = throwsToNotation(beat.throws);
+				if (beat.throws.length > 1)
+					out = '[' + out + ']';
+				return out;
+			} else if (beat.type == 'sync') {
+				return '(' + throwsToNotation(beat.left)
+					 + ',' + throwsToNotation(beat.right) + ')' + (beat.short ? '!' : '');
+			} else {
+				throw new Error(`unknown beat type ${beat.type}`);
+			}
+		}).join('') + (ast.star ? '*' : '');
+	} else {
+		throw new Error(`unknown ast type ${ast.type}`);
+	}
+}
+
 
 
 export default class ExtendedSiteswap {
@@ -162,7 +201,7 @@ export default class ExtendedSiteswap {
 constructor(input, options = {})
 {
 	if (typeof input === 'string') {
-		this.notation = input;
+		this.notation = input; // in case we can't parse it
 		try {
 			this.ast = parser.parse(input);
 		} catch (e) {
@@ -172,15 +211,15 @@ constructor(input, options = {})
 		}
 		this.isVanillaSiteswap = ExtendedSiteswap.isVanillaSiteswap(input);
 	} else if (Array.isArray(input)) {
-		this.notation = input.length == 1 ? input[0] : '<' + input.join('|') + '>';
+		this.notation = input.length == 1 ? input[0] : '<' + input.join('|') + '>'; // in case we can't parse it
 		// TODO handle case of nJugglers == 1 -> no passing ast..
 		const errors = [];
-		const asts = [];
+		const beats = [];
 		input.forEach((solo, j) => {
 			try {
 				const soloAst = parser.parse(solo);
 				if (soloAst.type == 'solo')
-					asts.push(soloAst.beats);
+					beats.push(soloAst.beats);
 				else
 					errors.push(`siteswap for juggler ${j} is no solo siteswap`);
 			} catch (e) {
@@ -190,13 +229,15 @@ constructor(input, options = {})
 			}
 			this.ast = {
 				type: 'passing',
-				passings: [asts],
+				beats,
 			};
 
 		});
 		if (errors.length)
 			this.error = errors.join('\n');
 	}
+	if (!this.error)
+		this.notation = astToNotation(this.ast);
 
 	// NOTE second try/catch needed as we still get a basic jif if we had an error above
 	try {
@@ -262,36 +303,30 @@ toJif(options = {})
 		({ throws, time: period } = beats2throws(ast.beats));
 	} else { // ast.type == 'passing'
 		let time = 0;
-		const nJugglers = ast.passings[0].length;
+		const nJugglers = ast.beats.length;
 		nLimbs = nJugglers * 2;
-
 		this.nLimbs = nLimbs;
 
-		for (const passing of ast.passings) {
-			if (passing.length != nJugglers)
-				throw new Error("passing must always have the same number of jugglers");
+		const beats = ast.beats;
 
-			const byJuggler = passing.map(
-				(passing, juggler) =>
-					beats2throws(
-						passing, {
-							nLimbs,
-							from: juggler * 2 + (time & 1),
-							time,
-						}
-					)
-			);
-			const passingTime = byJuggler[0].time;
-			if (!byJuggler.every(x => x.time == passingTime))
-				throw new Error("passing must have the same number of beats for every juggler");
+		const byJuggler = beats.map(
+			(beats, juggler) =>
+				beats2throws(
+					beats, {
+						nLimbs,
+						from: juggler * 2,
+					}
+				)
+		);
+		const passingTime = byJuggler[0].time;
+		if (!byJuggler.every(x => x.time == passingTime))
+			throw new Error("passing must have the same number of beats for every juggler");
 
-			byJuggler.forEach(({ throws:jugglerThrows }, juggler) => {
-				throws.push(...jugglerThrows);
-			});
+		byJuggler.forEach(({ throws:jugglerThrows }, juggler) => {
+			throws.push(...jugglerThrows);
+		});
 
-			time = passingTime;
-		}
-		period = time;
+		period = passingTime;
 	}
 
 	const repetition = { period };
@@ -328,11 +363,13 @@ nJugglers()
 	return 1;
 }
 
-static isVanillaSiteswap(notation) {
+static isVanillaSiteswap(notation)
+{
 	return !!notation.match(/^[\s0-9a-z]+$/i);
 }
 
-static stringToUrl(s) {
+static stringToUrl(s)
+{
 	// TODO: properly handle things like
 	// <(3p,3p)!|(0,0)!><(0,0)!|(3p,3p)!>
 	return s.replace(/^<(.*)>$/, '$1').replaceAll('|', '/');

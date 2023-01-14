@@ -39,4 +39,38 @@ test('vanilla siteswap test', () => {
 	]);
 });
 
+
+const patternTests = [
+	['534',            { }],
+	['543',            { valid: false }],
+	[['3p33', '234p'], { notation: '<3p33|234p>'}],
+	['<3p|3p>',        { }],
+	['<3p|3p><3|3>',   { notation: '<3p3|3p3>'}],
+	['<3p|3p><3|3|3>', { valid: false  }],
+	['<(4x,4px)|(4x,4px)>', { notation: '<(4x,4px)|(4x,4px)>' }],
+	['<(3p,3p)!|(0,0)!><(0,0)!|(3p,3p)!>', { notation:'<(3p,3p)!(0,0)!|(0,0)!(3p,3p)!>' }],
+	['<(4x,4px)|(4x,4px)>*', {}],
+];
+
+for (const patternTest of patternTests) {
+	const [input, testOptions] = patternTest;
+	const inputStr = JSON.stringify(input);
+
+	const extendedSiteswap = new ExtendedSiteswap(input);
+
+	const shouldBeValid = testOptions.valid ?? true;
+	test(inputStr + ' validity', () => {
+		assert.is(extendedSiteswap.isValid(), shouldBeValid);
+	});
+
+	if (!shouldBeValid)
+		continue;
+
+	const notation = testOptions.notation ? testOptions.notation : input;
+	if (typeof notation === 'string')
+		test(inputStr + ' notation', () => {
+			assert.is(extendedSiteswap.notation, notation);
+		});
+}
+
 test.run();
