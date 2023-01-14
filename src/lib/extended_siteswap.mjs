@@ -212,7 +212,7 @@ constructor(input, options = {})
 		this.isVanillaSiteswap = ExtendedSiteswap.isVanillaSiteswap(input);
 	} else if (Array.isArray(input)) {
 		this.notation = input.length == 1 ? input[0] : '<' + input.join('|') + '>'; // in case we can't parse it
-		// TODO handle case of nJugglers == 1 -> no passing ast..
+
 		const errors = [];
 		const beats = [];
 		input.forEach((solo, j) => {
@@ -227,12 +227,14 @@ constructor(input, options = {})
 					e.snippet = error_snippet(e.location, solo);
 				errors.push(e);
 			}
-			this.ast = {
-				type: 'passing',
-				beats,
-			};
-
 		});
+		this.ast = input.length == 1 ? {
+			type: 'solo',
+			beats: beats[0],
+		} : {
+			type: 'passing',
+			beats,
+		};
 		if (errors.length)
 			this.error = errors.join('\n');
 	}
