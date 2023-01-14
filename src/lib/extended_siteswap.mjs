@@ -96,7 +96,7 @@ function addTo(jifThrow, astThrow, nLimbs)
 	return jifThrow;
 }
 
-function beats2throws(beats, {nLimbs = 2, from = 0, time = 0 } = {})
+function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 {
 	const throws = [];
 	const initialFrom = from;
@@ -300,7 +300,7 @@ toJif(options = {})
 	let throws = [];
 	let period;
 	if (ast.type == 'solo') {
-		({ throws, time: period } = beats2throws(ast.beats));
+		({ throws, time: period } = beatsToThrows(ast.beats));
 	} else { // ast.type == 'passing'
 		let time = 0;
 		const nJugglers = ast.beats.length;
@@ -311,7 +311,7 @@ toJif(options = {})
 
 		const byJuggler = beats.map(
 			(beats, juggler) =>
-				beats2throws(
+				beatsToThrows(
 					beats, {
 						nLimbs,
 						from: juggler * 2,
