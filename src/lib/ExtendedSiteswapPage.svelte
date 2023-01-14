@@ -103,7 +103,7 @@
 			{nProps} props
 		</p>
 		<p>
-			Note: Support for extended siteswaps is new and might still have some bugs and rough edges..
+			Note: Support for extended siteswaps is new and still has some bugs and rough edges..
 		</p>
 
 	{:else if input.every(x => x)}
