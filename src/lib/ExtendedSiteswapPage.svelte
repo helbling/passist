@@ -1,7 +1,8 @@
 <script>
-	import PatternResult from '$lib/PatternResult.svelte';
-	import ExtendedSiteswapInput from '$lib/ExtendedSiteswapInput.svelte';
 	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
+	import ExtendedSiteswapInput from '$lib/ExtendedSiteswapInput.svelte';
+	import InfoBox from '$lib/InfoBox.svelte';
+	import PatternResult from '$lib/PatternResult.svelte';
 	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, U} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
@@ -108,17 +109,18 @@
 
 	{:else if input.every(x => x)}
 		<div>
-				<img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see an invalid siteswap" >
-				<p>Invalid Extended Siteswap</p>
-
-				{#if extendedSiteswap && extendedSiteswap.error}
+				<InfoBox type=error>
+					<h5>Invalid Extended Siteswap</h5>
+					{#if extendedSiteswap && extendedSiteswap.error}
 						<p>
 						{extendedSiteswap.error}
 						{#if extendedSiteswap.error.snippet}
 								<pre>{extendedSiteswap.error.snippet}</pre>
 						{/if}
 						</p>
-				{/if}
+					{/if}
+				 <img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see an invalid siteswap" >
+				</InfoBox>
 		</div>
 	{:else}
 		<!-- empty string as input: no output -->

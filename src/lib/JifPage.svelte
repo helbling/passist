@@ -2,8 +2,9 @@
 	import { onMount } from 'svelte';
 	import { useLocalStorage, defaults } from '$lib/passist.mjs';
 	import AnimationWidget from '$lib/AnimationWidget.svelte';
-	import InputField from '$lib/InputField.svelte';
 	import Icon from '$lib/Icon.svelte';
+	import InfoBox from '$lib/InfoBox.svelte';
+	import InputField from '$lib/InputField.svelte';
 	import Jif from '$lib/jif.mjs';
 
 	/*
@@ -75,8 +76,6 @@
 	.right  { grid-column:2 }
 	.input  { width:100%; height:30em }
 	.invalid { color:#dc3545 }
-	.error   { color:red }
-	.warnings { color:orange }
 	.animation-controls { display:flex; flex-flow:row wrap }
 </style>
 
@@ -123,12 +122,19 @@
 </p>
 
 {#if error || warnings.length}
-	<p class=error>{error}</p>
+
+	{#if error}
+	<InfoBox type=error>
+		{error}
+	</InfoBox>
+	{/if}
 	{#if warnings.length}
-	<ul class=warnings>
-		{#each warnings as warning}
-		<li>{warning}</li>
-		{/each}
-	</ul>
+	<InfoBox type=warning>
+		<ul>
+			{#each warnings as warning}
+			<li>{warning}</li>
+			{/each}
+		</ul>
+	</InfoBox>
 	{/if}
 {/if}
