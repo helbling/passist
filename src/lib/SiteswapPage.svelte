@@ -1,7 +1,9 @@
 <script>
+	import ExtendedSiteswap from '$lib/extended_siteswap.mjs';
+	import InfoBox from '$lib/InfoBox.svelte';
 	import PatternResult from '$lib/PatternResult.svelte';
-	import SiteswapInput from '$lib/SiteswapInput.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
+	import SiteswapInput from '$lib/SiteswapInput.svelte';
 	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
@@ -13,7 +15,7 @@
 	let shift = 0;
 	let handsInput = '';
 	let handsValid = false;
-	let siteswap, strippedInput, originalSiteswap;
+	let siteswap, strippedInput, originalSiteswap, extendedSiteswap;
 	let period;
 	let nProps;
 	let siteswapName;
@@ -55,6 +57,8 @@
 			strippedInput = String(input).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
 			originalSiteswap = new Siteswap(strippedInput);
 			siteswap = originalSiteswap.shift(shift);
+
+			extendedSiteswap = new ExtendedSiteswap(input);
 
 			if (nJugglers > 0) {
 				const circleRadius = 1.2 + nJugglers * 0.2;
@@ -136,7 +140,6 @@
 
 			} else {
 				valid = false;
-
 			}
 
 			url = siteswapUrl({
@@ -208,6 +211,12 @@
 	/>
 
 	<div slot=info>
+
+	{#if extendedSiteswap && !extendedSiteswap.isVanillaSiteswap && extendedSiteswap.isValid() }
+		<InfoBox type=warning>
+			Did you mean the extended siteswap <a href="{extendedSiteswap.toUrl()}">{extendedSiteswap.toString()}</a>?
+		</InfoBox>
+	{/if}
 
 	{#if valid}
 		{#if siteswap}

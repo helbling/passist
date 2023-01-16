@@ -209,7 +209,6 @@ constructor(input, options = {})
 				e.snippet = error_snippet(e.location, input);
 			this.error = e;
 		}
-		this.isVanillaSiteswap = ExtendedSiteswap.isVanillaSiteswap(input);
 	} else if (Array.isArray(input)) {
 		this.notation = input.length == 1 ? input[0] : '<' + input.join('|') + '>'; // in case we can't parse it
 
@@ -238,8 +237,10 @@ constructor(input, options = {})
 		if (errors.length)
 			this.error = errors.join('\n');
 	}
-	if (!this.error)
+	if (!this.error) {
 		this.notation = astToNotation(this.ast);
+		this.isVanillaSiteswap = ExtendedSiteswap.isVanillaSiteswap(this.notation);
+	}
 
 	// NOTE second try/catch needed as we still get a basic jif if we had an error above
 	try {
