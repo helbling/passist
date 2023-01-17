@@ -43,7 +43,7 @@ test('vanilla siteswap test', () => {
 const patternTests = [
 	['534',            { }],
 	['543',            { valid: false }],
-	[['3p33', '234p'], { notation: '<3p33|234p>'}],
+	[['3p33', '234p'], { creationOptions: { individualPatterns:true }, notation: '<3p33|234p>'}],
 	['<3p|3p>',        { }],
 	['<3p|3p><3|3>',   { notation: '<3p3|3p3>'}],
 	['<3p|3p><3|3|3>', { valid: false  }],
@@ -56,7 +56,7 @@ for (const patternTest of patternTests) {
 	const [input, testOptions] = patternTest;
 	const inputStr = JSON.stringify(input);
 
-	const extendedSiteswap = new ExtendedSiteswap(input);
+	const extendedSiteswap = new ExtendedSiteswap(input, testOptions.creationOptions ?? {});
 
 	const shouldBeValid = testOptions.valid ?? true;
 	test(inputStr + ' validity', () => {

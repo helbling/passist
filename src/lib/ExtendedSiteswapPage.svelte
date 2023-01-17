@@ -6,7 +6,7 @@
 	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, U} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
-	export let init;
+	export let init = undefined;
 	let nJugglers = defaults.nJugglers;
 	let jif = {};
 	let input = ['3p33', '234p'];
@@ -19,51 +19,55 @@
 	let siteswapName;
 	let title;
 	let url;
+	let urlSuffix;
 
-	function unserialize(str) {
-		if (str.match(/^<.*>$/))
-			return str.slice(1, -1).split('|');
-		return str.split('/');
-	}
-	function serialize(input) {
-		return input.join('/');
-	}
+	let inputStr, searchParams;
 	if (init) {
-		input = unserialize(init.params.input);
+		inputStr = init.params.input;
+		searchParams = init.url.searchParams;
+	} else if (useLocalStorage) {
+		const urlSuffix = localStorage.getItem('extended-siteswap/urlSuffix');
+		if (urlSuffix) {
+			console.log('us', urlSuffix);
+			let queryStr
+			[inputStr, queryStr] = urlSuffix.split('?');
+			searchParams = new URLSearchParams(queryStr);
+			console.log(inputStr, searchParams);
+		}
+	}
 
-		const nJugglersUrl = parseInt(init.url.searchParams.get('jugglers'));
-		if (nJugglersUrl && nJugglersUrl >= 1) {
-			nJugglers = nJugglersUrl;
+	if (inputStr) {
+		if (inputStr.match(/^<.*>$/)) {
+			/* if (inputStr.includes('|')) */
+			// redirect!
+			// TODO redirect <..|..> notation
+
 			individualPatterns = false;
-			input = Array(nJugglers).fill(input[0])
+
+			const nJugglersUrl = parseInt(searchParams.get('jugglers'));
+			if (nJugglersUrl && nJugglersUrl >= 1)
+				nJugglers = nJugglersUrl;
+
+			input = [inputStr.slice(1, -1)];
+
 		} else {
 			individualPatterns = true;
+			input = inputStr.split('/');
 			nJugglers = input.length;
 		}
-	} else if (useLocalStorage) {
-		nJugglers = localStorage.getItem('extended-siteswap/nJugglers') || defaults.nJugglers;
-		const localStorageInput = localStorage.getItem('extended-siteswap/input');
-		if (localStorageInput) {
-			input = unserialize(localStorageInput);
-			individualPatterns = true; // TODO: save/restore that one as well! (save full url?)
-		}
 	}
-
-	$: useLocalStorage && nJugglers && localStorage.setItem("extended-siteswap/nJugglers", nJugglers);
-	$: useLocalStorage && input.every(x => x) && localStorage.setItem("extended-siteswap/input", serialize(input));
+	$: useLocalStorage && input.every(x => x) && localStorage.setItem("extended-siteswap/urlSuffix", urlSuffix);
 
 	// TODO: make sure causal diagram works
 
 	$:{
-		extendedSiteswap = new ExtendedSiteswap(input);
+		extendedSiteswap = new ExtendedSiteswap(input, {individualPatterns, nJugglers});
+		url = extendedSiteswap.toUrl();
+		urlSuffix = extendedSiteswap.toUrlSuffix();
 		extendedSiteswapString = extendedSiteswap.toString();
 		valid = extendedSiteswap.isValid();
 		siteswapName = siteswapNames[extendedSiteswap.nJugglers() + '|' + extendedSiteswap.notation];
 		title = 'Extended Siteswap ' + extendedSiteswapString;
-		if (individualPatterns)
-			url = U('/extended-siteswap/' + serialize(input), {});
-		else
-			url = U('/extended-siteswap/' + input[0], {jugglers:nJugglers});
 
 		if (valid) {
 			jif = extendedSiteswap.toJif({

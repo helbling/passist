@@ -210,11 +210,23 @@ constructor(input, options = {})
 			this.error = e;
 		}
 	} else if (Array.isArray(input)) {
-		this.notation = input.length == 1 ? input[0] : '<' + input.join('|') + '>'; // in case we can't parse it
-
 		const errors = [];
+		let passing = input;;
+
+		if (!options.individualPatterns) {
+			let nJugglers = options.nJugglers;
+			if (!nJugglers) {
+				nJugglers = 2;
+				errors.push(`nJugglers missing`);
+			}
+			passing = Array(nJugglers).fill(input[0]);
+			this.urlSuffix = '<' + input[0] + '>?jugglers=' + nJugglers; // TODO proper url encoding!
+		}
+
+		this.notation = passing.length == 1 ? passing[0] : '<' + passing.join('|') + '>'; // in case we can't parse it
+
 		const beats = [];
-		input.forEach((solo, j) => {
+		passing.forEach((solo, j) => {
 			try {
 				const soloAst = parser.parse(solo);
 				if (soloAst.type == 'solo')
@@ -227,7 +239,7 @@ constructor(input, options = {})
 				errors.push(e);
 			}
 		});
-		this.ast = input.length == 1 ? {
+		this.ast = passing.length == 1 ? {
 			type: 'solo',
 			beats: beats[0],
 		} : {
@@ -270,9 +282,16 @@ toString()
 	return this.notation;
 }
 
+toUrlSuffix()
+{
+	if (this.urlSuffix)
+		return this.urlSuffix;
+	return ExtendedSiteswap.stringToUrl(this.notation);
+}
+
 toUrl()
 {
-	return '/extended-siteswap/' + ExtendedSiteswap.stringToUrl(this.notation);
+	return '/extended-siteswap/' + this.toUrlSuffix(); // TODO proper url encoding!
 }
 
 toJif(options = {})
