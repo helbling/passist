@@ -15,7 +15,7 @@ const defaults = {
 
 const useLocalStorage = browser === true && 'localStorage' in window;
 
-function U(path, query)
+function U(path, query = {})
 {
 	const queryPart = Object.entries(query).map(
 		([key, val]) => `${key}=${encodeURIComponent(val)}`

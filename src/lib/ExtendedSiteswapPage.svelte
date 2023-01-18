@@ -28,11 +28,9 @@
 	} else if (useLocalStorage) {
 		const urlSuffix = localStorage.getItem('extended-siteswap/urlSuffix');
 		if (urlSuffix) {
-			console.log('us', urlSuffix);
 			let queryStr
 			[inputStr, queryStr] = urlSuffix.split('?');
 			searchParams = new URLSearchParams(queryStr);
-			console.log(inputStr, searchParams);
 		}
 	}
 
@@ -107,9 +105,9 @@
 		<p>
 			{nProps} props
 		</p>
-		<p>
+		<InfoBox type=warning>
 			Note: Support for extended siteswaps is new and still has some bugs and rough edges..
-		</p>
+		</InfoBox>
 
 	{:else if input.every(x => x)}
 		<div>

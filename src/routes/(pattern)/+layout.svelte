@@ -1,17 +1,18 @@
 <script>
+	import { useLocalStorage } from '$lib/passist.mjs';
 	import { page } from '$app/stores';
 
-	let segment = '';
+	let pathname = '';
 	$: {
-		const pathname = $page?.url?.pathname || '';
-		segment = '/' + pathname.split('/')[1];
+		pathname = $page?.url?.pathname || '';
+		if (useLocalStorage && pathname != '/pattern')
+			localStorage.setItem("last-pattern-page", pathname)
 	}
 
-	// TODO: sticky subnavigation? would need notation to have its own page..
 	const pages = [
-		{ path:'/pattern',          title:'Notation' },
-		{ path:'/siteswap',         title:'Global Siteswap' },
-		{ path:'/extended-siteswap', title:'Extended Siteswap' },
+		{ path:'/siteswap',          title:'Global Siteswap' },
+		{ path:'/extended-siteswap', title:'Extended Siteswap (beta)' },
+		{ path:'/pattern/notation',  title:'Notation' },
 		// { path:'/social-siteswap',   title:'Social Siteswap' },
 		// { path:'/prechac',           title:'Prechac' },
 	];
@@ -29,10 +30,9 @@
 <nav class="pure-menu pure-menu-horizontal" data-sveltekit-preload-data="hover">
 	<ul class=pure-menu-list>
 		{#each pages as p}
-		<li class=pure-menu-item class:pure-menu-selected={segment === p.path}>
+		<li class=pure-menu-item class:pure-menu-selected={pathname.startsWith(p.path)}>
 			<a
 				class=pure-menu-link
-				class:selected={segment === p.path}
 				href={p.path}
 			>
 				{p.title}

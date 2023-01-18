@@ -1,6 +1,6 @@
 <script>
 	import InputField from '$lib/InputField.svelte';
-	import { jugglerName } from '$lib/passist.mjs';
+	import { jugglerName, useLocalStorage } from '$lib/passist.mjs';
 
 	export let siteswapInputs = [];
 	export let nJugglers = 2;
