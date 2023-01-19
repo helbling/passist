@@ -3,6 +3,7 @@
 import peggy from 'peggy';
 import Siteswap from './siteswap.mjs';
 import Jif from './jif.mjs';
+import { encodeUrlPathPart } from './passist.mjs';
 
 const grammar = `
 
@@ -220,7 +221,7 @@ constructor(input, options = {})
 				errors.push(`nJugglers missing`);
 			}
 			passing = Array(nJugglers).fill(input[0]);
-			this.urlSuffix = '<' + input[0] + '>?jugglers=' + nJugglers; // TODO proper url encoding!
+			this.urlSuffix = '<' + encodeUrlPathPart(input[0]) + '>?jugglers=' + nJugglers; // TODO proper url encoding!
 		}
 
 		this.notation = passing.length == 1 ? passing[0] : '<' + passing.join('|') + '>'; // in case we can't parse it
@@ -392,7 +393,7 @@ static isVanillaSiteswap(notation)
 
 static stringToUrl(s)
 {
-	return s.replace(/^<(.*)>$/, '$1').replaceAll('|', '/');
+	return s.replace(/^<(.*)>$/, '$1').split('|').map(encodeUrlPathPart).join('/');
 }
 
 }
