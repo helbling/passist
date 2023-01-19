@@ -1,6 +1,7 @@
 <script>
-	import { defaults, useLocalStorage, U } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage } from '$lib/passist.mjs';
 	import { goto } from '$app/navigation';
+	import { U } from '$lib/utils.mjs';
 
 	if (useLocalStorage) {
 		const siteswapInput = localStorage.getItem('siteswap-alternatives/siteswap') || defaults.siteswap;

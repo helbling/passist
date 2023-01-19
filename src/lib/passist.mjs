@@ -1,4 +1,5 @@
 import { browser, dev } from '$app/environment';
+import { U, encodeUrlPathPart } from '$lib/utils.mjs';
 
 const defaults = {
 	notation: 'siteswap',
@@ -14,19 +15,6 @@ const defaults = {
 };
 
 const useLocalStorage = browser === true && 'localStorage' in window;
-
-function U(path, query = {})
-{
-	const queryPart = Object.entries(query).map(
-		([key, val]) => `${key}=${encodeURIComponent(val)}`
-	).join('&');
-	return path + (queryPart ? (path.match(/\?/) ? '&' : '?') + queryPart : '');
-}
-
-function encodeUrlPathPart(string)
-{
-	return encodeURI(string).replaceAll('?', '%3F').replaceAll('#', '%23');
-}
 
 function siteswapUrl(p)
 {
@@ -129,7 +117,6 @@ export {
 	baseUrl,
 	defaultLimbs,
 	defaults,
-	encodeUrlPathPart,
 	extendedSiteswapUrl,
 	hands2limbs,
 	jifdev,
@@ -138,6 +125,5 @@ export {
 	servertype,
 	siteswapAlternativesUrl,
 	siteswapUrl,
-	U,
 	useLocalStorage,
 };

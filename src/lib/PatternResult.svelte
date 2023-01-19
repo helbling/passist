@@ -3,9 +3,10 @@
 	import AnimationWidget from '$lib/AnimationWidget.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
-	import { appName, defaults, useLocalStorage, jifdev, U } from '$lib/passist.mjs';
+	import { appName, defaults, useLocalStorage, jifdev } from '$lib/passist.mjs';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import { U } from '$lib/utils.mjs';
 
 	export let jif = {};
 	export let valid = false;

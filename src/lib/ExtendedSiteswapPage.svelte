@@ -3,7 +3,7 @@
 	import ExtendedSiteswapInput from '$lib/ExtendedSiteswapInput.svelte';
 	import InfoBox from '$lib/InfoBox.svelte';
 	import PatternResult from '$lib/PatternResult.svelte';
-	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs, U} from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let init = undefined;

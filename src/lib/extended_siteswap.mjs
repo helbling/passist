@@ -3,7 +3,7 @@
 import peggy from 'peggy';
 import Siteswap from './siteswap.mjs';
 import Jif from './jif.mjs';
-import { encodeUrlPathPart } from './passist.mjs';
+import { encodeUrlPathPart } from './utils.mjs';
 
 const grammar = `
 

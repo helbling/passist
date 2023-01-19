@@ -43,6 +43,7 @@ test('vanilla siteswap test', () => {
 const patternTests = [
 	['534',            { }],
 	['543',            { valid: false }],
+	['(6x,4)*',        { notation:'(6x,4)*'}],
 	[['3p33', '234p'], { creationOptions: { individualPatterns:true }, notation: '<3p33|234p>'}],
 	['<3p|3p>',        { }],
 	['<3p|3p><3|3>',   { notation: '<3p3|3p3>'}],
