@@ -163,7 +163,7 @@ function throwsToNotation(thr0ws)
 function astToNotation(ast)
 {
 	if (ast.type == 'passing') {
-		return '<' + ast.beats.map(soloBeats => astToNotation({type:'solo', beats:soloBeats})).join('|') + '>';
+		return '<' + ast.beats.map(soloBeats => astToNotation({type:'solo', beats:soloBeats})).join('|') + '>' + (ast.star ? '*' : '');
 	} else if (ast.type == 'solo') {
 		return ast.beats.map((beat) => {
 			if (beat.type == 'async') {
@@ -227,25 +227,44 @@ constructor(input, options = {})
 		this.notation = passing.length == 1 ? passing[0] : '<' + passing.join('|') + '>'; // in case we can't parse it
 
 		const beats = [];
+		const stars = [];
 		passing.forEach((solo, j) => {
 			try {
 				const soloAst = parser.parse(solo);
-				if (soloAst.type == 'solo')
+				if (soloAst.type == 'solo') {
 					beats.push(soloAst.beats);
-				else
+					stars.push(soloAst.star);
+				} else {
 					errors.push(`siteswap for juggler ${j} is no solo siteswap`);
+				}
 			} catch (e) {
 				if (e.location)
 					e.snippet = error_snippet(e.location, solo);
 				errors.push(e);
 			}
 		});
+		const star = stars.every((x) => x);
+		if (!star && stars.some((x) => x)) {
+			beats.forEach((soloBeats, i) => {
+				if (stars[i]) {
+					soloBeats.forEach((beat) => {
+						soloBeats.push(beat.type == 'sync' ?
+							Object.assign({}, beat, {left:beat.right, right:beat.left})
+							: beat
+						);
+					});
+
+				}
+			});
+		}
 		this.ast = passing.length == 1 ? {
 			type: 'solo',
 			beats: beats[0],
+			star,
 		} : {
 			type: 'passing',
 			beats,
+			star,
 		};
 		if (errors.length)
 			this.error = errors.join('\n');
