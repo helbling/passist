@@ -37,15 +37,16 @@ const grammar = `
   Solo
     = Async / Sync
 
+  Sync
+    = _ "(" _ left:Async _ "," _ right:Async _ ")" short:"!"? _ {
+        return { type:"sync", left, right, short:!!short };
+      }
+
   Async
     = _ m:Multiplex _ _ {
         return { type:"async", throws:m };
       }
 
-  Sync
-    = _ "(" _ left:Multiplex _ "," _ right:Multiplex _ ")" short:"!"? _ {
-        return { type:"sync", left, right, short:!!short };
-      }
 
   Multiplex
     =  _ "[" _ t:Throw+ _ "]" _ { return  t; }
@@ -115,7 +116,7 @@ function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 			from ^= 1;
 			time++;
 		} else if (beat.type == 'sync') {
-			for (const t of beat.left)
+			for (const t of beat.left.throws)
 				throws.push(addTo({
 					time,
 					duration: t.duration,
@@ -123,7 +124,7 @@ function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 					label: label(t),
 				}, t, nLimbs));
 
-			for (const t of beat.right)
+			for (const t of beat.right.throws)
 				throws.push(addTo({
 					time,
 					duration: t.duration,
@@ -162,24 +163,31 @@ function throwsToNotation(thr0ws)
 
 function astToNotation(ast)
 {
-	if (ast.type == 'passing') {
-		return '<' + ast.beats.map(soloBeats => astToNotation({type:'solo', beats:soloBeats})).join('|') + '>' + (ast.star ? '*' : '');
-	} else if (ast.type == 'solo') {
-		return ast.beats.map((beat) => {
-			if (beat.type == 'async') {
-				let out = throwsToNotation(beat.throws);
-				if (beat.throws.length > 1)
-					out = '[' + out + ']';
-				return out;
-			} else if (beat.type == 'sync') {
-				return '(' + throwsToNotation(beat.left)
-					 + ',' + throwsToNotation(beat.right) + ')' + (beat.short ? '!' : '');
-			} else {
-				throw new Error(`unknown beat type ${beat.type}`);
-			}
-		}).join('') + (ast.star ? '*' : '');
-	} else {
-		throw new Error(`unknown ast type ${ast.type}`);
+	switch (ast.type) {
+		case 'passing':
+			return '<' + ast.beats.map(soloBeats => astToNotation({type:'solo', beats:soloBeats})).join('|') + '>' + (ast.star ? '*' : '');
+
+		case 'solo':
+			return ast.beats.map(beat => astToNotation(beat)).join('') + (ast.star ? '*' : '');
+
+		case 'sync':
+			return '(' + astToNotation(ast.left)
+				 + ',' + astToNotation(ast.right) + ')' + (ast.short ? '!' : '');
+
+		case 'async':
+			let out = ast.throws.map(
+					thr0w => ''
+					+ thr0w.duration
+					+ (thr0w.p ? 'p' : '')
+					+ (thr0w.x ? 'x' : '')
+				).join('');
+
+			if (ast.throws.length > 1)
+				out = '[' + out + ']';
+			return out;
+
+		default:
+			throw new Error(`unknown ast type ${ast.type}`);
 	}
 }
 
