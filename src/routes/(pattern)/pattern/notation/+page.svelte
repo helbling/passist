@@ -62,8 +62,9 @@ Sometimes writing async patterns in this way can help to think about patterns th
 
 ### Synchronous passing
 
-The notation \`<xxx|yyy>\` means one juggler does \`xxx\` while another does \`yyy\`. \`'p'\` is used to represent a passing throw. For example, ${extended(['3p 3'], {nJugglers:2})} is a 6 prop two-count passing pattern, where all right hand throws are passes and left hand throws are selves. This can also be used with left/right synchronous patterns; a two-person 'shower' is then ${extended(['(2x,4xp)'], {nJugglers:2})}
+The notation \`<xxx|yyy>\` means one juggler does \`xxx\` while another does \`yyy\`. \`'p'\` is used to represent a passing throw. For example, ${extended(['<3p33|234p>'])} is a 6 prop three-count passing pattern, where the first juggler does a three count with single passes and the second juggler throws a three count with early double passes. This can also be used with left/right synchronous patterns; a two-person 'shower' is then ${extended(['<(2x,4xp)|(2x,4xp)>'])}.
 
+You won't need to type in \'<\', \'>\' or \'|\', the user interface will do that for you. In case the pattern is repeated for all jugglers you can use an even simpler interface. For example here: ${extended(['<(2x,4xp)>'], {nJugglers:2})}.
 `;
 
 let markdown = marked(source);
@@ -74,6 +75,7 @@ let markdown = marked(source);
     width: 100%;
     padding: 0 2em;
 }
+.markdown :global(a) { white-space: nowrap }
 </style>
 
 <svelte:head>
