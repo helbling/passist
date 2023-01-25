@@ -36,9 +36,7 @@
 
 	if (inputStr) {
 		if (inputStr.match(/^<.*>$/)) {
-			/* if (inputStr.includes('|')) */
-			// redirect!
-			// TODO redirect <..|..> notation
+			// NOTE: <..|..> notation is beeing redirected in extended-siteswap/[...input]/+page.js
 
 			individualPatterns = false;
 
