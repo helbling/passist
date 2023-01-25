@@ -96,6 +96,7 @@
 	.animationWidget { max-width:100%; overflow-x:auto; overflow-y:hidden }
 	.jif-button { float:right; margin-left:0.5em }
 	.animation-controls { display:flex; flex-flow:row wrap }
+	label.pure-button { margin:0 }
 </style>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
