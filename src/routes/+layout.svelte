@@ -14,7 +14,7 @@
 		{ path:'/',                   title:'Home' },
 		{ path:'/siteswap-generator', title:'Generator' },
 		{ path:'/pattern',            title:'Pattern' },
-		{ path:'/pattern-list',       title:'Pattern List' },
+		{ path:'/library',            title:'Library' },
 		jifdev ? { path:'/jif',       title:'Jif' } : null,
 		{ path:'/about',              title:'About' },
 	].filter(Boolean);
