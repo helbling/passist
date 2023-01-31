@@ -66,11 +66,12 @@
 		title = 'Extended Siteswap ' + extendedSiteswapString;
 
 		if (valid) {
+			nProps = extendedSiteswap.nProps();
 			jif = extendedSiteswap.toJif({
 				name: siteswapName ? siteswapName + " (" + extendedSiteswap.toString() + ")" : undefined,
 				flipTwos: true, // TODO: implement this
+				props: Array.from(Array(nProps), () => { return {}; }),
 			});
-			nProps = extendedSiteswap.nProps();
 		}
 	}
 </script>
