@@ -11,6 +11,7 @@
 	.meeseeks img { height:8rem; }
 	.cube img     { width:10rem; }
 	.cube  { margin-bottom:2em }
+	.new { margin-top:3em }
 </style>
 
 
@@ -31,5 +32,8 @@
 	</p>
 	<p>
 		<a class=pure-button href="{randomPatternUrl}">Random Pattern</a>
+	</p>
+	<p class=new>
+		New: <a href='/extended-siteswap/'>Extended Siteswap (beta)</a>
 	</p>
 </div>
