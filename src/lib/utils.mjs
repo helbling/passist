@@ -8,7 +8,7 @@ function U(path, query = {})
 
 function encodeUrlPathPart(string)
 {
-	return encodeURI(string).replaceAll('?', '%3F').replaceAll('#', '%23');
+	return encodeURI(string).replaceAll('?', '%3F').replaceAll('#', '%23').replaceAll('%5B', '[').replaceAll('%5D', ']');
 }
 
 export {
