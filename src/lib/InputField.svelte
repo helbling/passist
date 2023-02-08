@@ -101,7 +101,7 @@ function blurTargetOnEnter(e) {
 	}
 	.reset { border:none }
 	.input-group.type-range label { min-width:12em; text-align:left }
-	.range, .reset { background-color: #e9ecef; }
+	.range, .reset { background-color: var(--highlight-bg-color); }
 	.range { display:flex; height:2.4em }
 	.range input { width:9em; border:none }
 	.range-value { display:inline-block; min-width:2.5em; text-align:right; padding-left:1em }
@@ -112,7 +112,7 @@ function blurTargetOnEnter(e) {
 		line-height: 1.5;
 		text-align: center;
 		white-space: nowrap;
-		background-color: #e9ecef;
+		background-color: var(--button-bg-color);
 	}
 	select { height: auto }
 	.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0 }

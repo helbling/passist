@@ -22,15 +22,22 @@
 </script>
 
 <style>
+	:root {
+		--main-bg-color: #fff /*#f5feff*//;
+		--highlight-bg-color: #e9ecef /*#ddedf0*/;
+		--button-bg-color: #e9ecef /*#e9eeef*/ ;
+	}
+
 	:global(body) {
 		overflow: -moz-scrollbars-vertical;
 		overflow-y: scroll;
+		background-color: var(--main-bg-color);
 	}
 
 	main {
 		position: relative;
 		max-width: 56em;
-		background-color: white;
+		background-color: var(--main-bg-color);
 		padding: 1ex;
 		margin: 0 auto;
 		box-sizing: border-box;
@@ -49,11 +56,22 @@
 		header .container{max-width:1140px}
 	}
 
-	:global(.pure-menu-link) { letter-spacing: normal }
-
 	/* navigation */
-	.pure-menu-selected, .pure-menu-link:focus { background:#fff }
-	.pure-menu-link { color:#212529 }
+	.pure-menu-selected, .pure-menu-link:focus {
+		background-color: var(--main-bg-color);
+	}
+	.pure-menu-link {
+		color:#212529;
+		letter-spacing: normal;
+	}
+	:global(.pure-menu-active) > :global(.pure-menu-link), :global(.pure-menu-link:focus), :global(.pure-menu-link:hover) {
+		background-color: var(--highlight-bg-color) !important;
+	}
+	:global(.pure-button) {
+		background-color: var(--button-bg-color) !important;
+		text-decoration: none !important;
+	}
+
 	nav { position:absolute; bottom: 0; overflow-x:auto }
 	@media (max-width:38em) {
 		.title { display:none }

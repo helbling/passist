@@ -108,6 +108,7 @@ $: {
 	circle.right { fill:white }
 	circle.left  { fill:#b7c8d5 }
 	.nodeLabel { fill: #343a40 }
+	svg { background-color:#fff }
 </style>
 
 <svg {width} {height}>
