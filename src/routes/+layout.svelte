@@ -23,7 +23,7 @@
 
 <style>
 	:root {
-		--main-bg-color: #fff /*#f5feff*//;
+		--main-bg-color: #fff /*#f5feff*/;
 		--highlight-bg-color: #e9ecef /*#ddedf0*/;
 		--button-bg-color: #e9ecef /*#e9eeef*/ ;
 	}
