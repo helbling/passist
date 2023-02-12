@@ -13,7 +13,7 @@
 	let pages = [
 		{ path:'/',                   title:'Home' },
 		{ path:'/siteswap-generator', title:'Generator' },
-		{ path:'/pattern',            title:'Pattern' },
+		{ path:'/pattern',            title:'Siteswap' },
 		{ path:'/library',            title:'Library' },
 		jifdev ? { path:'/jif',       title:'Jif' } : null,
 		{ path:'/about',              title:'About' },

@@ -10,11 +10,11 @@
 	}
 
 	const pages = [
-		{ path:'/siteswap',          title:'Global Siteswap' },
-		{ path:'/extended-siteswap', title:'Extended Siteswap (beta)' },
-		{ path:'/pattern/notation',  title:'Notation' },
-		// { path:'/social-siteswap',   title:'Social Siteswap' },
-		// { path:'/prechac',           title:'Prechac' },
+		{ path:'/siteswap',           title:'Global' },
+		{ path:'/symmetric-siteswap', title:'Symmetric (beta)' },
+		{ path:'/extended-siteswap',  title:'Extended (beta)' },
+		{ path:'/pattern/notation',   title:'Notation' },
+		// { path:'/social-siteswap',   title:'Social Siteswap' }, // same as symmetric?
 	];
 </script>
 

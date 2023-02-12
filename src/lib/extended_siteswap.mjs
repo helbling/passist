@@ -1,5 +1,3 @@
-'use strict';
-
 import peggy from 'peggy';
 import Siteswap from './siteswap.mjs';
 import Jif from './jif.mjs';
@@ -19,7 +17,7 @@ const grammar = `
 
   Pattern
     = _ beats:Solo+       _ star:Star? _ { return { type:"solo",    star, beats    }; }
-    / _ passings:Passing+ _ star:Star? _ {
+    / _ passings:Passing+ _ star:Star? _ &{ return !options.soloOnly } {
 		if (!passings.every(x => x.length == passings[0].length))
 			throw new Error("not all passings have the same number of jugglers");
         return { type:"passing", star,
@@ -58,19 +56,20 @@ const grammar = `
 	/ duration:Duration _ p:P ? _ x:X ? _ { return { duration, p, x }; }
 
   P
-    = "p" { return true }
+    = "p" { return !options.ignorePasses }
 
   X
     = "x" { return true }
 
   Duration "duration"
-    = _ char:[0-9a-o] { return (char.match(/[0-9]/) ? +char : (char.charCodeAt(0) - 'a'.charCodeAt(0) + 10)); }
+    = _ char:[0-9a-o] fraction:('.' [0-9]+)? &{ return options.fractionalDuration || !fraction }
+      { return (char.match(/[0-9]/) ? +char : (char.charCodeAt(0) - 'a'.charCodeAt(0) + 10)) + (fraction ? +('0.'+fraction[1].join('')) : 0); }
 
   _ "whitespace"
     = [ \\t\\n\\r]*
 `
 
-var parser = peggy.generate(grammar);
+const parser = peggy.generate(grammar);
 
 function label(t)
 {
@@ -195,13 +194,19 @@ function astToNotation(ast)
 
 export default class ExtendedSiteswap {
 
+// TODO: less hacky export?
+static parser = parser;
+static error_snippet = error_snippet;
+static astToNotation = astToNotation;
+static beatsToThrows = beatsToThrows;
+
 /**
  *  constructs a new extended siteswap
  *  params:
  *  - input: can be one of:
  *     - a plain string with a pattern according to the grammar above
- *     - an array of strings with solo patterns according to the grammer above
- *     - TODO: some way to specify a repeated pattern..
+ *     - an array of strings with solo patterns according to the grammar above
+ *     - an ast
  *  - options: object with the following optional keys:
  *     - jugglers/limbs/props according to the JIF specification
  *     - name: pattern name
@@ -209,6 +214,8 @@ export default class ExtendedSiteswap {
  */
 constructor(input, options = {})
 {
+	this._valid = false;
+
 	if (typeof input === 'string') {
 		this.notation = input; // in case we can't parse it
 		try {
@@ -221,16 +228,6 @@ constructor(input, options = {})
 	} else if (Array.isArray(input)) {
 		const errors = [];
 		let passing = input;;
-
-		if (!options.individualPatterns) {
-			let nJugglers = options.nJugglers;
-			if (!nJugglers) {
-				nJugglers = 2;
-				errors.push(`nJugglers missing`);
-			}
-			passing = Array(nJugglers).fill(input[0]);
-			this.urlSuffix = '<' + encodeUrlPathPart(input[0]) + '>?jugglers=' + nJugglers; // TODO proper url encoding!
-		}
 
 		this.notation = passing.length == 1 ? passing[0] : '<' + passing.join('|') + '>'; // in case we can't parse it
 
@@ -276,6 +273,8 @@ constructor(input, options = {})
 		};
 		if (errors.length)
 			this.error = errors.join('\n');
+	} else if (typeof input === 'object' && (input.type == 'solo' || input.type == 'passing')) {
+		this.ast = input;
 	}
 	if (!this.error) {
 		this.notation = astToNotation(this.ast);
@@ -288,21 +287,21 @@ constructor(input, options = {})
 	} catch (e) {
 		this.error = e;
 	}
+
+	if (!this.error && this.jif) {
+		try {
+			this.completeJif = Jif.complete(this.jif, { expand:true, props:true }).jif;
+		} catch (e) {
+			this.error = e;
+		}
+	}
+	if (!this.error)
+		this._valid = true;
 }
 
 isValid()
 {
-	if (this.error || !this.jif)
-		return false;
-
-	try {
-		this.completeJif = Jif.complete(this.jif, { expand:true, props:true }).jif;
-	} catch (e) {
-		this.error = e;
-		return false;
-	}
-
-	return true;
+	return this._valid;
 }
 
 toString()

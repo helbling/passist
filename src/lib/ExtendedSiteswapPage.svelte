@@ -11,7 +11,6 @@
 	let jif = {};
 	let input = ['3p33', '234p'];
 	let valid = false;
-	let individualPatterns = true;
 	let extendedSiteswapString = '';
 	let extendedSiteswap;
 	let period;
@@ -35,29 +34,15 @@
 	}
 
 	if (inputStr) {
-		if (inputStr.match(/^<.*>$/)) {
-			// NOTE: <..|..> notation is beeing redirected in extended-siteswap/[...input]/+page.js
-
-			individualPatterns = false;
-
-			const nJugglersUrl = parseInt(searchParams.get('jugglers'));
-			if (nJugglersUrl && nJugglersUrl >= 1)
-				nJugglers = nJugglersUrl;
-
-			input = [inputStr.slice(1, -1)];
-
-		} else {
-			individualPatterns = true;
-			input = inputStr.split('/');
-			nJugglers = input.length;
-		}
+		input = inputStr.split('/');
+		nJugglers = input.length;
 	}
 	$: useLocalStorage && input.every(x => x) && localStorage.setItem("extended-siteswap/urlSuffix", urlSuffix);
 
 	// TODO: make sure causal diagram works
 
 	$:{
-		extendedSiteswap = new ExtendedSiteswap(input, {individualPatterns, nJugglers});
+		extendedSiteswap = new ExtendedSiteswap(input, {nJugglers});
 		url = extendedSiteswap.toUrl();
 		urlSuffix = extendedSiteswap.toUrlSuffix();
 		extendedSiteswapString = extendedSiteswap.toString();
@@ -82,7 +67,6 @@
 		slot=input
 		bind:nJugglers
 		bind:siteswapInputs={input}
-		bind:individualPatterns
 		siteswapValid={valid}
 		idPrefix=main
 	/>
@@ -104,10 +88,6 @@
 		<p>
 			{nProps} props
 		</p>
-		<InfoBox type=warning>
-			Note: Support for extended siteswaps is new and still has some bugs and rough edges..
-		</InfoBox>
-
 	{:else if input.every(x => x)}
 		<div>
 				<InfoBox type=error>
@@ -126,6 +106,9 @@
 	{:else}
 		<!-- empty string as input: no output -->
 	{/if}
+		<InfoBox type=warning>
+			Note: Support for extended siteswaps is new and still has some bugs and rough edges..
+		</InfoBox>
 	</div>
 
 </PatternResult>

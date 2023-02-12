@@ -28,6 +28,16 @@ function siteswapUrl(p)
 	return U('/siteswap/' + ((typeof p.siteswapInput === 'string') ? encodeUrlPathPart(p.siteswapInput) : ''), query);
 }
 
+function symmetricSiteswapUrl(p)
+{
+	const query = {};
+	if (p.nJugglers)
+		query.jugglers = p.nJugglers;
+	if (p.fullscreen)
+		query.fullscreen = 1;
+	return U('/symmetric-siteswap/' + encodeUrlPathPart(p.siteswapInput), query);
+}
+
 function extendedSiteswapUrl(p)
 {
 	const query = {};
@@ -125,5 +135,6 @@ export {
 	servertype,
 	siteswapAlternativesUrl,
 	siteswapUrl,
+	symmetricSiteswapUrl,
 	useLocalStorage,
 };

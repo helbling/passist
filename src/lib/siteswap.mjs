@@ -1,4 +1,6 @@
-'use strict';
+/**
+ * Vanilla siteswap (global)
+ */
 
 export default class Siteswap {
 

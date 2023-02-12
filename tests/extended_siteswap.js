@@ -54,7 +54,7 @@ const patternTests = [
 	[['(4x,4px)*', '(4x,4px)(4px,4x)'], { creationOptions: { individualPatterns:true }, notation: '<(4x,4px)(4px,4x)|(4x,4px)(4px,4x)>' }],
 	['<(3p,3p)!|(0,0)!><(0,0)!|(3p,3p)!>', { notation:'<(3p,3p)!(0,0)!|(0,0)!(3p,3p)!>' }],
 	['<(4x,4px)|(4x,4px)>*', {}],
-	[['(4,2)(2x,[44x])'], { creationOptions: { individualPatterns:true }, urlSuffix: '(4,2)(2x,%5B44x%5D)'}],
+	[['(4,2)(2x,[44x])'], { creationOptions: { individualPatterns:true }, urlSuffix: '(4,2)(2x,[44x])'}],
 ];
 
 for (const patternTest of patternTests) {

@@ -9,10 +9,10 @@
 	export let nJugglers;
 	export let showNJugglers = true;
 	export let showHandOrderInput = true;
-	export let handsInput;
+	export let handsInput = '';
 	export let idPrefix;
 	export let siteswapValid;
-	export let handsValid;
+	export let handsValid = true;
 
 	let handsInputDefault = '';
 	let handsDragDropVisible = false;

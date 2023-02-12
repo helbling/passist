@@ -12,8 +12,9 @@ function patternValid(symmetricSiteswap, options, jif, warnings = []) {
 // TODO: test more than two jugglers
 const patternTests = [
 	// invalid:
-	{ input: '543',  valid: false },
-	{ input: '543p', valid: false },
+	{ input: '543',      valid: false },
+	{ input: '543p',     valid: false },
+	{ input: '<3p|3p>',  valid: false },
 
 	// In phase patterns
 	{ input: '3',                    valid: true },
