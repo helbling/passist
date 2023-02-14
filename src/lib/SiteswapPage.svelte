@@ -148,7 +148,7 @@ $:	{
 
 			prechacthisUrl = '';
 			if (nJugglers == 2 && limbs.length == 4 && (period % 2) == 1) {
-				prechacthisUrl = 'http://prechacthis.org/info.php?pattern=['
+				prechacthisUrl = 'http://prechacthis.takeouts.eu/info.php?pattern=['
 					+ startConfigurations[0].local.map(x => {
 						var h = x.height / 2;
 						return 'p(' + h + (+x.height & 1 ? ',1,' + (h + period / 2) : ',0,' + h) + ')';
