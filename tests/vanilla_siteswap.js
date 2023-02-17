@@ -1,6 +1,7 @@
 import { test } from 'uvu';
 import * as assert from 'uvu/assert';
 import Siteswap from '../src/lib/siteswap.mjs';
+import Jif from '../src/lib/jif.mjs';
 import { patterns } from '../src/lib/patterns.mjs'
 
 function defaultLimbs(n) // TODO: avoid copy-pasta
@@ -36,10 +37,11 @@ for (const pattern of patterns) {
 
 		let exception = false;
 		try {
-			siteswap.toJif({
+			const jif = siteswap.toJif({
 				jugglers,
 				limbs: defaultLimbs(nJugglers),
 			});
+			Jif.complete(jif, { expand:true, props:true });
 		} catch(e) {
 			console.log(notation, e);
 			exception = true;

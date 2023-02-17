@@ -497,7 +497,6 @@ export default class Jif
 				jif.repetition.limbPermutation = [...Array(jif.limbs.length).keys()];
 			}
 
-
 			if (options.props) {
 				_completeOrbits({ jif, warnings })
 				const nProps = _nProps(jif);

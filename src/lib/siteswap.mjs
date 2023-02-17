@@ -2,6 +2,8 @@
  * Vanilla siteswap (global)
  */
 
+import Jif from './jif.mjs';
+
 export default class Siteswap {
 
 constructor(input)
@@ -148,45 +150,21 @@ toJif(options)
 		limbs:    options.limbs,
 		props:    options.props,
 		timeStretchFactor: nLimbs / 2,
+		repetition: {
+			period: this.period,
+		},
+		throws: [],
 	};
+	if (this.period)
+		jif.repetition.limbPermutation = [...Array(nLimbs).keys()].map(limb => (limb + this.period) % nLimbs);
 
-	const heights = this.heights;
-	if (!this.isValid())
-		return jif;
-
-	function lcmArray(array) {
-		function gcd(a, b) { return !b ? a : gcd(b, a % b); }
-		function lcm(a, b) { return (a * b) / gcd(a, b); }
-		let multiple = 1;
-		array.forEach(function(n) {
-			multiple = lcm(multiple, n);
-		});
-		return multiple;
-	}
-	const periods = this.orbits().map(function(orbit) {
-		return orbit.reduce(function(a, b) { return a + b; }, 0); // sum
-	});
-	periods.push(nLimbs);
-
-	const steps = lcmArray(periods);
-
-	// TODO: simplify
-	jif.repetition = {
-		period: steps,
-	};
-	jif.throws = [];
-	if (this.period < 1)
-		return jif;
-
-	const throwsAtTime = [];
-
-	for (let i = 0; i < steps; i++) {
-		const height = heights[i % this.period];
+	let time = 0;
+	for (const height of this.heights) {
 		const t = {
-			time: i,
+			time,
 			duration: height,
-			from: i % nLimbs,
-			to:  (i + height) % nLimbs,
+			from: time % nLimbs,
+			to:  (time + height) % nLimbs,
 			label: Siteswap.heightToChar(height)
 		};
 		if (
@@ -197,24 +175,8 @@ toJif(options)
 			t.spins = 1;
 		}
 
-		throwsAtTime.push(t);
 		jif.throws.push(t);
-	}
-
-	// label throws with propid
-	let propid = 0;
-	for (let i = 0; i < steps; i++) {
-		const t = throwsAtTime[i];
-		if (t.prop === undefined && t.duration) {
-			let j = i;
-			throwsAtTime[j].prop = propid;
-			while (j < steps && throwsAtTime[j].duration) {
-				j += throwsAtTime[j].duration;
-				throwsAtTime[j % steps].prop = propid;
-			}
-
-			propid++;
-		}
+		time++;
 	}
 
 	return jif;
