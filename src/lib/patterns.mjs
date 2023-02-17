@@ -1,5 +1,5 @@
-import Siteswap from "$lib/siteswap.mjs";
-import ExtendedSiteswap from "$lib/extended_siteswap.mjs";
+import Siteswap from "./siteswap.mjs";
+import ExtendedSiteswap from "./extended_siteswap.mjs";
 
 const patterns = [];
 
