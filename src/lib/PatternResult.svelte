@@ -12,7 +12,6 @@
 	export let valid = false;
 	export let fullscreen = false;
 	export let startConfigurations = false;
-	export let causalDiagramSteps = 10; // TODO
 	export let title;
 	export let url;
 	export let init;
@@ -122,7 +121,6 @@
 		<CausalDiagramWidget
 			{jif}
 			{startConfigurations}
-			steps={causalDiagramSteps}
 		/>
 	</div>
 {/if}

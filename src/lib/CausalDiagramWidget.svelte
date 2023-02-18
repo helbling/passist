@@ -3,11 +3,10 @@
 <script>
 	export let jif;
 	export let startConfigurations;
-	export let steps; // = jif.repetition.period;
 	import Jif from '$lib/jif.mjs';
 
 	let jugglers = {};
-	const xoff = 55;
+	const xoff = 80;
 	const yoff = 70;
 	const dy = 100;
 	let dx;
@@ -18,6 +17,7 @@
 	let nLines;
 	let width, height;
 	let nodes = {};
+	let steps;
 
 	const arrowLength = 20;
 
@@ -66,19 +66,18 @@
 
 $: {
 		_jif = Jif.complete(jif, { expand:true, props:false } ).jif;
-		if (!steps)
-			steps = _jif.throws.length;
+		const throws = _jif.throws;
+		steps = throws.length * Math.ceil(10 / throws.length);
 
 		timeStretchFactor = _jif.timeStretchFactor;
 		nJugglers = _jif.jugglers.length;
 		dx = 70 / timeStretchFactor;
 
 		nLines = nJugglers;
-		width = steps * dx + 50;
+		width = steps * dx + 70;
 		height = (nLines - (nLines > 1 ? 1 : 1.4)) * dy + 2 * yoff;
 
 		nodes = [];
-		const throws = _jif.throws;
 		if (throws && throws.length > 0) {
 
 			// TODO: avoid copy-pasta (Jif._completeOrbits)
@@ -172,6 +171,9 @@ $: {
 				d='M0,0 L0,6 L9,3 z'
 			/>
 		</marker>
+		<clipPath id="arrow_clip">
+			<rect x={xoff - 40} y="0" width={width - xoff + 40} {height} />
+		</clipPath>
 	</defs>
 	<rect
 		x=0
@@ -183,33 +185,33 @@ $: {
 		fill=none
 	/>
 
-{#if startConfigurations}
-	{#each startConfigurations as j, i}
-		<text
-			x=10
-			y={yoff + 9 + i * dy}
-			font-size=20
-			stroke-width=0px
-			strke=black
-		>{j.name}</text>
+	{#if startConfigurations}
+		{#each startConfigurations as j, i}
+			<text
+				x=10
+				y={yoff + 9 + i * dy}
+				font-size=20
+				stroke-width=0px
+				strke=black
+			>{j.name}</text>
 
-		<text
-			x=20
-			y={yoff - 10 + i * dy}
-			font-size=20
-			stroke-width=0px
-			strke=black
-		>{j.startProps['left hand'] || 0}</text>
+			<text
+				x=20
+				y={yoff - 10 + i * dy}
+				font-size=20
+				stroke-width=0px
+				strke=black
+			>{j.startProps['left hand'] || 0}</text>
 
-		<text
-			x=20
-			y={yoff + 30 + i * dy}
-			font-size=20
-			stroke-width=0px
-			strke=black
-		>{j.startProps['right hand'] || 0}</text>
-	{/each}
-{/if}
+			<text
+				x=20
+				y={yoff + 30 + i * dy}
+				font-size=20
+				stroke-width=0px
+				strke=black
+			>{j.startProps['right hand'] || 0}</text>
+		{/each}
+	{/if}
 
 	{#each nodes as n}
 		<circle
@@ -228,17 +230,27 @@ $: {
 			stroke-width=0px
 			text-anchor=middle
 		>{n.label}</text>
-
-		<!-- TODO allow more than one arrow per node -->
-		{#if n.arrow}
-			<path
-				class=arrowStroke
-				d={n.arrow}
-				stroke-width=2px
-				fill=none
-				marker-end=url(#arrow)
-			/>
-		{/if}
 	{/each}
-</svg>
 
+	<g clip-path="url(#arrow_clip)">
+		<g id=arrows>
+		{#each nodes as n}
+			<!-- TODO allow more than one arrow per node -->
+			{#if n.arrow}
+				<path
+					class=arrowStroke
+					d={n.arrow}
+					stroke-width=2px
+					fill=none
+					marker-end=url(#arrow)
+				/>
+			{/if}
+		{/each}
+		</g>
+
+		<use xlink:href="#arrows" transform="translate({-steps * dx * 1}, 0)" />
+		<use xlink:href="#arrows" transform="translate({-steps * dx * 2}, 0)" />
+		<use xlink:href="#arrows" transform="translate({-steps * dx * 3}, 0)" /> <!-- should be enough even for siteswap z -->
+	</g>
+
+</svg>
