@@ -117,7 +117,7 @@
 
 <slot name="info"/>
 
-{#if valid && startConfigurations}
+{#if jif && jif.throws && jif.throws.length > 0}
 	<div class=causalDiagram>
 		<CausalDiagramWidget
 			{jif}
