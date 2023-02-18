@@ -285,8 +285,21 @@
 
 				</div>
 			{/if}
-
 		{/if}
+
+	{:else if input}
+			<InfoBox type=error>
+				<h5>Invalid Siteswap</h5>
+				{#if siteswap && siteswap.error}
+					<p>
+					{siteswap.error}
+					{#if siteswap.error.snippet}
+							<pre>{siteswap.error.snippet}</pre>
+					{/if}
+					</p>
+				{/if}
+			 <img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see an invalid siteswap" >
+			</InfoBox>
 	{:else}
 		<!-- empty string as input: no output -->
 	{/if}

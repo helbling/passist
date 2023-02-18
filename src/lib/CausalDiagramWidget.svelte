@@ -79,23 +79,67 @@ $: {
 
 		nodes = [];
 		const throws = _jif.throws;
-		for (let i = 0; i < steps; i++) {
-			const th = throws[i % throws.length];
-			const time = th.time + Math.floor(i / throws.length) * _jif.repetition.period;
-			const fromLimb = _jif.limbs[th.from];
-			const isLeft = fromLimb.type && fromLimb.type.match(/left/);
+		if (throws && throws.length > 0) {
 
-			const fromLine = _jif.limbs[th.from].juggler;
-			const toLine = _jif.limbs[th.to].juggler;
+			// TODO: avoid copy-pasta (Jif._completeOrbits)
+			// TODO: make this less hacky and make it work for patterns with implicit holds
 
-			nodes.push({
-				r: r,
-				x: x(time),
-				y: y(fromLine),
-				class: isLeft ? 'left' : 'right',
-				label: th.label,
-				arrow: arrow(time, th.duration - 2 * timeStretchFactor, fromLine, toLine), // for ladder diagram: don't subtract 2 * timeStretchFactor
+			// https://stackoverflow.com/a/17369245
+			function countDecimals(x) {
+				if (Math.floor(x) === x)
+					return 0;
+
+				var str = '' + x;
+				if (str.indexOf(".") !== -1 && str.indexOf("-") !== -1) {
+					return str.split("-")[1] || 0;
+				} else if (str.indexOf(".") !== -1) {
+					return str.split(".")[1].length || 0;
+				}
+				return str.split("-")[1] || 0;
+			}
+
+			const timePrecision = Math.max(
+				0,
+				...throws.map(t => countDecimals(t.time)),
+				...throws.map(t => countDecimals(t.duration))
+			);
+
+			function getKey(thr0w, type) {
+				let time = thr0w.time + (type == 'catch' ? thr0w.duration + _jif.repetition.period * 2 * timeStretchFactor  - 2 * timeStretchFactor : 0);
+				if (_jif.repetition.period)
+					time = time % _jif.repetition.period;
+				return time.toFixed(timePrecision) + '|' + thr0w[type == 'catch' ? 'to' : 'from'];
+			}
+
+			const balance = {};
+
+			throws.forEach((th, i) => {
+				const throwKey = getKey(th, 'throw');
+				const catchKey = getKey(th, 'catch');
+
+				balance[throwKey] = (balance[throwKey] ? balance[throwKey] : 0) - 1;
+				balance[catchKey] = (balance[catchKey] ? balance[catchKey] : 0) + 1;
 			});
+
+			for (let i = 0; i < steps; i++) {
+				const th = throws[i % throws.length];
+				const time = th.time + Math.floor(i / throws.length) * _jif.repetition.period;
+				const fromLimb = _jif.limbs[th.from];
+				const isLeft = fromLimb.type && fromLimb.type.match(/left/);
+
+				const fromLine = _jif.limbs[th.from].juggler;
+				const toLine = _jif.limbs[th.to].juggler;
+
+				const nodeKey = getKey(th, 'throw');
+				nodes.push({
+					r: r,
+					x: x(time),
+					y: y(fromLine),
+					class: (isLeft ? 'left' : 'right') + ' ' + (balance[nodeKey] > 0 ? 'jammed'  : (balance[nodeKey] < 0 ? 'exhausted' : '')),
+					label: th.label,
+					arrow: arrow(time, th.duration - 2 * timeStretchFactor, fromLine, toLine), // for ladder diagram: don't subtract 2 * timeStretchFactor
+				});
+			}
 		}
 		nodes = nodes; // update svelte state
 	}
@@ -107,6 +151,8 @@ $: {
 	circle { stroke:#343a40 }
 	circle.right { fill:white }
 	circle.left  { fill:#b7c8d5 }
+	circle.jammed     { stroke:red; stroke-width:3 }
+	circle.exhausted  { stroke:orange; stroke-width:3 }
 	.nodeLabel { fill: #343a40 }
 	svg { background-color:#fff }
 </style>
