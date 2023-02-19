@@ -16,8 +16,8 @@
 	let timeStretchFactor;
 	let nLines;
 	let width, height;
+	let period = 1;
 	let nodes = {};
-	let steps;
 
 	const arrowLength = 20;
 
@@ -67,14 +67,17 @@
 $: {
 		_jif = Jif.complete(jif, { expand:true, props:false } ).jif;
 		const throws = _jif.throws;
-		steps = throws.length * Math.ceil(10 / throws.length);
+
+		period = _jif.repetition.period;
+		const minSteps = 10;
+		const nPeriods = Math.ceil(minSteps / period);
 
 		timeStretchFactor = _jif.timeStretchFactor;
 		nJugglers = _jif.jugglers.length;
 		dx = 70 / timeStretchFactor;
 
 		nLines = nJugglers;
-		width = steps * dx + 70;
+		width = period * nPeriods * dx + 70;
 		height = (nLines - (nLines > 1 ? 1 : 1.4)) * dy + 2 * yoff;
 
 		nodes = [];
@@ -104,9 +107,9 @@ $: {
 			);
 
 			function getKey(thr0w, type) {
-				let time = thr0w.time + (type == 'catch' ? thr0w.duration + _jif.repetition.period * 2 * timeStretchFactor  - 2 * timeStretchFactor : 0);
-				if (_jif.repetition.period)
-					time = time % _jif.repetition.period;
+				let time = thr0w.time + (type == 'catch' ? thr0w.duration + period * 2 * timeStretchFactor  - 2 * timeStretchFactor : 0);
+				if (period)
+					time = time % period;
 				return time.toFixed(timePrecision) + '|' + thr0w[type == 'catch' ? 'to' : 'from'];
 			}
 
@@ -120,9 +123,9 @@ $: {
 				balance[catchKey] = (balance[catchKey] ? balance[catchKey] : 0) + 1;
 			});
 
-			for (let i = 0; i < steps; i++) {
+			for (let i = 0; i < throws.length * nPeriods; i++) {
 				const th = throws[i % throws.length];
-				const time = th.time + Math.floor(i / throws.length) * _jif.repetition.period;
+				const time = th.time + Math.floor(i / throws.length) * period;
 				const fromLimb = _jif.limbs[th.from];
 				const isLeft = fromLimb.type && fromLimb.type.match(/left/);
 
@@ -248,9 +251,10 @@ $: {
 		{/each}
 		</g>
 
-		<use xlink:href="#arrows" transform="translate({-steps * dx * 1}, 0)" />
-		<use xlink:href="#arrows" transform="translate({-steps * dx * 2}, 0)" />
-		<use xlink:href="#arrows" transform="translate({-steps * dx * 3}, 0)" /> <!-- should be enough even for siteswap z -->
+		<!-- should be enough even for siteswap z -->
+		{#each Array(10) as _, index (index)}
+			<use xlink:href="#arrows" transform="translate({-period * dx * index + 1}, 0)" />
+		{/each}
 	</g>
 
 </svg>
