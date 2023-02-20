@@ -69,12 +69,13 @@ $: {
 		const throws = _jif.throws;
 
 		period = _jif.repetition.period;
-		const minSteps = 10;
-		const nPeriods = Math.ceil(minSteps / period);
-
 		timeStretchFactor = _jif.timeStretchFactor;
 		nJugglers = _jif.jugglers.length;
 		dx = 70 / timeStretchFactor;
+
+		const minSteps = 5 * timeStretchFactor;
+		const nPeriods = Math.ceil(minSteps / period);
+
 
 		nLines = nJugglers;
 		width = period * nPeriods * dx + 70;
