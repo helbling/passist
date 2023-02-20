@@ -42,6 +42,11 @@
 	// TODO: make sure causal diagram works
 
 	$:{
+
+		// TODO: toJif options:
+		/* 		name: siteswapName ? siteswapName + " (" + extendedSiteswap.toString() + ")" : undefined, */
+		/* 		flipTwos: true, // TODO: implement this */
+
 		extendedSiteswap = new ExtendedSiteswap(input, {nJugglers});
 		url = extendedSiteswap.toUrl();
 		urlSuffix = extendedSiteswap.toUrlSuffix();
@@ -50,14 +55,8 @@
 		siteswapName = siteswapNames[extendedSiteswap.nJugglers() + '|' + extendedSiteswap.notation];
 		title = 'Extended Siteswap ' + extendedSiteswapString;
 
-		if (valid) {
-			nProps = extendedSiteswap.nProps();
-			jif = extendedSiteswap.toJif({
-				name: siteswapName ? siteswapName + " (" + extendedSiteswap.toString() + ")" : undefined,
-				flipTwos: true, // TODO: implement this
-				props: Array.from(Array(nProps), () => { return {}; }),
-			});
-		}
+		jif = extendedSiteswap.jif;
+		nProps = extendedSiteswap.nProps();
 	}
 </script>
 

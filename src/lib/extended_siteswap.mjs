@@ -137,7 +137,7 @@ function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 			throw new Error(`beat.type '$(beat.type)' not handled`);
 		}
 	}
-	return { throws, time };
+	return { throws, time, from };
 }
 
 // inspired by function format() of
@@ -338,9 +338,6 @@ toJif(options = {})
 		limbs:    options.limbs,
 		props:    options.props,
 	};
-
-	if (this.error)
-		return jif;
 
 	let nLimbs = 2;
 
