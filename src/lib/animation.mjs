@@ -743,7 +743,7 @@ updateScene(jif, options)
 	const timeStretchFactor = jif.timeStretchFactor ? jif.timeStretchFactor : 1;
 	this.beatsPerSecond = options.jugglingSpeed * timeStretchFactor;
 	const periodSeconds = this.periodSeconds = jif.repetition.period / this.beatsPerSecond;
-	const nProps = jif.props.length;
+	const nProps = jif.props ? jif.props.length : 0;
 
 	this.cleanup();
 	this.scene = new THREE.Scene();

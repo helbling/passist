@@ -32,12 +32,8 @@
 		nJugglers = localStorage.getItem('symmetric-siteswap/nJugglers') || defaults.nJugglers;
 	}
 
-
 	$: useLocalStorage && input && localStorage.setItem("symmetric-siteswap/input", input);
 	$: useLocalStorage && nJugglers && localStorage.setItem("symmetric-siteswap/nJugglers", nJugglers);
-
-	$: console.log(input);
-
 
 	// TODO: make sure causal diagram works
 
@@ -52,14 +48,11 @@
 		symmetricSiteswapString = symmetricSiteswap.toString();
 		siteswapName = siteswapNames[url];
 
-		if (valid) {
-			nProps = symmetricSiteswap.nProps();
-			jif = symmetricSiteswap.toJif({
-				name: siteswapName ? siteswapName + " (" + symmetricSiteswap.toString() + ")" : undefined,
-				flipTwos: true, // TODO: implement this
-				props: Array.from(Array(nProps), () => { return {}; }),
-			});
-		}
+		jif = symmetricSiteswap.toJif({
+			name: siteswapName ? siteswapName + " (" + symmetricSiteswap.toString() + ")" : undefined,
+			flipTwos: true, // TODO: implement this
+		});
+		nProps = symmetricSiteswap.nProps;
 	}
 </script>
 
