@@ -4,7 +4,7 @@
 	import InfoBox from '$lib/InfoBox.svelte';
 	import PatternResult from '$lib/PatternResult.svelte';
 	import { defaults, useLocalStorage, symmetricSiteswapUrl } from '$lib/passist.mjs';
-	import { siteswapNames} from '$lib/patterns.mjs';
+	import { siteswapNames } from '$lib/patterns.mjs';
 
 	export let init = undefined;
 	let nJugglers = defaults.nJugglers;
@@ -50,7 +50,7 @@
 		symmetricSiteswap = new SymmetricSiteswap(input, {symmetric:true, nJugglers});
 		valid = symmetricSiteswap.isValid();
 		symmetricSiteswapString = symmetricSiteswap.toString();
-		/* siteswapName = siteswapNames[symmetricSiteswap.nJugglers() + '|' + symmetricSiteswap.notation]; */
+		siteswapName = siteswapNames[url];
 
 		if (valid) {
 			nProps = symmetricSiteswap.nProps();

@@ -60,6 +60,12 @@
 
 			extendedSiteswap = new ExtendedSiteswap(input);
 
+			url = siteswapUrl({
+					siteswapInput: input,
+					nJugglers: nJugglers,
+					handsInput: handsInput,
+			});
+
 			if (nJugglers > 0) {
 				const circleRadius = 1.2 + nJugglers * 0.2;
 				const jugglers = [];
@@ -129,7 +135,7 @@
 					handsInput,
 				});
 
-				siteswapName = siteswapNames[nJugglers + '|' + siteswap.canonicString()];
+				siteswapName = siteswapNames[url];
 				title = 'Siteswap ' + strippedInput;
 				if (siteswapName)
 					title += ' (' + siteswapName + ')';
@@ -141,12 +147,6 @@
 			} else {
 				valid = false;
 			}
-
-			url = siteswapUrl({
-					siteswapInput: input,
-					nJugglers: nJugglers,
-					handsInput: handsInput,
-			});
 	}
 
 	function shiftLeft() {

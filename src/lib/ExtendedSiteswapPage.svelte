@@ -52,7 +52,7 @@
 		urlSuffix = extendedSiteswap.toUrlSuffix();
 		extendedSiteswapString = extendedSiteswap.toString();
 		valid = extendedSiteswap.isValid();
-		siteswapName = siteswapNames[extendedSiteswap.nJugglers() + '|' + extendedSiteswap.notation];
+		siteswapName = siteswapNames[url];
 		title = 'Extended Siteswap ' + extendedSiteswapString;
 
 		jif = extendedSiteswap.jif;
