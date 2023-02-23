@@ -215,6 +215,7 @@ static beatsToThrows = beatsToThrows;
 constructor(input, options = {})
 {
 	this._valid = false;
+	this.nProps = NaN;
 
 	if (typeof input === 'string') {
 		this.notation = input; // in case we can't parse it
@@ -295,8 +296,10 @@ constructor(input, options = {})
 			this.error = e;
 		}
 	}
-	if (!this.error)
+	if (!this.error) {
 		this._valid = true;
+		this.nProps = this.completeJif.props.length;
+	}
 }
 
 isValid()
@@ -392,14 +395,6 @@ toJif(options = {})
 	jif.repetition = repetition;
 
 	return jif;
-}
-
-nProps()
-{
-	if (!this.isValid())
-		return NaN;
-
-	return this.completeJif.props.length;
 }
 
 nJugglers()

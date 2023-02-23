@@ -56,7 +56,7 @@
 		title = 'Extended Siteswap ' + extendedSiteswapString;
 
 		jif = extendedSiteswap.jif;
-		nProps = extendedSiteswap.nProps();
+		nProps = extendedSiteswap.nProps;
 	}
 </script>
 
