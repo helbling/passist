@@ -5,13 +5,15 @@
 
 	let patternsFiltered;
 	let knownSiteswaps;
+	let symmetricSiteswaps;
 	let extendedSiteswaps;
 
 	const normalize = s => ('' + s).toLowerCase().replace(/[^a-z0-9]+/g, '').replace(/ /g, '');
 $: {
-	patternsFiltered = patterns.filter(a => [a.name, a.notation].some(x => normalize(x).includes(normalize(filter))));
-	knownSiteswaps    = patternsFiltered.filter(p => p.source == 'known_siteswaps')
-	extendedSiteswaps = patternsFiltered.filter(p => p.type == 'extended_siteswap');
+	patternsFiltered   = patterns.filter(a => [a.name, a.notation].some(x => normalize(x).includes(normalize(filter))));
+	knownSiteswaps     = patternsFiltered.filter(p => p.source == 'known_siteswaps')
+	symmetricSiteswaps = patternsFiltered.filter(p => p.type == 'symmetric_siteswap');
+	extendedSiteswaps  = patternsFiltered.filter(p => p.type == 'extended_siteswap');
 }
 
 </script>
@@ -41,6 +43,26 @@ $: {
 <ul class="pure-menu-list pure-g">
 	{#if knownSiteswaps.length}
 		{#each knownSiteswaps as pattern}
+			<li class="pure-menu-item pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+				<a class=pure-menu-link href="{pattern.url}">
+					<span class=siteswap>{pattern.notation}</span>
+					<span class=name>{pattern.name}</span>
+				</a>
+			</li>
+		{/each}
+	{:else}
+		<div class="pure-u-1 pure-u-md-1-1 pure-u-lg-1-1">
+			<p>No pattern found for "{filter}"</p>
+		</div>
+	{/if}
+</ul>
+</div>
+
+<h2>Symmetric siteswaps</h2>
+<div class=pure-menu>
+<ul class="pure-menu-list pure-g">
+	{#if symmetricSiteswaps.length}
+		{#each symmetricSiteswaps as pattern}
 			<li class="pure-menu-item pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
 				<a class=pure-menu-link href="{pattern.url}">
 					<span class=siteswap>{pattern.notation}</span>
