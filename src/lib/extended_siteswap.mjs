@@ -369,15 +369,10 @@ toJif(options = {})
 					}
 				)
 		);
-		const passingTime = byJuggler[0].time;
-		if (!byJuggler.every(x => x.time == passingTime))
-			throw new Error("passing must have the same number of beats for every juggler");
-
 		byJuggler.forEach(({ throws:jugglerThrows }, juggler) => {
 			throws.push(...jugglerThrows);
 		});
-
-		period = passingTime;
+		period = Math.max(...byJuggler.map(x => x.time));
 	}
 
 	const repetition = { period };
