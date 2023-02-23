@@ -4,12 +4,14 @@ import Jif from './jif.mjs';
 import { encodeUrlPathPart } from './utils.mjs';
 
 const grammar = `
-
-{{
+{
 	function zip(rows) { // https://stackoverflow.com/a/10284006
 		return rows[0].map((_,c)=>rows.map(row=>row[c]));
 	}
-}}
+
+	const modifyThrows = options.modifyThrows ? options.modifyThrows : (x) => x;
+}
+
   // jugglinglab pattern grammar for peggy
   // =====================================
   //
@@ -51,12 +53,12 @@ const grammar = `
     /  _ t:Throw                { return [t]; }
 
   Throw
-    = duration:Duration _ x:X _ p:P     _ { return { duration, p, x }; }
-    / duration:Duration _ p:P _ x:X     _ { return { duration, p, x }; }
-	/ duration:Duration _ p:P ? _ x:X ? _ { return { duration, p, x }; }
+    = duration:Duration _ x:X _ p:P     _ { return modifyThrows({ duration, p, x }); }
+    / duration:Duration _ p:P _ x:X     _ { return modifyThrows({ duration, p, x }); }
+	/ duration:Duration _ p:P ? _ x:X ? _ { return modifyThrows({ duration, p, x }); }
 
   P
-    = "p" { return !options.ignorePasses }
+    = "p" { return true }
 
   X
     = "x" { return true }
