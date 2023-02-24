@@ -34,6 +34,15 @@ const patternTests = [
 	{ input: '(4,2)(2x,[44px])',     valid: true },
 	{ input: '(4p,2p)(2px,[4p4px])', valid: true },
 
+
+	// In phase patterns straight/cross flipped
+	{ input: '3px',                  valid: true },
+	{ input: '3px3',                 valid: true },
+	{ input: '5px 3px 4px',          valid: true },
+	{ input: '(3px, 3px)',           valid: true },
+	{ input: '(4px,2)(2p,[44p])',    valid: true },
+
+
 	// Out of phase patterns - aka Prechac
 	{ input: '4p 3',                 valid: true }, // two-count with 7
 	{ input: '534px333',             valid: true }, // six-count popcorn
@@ -56,6 +65,7 @@ for (const patternTest of patternTests) {
 	// TODO: test nProps
 	// TODO: test url
 	// TODO: test alternative notations
+	// TODO: test if causal diagram works without errors on all valid patterns
 }
 
 test.run();
