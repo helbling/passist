@@ -380,12 +380,14 @@ toJif(options = {})
 	if (ast.star || (period & 1))
 		repetition.limbPermutation = [...Array(nLimbs).keys()].map(limb => limb ^ 1);
 
-	jif.limbs = [];
-	for (let i = 0; i < nLimbs; i++) {
-		jif.limbs.push({
-			juggler: Math.floor(i / 2),
-			type: ((i & 1) ? 'left' : 'right') + ' hand',
-		});
+	if (!jif.limbs) {
+		jif.limbs = [];
+		for (let i = 0; i < nLimbs; i++) {
+			jif.limbs.push({
+				juggler: Math.floor(i / 2),
+				type: ((i & 1) ? 'left' : 'right') + ' hand',
+			});
+		}
 	}
 
 	jif.throws = throws;

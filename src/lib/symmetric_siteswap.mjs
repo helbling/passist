@@ -59,26 +59,32 @@ constructor(input, options = {})
 
 	console.log(input); // NOCOMMIT
 
-	let ast, soloAst,soloAst2;
+	let ast, soloAst, soloAstFlippedPasses, flippedPasses;
 	try {
 		ast     = parser.parse(input, { fractionalDuration:true, soloOnly:true });
 		soloAst = parser.parse(input, {
-			fractionalDuration:true,
 			soloOnly:true,
 			modifyThrows: (th) => {
 				th.p = null;
 				return th;
 			}
 		});
+
 		// TODO: make 4px23 work by switching hands of juggler B
-		soloAst2 = parser.parse(input, {
-			fractionalDuration:true,
+		soloAstFlippedPasses = parser.parse(input, {
 			soloOnly:true,
 			modifyThrows: (th) => {
 				if (th.p) {
 					th.x = !th.x;
 					th.p = null;
 				}
+				return th;
+			}
+		});
+		flippedPasses = parser.parse(input, {
+			modifyThrows: (th) => {
+				if (th.p)
+					th.x = !th.x;
 				return th;
 			}
 		});
@@ -89,32 +95,45 @@ constructor(input, options = {})
 		return;
 	}
 
-	const soloExtendedSiteswap = new ExtendedSiteswap(soloAst);
-	// const soloExtendedSiteswap2 = new ExtendedSiteswap(soloAst2);
-	if (soloExtendedSiteswap.isValid()) {
+	const solo = new ExtendedSiteswap(soloAst);
+	const soloFlippedPasses = new ExtendedSiteswap(soloAstFlippedPasses);
+
+	if (solo.isValid()) {
 		// in-phase pattern, same start for every juggler
 		console.log(input, 'in phase detected for ', input);
 
-		const extendedSiteswapInput = Array(nJugglers).fill(input);
-		const es = new ExtendedSiteswap(extendedSiteswapInput, { nJugglers}); // TODO: better extended siteswap options..
+		const extendedSiteswap = new ExtendedSiteswap(
+			Array(nJugglers).fill(input),
+		);
 
-		const nProps = es.nProps;
-		this.jif = es.toJif({
+		this.jif = extendedSiteswap.toJif({
 			flipTwos: true, // TODO: implement this
-			props: Array.from(Array(nProps), () => { return {}; }),
 		});
-	} else if (soloExtendedSiteswap2.isValid()) {
+
+	} else if (soloFlippedPasses.isValid()) {
 		console.log(input, 'in phase detected for ', input, ' crossed');
 
-		// TODO: flip B-s hands
-		// TOOD: more general?
-		const extendedSiteswapInput = Array(nJugglers).fill(input);
-		const es = new ExtendedSiteswap(extendedSiteswapInput, { nJugglers}); // TODO: better extended siteswap options..
+		const extendedSiteswap = new ExtendedSiteswap(
+			Array(nJugglers).fill(
+				ExtendedSiteswap.astToNotation(flippedPasses)
+			),
+		);
 
-		const nProps = es.nProps;
-		this.jif = es.toJif({
+		// flip hands of every second juggler
+		// this way for an even numer of jugglers, all passes are flipped
+		// for an odd number of jugglers, most passes are flipped
+		const limbs = [];
+		for (let i = 0; i < nLimbs; i++) {
+			const juggler = Math.floor(i / 2);
+			limbs.push({
+				juggler,
+				type: (((i ^ juggler) & 1) ? 'left' : 'right') + ' hand',
+			});
+		}
+
+		this.jif = extendedSiteswap.toJif({
 			flipTwos: true, // TODO: implement this
-			props: Array.from(Array(nProps), () => { return {}; }),
+			limbs,
 		});
 
 	} else {
@@ -134,7 +153,7 @@ constructor(input, options = {})
 		const throws = [];
 
 		const beats = ast.beats;
-		console.log(beats);
+		// console.log(beats);
 
 		for (let juggler = 0; juggler < nJugglers; juggler++) {
 			let time = juggler * prechacOffset;
@@ -197,7 +216,7 @@ constructor(input, options = {})
 			repetition: { period: period * nJugglers * nJugglers },
 			timeStretchFactor: nJugglers,
 		};
-		console.log(this.jif);
+		// console.log(this.jif);
 
 		// this._valid = false;
 		// return;
