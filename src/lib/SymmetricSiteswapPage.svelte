@@ -3,7 +3,7 @@
 	import SiteswapInput from '$lib/SiteswapInput.svelte';
 	import InfoBox from '$lib/InfoBox.svelte';
 	import PatternResult from '$lib/PatternResult.svelte';
-	import { defaults, useLocalStorage, symmetricSiteswapUrl } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, jugglersInCircle, symmetricSiteswapUrl } from '$lib/passist.mjs';
 	import { siteswapNames } from '$lib/patterns.mjs';
 
 	export let init = undefined;
@@ -43,7 +43,7 @@
 				siteswapInput: input,
 				nJugglers: nJugglers,
 		});
-		symmetricSiteswap = new SymmetricSiteswap(input, {symmetric:true, nJugglers});
+		symmetricSiteswap = new SymmetricSiteswap(input, {symmetric:true, jugglers:jugglersInCircle(nJugglers)});
 		valid = symmetricSiteswap.isValid();
 		symmetricSiteswapString = symmetricSiteswap.toString();
 		siteswapName = siteswapNames[url];

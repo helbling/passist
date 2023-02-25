@@ -4,7 +4,7 @@
 	import PatternResult from '$lib/PatternResult.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
 	import SiteswapInput from '$lib/SiteswapInput.svelte';
-	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, jugglersInCircle, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let init;
@@ -68,26 +68,7 @@
 
 			if (nJugglers > 0) {
 				const circleRadius = 1.2 + nJugglers * 0.2;
-				const jugglers = [];
-				for (let i = 0; i < nJugglers; i++) {
-					const juggler = {
-						name: jugglerName(i),
-					};
-					if (nJugglers == 1) {
-						Object.assign(juggler, {
-							position: [0, 0, 0],
-							lookAt:   [0, 0, 1],
-						});
-					} else {
-						const a = Math.PI * 2 * i / nJugglers;
-						const round = x => Math.round(x * 1000) / 1000;
-						Object.assign(juggler, {
-							position: [round(circleRadius * Math.cos(a)), 0, round(circleRadius * Math.sin(a))],
-							lookAt:   [0, 0, 0],
-						});
-					}
-					jugglers.push(juggler);
-				}
+				const jugglers = jugglersInCircle(nJugglers);
 
 				limbs = hands2limbs(handsInput, nJugglers);
 				handsValid = limbs || !handsInput;

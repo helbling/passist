@@ -109,6 +109,32 @@ function defaultLimbs(n)
 	return result;
 }
 
+function jugglersInCircle(nJugglers)
+{
+	const circleRadius = 1.2 + nJugglers * 0.2;
+	const jugglers = [];
+	for (let i = 0; i < nJugglers; i++) {
+		const juggler = {
+			name: jugglerName(i),
+		};
+		if (nJugglers == 1) {
+			Object.assign(juggler, {
+				position: [0, 0, 0],
+				lookAt:   [0, 0, 1],
+			});
+		} else {
+			const a = Math.PI * 2 * i / nJugglers;
+			const round = x => Math.round(x * 1000) / 1000;
+			Object.assign(juggler, {
+				position: [round(circleRadius * Math.cos(a)), 0, round(circleRadius * Math.sin(a))],
+				lookAt:   [0, 0, 0],
+			});
+		}
+		jugglers.push(juggler);
+	}
+	return jugglers;
+}
+
 
 const servertype = import.meta.env.VITE_SERVERTYPE || (dev ? 'dev' : '');
 
@@ -131,6 +157,7 @@ export {
 	hands2limbs,
 	jifdev,
 	jugglerName,
+	jugglersInCircle,
 	limbs2hands,
 	servertype,
 	siteswapAlternativesUrl,
