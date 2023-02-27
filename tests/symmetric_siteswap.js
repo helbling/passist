@@ -44,8 +44,12 @@ const patternTests = [
 
 
 	// Out of phase patterns - aka Prechac
-	{ input: '4px 3'                 valid: true }, // two-count with 7
+	{ input: '4px 3',                valid: true }, // two-count with 7
+	{ input: '4p 3',                 valid: true },
 	{ input: '534px333',             valid: true }, // six-count popcorn
+	{ input: '2.5p',                 valid: true }, // 5 clubs ultimates
+	{ input: '3.5p',                 valid: true }, // 7 clubs ultimates
+	{ input: '4.5p',                 valid: true }, // 9 clubs ultimates
 	{ input: '3.5p 3 3.5p 4 1',      valid: true }, // why not
 	{ input: '3.5p 3 4',             valid: true }, // french three-count
 
