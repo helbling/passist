@@ -59,13 +59,29 @@ const patternTests = [
 	// Another category of out of phase patterns (not Prechac)
 	// { input: '(3, 3p)! 3 *',         valid: true }, // techno
 	// { input: '(4, 3p)*',             valid: true }, // scratch your head
+
+	// 3 jugglers
+	{ nJugglers:3, input: '3.3p',      valid: true },
+	{ nJugglers:3, input: '3.6p 3',    valid: true },
+	{ nJugglers:3, input: '4p 3 3',    valid: true },
+	{ nJugglers:3, input: '4p 3p 5p',  valid: true },
+
+	{ nJugglers:3, input: '3.3px',        valid: true },
+	{ nJugglers:3, input: '3.6px 3',      valid: true },
+	{ nJugglers:3, input: '4px 3 3',      valid: true },
+	{ nJugglers:3, input: '4px 3px 5px',  valid: true },
+
 ];
 
 for (const patternTest of patternTests) {
 	const input = patternTest.input;
-	const symmetricSiteswap = new SymmetricSiteswap(input);
+	const options = {};
+	if (patternTest.nJugglers)
+		options.jugglers = Array.from(Array(patternTest.nJugglers), () => ({}));
+	const testname = input + ' (' + (patternTest.nJugglers ?? 2) + ' jugglers)';
+	const symmetricSiteswap = new SymmetricSiteswap(input, options);
 
-	test(input + ' validity', () => {
+	test(testname + ' validity', () => {
 		assert.is(symmetricSiteswap.isValid(), patternTest.valid);
 	});
 
