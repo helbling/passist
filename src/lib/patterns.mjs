@@ -115,6 +115,9 @@ const symmetricPassings = [
 	[6, '3p33',    'three-count'],
 	[6, '3p333',   'four-count'],
 	[6, '3p333 3p33 3p3 3p 3p3 3p33', 'count-down'],
+	[7, '4px3',    '7 club two-count'],
+	[7, '534px333', 'six-count popcorn'],
+
 
 	// TODO: make the following patterns use singles..
 	[8, '4p',        'double treff'],
