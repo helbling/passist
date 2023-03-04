@@ -237,8 +237,9 @@ static _outOfPhase(input, p = {})
 		th.to ^= flipSides;
 
 		if ((th.from | 1) != (th.to | 1)) { // pass
-			if (juggler & 1) // TODO: is this correct for nJugglers > 2?
+			if (nJugglers == 2 && juggler & 1)
 				th.to ^= 1;
+			// TODO: what about nJugglers > 2?
 
 			if (period % (nLimbs / 2) != 0)
 				th.to = (th.to + 2 * ((th.duration % nJugglers) - 1)) % nLimbs;
