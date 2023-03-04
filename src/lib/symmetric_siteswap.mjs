@@ -15,7 +15,7 @@ const parser = ExtendedSiteswap.parser;
 function permutation_power(permutation, n)
 {
 	if (n < 0)
-		throw new Error("permuation power for n < 0 not implemented");
+		throw new Error("permutation power for n < 0 not implemented");
 
 	if (n == 0)
 		return permutation.map((v, k) => k); // identity
@@ -207,48 +207,21 @@ static _outOfPhase(input, p = {})
 
 	const beats = ast.beats;
 
-	// 0  1  2  3
-	// Ar Al Br Bl
-	// 2  3  1  0
-	//
-	// Ar -> Br -> Al
-	// Al -> Bl -> Ar
-	// Br -> Al -> Bl
-	// Bl -> Ar -> Br
-	//
-	// Ar -> Bl  3
-	// Al -> Br  2
-	// Br -> Al  1
-	// Bl -> Ar  0
-	//
-	// 2 3 1 0
-	//
-	//
-	// Ar -> Br
-	// Br -> Cr
-	// Cr -> Al
-	// Al -> Bl
-	// Bl -> Cl
-	// Cl -> Ar
-	//
-	// 0  1  2  3  4  5
-	// Ar Al Br Bl Cr Cl
-	// Br Bl Cr Cl Al Ar
-	// 2  3  4  5  1  0
-	//
-	//
-	// repetition.limbPermutation = [2, 0, 1, 3];
-	// repetition.limbPermutation = [2, 0, 1, 0];
-	//
-	//                            0  2  1  3
-
-	// TODO: generalize for nJugglers > 2!
-	repetition.limbPermutation = period % 4 == 0 ? [ 2, 3, 0, 1] : (period % 2 == 0 ? [ 3, 2, 1, 0 ] : permutation_power([2, 3, 1, 0], period % 4));
+	if (period % nLimbs == 0)
+		repetition.limbPermutation = Array.from({length: nLimbs}, (_, i) => (i + 2) % nLimbs);
+	else if (period % (nLimbs / 2) == 0)
+		repetition.limbPermutation = Array.from({length: nLimbs}, (_, i) => ((i + 2) ^ 1) % nLimbs);
+	else {
+		const permutation = Array.from({length: nLimbs}, (_, i) => i + 2 < nLimbs ? i + 2 : 1 - (i + 2 - nLimbs));
+		repetition.limbPermutation = permutation_power(permutation, period % nLimbs);
+	}
 
 	let lastJuggler = -1;
 	let flipSides = 0;
 	for (const th of btt.throws) {
-		const juggler = Math.floor(th.time * nJugglers / period);
+		let juggler = Math.floor(th.time * nJugglers / period);
+		if (period % (nLimbs / 2) == 0)
+			juggler = (nJugglers - juggler) % nJugglers;
 
 		th.time     = Math.round((th.time * nJugglers) % repetition.period);
 		th.duration = Math.round(th.duration * nJugglers);
@@ -263,9 +236,14 @@ static _outOfPhase(input, p = {})
 		th.from ^= flipSides;
 		th.to ^= flipSides;
 
-		// TODO: is this correct for nJugglers > 2?
-		if ((th.from | 1) != (th.to | 1) && juggler & 1) // pass
-			th.to ^= 1;
+		if ((th.from | 1) != (th.to | 1)) { // pass
+			if (juggler & 1) // TODO: is this correct for nJugglers > 2?
+				th.to ^= 1;
+
+			if (period % (nLimbs / 2) != 0)
+				th.to = (th.to + 2 * ((th.duration % nJugglers) - 1)) % nLimbs;
+			// console.log(th);
+		}
 
 		lastJuggler = juggler;
 		throws.push(th);
@@ -297,6 +275,7 @@ static _outOfPhase(input, p = {})
 		repetition,
 		timeStretchFactor: nJugglers,
 	};
+	// console.log(jif);
 
 	return jif;
 }

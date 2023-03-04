@@ -62,14 +62,22 @@ const patternTests = [
 
 	// 3 jugglers
 	{ nJugglers:3, input: '3.3p',      valid: true },
-	{ nJugglers:3, input: '3.6p 3',    valid: true },
+	{ nJugglers:3, input: '3.7p 3',    valid: true },
 	{ nJugglers:3, input: '4p 3 3',    valid: true },
-	{ nJugglers:3, input: '4p 3p 5p',  valid: true },
+	{ nJugglers:3, input: '3p 3 4',    valid: true },
+	{ nJugglers:3, input: '3p 4p 5p',  valid: true },
+	{ nJugglers:3, input: '3p 3 5p',   valid: true },
+	{ nJugglers:3, input: '4p 3 4 2 3 4',   valid: true },
+	{ nJugglers:3, input: '4p 5p 6p 2 3 4', valid: true },
 
 	{ nJugglers:3, input: '3.3px',        valid: true },
-	{ nJugglers:3, input: '3.6px 3',      valid: true },
+	{ nJugglers:3, input: '3.7px 3',      valid: true },
+	{ nJugglers:3, input: '3px 3 4',      valid: true },
 	{ nJugglers:3, input: '4px 3 3',      valid: true },
-	{ nJugglers:3, input: '4px 3px 5px',  valid: true },
+	{ nJugglers:3, input: '3px 4px 5px',  valid: true },
+	{ nJugglers:3, input: '3px 3 5px',    valid: true },
+	{ nJugglers:3, input: '4px 3 4 2 3 4',     valid: true },
+	{ nJugglers:3, input: '4px 5px 6px 2 3 4', valid: true },
 
 ];
 
