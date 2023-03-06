@@ -55,6 +55,8 @@ const patternTests = [
 	{ input: '3.5p 3 3.5p 4 1',      valid: true }, // why not
 	{ input: '3.5p 4.5p 5.5p',       valid: true },
 	{ input: '3.5p 3 4',             valid: true }, // french three-count
+	{ input: '3p 3p 3p 1',           valid: true },
+	{ input: '5 5 5 1 3p 3 3 3',     valid: true },
 
 	// Another category of out of phase patterns (not Prechac)
 	// { input: '(3, 3p)! 3 *',         valid: true }, // techno

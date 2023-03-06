@@ -109,19 +109,25 @@ for (const [nProps, notation, name] of kaestnersKnownSiteswaps) {
 
 // 2 person symmetric siteswaps
 const symmetricPassings = [
-	[6, '3p',      'one-count'],
-	[6, '(3p,3p)', 'synchronous one-count'],
-	[6, '3p3',     'two-count'],
-	[6, '3p33',    'three-count'],
-	[6, '3p333',   'four-count'],
+	[6, '3p',         'one-count'],
+	[6, '(3p,3p)',    'synchronous one-count'],
+	[6, '3p3',        'two-count'],
+	[6, '3p33',       'three-count'],
+	[6, '3p333',      'four-count'],
 	[6, '3p333 3p33 3p3 3p 3p3 3p33', 'count-down'],
-	[7, '4px3',    '7 club two-count'],
-	[7, '534px333', 'six-count popcorn'],
+	[7, '4px3',       '7 prop two-count'],
+	[7, '5p333',      '7 prop four-count'],
+	[7, '534px333',   'six-count popcorn'],
+	[8, '554px4px33', '8 prop popcorn'],
+	[9, '(4px,4x)(6x,4x)', 'Good Twin'],
+	[9, '(6px,4x)(4,4)', 'Evil Twin'],
+	[9, '(6x,4x)(5p,4x)(4,4)', 'Unpopped Popcorn'],
+	[10, '5p',        '10 prop one-count'],
 
 
 	// TODO: make the following patterns use singles..
 	[8, '4p',        'double treff'],
-	[8, '(4x,4px)',  '8 club two count symmetric with doubles'],
+	[8, '(4x,4px)',  '8 prop two count symmetric with doubles'],
 	[8, '(4x,4px)*', 'swinging door with doubles'],
 ];
 
