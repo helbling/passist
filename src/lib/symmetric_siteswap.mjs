@@ -108,11 +108,10 @@ static _inPhase(input, p = {})
 	}
 
 	const soloPattern = new ExtendedSiteswap(soloAst);
-
 	if (!soloPattern.isValid())
 		return null;
 
-	console.log(input, 'in phase detected for ', input, p.flipped ? ' flipped' : '');
+	// console.log(input, 'in phase detected for ', input, p.flipped ? ' flipped' : '');
 
 	const extendedSiteswap = new ExtendedSiteswap(
 		Array(p.nJugglers).fill(
@@ -189,11 +188,10 @@ static _outOfPhase(input, p = {})
 	}
 
 	const soloPattern = new ExtendedSiteswap(soloAst);
-
 	if (!soloPattern.isValid())
 		return null;
 
-	console.log(input, 'out-of-phase detected for ', input, p.flipped ? ' flipped' : '');
+	// console.log(input, 'out-of-phase detected for ', input, p.flipped ? ' flipped' : '');
 
 	const repetition = {
 		// period: period * nJugglers
