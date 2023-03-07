@@ -204,10 +204,11 @@ static _outOfPhase(input, p = {})
 	const throws = [];
 
 	const beats = ast.beats;
+	const simultaneous = (period % (nLimbs / 2) == 0);
 
 	if (period % nLimbs == 0)
 		repetition.limbPermutation = Array.from({length: nLimbs}, (_, i) => (i + 2) % nLimbs);
-	else if (period % (nLimbs / 2) == 0)
+	else if (simultaneous)
 		repetition.limbPermutation = Array.from({length: nLimbs}, (_, i) => ((i + 2) ^ 1) % nLimbs);
 	else {
 		const permutation = Array.from({length: nLimbs}, (_, i) => i + 2 < nLimbs ? i + 2 : 1 - (i + 2 - nLimbs));
@@ -218,7 +219,7 @@ static _outOfPhase(input, p = {})
 	let flipSides = 0;
 	for (const th of btt.throws) {
 		let juggler = Math.floor(th.time * nJugglers / period);
-		if (period % (nLimbs / 2) == 0)
+		if (simultaneous)
 			juggler = (nJugglers - juggler) % nJugglers;
 
 		th.time     = Math.round((th.time * nJugglers) % repetition.period);
@@ -235,11 +236,11 @@ static _outOfPhase(input, p = {})
 		th.to ^= flipSides;
 
 		if ((th.from | 1) != (th.to | 1)) { // pass
-			if (nJugglers == 2 && juggler & 1)
+			if (nJugglers == 2 && !simultaneous && juggler & 1)
 				th.to ^= 1;
 			// TODO: what about nJugglers > 2?
 
-			if (period % (nLimbs / 2) != 0)
+			if (!simultaneous)
 				th.to = (th.to + 2 * ((th.duration % nJugglers) - 1)) % nLimbs;
 			// console.log(th);
 		}
