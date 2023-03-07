@@ -164,7 +164,7 @@ static _outOfPhase(input, p = {})
 				if (th.p) {
 					if (p.flipped)
 						th.x = !th.x;
-					th.duration = Math.round((th.duration - prechacOffset) * 10) / 10;
+					th.duration = Math.round((th.duration - prechacOffset + period) * 10) / 10;
 				}
 				th.p = null;
 				return th;
