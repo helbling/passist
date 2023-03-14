@@ -15,7 +15,7 @@ const config = {
 	animation_widget: {
 		entry: './src/lib/AnimationWidget.svelte',
 		name: 'AnimationWidget',
-		fileName: 'static/api/animation-widget-standalone.mjs',
+		fileName: 'animation-widget-standalone.mjs',
 	},
 }[process.env.BUILD_TARGET];
 
