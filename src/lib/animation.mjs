@@ -546,10 +546,9 @@ constructor(canvas, jif, animationOptions, sizeOptions)
 	});
 	this.renderer.setClearColor(new THREE.Color(0xffffff));
 
-	// to have similar colors as before with
-	//   outputEncoding = THREE.GammaEncoding
-	//   gammaFactor = 2.2
-	this.renderer.outputEncoding = THREE.sRGBEncoding;
+	// use same colors as before threejs-152
+	// documentaiton: https://threejs.org/docs/#manual/en/introduction/Color-management
+	THREE.ColorManagement.enabled = false;
 
 
 	this.camera = new THREE.PerspectiveCamera(45, sizeOptions.width / sizeOptions.height, 0.1, 10000);
