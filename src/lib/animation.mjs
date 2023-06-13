@@ -108,7 +108,7 @@ constructor(faceTexture)
 		faceTexture,
 		function( texture ) {
 			texture.anisotropy = 8;
-			texture.encoding = THREE.sRGBEncoding;
+			texture.colorSpace = THREE.SRGBColorSpace;
 			headMaterial.map = texture;
 			headMaterial.color = undefined;
 			headMaterial.needsUpdate = true;
@@ -117,7 +117,7 @@ constructor(faceTexture)
 	(new THREE.TextureLoader()).load(
 		resourceUrl('/images/meeseeks_blue.png'),
 		function( texture ) {
-			texture.encoding = THREE.sRGBEncoding;
+			texture.colorSpace = THREE.SRGBColorSpace;
 			bodyMaterial.map = texture;
 			bodyMaterial.color = undefined;
 			bodyMaterial.needsUpdate = true;
@@ -645,7 +645,7 @@ static createGrassTileMesh()
 	tex.repeat.set(groundRepeat, groundRepeat)
 	tex.magFilter = THREE.NearestFilter;
 	tex.minFilter = THREE.NearestFilter;
-	tex.encoding = THREE.sRGBEncoding;
+	tex.colorSpace = THREE.SRGBColorSpace;
 	return new THREE.Mesh(
 		new THREE.CircleGeometry(groundStretch * groundRepeat, 32).rotateX(-Math.PI / 2),
 		new THREE.MeshToonMaterial({map:tex}),
@@ -720,7 +720,7 @@ static clubTexture(clubColors = {})
 	}
 
 	const tex = new THREE.CanvasTexture(canvas);
-	tex.encoding = THREE.sRGBEncoding;
+	tex.colorSpace = THREE.SRGBColorSpace;
 	tex.magFilter = THREE.NearestFilter;
 	tex.minFilter = THREE.NearestFilter;
 	return tex;
