@@ -1,6 +1,5 @@
 <script>
 	import InputField from '$lib/InputField.svelte';
-	// TODO: this currently doesn't work
 	import DragDropList from '$lib/DragDropList.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import { jugglerName, hands2limbs, limbs2hands, defaultLimbs } from '$lib/passist.mjs';
@@ -13,6 +12,8 @@
 	export let idPrefix;
 	export let siteswapValid;
 	export let handsValid = true;
+	export let size = 10;
+	export let big = false;
 
 	let handsInputDefault = '';
 	let handsDragDropVisible = false;
@@ -64,6 +65,7 @@
 		border-bottom-left-radius:0;
 		-webkit-appearance:none;
 	}
+	.hands-input input.big { width:18rem !important }
 	.hands-input input.empty { padding-right:0.3rem }
 	.hands-input input::-webkit-search-cancel-button { -webkit-appearance: none }
 	.hands-input input.invalid { color:#dc3545 }
@@ -87,6 +89,7 @@
 		min=1
 		max=9
 		on:change={e => { handsInput = ''; }}
+		{big}
 		/>
 	{/if}
 
@@ -100,8 +103,9 @@
 			class:     'siteswap',
 			inputmode: 'verbatim',
 			pattern:   '[0-9a-zA-Z ]+',
-			size:      10,
+			size,
 		}}
+		{big}
 		/>
 
 	{#if showHandOrderInput}

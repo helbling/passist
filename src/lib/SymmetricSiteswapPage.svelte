@@ -65,6 +65,7 @@
 		siteswapValid={valid}
 		idPrefix=main
 		showHandOrderInput={false}
+		big={true}
 	/>
 	<SiteswapInput
 		showNJugglers={false}
@@ -74,6 +75,7 @@
 		{nJugglers}
 		idPrefix=animation
 		showHandOrderInput={false}
+		big={true}
 	/>
 
 	<div slot=info>
