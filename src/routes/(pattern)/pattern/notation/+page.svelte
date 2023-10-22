@@ -1,6 +1,6 @@
 <script>
 import { marked } from 'marked';
-import { appName, siteswapUrl, extendedSiteswapUrl } from '$lib/passist.mjs';
+import { appName, siteswapUrl, extendedSiteswapUrl, symmetricSiteswapUrl } from '$lib/passist.mjs';
 
 function patternLink(siteswap, url, params = {}) {
 	return '[`'
@@ -14,6 +14,10 @@ function patternLink(siteswap, url, params = {}) {
 function global(siteswap, params = {}) {
 	params.siteswapInput = siteswap;
 	return patternLink(siteswap, siteswapUrl(params), params);
+}
+function symmetric(siteswap, params = {}) {
+	params.siteswapInput = siteswap;
+	return patternLink(siteswap, symmetricSiteswapUrl(params), params);
 }
 function extended(siteswap, params = {}) {
 	params.siteswapInputs = siteswap;
@@ -64,7 +68,7 @@ Sometimes writing async patterns in this way can help to think about patterns th
 
 The notation \`<xxx|yyy>\` means one juggler does \`xxx\` while another does \`yyy\`. \`'p'\` is used to represent a passing throw. For example, ${extended(['<3p33|234p>'])} is a 6 prop three-count passing pattern, where the first juggler does a three count with single passes and the second juggler throws a three count with early double passes. This can also be used with left/right synchronous patterns; a two-person 'shower' is then ${extended(['<(2x,4xp)|(2x,4xp)>'])}.
 
-You won't need to type in \'<\', \'>\' or \'|\', the user interface will do that for you. In case the pattern is repeated for all jugglers you can use an even simpler interface. For example here: ${extended(['<(2x,4xp)>'], {nJugglers:2})}.
+You won't need to type in \'<\', \'>\' or \'|\', the user interface will do that for you. In case the pattern is repeated for all jugglers you can use an even simpler interface. For example here: ${symmetric(['(2x,4xp)'], {nJugglers:2})}.
 `;
 
 let markdown = marked(source);
