@@ -14,21 +14,32 @@
 	let _jif;
 	let nJugglers;
 	let timeStretchFactor;
-	let nLines;
 	let width, height;
 	let period = 1;
 	let nodes = {};
 
 	const arrowLength = 20;
 
+	let jugglerHasCollision = [];
+	let line2y = [];
+
+	function line(limbId, jif) {
+		const limb = jif.limbs[limbId];
+		const isLeft = limb.type && limb.type.match(/left/);
+		return limb.juggler * 2 + (isLeft ? 0 : 1);
+	}
 	function arrow(time, step, fromLine, toLine) {
 		const time2 = time + step;
 
 		// do we need a curved line?
-		if (fromLine != toLine || Math.abs(step) >= timeStretchFactor * 0.7 && Math.abs(step) <= timeStretchFactor) // TODO: add collision detection
+		if (y(fromLine) != y(toLine) || Math.abs(step) >= timeStretchFactor * 0.7 && Math.abs(step) <= timeStretchFactor) // TODO: add collision detection
 			return "M" + xy(time, r, x(time2), y(toLine), fromLine) + " L" + xy(time2, r + arrowLength, x(time), y(fromLine), toLine);
 		let dirX = x(time2) > x(time) ? 1 : -1;
-		const dirY = fromLine ? 1 : -1;
+
+
+		const dirY = y(fromLine) == y(fromLine ^ 1) ?
+			(fromLine > 1 ? 1 : -1)      // left-right on same line
+			: ((fromLine & 1) ? 1 : -1); // line split into left/right
 
 		let offsetX = dirX * dy / 2;
 		const offsetY = dirY * dy / 2;
@@ -50,7 +61,7 @@
 	};
 
 	function x(time) { return xoff + time * dx;}
-	function y(line) { return yoff + line * dy;}
+	function y(line) { return line2y[line] || 0 }
 	function xy(time, shorten, towardsX, towardsY, line) {
 		let X = x(time);
 		let Y = y(line);
@@ -76,13 +87,42 @@ $: {
 		const minSteps = 5 * timeStretchFactor;
 		const nPeriods = Math.ceil(minSteps / period);
 
-
-		nLines = nJugglers;
 		width = period * nPeriods * dx + 70;
-		height = (nLines - (nLines > 1 ? 1 : 1.4)) * dy + 2 * yoff;
 
 		nodes = [];
 		if (throws && throws.length > 0) {
+
+			// check for collisions
+			const timesByJuggler = Array.from(Array(nJugglers), () => []);
+			throws.forEach((th, i) => {
+				const juggler = _jif.limbs[th.from].juggler;
+				timesByJuggler[juggler].push(th.time);
+			});
+			timesByJuggler.forEach((times, juggler) => {
+				let last;
+				for (const time of times) {
+					if (last !== undefined && (time - last) * dx <= 2 * r + 10) {
+						jugglerHasCollision[juggler] = true;
+						break;
+					}
+					last = time;
+				};
+			});
+
+
+			// calculate line2y
+			let offset = yoff;
+			line2y = [];
+			for (let i = 0; i < nJugglers; i++) {
+				line2y.push(offset);
+				if (jugglerHasCollision[i])
+					offset += dy / 2.5;
+				line2y.push(offset);
+				offset += dy;
+			}
+			line2y = line2y;
+			height = offset;
+
 
 			// TODO: avoid copy-pasta (Jif._completeOrbits)
 			// TODO: make this less hacky and make it work for patterns with implicit holds
@@ -130,15 +170,15 @@ $: {
 				const fromLimb = _jif.limbs[th.from];
 				const isLeft = fromLimb.type && fromLimb.type.match(/left/);
 
-				const fromLine = _jif.limbs[th.from].juggler;
-				const toLine = _jif.limbs[th.to].juggler;
+				const fromLine = line(th.from, _jif);
+				const toLine   = line(th.to,   _jif);
 
 				const nodeKey = getKey(th, 'throw');
 				nodes.push({
 					r: r,
 					x: x(time),
 					y: y(fromLine),
-					class: (isLeft ? 'left' : 'right') + ' ' + (balance[nodeKey] > 0 ? 'jammed'  : (balance[nodeKey] < 0 ? 'exhausted' : '')),
+					class: (isLeft ? 'left' : 'right') + ' ' + (balance[nodeKey] > 0 ? 'jammed' : (balance[nodeKey] < 0 ? 'exhausted' : '')),
 					label: th.label,
 					arrow: arrow(time, th.duration - 2 * timeStretchFactor, fromLine, toLine), // for ladder diagram: don't subtract 2 * timeStretchFactor
 				});
