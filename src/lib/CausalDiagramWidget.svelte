@@ -98,6 +98,7 @@ $: {
 				const juggler = _jif.limbs[th.from].juggler;
 				timesByJuggler[juggler].push(th.time);
 			});
+			jugglerHasCollision = [];
 			timesByJuggler.forEach((times, juggler) => {
 				let last;
 				for (const time of times) {
