@@ -56,7 +56,7 @@ const knownSiteswaps = [
 	["7747746677466", "Jim's ppsps (async)"],
 	["8686777", "Vitoria"],
 	["7742744", "Flipalot"],
-	["7747746677466", "Brainstorming / Jim's pssps (async)"],
+	["7747746677466", "Brainstorming / Jim's ppsps (async)"],
 	["9969788", "Poem"],
 	["9968978", "Clean Finish"],
 	["9968897", "Real Fake Clean Finish"],
