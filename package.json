@@ -16,22 +16,22 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "heap-js": "^2.3.0",
-    "marked": "^11.1.1",
-    "peggy": "^3.0.2",
+    "express": "^4.19.2",
+    "heap-js": "^2.5.0",
+    "marked": "^12.0.2",
+    "peggy": "^4.0.2",
     "three": "^0.154.0",
-    "vite": "^5.0.12"
+    "vite": "^5.2.10"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
-    "@sveltejs/adapter-node": "4.0.1",
-    "@sveltejs/kit": "2.4.3",
-    "eslint": "^8.56.0",
+    "@sveltejs/adapter-node": "5.0.1",
+    "@sveltejs/kit": "2.5.7",
+    "eslint": "^9.1.0",
     "npm-run-all": "^4.1.5",
-    "svelte": "^4.2.9",
+    "svelte": "^4.2.15",
     "uvu": "^0.5.6"
   }
 }
