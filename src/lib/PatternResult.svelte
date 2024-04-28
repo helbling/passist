@@ -25,6 +25,7 @@
 	let showAnimationWidget = false;
 	let limbs = [];
 	let fullUrl;
+	let showLadderDiagram = false;
 
 
 	if (init && init.url.searchParams.has('fullscreen'))
@@ -96,6 +97,8 @@
 	.jif-button { float:right; margin-left:0.5em }
 	.animation-controls { display:flex; flex-flow:row wrap }
 	label.pure-button { margin:0 }
+	.causalDiagram span { display:inline-block; cursor:pointer }
+	.causalDiagram .selected { font-weight: bold; border:2px solid #ccc; border-bottom:2px solid #fff; z-index:10; position:relative; margin-bottom:-2px }
 </style>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
@@ -118,9 +121,14 @@
 
 {#if jif && jif.throws && jif.throws.length > 0}
 	<div class=causalDiagram>
+		<div>
+			<span class=pure-menu-link class:selected={!showLadderDiagram} on:click={e => showLadderDiagram=false }>Causal Diagram</span>
+			<span class=pure-menu-link class:selected={ showLadderDiagram} on:click={e => showLadderDiagram=true  }>Ladder Diagram</span>
+		</div>
 		<CausalDiagramWidget
 			{jif}
 			{startConfigurations}
+			isLadderDiagram={showLadderDiagram}
 		/>
 	</div>
 {/if}

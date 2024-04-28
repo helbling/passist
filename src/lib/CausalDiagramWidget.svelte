@@ -3,6 +3,7 @@
 <script>
 	export let jif;
 	export let startConfigurations;
+	export let isLadderDiagram = false;
 	import Jif from '$lib/jif.mjs';
 
 	let jugglers = {};
@@ -14,6 +15,7 @@
 	let _jif;
 	let nJugglers;
 	let timeStretchFactor;
+	let causalDiagramOffset;
 	let width, height;
 	let period = 1;
 	let nodes = {};
@@ -81,6 +83,7 @@ $: {
 
 		period = _jif.repetition.period;
 		timeStretchFactor = _jif.timeStretchFactor;
+		causalDiagramOffset = isLadderDiagram ? 0 : 2 * timeStretchFactor;
 		nJugglers = _jif.jugglers.length;
 		dx = 70 / timeStretchFactor;
 
@@ -149,7 +152,7 @@ $: {
 			);
 
 			function getKey(thr0w, type) {
-				let time = thr0w.time + (type == 'catch' ? thr0w.duration + period * 2 * timeStretchFactor  - 2 * timeStretchFactor : 0);
+				let time = thr0w.time + (type == 'catch' ? thr0w.duration + period * 2 * timeStretchFactor - causalDiagramOffset : 0);
 				if (period)
 					time = time % period;
 				return time.toFixed(timePrecision) + '|' + thr0w[type == 'catch' ? 'to' : 'from'];
@@ -181,7 +184,7 @@ $: {
 					y: y(fromLine),
 					class: (isLeft ? 'left' : 'right') + ' ' + (balance[nodeKey] > 0 ? 'jammed' : (balance[nodeKey] < 0 ? 'exhausted' : '')),
 					label: th.label,
-					arrow: arrow(time, th.duration - 2 * timeStretchFactor, fromLine, toLine), // for ladder diagram: don't subtract 2 * timeStretchFactor
+					arrow: arrow(time, th.duration - causalDiagramOffset, fromLine, toLine), // for ladder diagram: don't subtract 2 * timeStretchFactor
 				});
 			}
 		}
