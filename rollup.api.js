@@ -16,7 +16,7 @@ const baseConfig = {
 		}),
 		alias({
 			entries: {
-				'$lib':     'src/lib',
+				// '$lib':     'src/lib',
 				'$app/environment': 'src/api/env.js',
 				//'$app':     '.svelte-kit/build/runtime/app',
 			},
