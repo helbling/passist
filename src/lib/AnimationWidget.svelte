@@ -1,10 +1,10 @@
 <script>
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
-	import { defaults } from '$lib/passist.mjs';
-	import Icon from '$lib/Icon.svelte';
-	import InputField from '$lib/InputField.svelte';
+	import { defaults } from './passist.mjs';
+	import Icon from './Icon.svelte';
+	import InputField from './InputField.svelte';
 	import { browser } from '$app/environment';
-	import Jif from '$lib/jif.mjs';
+	import Jif from './jif.mjs';
 
 	export let jif;
 	export let teaser = true;
@@ -65,7 +65,7 @@
 		isFullscreen = (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) === container;
 	};
 	onMount(async () => {
-		const Animation = (await import('$lib/animation.mjs')).default; // dynamic import, only on browser
+		const Animation = (await import('./animation.mjs')).default; // dynamic import, only on browser
 
 		animation = new Animation(canvas, animationJif, animationOptions, sizeOptions);
 		loaded = true;

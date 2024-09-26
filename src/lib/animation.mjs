@@ -1,8 +1,8 @@
-import { defaults, baseUrl } from '$lib/passist.mjs';
+import { defaults, baseUrl } from './passist.mjs';
 
 import * as THREE from 'three';
 // import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js"; # this does not work (2021-05) as vite treats it as commonjs
-import { OrbitControls } from "$lib/OrbitControls.mjs"; // <-- symlink hack to treat it like the module it actually is
+import { OrbitControls } from "./OrbitControls.mjs"; // <-- symlink hack to treat it like the module it actually is
 
 const hu = 0.21;
 const jugglerHeight  = 8    * hu;
