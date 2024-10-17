@@ -5,6 +5,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { defaults, useLocalStorage, siteswapGeneratorUrl } from '$lib/passist.mjs';
+	import { goto } from '$app/navigation';
 
 	export let params = {};
 
@@ -45,8 +46,9 @@
 	});
 	const onchanged = (params) => {
 
-		if (browser === true && window && ('history' in window))
-			history.replaceState({}, '', siteswapGeneratorUrl(params));
+		if (browser === true && window && location)
+			goto(siteswapGeneratorUrl(params), { replaceState: true, keepFocus:true } );
+
 
 		if (useLocalStorage)
 			localStorage.setItem("siteswapGeneratorParams", JSON.stringify(params));

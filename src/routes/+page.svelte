@@ -10,7 +10,7 @@
 			try {
 				const props = JSON.parse(propsJSON);
 				params = props;
-				goto(siteswapGeneratorUrl(params));
+				goto(siteswapGeneratorUrl(params), { replaceState: true });
 			} catch(e) {
 				// ignore
 			}
