@@ -2,6 +2,7 @@
 	import { useLocalStorage, siteswapUrl } from '$lib/passist.mjs';
 	import SiteswapPage from '$lib/SiteswapPage.svelte';
 	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
 
 	export let data;
 	let siteswapInput, nJugglers, handsInput, fullscreen;
@@ -11,14 +12,16 @@
 	$:  useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
 
 	$: {
-		if (browser === true && window && ('history' in window)) {
+		if (browser === true && window && location) {
 			const url = siteswapUrl({
 				siteswapInput,
 				nJugglers,
 				handsInput,
 				fullscreen,
 			});
-			history.replaceState({}, '', url);
+			if (location.pathname + location.search != url) {
+				goto(url, { replaceState: true, keepFocus:true } );
+			}
 		}
 	}
 </script>

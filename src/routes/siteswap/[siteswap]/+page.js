@@ -10,7 +10,7 @@ export async function load({ url, params }) {
 		handsInput = limbs2hands(limbs);
 
 	return {
-		siteswapInput: params.siteswap,
+		siteswapInput: params.siteswap == '-' ? '' : params.siteswap,
 		nJugglers,
 		handsInput,
 		fullscreen: parseInt(url.searchParams.get('fullscreen')),

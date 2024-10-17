@@ -7,7 +7,7 @@
 		goto(siteswapUrl({
 			siteswapInput: (localStorage.getItem('siteswap') || defaults.siteswap),
 			nJugglers: (localStorage.getItem('nJugglers') || 2),
-		}));
+		}), { replaceState: true });
 	}
 </script>
 
