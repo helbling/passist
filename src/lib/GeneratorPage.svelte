@@ -3,14 +3,17 @@
 	import Siteswap from '$lib/siteswap.mjs';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
-	import { defaults } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapGeneratorUrl } from '$lib/passist.mjs';
 
-	export let nProps   = defaults.nProps;
-	export let period   = defaults.period;
-	export let minThrow = defaults.minThrow;
-	export let maxThrow = defaults.maxThrow;
-	export let include  = '';
-	export let exclude  = '3 5';
+	export let params = {};
+
+	// set defaults for not set params
+	for (const [key, val] of Object.entries(defaults.siteswapGeneratorParams)) {
+		if (!params.hasOwnProperty(key))
+			params[key] = val;
+	}
+
+	let { nProps, period, maxThrow, minThrow, nJugglers, include, exclude } = params;
 
 	const spinner = "⣷⣯⣟⡿⢿⣻⣽⣾";
 
@@ -20,8 +23,6 @@
 //	minThrow = Math.max(0, Math.min(35, parseInt(minThrow)));
 //	maxThrow = Math.max(0, Math.min(35, parseInt(maxThrow)));
 //	nJugglers = Math.max(1, Math.min(9, parseInt(nJugglers)));
-
-	export let nJugglers = 2;
 
 	let list = [];
 	let calculating = true;
@@ -42,6 +43,13 @@
 		clearInterval(generatorInterval);
 	});
 	const onchanged = (params) => {
+
+		if (browser === true && window && ('history' in window))
+			history.replaceState({}, '', siteswapGeneratorUrl(params));
+
+		if (useLocalStorage)
+			localStorage.setItem("siteswapGeneratorParams", JSON.stringify(params));
+
 		ticks = 0;
 		calculating = true;
 		list = [];
@@ -67,17 +75,8 @@
 	};
 
 	$: {
-		if (browser === true) {
-			onchanged({
-				nProps:    nProps,
-				period:    period,
-				minThrow:  minThrow,
-				maxThrow:  maxThrow,
-				include:   include,
-				exclude:   exclude,
-				nJugglers: nJugglers
-			});
-		}
+		if (browser === true)
+			onchanged({ nProps, period, maxThrow, minThrow, nJugglers, include, exclude });
 	}
 
 </script>
