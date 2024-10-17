@@ -1,5 +1,6 @@
 <script>
 	import InputField from '$lib/InputField.svelte';
+	import Icon from '$lib/Icon.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
@@ -79,11 +80,19 @@
 			onchanged({ nProps, period, maxThrow, minThrow, nJugglers, include, exclude });
 	}
 
+	const reset = e => {
+		({ nProps, period, maxThrow, minThrow, nJugglers, include, exclude } = defaults.siteswapGeneratorParams);
+	};
 </script>
 
 <style>
 	ul { list-style-type:none; column-width:8em }
 	span.siteswap { color: #212529 }
+	button.reset { margin-bottom: 1em }
+	:global(button.reset svg) {
+		height: 1.2em;
+		color: #495057;
+	}
 </style>
 
 <div class="pure-form form-inline">
@@ -149,6 +158,16 @@
 		id=exclude
 		label='Exclude global'
 	/>
+
+	{#if JSON.stringify({ nProps, period, maxThrow, minThrow, nJugglers, include, exclude }) != JSON.stringify(defaults.siteswapGeneratorParams)}
+		<button
+			class="pure-button reset"
+			title="reset to example values"
+			on:click={e => ({ nProps, period, maxThrow, minThrow, nJugglers, include, exclude } = defaults.siteswapGeneratorParams) }
+		>
+			<Icon type=reload/>
+		</button>
+	{/if}
 </div>
 
 <h5>{list.length} siteswaps found{ calculating ? ' so far ' + spinner.charAt(ticks % 8) : ' in ' + calctime  + 's'}</h5>
