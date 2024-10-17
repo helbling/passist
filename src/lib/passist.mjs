@@ -6,10 +6,15 @@ const defaults = {
 	propType: 'club',
 	jugglingSpeed: 2.8,
 	animationSpeed: 0.8,
-	period: 5,
-	nProps: 7,
-	minThrow: 2,
-	maxThrow: 10,
+	siteswapGeneratorParams: {
+		nProps: 7,
+		period: 5,
+		maxThrow: 10,
+		minThrow: 2,
+		nJugglers: 2,
+		include: '',
+		exclude: '3 5',
+	},
 };
 
 const useLocalStorage = browser === true && 'localStorage' in window;
@@ -38,6 +43,26 @@ function siteswapUrl(p)
 function siteswapAlternativesUrl(p)
 {
 	return siteswapUrl(p).replace('/siteswap/', '/siteswap-alternatives/');
+}
+
+const siteswapGeneratorKeys = {
+		nProps: 'props',
+		period: 'period',
+		maxThrow: 'max_throw',
+		minThrow: 'min_throw',
+		nJugglers: 'jugglers',
+		include: 'include',
+		exclude: 'exclude',
+};
+
+function siteswapGeneratorUrl(p)
+{
+	const urlParams = {};
+	for (const [key, urlKey] of Object.entries(siteswapGeneratorKeys)) {
+		if (p.hasOwnProperty(key))
+			urlParams[urlKey] = p[key];
+	}
+	return U('/siteswap-generator', urlParams);
 }
 
 function jugglerName(i)
@@ -110,6 +135,8 @@ export {
 	useLocalStorage,
 	siteswapUrl,
 	siteswapAlternativesUrl,
+	siteswapGeneratorKeys,
+	siteswapGeneratorUrl,
 	jugglerName,
 	hands2limbs,
 	limbs2hands,
