@@ -16,6 +16,9 @@
 	}
 
 	let { nProps, period, maxThrow, minThrow, nJugglers, include, exclude } = params;
+	let hasDefaultParams;
+
+	$: hasDefaultParams = JSON.stringify({ nProps, period, maxThrow, minThrow, nJugglers, include, exclude }) == JSON.stringify(defaults.siteswapGeneratorParams);
 
 	const spinner = "⣷⣯⣟⡿⢿⣻⣽⣾";
 
@@ -47,7 +50,7 @@
 	const onchanged = (params) => {
 
 		if (browser === true && window && location)
-			goto(siteswapGeneratorUrl(params), { replaceState: true, keepFocus:true } );
+			goto(siteswapGeneratorUrl(hasDefaultParams ? {} : params), { replaceState: true, keepFocus:true } );
 
 
 		if (useLocalStorage)
@@ -161,7 +164,7 @@
 		label='Exclude global'
 	/>
 
-	{#if JSON.stringify({ nProps, period, maxThrow, minThrow, nJugglers, include, exclude }) != JSON.stringify(defaults.siteswapGeneratorParams)}
+	{#if !hasDefaultParams}
 		<button
 			class="pure-button reset"
 			title="reset to example values"
