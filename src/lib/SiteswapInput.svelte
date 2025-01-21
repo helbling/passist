@@ -20,6 +20,7 @@
 	let handsDragDropElement;
 	let handsInputElement;
 	let handList = [];
+	let showStyle = false;
 
 	$: handsInputDefault = limbs2hands(defaultLimbs(nJugglers));
 	$: handList = calculateHandList(handsInput, nJugglers);
@@ -44,11 +45,11 @@
 </script>
 
 <style>
-	.hands-input {
+	.hands-input, .style-overview {
 		display: inline-flex;
 		position:relative;
 	}
-	.hands-input input {
+	.hands-input input, .style-overview {
 		border-top-left-radius:0;
 		border-bottom-left-radius:0;
 		padding-right:1.55rem;
@@ -69,11 +70,20 @@
 	.hands-input input.empty { padding-right:0.3rem }
 	.hands-input input::-webkit-search-cancel-button { -webkit-appearance: none }
 	.hands-input input.invalid { color:#dc3545 }
+	.style-overview { line-height:1.15; padding:0.5em 1em; width:auto; padding-right:3em; margin-bottom:1em }
 
 	:global(.dragdroplist) { position:absolute !important; left:0; right:0; top:2.4em; z-index:1; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border:1px solid gray; background:white }
 	:global(.dragdroplist > .list > div.item) { margin-bottom:-1px; border-left:none; border-right:none }
 	:global(.dragdroplist > .list > div.item div.content p ) { margin:0 }
 	:global(.dragdroplist div.buttons) { visibility:hidden }
+
+	.show-style-button {
+		margin-bottom: 1em;
+		margin-right: 1em;
+	}
+	:global(.pure-button svg) {
+		height:1.5em
+	}
 </style>
 
 <svelte:window on:touchstart={windowOnClick} on:mousedown={windowOnClick}/>
@@ -108,40 +118,60 @@
 		{big}
 		/>
 
-	{#if showHandOrderInput}
-	<InputField
-		id={idPrefix + "HandOrder"}
-		label='Hand order'
-		type=custom
-		>
-		<div class=hands-input>
-			<input
-				id={idPrefix + "Hands"}
-				type=search
-				spellcheck=false
-				autocomplete=off
-				class:empty={!handsInput}
-				bind:value={handsInput}
-				placeholder={handsInputDefault}
-				on:focus={e => { handsDragDropVisible = true }}
-				bind:this={handsInputElement}
-				class:invalid={!handsValid}
-				on:keyup={e => { if (e.key == 'Enter') { e.target.blur(); handsDragDropVisible = false;}} }
+	<button
+		class="pure-button show-style-button"
+		class:pure-button-active={showStyle}
+		on:click={(e) => showStyle = !showStyle }
+	>
+		<Icon type=options />
+	</button>
+</div>
+
+<div class="pure-form form-inline">
+	{#if showStyle}
+		{#if showHandOrderInput}
+		<InputField
+			id={idPrefix + "HandOrder"}
+			label='Hand order'
+			type=custom
 			>
-			{#if handsDragDropVisible}
-			<div
-				bind:this={handsDragDropElement}
-				on:touchstart|capture={e => { handsInputElement.blur(); }}
-				on:touchend|capture={handsDragDropChanged}
-				on:mouseup|capture={handsDragDropChanged}
-			>
-				<DragDropList bind:data={handList} />
+			<div class=hands-input>
+				<input
+					id={idPrefix + "Hands"}
+					type=search
+					spellcheck=false
+					autocomplete=off
+					class:empty={!handsInput}
+					bind:value={handsInput}
+					placeholder={handsInputDefault}
+					on:focus={e => { handsDragDropVisible = true }}
+					bind:this={handsInputElement}
+					class:invalid={!handsValid}
+					on:keyup={e => { if (e.key == 'Enter') { e.target.blur(); handsDragDropVisible = false;}} }
+				>
+				{#if handsDragDropVisible}
+				<div
+					bind:this={handsDragDropElement}
+					on:touchstart|capture={e => { handsInputElement.blur(); }}
+					on:touchend|capture={handsDragDropChanged}
+					on:mouseup|capture={handsDragDropChanged}
+				>
+					<DragDropList bind:data={handList} />
+				</div>
+				{/if}
+				{#if handsInput}
+				<Icon type=close on:click={e => {handsInput = '';}}/>
+				{/if}
 			</div>
-			{/if}
-			{#if handsInput}
-			<Icon type=close on:click={e => {handsInput = '';}}/>
-			{/if}
-		</div>
-	</InputField>
+		</InputField>
+		{/if}
+
+	{:else} <!-- !showStyle -->
+		{#if showHandOrderInput && handsInput}
+			<div class="style-overview input-group" on:click={e => showStyle = true}>
+				<Icon type=close on:click={e => {handsInput = '';}}/>
+				Hand order: {handsInput}
+			</div>
+		{/if}
 	{/if}
 </div>
