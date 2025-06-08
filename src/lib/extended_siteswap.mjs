@@ -57,7 +57,7 @@ const grammar = `
   Throw
     = duration:Duration _ x:X _ p:P     _ { return modifyThrows({ duration, p, x }); }
     / duration:Duration _ p:P _ x:X     _ { return modifyThrows({ duration, p, x }); }
-	/ duration:Duration _ p:P ? _ x:X ? _ { return modifyThrows({ duration, p, x }); }
+    / duration:Duration _ p:P ? _ x:X ? _ { return modifyThrows({ duration, p, x }); }
 
   P
     = "p" { return true }
