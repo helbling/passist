@@ -4,11 +4,13 @@ import Jif from './jif.mjs';
 import { encodeUrlPathPart } from './utils.mjs';
 
 const grammar = `
-{
+{{
 	function zip(rows) { // https://stackoverflow.com/a/10284006
 		return rows[0].map((_,c)=>rows.map(row=>row[c]));
 	}
+}}
 
+{
 	const modifyThrows = options.modifyThrows ? options.modifyThrows : (x) => x;
 }
 
