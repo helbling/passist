@@ -21,7 +21,7 @@ const grammar = `
 
   Pattern
     = _ beats:Solo+       _ star:Star? _ { return { type:"solo",    star, beats    }; }
-    / _ passings:Passing+ _ star:Star? _ &{ return !options.soloOnly } {
+    / _ passings:Passing+ _ star:Star? _ !{ return options.soloOnly } {
         if (!passings.every(x => x.length == passings[0].length))
           throw new Error("not all passings have the same number of jugglers");
         return { type:"passing", star,
@@ -60,7 +60,13 @@ const grammar = `
     / duration:Duration _ p:P ? _ x:X ? _ { return modifyThrows({ duration, p, x }); }
 
   P
-    = "p" { return true }
+    =
+     // TODO: what if we have more than 9 jugglers?
+     // TODO: document
+      "p:" abs:([1-9]) !{ return options.soloOnly } { return { abs:+abs - 1 } }
+    / "p+" rel:[0-9] { return { rel: +rel } }
+    / "p-" rel:[0-9] { return { rel: -rel } }
+	  / "p" { return { rel: 1 }}
 
   X
     = "x" { return true }
@@ -93,8 +99,17 @@ function addTo(jifThrow, astThrow, nLimbs)
 		to ^= 1;
 
 	// passes
-	if (astThrow.p)
-		to = (to + 2) % nLimbs;
+	if (astThrow.p) {
+		if ('rel' in astThrow.p)
+			to = (to + 2 * astThrow.p.rel) % nLimbs;
+		else if ('abs' in astThrow.p) {
+			to = (2 * astThrow.p.abs + (to&1)) % nLimbs;
+		} else
+			to = (to + 2) % nLimbs; // should not happen according to current grammar
+
+		if (to < 0)
+			to = (nLimbs + to) % nLimbs
+	}
 
 	jifThrow.to = to;
 
