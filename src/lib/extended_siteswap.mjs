@@ -61,11 +61,11 @@ const grammar = `
 
   P
     =
-     // TODO: what if we have more than 9 jugglers?
      // TODO: document
-      "p:" abs:([1-9]) !{ return options.soloOnly } { return { abs:+abs - 1 } }
-    / "p+" rel:[0-9] { return { rel: +rel } }
-    / "p-" rel:[0-9] { return { rel: -rel } }
+     // TODO: support joe-pass notations as well?
+      "p:" abs:([0-9]+) !{ return options.soloOnly } { return { abs:+abs.join('') - 1 } }
+    / "p+" rel:([0-9]+) { return { rel: +rel.join('') } }
+    / "p-" rel:([0-9]+) { return { rel: +rel.join('') } }
 	  / "p" { return { rel: 1 }}
 
   X
