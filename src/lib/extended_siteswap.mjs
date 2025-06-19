@@ -61,7 +61,6 @@ const grammar = `
 
   P
     =
-     // TODO: document
       ("p:" / ":") abs:([0-9]+) !{ return options.soloOnly } { return { abs:+abs.join('') - 1 } }
     / ( "p+" / "r"  ) rel:([0-9]+) { return { rel: +rel.join('') } }
     / ( "p-" / "r-" ) rel:([0-9]+) { return { rel: -rel.join('') } }

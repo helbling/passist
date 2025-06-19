@@ -69,6 +69,14 @@ Sometimes writing async patterns in this way can help to think about patterns th
 The notation \`<xxx|yyy>\` means one juggler does \`xxx\` while another does \`yyy\`. \`'p'\` is used to represent a passing throw. For example, ${extended(['<3p33|234p>'])} is a 6 prop three-count passing pattern, where the first juggler does a three count with single passes and the second juggler throws a three count with early double passes. This can also be used with left/right synchronous patterns; a two-person 'shower' is then ${extended(['<(2x,4xp)|(2x,4xp)>'])}.
 
 You won't need to type in \'<\', \'>\' or \'|\', the user interface will do that for you. In case the pattern is repeated for all jugglers you can use an even simpler interface. For example here: ${symmetric(['(2x,4xp)'], {nJugglers:2})}.
+
+#### Pass destination
+
+If we have more than two jugglers, a \`3p\` is a single pass to the next juggler in-line.
+
+A single pass two jugglers forward is \`3p+2\`, one backwards \`3p-1\`, and so on. Make sure to put a space between passes for these relative pass notations.
+
+For extended siteswaps, you can also specify \`3p:2\` for a single pass to the second juggler.
 `;
 
 let markdown = marked(source);
