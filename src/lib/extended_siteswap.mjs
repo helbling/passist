@@ -65,7 +65,7 @@ const grammar = `
      // TODO: support joe-pass notations as well?
       "p:" abs:([0-9]+) !{ return options.soloOnly } { return { abs:+abs.join('') - 1 } }
     / "p+" rel:([0-9]+) { return { rel: +rel.join('') } }
-    / "p-" rel:([0-9]+) { return { rel: +rel.join('') } }
+    / "p-" rel:([0-9]+) { return { rel: -rel.join('') } }
 	  / "p" { return { rel: 1 }}
 
   X
