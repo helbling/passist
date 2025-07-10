@@ -26,7 +26,7 @@ function extended(siteswap, params = {}) {
 
 let source = `
 
-### Global Siteswap
+## Global Siteswap
 A sequence of numbers that define for every throw how many beats later the prop is thrown again.
 
 See https://en.wikipedia.org/wiki/Siteswap#Vanilla for an in depth description.
@@ -39,13 +39,13 @@ Examples:
 - ${global('86277', {nJugglers: 2})}
 - ${global('7a666', {nJugglers: 2})}
 
-### Extended Siteswap
+## Extended Siteswap
 The following extensions to vanilla siteswap are allowed:
 
-#### Multiplexes
+### Multiplexes
 Throws in square brackets are thrown simultaneously from the same hand. Example: ${extended(['24[54]'])}
 
-#### Synchronous throws
+### Synchronous throws
 Throws in round brackets are thrown left/right synchronously. Example: ${extended(['(4x,2x)'])}.
 The 'x' means the throw should land in the other hand it would normaly land in. 
 
@@ -57,7 +57,7 @@ By convention the left slot in the parenthesis is taken to correspond to the lef
 
 Multiplexing can also be notated, exactly as above; for example the 4 ball pattern ${extended(['(4,2)(2x,[44x])'])} has a multiplexed '4' and '4x' thrown with the right hand.
 
-#### Short-beat synchronous throws!
+### Short-beat synchronous throws!
 The usual sync throws \`(t1,t2)\` assume the beat immediately following the sync throw is empty (no throws occurring). So for a two-handed sync pattern, each hand throws every two beats, the same as async juggling. This preserves our intuitions for how high a throw X should be when we switch between sync and async patterns.
 
 In some cases it may be desirable to break this assumption and allow a throw on the beat immediately following the sync throw. For this purpose you can use a "short-beat" sync throw by adding a \`'!'\` to the throw pair signifying no empty beat immediately following.
@@ -70,13 +70,25 @@ The notation \`<xxx|yyy>\` means one juggler does \`xxx\` while another does \`y
 
 You won't need to type in \'<\', \'>\' or \'|\', the user interface will do that for you. In case the pattern is repeated for all jugglers you can use an even simpler interface. For example here: ${symmetric(['(2x,4xp)'], {nJugglers:2})}.
 
-#### Pass destination
+### Pass destination
 
 If we have more than two jugglers, a \`3p\` is a single pass to the next juggler in-line.
 
 A single pass two jugglers forward is \`3p+2\`, one backwards \`3p-1\`, and so on. Make sure to put a space between passes for these relative pass notations.
 
 For extended siteswaps, you can also specify \`3p:2\` for a single pass to the second juggler.
+
+### Throw heights
+As the letter \`p\` is used to mark a pass, throws can get up to height \`o\`, which corresponds to 24 beats.
+
+## Symmetric siteswap
+
+In lots of passing patterns all the jugglers are throwing the same throw sequence, either exactly at the same time, or staggered. In symmetric mode, this sequence only needs to be typed in once.
+
+Staggered symmetric patterns can be generated from solo siteswaps using the Prechac Transformation. See this detailed article here: [Staggered Symmetric Passing by Sean Gandini](https://jugglingedge.com/pdf/SymmetricPatternsClassified_SG_2008-02-24.pdf)
+
+Here you can generate lots of prechac patterns: [PrechacThis](http://prechacthis.takeouts.eu/)
+
 `;
 
 let markdown = marked(source);
