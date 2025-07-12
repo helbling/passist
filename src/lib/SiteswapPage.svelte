@@ -4,7 +4,7 @@
 	import PatternResult from '$lib/PatternResult.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
 	import SiteswapInput from '$lib/SiteswapInput.svelte';
-	import { defaults, useLocalStorage, siteswapUrl, siteswapAlternativesUrl, jugglerName, jugglersInCircle, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, jugglersInCircle, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let init;
@@ -22,7 +22,7 @@
 	let startProperties;
 	let localPeriod;
 	let prechacthisUrl;
-	let alternativesUrl;
+	// let alternativesUrl;
 	let startConfigurations;
 	let unusualThrows = false;
 	let limbs = [];
@@ -69,7 +69,6 @@
 			});
 
 			if (nJugglers > 0) {
-				const circleRadius = 1.2 + nJugglers * 0.2;
 				const jugglers = jugglersInCircle(nJugglers);
 
 				limbs = hands2limbs(handsInput, nJugglers);
@@ -111,12 +110,14 @@
 				}
 
 
+				/*
 				const alternativesSiteswap = siteswap.toString().repeat(localPeriod * nJugglers / period);
 				alternativesUrl = siteswapAlternativesUrl({
 					siteswapInput: alternativesSiteswap,
 					nJugglers,
 					handsInput,
 				});
+				*/
 
 				siteswapName = siteswapNames[url];
 				title = 'Siteswap ' + strippedInput;
@@ -167,7 +168,6 @@
 	a.arrow { color:inherit; text-decoration:none; cursor:pointer }
 	.localThrows { overflow-x:auto; margin-bottom:1em }
 	.localThrows td { white-space:nowrap }
-	label.pure-button { margin:0 }
 	td.space { padding-left:0.5em }
 </style>
 
@@ -229,7 +229,7 @@
 						<thead>
 							<tr>
 								<td>Local&nbsp;</td>
-								<td class=space />
+								<td class=space></td>
 								<td colspan={localPeriod + 1}>Siteswap</td>
 								<td colspan={localPeriod + 1}>
 									{#if prechacthisUrl}
@@ -248,18 +248,18 @@
 						{#each startConfigurations as j}
 							<tr>
 								<th>{j.name} <sub>{j.startProps['left hand'] || 0}|{j.startProps['right hand'] || 0}</sub></th>
-								<td class=space />
+								<td class=space></td>
 								{#each j.local as t}
 									<td>{#if t}{t.siteswap}{@html t.desc}{/if}&nbsp;</td>
 								{/each}
-								<td class=space />
+								<td class=space></td>
 								{#each j.local as t}
 									<td>
 										{#if t}{prechac(t.height, nJugglers)}{@html t.desc}{:else}&nbsp;{/if}
 									</td>
 								{/each}
 								{#if nJugglers == 2 && !unusualThrows}
-									<td class=space />
+									<td class=space></td>
 									{#each j.local as t}
 										<td>{#if t}{word(t.height)},{/if}&nbsp;</td>
 									{/each}
@@ -279,11 +279,11 @@
 				<h5>Invalid Siteswap</h5>
 				{#if siteswap && siteswap.error}
 					<p>
-					{siteswap.error}
+						{siteswap.error}
+					</p>
 					{#if siteswap.error.snippet}
 							<pre>{siteswap.error.snippet}</pre>
 					{/if}
-					</p>
 				{/if}
 			 <img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see an invalid siteswap" >
 			</InfoBox>
