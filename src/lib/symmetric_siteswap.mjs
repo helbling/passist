@@ -2,8 +2,6 @@
  * Symmetric siteswap
  */
 
-import peggy from 'peggy';
-import Siteswap from './siteswap.mjs';
 import ExtendedSiteswap from './extended_siteswap.mjs';
 import Jif from './jif.mjs';
 
@@ -18,7 +16,7 @@ function permutation_power(permutation, n)
 		throw new Error("permutation power for n < 0 not implemented");
 
 	if (n == 0)
-		return permutation.map((v, k) => k); // identity
+		return permutation.map((_, k) => k); // identity
 
 	let result = [...permutation]; // clone
 
@@ -142,7 +140,7 @@ static _inPhase(input, p = {})
 static _outOfPhase(input, p = {})
 {
 	const { nJugglers, nLimbs, options } = p;
-	let ast, soloAst, flippedPasses, period, prechacOffset, btt;
+	let ast, soloAst, period, prechacOffset, btt;
 
 	try {
 		const parserOptions = { fractionalDuration:true, soloOnly:true };
@@ -203,7 +201,6 @@ static _outOfPhase(input, p = {})
 
 	const throws = [];
 
-	const beats = ast.beats;
 	const simultaneous = (period % (nLimbs / 2) == 0);
 
 	if (period % nLimbs == 0)
