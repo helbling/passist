@@ -170,7 +170,7 @@ static _outOfPhase(input, p = {})
 		});
 
 		if (p.flipped)
-			flippedPasses = parser.parse(input, {
+			parser.parse(input, {
 				fractionalDuration:true,
 				modifyThrows: (th) => {
 					if (th.p)
