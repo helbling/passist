@@ -87,7 +87,7 @@
 			{symmetricSiteswapString}{siteswapName ? ' - ' + siteswapName : ''}
 		</p>
 		<p>
-			{nProps} props
+			{nProps} props{#if jif.meta._prechacthisUrl}, <a href={jif.meta._prechacthisUrl}>PrechacThis</a> {/if}
 		</p>
 	{:else if input}
 		<div>

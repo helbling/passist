@@ -256,10 +256,21 @@ static _outOfPhase(input, p = {})
 		});
 	}
 
+	let _prechacthisUrl = '';
+	if (nJugglers == 2 && limbs.length == 4) {
+		_prechacthisUrl = 'http://prechacthis.takeouts.eu/info.php?pattern=['
+			+ throws.map(th => {
+				var h = th.duration / 2;
+				return 'p(' + h + (limbs[th.from].juggler == limbs[th.to].juggler ? ',0,' + h : ',1,' + (h + period / 2)) + ')';
+			}).join(',')
+		+ ']&persons=2'; // + (p.flipped ? '&swap=[0]' :''); // TODO: find out how swap= on prechacthis works..
+	}
+
 	const jif = {
 		meta: {
 			name: options.name ? options.name : 'symmetric siteswap ' + input,
 			generator: 'passist', // TODO: put version of package.json here again
+			_prechacthisUrl,
 		},
 		highLevelDescription: {
 			type: 'symmetricSiteswap',
