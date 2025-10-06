@@ -107,7 +107,7 @@ $: {
 
 			// check for collisions
 			const timesByJuggler = Array.from(Array(nJugglers), () => []);
-			throws.forEach((th, i) => {
+			throws.forEach(th => {
 				const juggler = _jif.limbs[th.from].juggler;
 				timesByJuggler[juggler].push(th.time);
 			});
@@ -170,7 +170,7 @@ $: {
 
 			const balance = {};
 
-			throws.forEach((th, i) => {
+			throws.forEach(th => {
 				const throwKey = getKey(th, 'throw');
 				const catchKey = getKey(th, 'catch');
 
