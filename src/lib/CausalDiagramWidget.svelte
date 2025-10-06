@@ -20,7 +20,7 @@
 	const yoff = 70;
 	const dy = 100;
 	let dx;
-	const r = 13
+	let r = 13
 	let _jif;
 	let nJugglers;
 	let timeStretchFactor;
@@ -90,6 +90,13 @@
 $: {
 		_jif = Jif.complete(jif, { expand:true, props:false, keepZeroThrows: !isLadderDiagram } ).jif;
 		const throws = _jif.throws;
+
+		let maxLabel = 1;
+		for (const th of jif.throws)
+		if (th.label && th.label.length > maxLabel)
+			maxLabel = th.label.length;
+		if (maxLabel > 2)
+			r = Math.min(32, maxLabel * 4.5);
 
 		period = _jif.repetition.period;
 		timeStretchFactor = _jif.timeStretchFactor;
