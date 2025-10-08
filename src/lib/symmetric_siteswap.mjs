@@ -163,6 +163,8 @@ static _outOfPhase(input, p = {})
 					if (p.flipped)
 						th.x = !th.x;
 					th.duration = Math.round((th.duration - prechacOffset + period) * 10) / 10;
+					if (nJugglers == 3 && (th.duration % 1 > 0.9))
+						th.duration += 0.1; // allow "3.6p 3" for 3 jugglers as well, not just "3.7p 3" or more precision
 				}
 				th.p = null;
 				return th;
