@@ -30,7 +30,7 @@
 		return limbs.map(limb => jugglerName(limb.juggler) + ' ' + limb.type.split(' ')[0]);
 	}
 
-	function handsDragDropChanged(e) {
+	function handsDragDropChanged() {
 		handsInput = handList.join(' ')
 			.replace(/ right/g, 'r')
 			.replace(/ left/g, 'l');
@@ -64,9 +64,9 @@
 		margin:0;
 		border-top-left-radius:0;
 		border-bottom-left-radius:0;
+		appearance: none;
 		-webkit-appearance:none;
 	}
-	.hands-input input.big { width:18rem !important }
 	.hands-input input.empty { padding-right:0.3rem }
 	.hands-input input::-webkit-search-cancel-button { -webkit-appearance: none }
 	.hands-input input.invalid { color:#dc3545 }
@@ -98,7 +98,7 @@
 		title='Number of jugglers'
 		min=1
 		max=9
-		on:change={e => { handsInput = ''; }}
+		on:change={() => { handsInput = ''; }}
 		{big}
 		/>
 	{/if}
@@ -121,7 +121,7 @@
 	<button
 		class="pure-button show-style-button"
 		class:pure-button-active={showStyle}
-		on:click={(e) => showStyle = !showStyle }
+		on:click={() => showStyle = !showStyle }
 	>
 		<Icon type=options />
 	</button>
@@ -144,15 +144,17 @@
 					class:empty={!handsInput}
 					bind:value={handsInput}
 					placeholder={handsInputDefault}
-					on:focus={e => { handsDragDropVisible = true }}
+					on:focus={() => { handsDragDropVisible = true }}
 					bind:this={handsInputElement}
 					class:invalid={!handsValid}
 					on:keyup={e => { if (e.key == 'Enter') { e.target.blur(); handsDragDropVisible = false;}} }
 				>
 				{#if handsDragDropVisible}
+
+				<!--svelte-ignore a11y_no_static_element_interactions -->
 				<div
 					bind:this={handsDragDropElement}
-					on:touchstart|capture={e => { handsInputElement.blur(); }}
+					on:touchstart|capture={() => { handsInputElement.blur(); }}
 					on:touchend|capture={handsDragDropChanged}
 					on:mouseup|capture={handsDragDropChanged}
 				>
@@ -160,7 +162,7 @@
 				</div>
 				{/if}
 				{#if handsInput}
-				<Icon type=close on:click={e => {handsInput = '';}}/>
+				<Icon type=close on:click={() => {handsInput = '';}}/>
 				{/if}
 			</div>
 		</InputField>
@@ -168,8 +170,10 @@
 
 	{:else} <!-- !showStyle -->
 		{#if showHandOrderInput && handsInput}
-			<div class="style-overview input-group" on:click={e => showStyle = true}>
-				<Icon type=close on:click={e => {handsInput = '';}}/>
+			<!--svelte-ignore a11y_no_static_element_interactions -->
+			<!--svelte-ignore a11y_click_events_have_key_events -->
+			<div class="style-overview input-group" on:click={() => showStyle = true}>
+				<Icon type=close on:click={() => {handsInput = '';}}/>
 				Hand order: {handsInput}
 			</div>
 		{/if}
