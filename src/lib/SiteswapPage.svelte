@@ -15,6 +15,7 @@
 	let shift = 0;
 	let handsInput = '';
 	let handsValid = false;
+	let style = [];
 	let siteswap, strippedInput, originalSiteswap, extendedSiteswap;
 	let period;
 	let nProps;
@@ -179,6 +180,8 @@
 		bind:siteswapInput={input}
 		bind:handsInput
 		bind:handsValid
+		bind:style
+		{jif}
 		idPrefix=main
 	/>
 

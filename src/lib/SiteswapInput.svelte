@@ -14,16 +14,33 @@
 	export let handsValid = true;
 	export let size = 10;
 	export let big = false;
+	export let jif = {};
+	export let style = [];
 
 	let handsInputDefault = '';
 	let handsDragDropVisible = false;
 	let handsDragDropElement;
 	let handsInputElement;
 	let handList = [];
-	let showStyle = false;
+	let showStyle = true;
+	let heights = new Set();
+	let heightCount = {};
+	let newStyle = {dummy:'du'};
 
 	$: handsInputDefault = limbs2hands(defaultLimbs(nJugglers));
 	$: handList = calculateHandList(handsInput, nJugglers);
+
+	$: {
+		if (jif.throws) {
+			heights = new Set();
+			heightCount = {};
+			for (const th of jif.throws) {
+					heights.add(th.label);
+					heightCount[th.label] = (heightCount[th.label] ?? 0) + 1;
+				}
+			}
+			heights = heights;
+	}
 
 	function calculateHandList(handsInput, nJugglers) {
 		const limbs = hands2limbs(handsInput, nJugglers) || defaultLimbs(nJugglers);
@@ -41,6 +58,13 @@
 			handsDragDropVisible = false
 			handsInputElement.blur();
 		}
+	}
+
+	/**
+	 * prints the ordinal string for a number (1st, 2nd, 3rd, 4th, etc)
+	 */
+	function ordinal(n) {
+			return n + ([,'st','nd','rd'][(''+n).match`1?.$`]||'th');
 	}
 </script>
 
@@ -168,6 +192,49 @@
 		</InputField>
 		{/if}
 
+		<div class="throw-style">
+			<InputField
+				id={idPrefix + "style_new"}
+				label='Style'
+				type=custom
+				>
+					{#each style as s}
+						{JSON.stringify(s)}
+					{/each}
+					<select name="throw">
+						{#each [...heights.keys()] as height}
+							{#if heightCount[height] == 1}
+							  <option value="{height}">{height}</option>
+						  {:else}
+							  <option value="{height}">{heightCount[height] == 2 ? 'both' : 'all'} {height}</option>
+							  {#each { length: heightCount[height] } as _,ith}}
+								  <option value="{height}">{ordinal(ith+1)} {height}</option>
+							  {/each}
+
+						  {/if}
+						{/each}
+					</select>
+					<select name="jugglers">
+					  <option value="all">of all jugglers</option>
+						{#each jif.jugglers as juggler, idx}
+							<option value="{idx}">of juggler {juggler.name}</option>
+						{/each}
+					</select>
+					<select name="what">
+						  <option value="spins">#spins</option>
+						  <!-- <option value="dwell">dwell time</option> -->
+					</select>
+					<input
+						type=number
+						min=-99
+						max=99
+						value=1
+					/>
+					<button on:click={_=>{style.push(newStyle); style=style } }>
+						add
+					</button>
+				</InputField>
+		</div>
 	{:else} <!-- !showStyle -->
 		{#if showHandOrderInput && handsInput}
 			<!--svelte-ignore a11y_no_static_element_interactions -->

@@ -68,6 +68,7 @@
 		idPrefix=main
 		showHandOrderInput={false}
 		big={true}
+		{jif}
 	/>
 	<SiteswapInput
 		showNJugglers={false}
