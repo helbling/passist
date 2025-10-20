@@ -25,7 +25,8 @@
 	let showStyle = true;
 	let heights = new Set();
 	let heightCount = {};
-	let newStyle = {dummy:'du'};
+	let newStyle = {};
+
 
 	$: handsInputDefault = limbs2hands(defaultLimbs(nJugglers));
 	$: handList = calculateHandList(handsInput, nJugglers);
@@ -194,43 +195,47 @@
 
 		<div class="throw-style">
 			<InputField
-				id={idPrefix + "style_new"}
+				id={idPrefix + "throw-style"}
 				label='Style'
 				type=custom
 				>
-					{#each style as s}
-						{JSON.stringify(s)}
+					{#each style as s,idx}
+						<div class="style-overview input-group">
+							{s.height}{s.jugglers >= 0 ? ' of ' + jif.jugglers[s.jugglers].name : ''}: {s.what}={s.value}
+							<Icon type=close on:click={() => { style.splice(idx, 1); style = style }}/>
+						</div>
 					{/each}
-					<select name="throw">
+					<select name="height" bind:value={newStyle.height} >
 						{#each [...heights.keys()] as height}
 							{#if heightCount[height] == 1}
 							  <option value="{height}">{height}</option>
 						  {:else}
 							  <option value="{height}">{heightCount[height] == 2 ? 'both' : 'all'} {height}</option>
 							  {#each { length: heightCount[height] } as _,ith}}
-								  <option value="{height}">{ordinal(ith+1)} {height}</option>
+								  <option value="{ordinal(ith+1) + ' ' + height}">{ordinal(ith+1)} {height}</option>
 							  {/each}
 
 						  {/if}
 						{/each}
 					</select>
-					<select name="jugglers">
-					  <option value="all">of all jugglers</option>
+					<select name="jugglers" bind:value={newStyle.jugglers}>
+					  <option value="-1">of all jugglers</option>
 						{#each jif.jugglers as juggler, idx}
 							<option value="{idx}">of juggler {juggler.name}</option>
 						{/each}
 					</select>
-					<select name="what">
+					<select name="what" bind:value={newStyle.what} >
 						  <option value="spins">#spins</option>
-						  <!-- <option value="dwell">dwell time</option> -->
+						  <option value="dwell">dwell time</option>
 					</select>
 					<input
 						type=number
 						min=-99
 						max=99
-						value=1
+						bind:value={newStyle.value}
+						step={newStyle.what == 'dwell' ? 0.01 : 1}
 					/>
-					<button on:click={_=>{style.push(newStyle); style=style } }>
+					<button on:click={_=>{style.push(Object.assign({}, newStyle)); style=style } }>
 						add
 					</button>
 				</InputField>
