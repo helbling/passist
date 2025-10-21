@@ -15,7 +15,7 @@
 	let shift = 0;
 	let handsInput = '';
 	let handsValid = false;
-	let style = [];
+	let throwStyles = [];
 	let siteswap, strippedInput, originalSiteswap, extendedSiteswap;
 	let period;
 	let nProps;
@@ -180,7 +180,7 @@
 		bind:siteswapInput={input}
 		bind:handsInput
 		bind:handsValid
-		bind:style
+		bind:throwStyles
 		{jif}
 		idPrefix=main
 	/>
@@ -193,6 +193,8 @@
 		bind:siteswapInput={input}
 		bind:handsInput
 		bind:handsValid
+		bind:throwStyles
+		{jif}
 		idPrefix=animation
 	/>
 

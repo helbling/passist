@@ -15,7 +15,7 @@
 	export let size = 10;
 	export let big = false;
 	export let jif = {};
-	export let style = [];
+	export let throwStyles = [];
 
 	let handsInputDefault = '';
 	let handsDragDropVisible = false;
@@ -67,6 +67,11 @@
 	function ordinal(n) {
 			return n + ([,'st','nd','rd'][(''+n).match`1?.$`]||'th');
 	}
+
+	function throwStyleString(style, jif) {
+		return style.height + (style.jugglers >= 0 ? ' of ' + jif.jugglers[style.jugglers].name : '') + ': ' + style.what + '=' + style.value;
+	}
+	
 </script>
 
 <style>
@@ -109,6 +114,7 @@
 	:global(.pure-button svg) {
 		height:1.5em
 	}
+	select { height: 2.4em }
 </style>
 
 <svelte:window on:touchstart={windowOnClick} on:mousedown={windowOnClick}/>
@@ -196,13 +202,13 @@
 		<div class="throw-style">
 			<InputField
 				id={idPrefix + "throw-style"}
-				label='Style'
+				label='Throw styles'
 				type=custom
 				>
-					{#each style as s,idx}
+					{#each throwStyles as s,idx}
 						<div class="style-overview input-group">
-							{s.height}{s.jugglers >= 0 ? ' of ' + jif.jugglers[s.jugglers].name : ''}: {s.what}={s.value}
-							<Icon type=close on:click={() => { style.splice(idx, 1); style = style }}/>
+							{throwStyleString(s, jif)}
+							<Icon type=close on:click={() => { throwStyles.splice(idx, 1); throwStyles = throwStyles }}/>
 						</div>
 					{/each}
 					<select name="height" bind:value={newStyle.height} >
@@ -235,7 +241,7 @@
 						bind:value={newStyle.value}
 						step={newStyle.what == 'dwell' ? 0.01 : 1}
 					/>
-					<button on:click={_=>{style.push(Object.assign({}, newStyle)); style=style } }>
+					<button on:click={_=>{throwStyles.push(Object.assign({}, newStyle)); throwStyles=throwStyles } }>
 						add
 					</button>
 				</InputField>
@@ -247,6 +253,14 @@
 			<div class="style-overview input-group" on:click={() => showStyle = true}>
 				<Icon type=close on:click={() => {handsInput = '';}}/>
 				Hand order: {handsInput}
+			</div>
+		{/if}
+		{#if throwStyles.length > 0}
+			<!--svelte-ignore a11y_no_static_element_interactions -->
+			<!--svelte-ignore a11y_click_events_have_key_events -->
+			<div class="style-overview input-group" on:click={() => showStyle = true}>
+				<Icon type=close on:click={() => {throwStyles = [];}}/>
+				Throw styles: {throwStyles.map(s => throwStyleString(s, jif)).join(', ')}
 			</div>
 		{/if}
 	{/if}

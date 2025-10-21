@@ -13,12 +13,11 @@
 	let valid = false;
 	let symmetricSiteswapString = '';
 	let symmetricSiteswap;
-	let period;
 	let nProps;
 	let siteswapName;
 	let title;
 	let url;
-	let urlSuffix;
+	let throwStyles = [];
 
 	if (init) {
 		input = init.params.input;
@@ -68,6 +67,7 @@
 		idPrefix=main
 		showHandOrderInput={false}
 		big={true}
+		bind:throwStyles
 		{jif}
 	/>
 	<SiteswapInput
@@ -79,6 +79,8 @@
 		idPrefix=animation
 		showHandOrderInput={false}
 		big={true}
+		bind:throwStyles
+		{jif}
 	/>
 
 	<div slot=info>
