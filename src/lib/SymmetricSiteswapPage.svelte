@@ -28,17 +28,17 @@
 		if (nJugglersUrl && nJugglersUrl >= 1)
 			nJugglers = nJugglersUrl;
 
+		const throwStylesParam = init.url.searchParams.get('throw_styles');
+		if (throwStylesParam) {
+			try {
+				throwStyles = JSON.parse(throwStylesParam);
+			} catch(e) {
+				throwStyles = [];
+			}
+		}
 	} else if (useLocalStorage) {
 		input = localStorage.getItem('symmetric-siteswap/input') || defaults.siteswap;
 		nJugglers = localStorage.getItem('symmetric-siteswap/nJugglers') || defaults.nJugglers;
-	}
-	const throwStylesParam = init.url.searchParams.get('throw_styles');
-	if (throwStylesParam) {
-		try {
-			throwStyles = JSON.parse(throwStylesParam);
-		} catch(e) {
-			throwStyles = [];
-		}
 	}
 
 	$: useLocalStorage && input && localStorage.setItem("symmetric-siteswap/input", input);

@@ -43,18 +43,18 @@
 		const limbs = hands2limbs(handsParam, nJugglers);
 		if (limbs)
 			handsInput = limbs2hands(limbs);
+
+		const throwStylesParam = init.url.searchParams.get('throw_styles');
+		if (throwStylesParam) {
+			try {
+				throwStyles = JSON.parse(throwStylesParam);
+			} catch(e) {
+				throwStyles = [];
+			}
+		}
 	} else if (useLocalStorage) {
 			input = localStorage.getItem('siteswap') || defaults.siteswap;
 			nJugglers = localStorage.getItem('nJugglers') || defaults.nJugglers;
-	}
-
-	const throwStylesParam = init.url.searchParams.get('throw_styles');
-	if (throwStylesParam) {
-		try {
-			throwStyles = JSON.parse(throwStylesParam);
-		} catch(e) {
-			throwStyles = [];
-		}
 	}
 
 	$: useLocalStorage && input && localStorage.setItem("siteswap", input);
