@@ -2,6 +2,7 @@
 	import InputField from '$lib/InputField.svelte';
 	import DragDropList from '$lib/DragDropList.svelte';
 	import Icon from '$lib/Icon.svelte';
+	import InfoBox from '$lib/InfoBox.svelte';
 	import { jugglerName, hands2limbs, limbs2hands, defaultLimbs } from '$lib/passist.mjs';
 
 	export let siteswapInput;
@@ -27,6 +28,7 @@
 	let heightCount = {};
 	let newStyle = {};
 
+	const throwStylesBetaWarning = 'Note: Throw styles is new and might still have bugs';
 
 	$: handsInputDefault = limbs2hands(defaultLimbs(nJugglers));
 	$: handList = calculateHandList(handsInput, nJugglers);
@@ -251,6 +253,7 @@
 			</div>
 			{/each}
 		</div>
+		<InfoBox type=warning>{throwStylesBetaWarning}</InfoBox>
 	</div>
 	{:else} <!-- !showStyle -->
 	<div class="pure-form form-inline">
@@ -275,6 +278,8 @@
 					}}/>
 				Throw styles: {throwStyles.map(s => throwStyleString(s, jif)).join(', ')}
 			</div>
+
+			<InfoBox type=warning>{throwStylesBetaWarning}</InfoBox>
 		{/if}
 	</div>
 {/if}
