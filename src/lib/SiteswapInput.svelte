@@ -34,7 +34,7 @@
 	$: handList = calculateHandList(handsInput, nJugglers);
 
 	$: {
-		if (jif.throws) {
+		if (jif && jif.throws) {
 			heights = new Set();
 			heightCount = {};
 			for (const th of jif.throws) {
