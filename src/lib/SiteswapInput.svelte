@@ -100,8 +100,7 @@
 	.hands-input input.empty { padding-right:0.3rem }
 	.hands-input input::-webkit-search-cancel-button { -webkit-appearance: none }
 	.hands-input input.invalid { color:#dc3545 }
-	.style-overview { line-height:1.15; padding:0.5em 1em; width:auto; padding-right:3em; margin-bottom:1em }
-	.throw-styles .style-overview { margin-right:1em }
+	.style-overview { line-height:1.15; padding:0.5em 1em; width:auto; padding-right:3em; margin-bottom:1em; margin-right:1em }
 
 	:global(.dragdroplist) { position:absolute !important; left:0; right:0; top:2.4em; z-index:1; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border:1px solid gray; background:white }
 	:global(.dragdroplist > .list > div.item) { margin-bottom:-1px; border-left:none; border-right:none }
