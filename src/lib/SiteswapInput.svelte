@@ -101,6 +101,7 @@
 	.hands-input input::-webkit-search-cancel-button { -webkit-appearance: none }
 	.hands-input input.invalid { color:#dc3545 }
 	.style-overview { line-height:1.15; padding:0.5em 1em; width:auto; padding-right:3em; margin-bottom:1em }
+	.throw-styles .style-overview { margin-right:1em }
 
 	:global(.dragdroplist) { position:absolute !important; left:0; right:0; top:2.4em; z-index:1; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border:1px solid gray; background:white }
 	:global(.dragdroplist > .list > div.item) { margin-bottom:-1px; border-left:none; border-right:none }
@@ -153,14 +154,15 @@
 		class="pure-button show-style-button"
 		class:pure-button-active={showStyle}
 		on:click={() => showStyle = !showStyle }
+		title="{showStyle ? 'hide' : 'show'} settings"
 	>
 		<Icon type=options />
 	</button>
 </div>
 
-<div class="pure-form form-inline">
-	{#if showStyle}
-		{#if showHandOrderInput}
+{#if showStyle}
+	{#if showHandOrderInput}
+	<div class="pure-form form-inline">
 		<InputField
 			id={idPrefix + "HandOrder"}
 			label='Hand order'
@@ -197,56 +199,62 @@
 				{/if}
 			</div>
 		</InputField>
-		{/if}
+	</div>
+	{/if}
 
-		<div class="throw-style">
-			<InputField
-				id={idPrefix + "throw-style"}
-				label='Throw styles'
-				type=custom
-				>
-					{#each throwStyles as s,idx}
-						<div class="style-overview input-group">
-							{throwStyleString(s, jif)}
-							<Icon type=close on:click={() => { throwStyles.splice(idx, 1); throwStyles = throwStyles }}/>
-						</div>
-					{/each}
-					<select name="height" bind:value={newStyle.height} >
-						{#each [...heights.keys()] as height}
-							{#if heightCount[height] == 1}
-							  <option value="{height}">{height}</option>
-						  {:else}
-							  <option value="{height}">{heightCount[height] == 2 ? 'both' : 'all'} {height}</option>
-							  {#each { length: heightCount[height] } as _,ith}}
-								  <option value="{ordinal(ith+1) + ' ' + height}">{ordinal(ith+1)} {height}</option>
-							  {/each}
+	<div class="pure-form form-inline">
+	<InputField
+		id={idPrefix + "throw-styles"}
+		label='Throw styles'
+		type=custom
+		>
+			<select name="height" bind:value={newStyle.height} >
+				{#each [...heights.keys()] as height}
+					{#if heightCount[height] == 1}
+					  <option value="{height}">{height}</option>
+				  {:else}
+					  <option value="{height}">{heightCount[height] == 2 ? 'both' : 'all'} {height}</option>
+					  {#each { length: heightCount[height] } as _,ith}}
+						  <option value="{ordinal(ith+1) + ' ' + height}">{ordinal(ith+1)} {height}</option>
+					  {/each}
 
-						  {/if}
-						{/each}
-					</select>
-					<select name="jugglers" bind:value={newStyle.jugglers}>
-					  <option value="-1">of all jugglers</option>
-						{#each jif.jugglers as juggler, idx}
-							<option value="{idx}">of juggler {juggler.name}</option>
-						{/each}
-					</select>
-					<select name="what" bind:value={newStyle.what} >
-						  <option value="spins">#spins</option>
-						  <option value="dwell">dwell time</option>
-					</select>
-					<input
-						type=number
-						min=-99
-						max=99
-						bind:value={newStyle.value}
-						step={newStyle.what == 'dwell' ? 0.01 : 1}
-					/>
-					<button on:click={_=>{throwStyles.push(Object.assign({}, newStyle)); throwStyles=throwStyles } }>
-						add
-					</button>
-				</InputField>
+				  {/if}
+				{/each}
+			</select>
+			<select name="jugglers" bind:value={newStyle.jugglers}>
+			  <option value="-1">of all jugglers</option>
+				{#each jif.jugglers as juggler, idx}
+					<option value="{idx}">of juggler {juggler.name}</option>
+				{/each}
+			</select>
+			<select name="what" bind:value={newStyle.what} >
+				  <option value="spins">#spins</option>
+				  <option value="dwell">dwell time</option>
+			</select>
+			<input
+				type=number
+				min=-99
+				max=99
+				bind:value={newStyle.value}
+				step={newStyle.what == 'dwell' ? 0.01 : 1}
+			/>
+			<button
+				class="pure-button"
+				on:click={_=>{throwStyles.push(Object.assign({}, newStyle)); throwStyles=throwStyles } }>
+				add
+			</button>
+		</InputField>
+		<div class=throw-styles>
+			{#each throwStyles as s,idx}
+			<div class="style-overview input-group">
+				{throwStyleString(s, jif)}
+				<Icon type=close on:click={() => { throwStyles.splice(idx, 1); throwStyles = throwStyles }}/>
+			</div>
+			{/each}
 		</div>
+	</div>
 	{:else} <!-- !showStyle -->
+	<div class="pure-form form-inline">
 		{#if showHandOrderInput && handsInput}
 			<!--svelte-ignore a11y_no_static_element_interactions -->
 			<!--svelte-ignore a11y_click_events_have_key_events -->
@@ -263,5 +271,5 @@
 				Throw styles: {throwStyles.map(s => throwStyleString(s, jif)).join(', ')}
 			</div>
 		{/if}
-	{/if}
-</div>
+	</div>
+{/if}
