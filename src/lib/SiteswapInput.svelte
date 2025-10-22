@@ -22,7 +22,7 @@
 	let handsDragDropElement;
 	let handsInputElement;
 	let handList = [];
-	let showStyle = true;
+	let showStyle = false;
 	let heights = new Set();
 	let heightCount = {};
 	let newStyle = {};
@@ -259,7 +259,10 @@
 			<!--svelte-ignore a11y_no_static_element_interactions -->
 			<!--svelte-ignore a11y_click_events_have_key_events -->
 			<div class="style-overview input-group" on:click={() => showStyle = true}>
-				<Icon type=close on:click={() => {handsInput = '';}}/>
+				<Icon type=close on:click={e => {
+						handsInput = '';
+						e.stopPropagation();
+					}}/>
 				Hand order: {handsInput}
 			</div>
 		{/if}
@@ -267,7 +270,10 @@
 			<!--svelte-ignore a11y_no_static_element_interactions -->
 			<!--svelte-ignore a11y_click_events_have_key_events -->
 			<div class="style-overview input-group" on:click={() => showStyle = true}>
-				<Icon type=close on:click={() => {throwStyles = [];}}/>
+				<Icon type=close on:click={e => {
+						throwStyles = [];
+						e.stopPropagation();
+					}}/>
 				Throw styles: {throwStyles.map(s => throwStyleString(s, jif)).join(', ')}
 			</div>
 		{/if}
