@@ -32,9 +32,18 @@
 		input = localStorage.getItem('symmetric-siteswap/input') || defaults.siteswap;
 		nJugglers = localStorage.getItem('symmetric-siteswap/nJugglers') || defaults.nJugglers;
 	}
+	const throwStylesParam = init.url.searchParams.get('throw_styles');
+	if (throwStylesParam) {
+		try {
+			throwStyles = JSON.parse(throwStylesParam);
+		} catch(e) {
+			throwStyles = [];
+		}
+	}
 
 	$: useLocalStorage && input && localStorage.setItem("symmetric-siteswap/input", input);
 	$: useLocalStorage && nJugglers && localStorage.setItem("symmetric-siteswap/nJugglers", nJugglers);
+	// TODO: sticky throwStyles
 
 	// TODO: make sure causal diagram works
 
@@ -42,7 +51,8 @@
 		title = 'Symmetric Siteswap ' + input;
 		url = symmetricSiteswapUrl({
 				siteswapInput: input,
-				nJugglers: nJugglers,
+				nJugglers,
+				throwStyles,
 		});
 		symmetricSiteswap = new SymmetricSiteswap(input, {symmetric:true, jugglers:jugglersInCircle(nJugglers)});
 		valid = symmetricSiteswap.isValid();

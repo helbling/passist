@@ -48,10 +48,19 @@
 			nJugglers = localStorage.getItem('nJugglers') || defaults.nJugglers;
 	}
 
+	const throwStylesParam = init.url.searchParams.get('throw_styles');
+	if (throwStylesParam) {
+		try {
+			throwStyles = JSON.parse(throwStylesParam);
+		} catch(e) {
+			throwStyles = [];
+		}
+	}
 
 	$: useLocalStorage && input && localStorage.setItem("siteswap", input);
 	$: useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
 	// TODO: sticky handsInput
+	// TODO: sticky throwStyles
 
 	$:{
 		// TODO: add hint/link when entering extended siteswap
@@ -65,8 +74,9 @@
 
 			url = siteswapUrl({
 					siteswapInput: input,
-					nJugglers: nJugglers,
-					handsInput: handsInput,
+					nJugglers,
+					handsInput,
+					throwStyles
 			});
 
 			if (nJugglers > 0) {

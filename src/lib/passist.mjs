@@ -30,6 +30,8 @@ function siteswapUrl(p)
 		query.fullscreen = 1;
 	if (p.handsInput)
 		query.hands = p.handsInput.replace(/[^a-z]+/gi, '-');
+	if (p.throwStyles && p.throwStyles.length > 0)
+		query.throw_styles = JSON.stringify(p.throwStyles);
 	return U('/siteswap/' + ((typeof p.siteswapInput === 'string') ? encodeUrlPathPart(p.siteswapInput || '-') : ''), query);
 }
 
@@ -40,6 +42,8 @@ function symmetricSiteswapUrl(p)
 		query.jugglers = p.nJugglers;
 	if (p.fullscreen)
 		query.fullscreen = 1;
+	if (p.throwStyles && p.throwStyles.length > 0)
+		query.throw_styles = JSON.stringify(p.throwStyles);
 	return U('/symmetric-siteswap/' + encodeUrlPathPart(p.siteswapInput || '-'), query);
 }
 
