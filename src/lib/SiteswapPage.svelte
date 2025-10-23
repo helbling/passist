@@ -97,7 +97,8 @@
 					jugglers: jugglers,
 					limbs: limbs,
 					props: valid ? Array.from(Array(nProps), () => { return {}; }) : [],
-					flipTwos: true
+					flipTwos: true, // TODO: make this configurable in throwStyles as well!
+					throwStyles,
 				});
 
 				startProperties = siteswap.getStartProperties(nJugglers);
