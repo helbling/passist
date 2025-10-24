@@ -224,7 +224,7 @@
 			</select>
 			{#if nJugglers > 1}
 				<select name="jugglers" bind:value={newStyle.jugglers}>
-				  <option value="-1">of all jugglers</option>
+				  <option value="-1">of {nJugglers == 2 ? 'both' : 'all'} jugglers</option>
 					{#each jif.jugglers as juggler, idx}
 						<option value="{idx}">of juggler {juggler.name}</option>
 					{/each}
