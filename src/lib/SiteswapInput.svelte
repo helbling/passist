@@ -222,12 +222,14 @@
 				  {/if}
 				{/each}
 			</select>
-			<select name="jugglers" bind:value={newStyle.jugglers}>
-			  <option value="-1">of all jugglers</option>
-				{#each jif.jugglers as juggler, idx}
-					<option value="{idx}">of juggler {juggler.name}</option>
-				{/each}
-			</select>
+			{#if nJugglers > 1}
+				<select name="jugglers" bind:value={newStyle.jugglers}>
+				  <option value="-1">of all jugglers</option>
+					{#each jif.jugglers as juggler, idx}
+						<option value="{idx}">of juggler {juggler.name}</option>
+					{/each}
+				</select>
+			{/if}
 			<select name="what" bind:value={newStyle.what} >
 				  <option value="spins">#spins</option>
 				  <option value="dwell">dwell time</option>
