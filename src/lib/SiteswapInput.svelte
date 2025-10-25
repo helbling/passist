@@ -45,6 +45,14 @@
 			heights = heights;
 	}
 
+	function setDefaultThrowStyleValue() {
+		const soloHeight = newStyle.height / nJugglers;
+		if (newStyle.what == 'spins')
+			newStyle.value = Math.max(0, Math.floor(soloHeight - 2));
+		if (newStyle.what == 'dwell')
+			newStyle.value = soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5);
+	}
+
 	function calculateHandList(handsInput, nJugglers) {
 		const limbs = hands2limbs(handsInput, nJugglers) || defaultLimbs(nJugglers);
 		return limbs.map(limb => jugglerName(limb.juggler) + ' ' + limb.type.split(' ')[0]);
@@ -209,7 +217,7 @@
 		label='Throw styles'
 		type=custom
 		>
-			<select name="height" bind:value={newStyle.height} >
+			<select name="height" bind:value={newStyle.height}  on:change={setDefaultThrowStyleValue} >
 				{#each [...heights.keys()] as height}
 					{#if heightCount[height] == 1}
 					  <option value="{height}">{height}</option>
@@ -230,14 +238,14 @@
 					{/each}
 				</select>
 			{/if}
-			<select name="what" bind:value={newStyle.what} >
+			<select name="what" bind:value={newStyle.what} on:change={setDefaultThrowStyleValue}>
 				  <option value="spins">#spins</option>
 				  <option value="dwell">dwell time</option>
 			</select>
 			<input
 				type=number
-				min=-99
-				max=99
+				min={ newStyle.what == 'dwell' ? 0 : -99 }
+				max={ newStyle.what == 'dwell' ? 9 : 99 }
 				bind:value={newStyle.value}
 				step={newStyle.what == 'dwell' ? 0.01 : 1}
 			/>
