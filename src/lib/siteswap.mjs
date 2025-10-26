@@ -176,7 +176,7 @@ toJif(options)
 		}
 
 		for (const style of options.throwStyles) {
-			if (style.height == t.label) // TODO: do other checks
+			if (style.label == t.label) // TODO: do other checks?
 				t[style.what] = style.value;
 		}
 

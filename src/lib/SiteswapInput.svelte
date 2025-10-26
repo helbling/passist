@@ -24,9 +24,12 @@
 	let handsInputElement;
 	let handList = [];
 	let showStyle = false;
-	let heights = new Set();
-	let heightCount = {};
 	let newStyle = {};
+	let newStyleThrow = '';
+	let newStyleJugglers = '-1';
+	let newStyleWhat = 'spins';
+	let newStyleValue = '';
+	let throwSelect = [];
 
 	const throwStylesBetaWarning = 'Note: Throw styles is new and might still have bugs';
 
@@ -35,22 +38,43 @@
 
 	$: {
 		if (jif && jif.throws) {
-			heights = new Set();
-			heightCount = {};
+			const throwLabels = new Set();
+			const labelCount = {};
 			for (const th of jif.throws) {
-					heights.add(th.label);
-					heightCount[th.label] = (heightCount[th.label] ?? 0) + 1;
+				throwLabels.add(th.label);
+				labelCount[th.label] = (labelCount[th.label] ?? 0) + 1;
+			}
+			throwSelect = [];
+			for (const label of [...throwLabels.keys()]) {
+				if (labelCount[label] == 1) {
+					throwSelect[label] = { label };
+				} else {
+					throwSelect[(labelCount[label] == 2 ? 'both' : 'all') + ' ' + label] = { label };
+					for (let ith = 0; ith < labelCount[label]; ith++)
+						throwSelect[ordinal(ith + 1) + ' ' + label] = { label, ith };
 				}
 			}
-			heights = heights;
+			// newStyleThrow = JSON.stringify(Object.values(throwSelect)[0]);
+		}
+	}
+
+	$: {
+		try {
+			newStyle = Object.assign({}, {jugglers: newStyleJugglers, what: newStyleWhat, value: newStyleValue}, JSON.parse(newStyleThrow));
+		} catch(e) {
+			// ignore
+		}
 	}
 
 	function setDefaultThrowStyleValue() {
-		const soloHeight = newStyle.height / nJugglers;
-		if (newStyle.what == 'spins')
-			newStyle.value = Math.max(0, Math.floor(soloHeight - 2));
-		if (newStyle.what == 'dwell')
-			newStyle.value = soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5);
+		const nst = JSON.parse(newStyleThrow);
+		if (!nst.label)
+			return;
+		const soloHeight = nst.label.replace(/[px]*$/g, '') / nJugglers;
+		if (newStyleWhat == 'spins')
+			newStyleValue = Math.max(0, Math.floor(soloHeight - 2));
+		if (newStyleWhat == 'dwell')
+			newStyleValue = soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5);
 	}
 
 	function calculateHandList(handsInput, nJugglers) {
@@ -79,7 +103,7 @@
 	}
 
 	function throwStyleString(style, jif) {
-		return style.height + (style.jugglers >= 0 ? ' of ' + jif.jugglers[style.jugglers].name : '') + ': ' + style.what + '=' + style.value;
+		return style.label + (style.jugglers >= 0 ? ' of ' + jif.jugglers[style.jugglers].name : '') + ': ' + style.what + '=' + style.value;
 	}
 	
 </script>
@@ -217,37 +241,29 @@
 		label='Throw styles'
 		type=custom
 		>
-			<select name="height" bind:value={newStyle.height}  on:change={setDefaultThrowStyleValue} >
-				{#each [...heights.keys()] as height}
-					{#if heightCount[height] == 1}
-					  <option value="{height}">{height}</option>
-				  {:else}
-					  <option value="{height}">{heightCount[height] == 2 ? 'both' : 'all'} {height}</option>
-					  {#each { length: heightCount[height] } as _,ith}}
-						  <option value="{ordinal(ith+1) + ' ' + height}">{ordinal(ith+1)} {height}</option>
-					  {/each}
-
-				  {/if}
+			<select bind:value={newStyleThrow}  on:change={setDefaultThrowStyleValue} >
+				{#each Object.entries(throwSelect) as [key, values]}
+					  <option value="{JSON.stringify(values)}">{key}</option>
 				{/each}
 			</select>
 			{#if nJugglers > 1}
-				<select name="jugglers" bind:value={newStyle.jugglers}>
+				<select name="jugglers" bind:value={newStyleJugglers}>
 				  <option value="-1">of {nJugglers == 2 ? 'both' : 'all'} jugglers</option>
 					{#each jif.jugglers as juggler, idx}
 						<option value="{idx}">of juggler {juggler.name}</option>
 					{/each}
 				</select>
 			{/if}
-			<select name="what" bind:value={newStyle.what} on:change={setDefaultThrowStyleValue}>
+			<select name="what" bind:value={newStyleWhat} on:change={setDefaultThrowStyleValue}>
 				  <option value="spins">#spins</option>
 				  <option value="dwell">dwell time</option>
 			</select>
 			<input
 				type=number
-				min={ newStyle.what == 'dwell' ? 0 : -99 }
-				max={ newStyle.what == 'dwell' ? 9 : 99 }
-				bind:value={newStyle.value}
-				step={newStyle.what == 'dwell' ? 0.01 : 1}
+				min={ newStyleWhat == 'dwell' ? 0 : -99 }
+				max={ newStyleWhat == 'dwell' ? 9 : 99 }
+				bind:value={newStyleValue}
+				step={newStyleWhat == 'dwell' ? 0.01 : 1}
 			/>
 			<button
 				class="pure-button"
