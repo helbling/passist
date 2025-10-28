@@ -1,5 +1,7 @@
 <script>
+	import Icon from '$lib/Icon.svelte';
 	import InputField from '$lib/InputField.svelte';
+	import ThrowStyleInput from '$lib/ThrowStyleInput.svelte';
 	import { jugglerName, useLocalStorage } from '$lib/passist.mjs';
 
 	export let siteswapInputs = [];
@@ -7,6 +9,10 @@
 	export let idPrefix;
 	export let siteswapValid;
 	export let showNJugglers = true;
+	export let throwStyles = [];
+	export let jif = [];
+
+	let showSettings = false;
 
 $: {
 	// set unset input field to first input
@@ -25,6 +31,16 @@ $: {
 }
 
 </script>
+
+<style>
+	.show-settings-button {
+		margin-bottom: 1em;
+		margin-right: 1em;
+	}
+	:global(.pure-button svg) {
+		height:1.5em
+	}
+</style>
 
 <div class="pure-form form-inline">
 
@@ -57,4 +73,34 @@ $: {
 	/>
 {/each}
 
+	<button
+		class="pure-button show-settings-button"
+		class:pure-button-active={showSettings}
+		on:click={() => showSettings = !showSettings }
+		title="{showSettings ? 'hide' : 'show'} settings"
+	>
+		<Icon type=options />
+	</button>
 </div>
+
+{#if showSettings}
+		<ThrowStyleInput
+			bind:throwStyles
+			bind:nJugglers
+			bind:idPrefix
+			bind:jif
+			bind:showSettings
+		/>
+
+	
+	{:else} <!-- !showSettings -->
+	<div class="pure-form form-inline">
+		<ThrowStyleInput
+			bind:throwStyles
+			bind:nJugglers
+			bind:idPrefix
+			bind:jif
+			bind:showSettings
+		/>
+	</div>
+{/if}

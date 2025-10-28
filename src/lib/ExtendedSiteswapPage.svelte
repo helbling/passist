@@ -66,6 +66,7 @@
 		slot=input
 		bind:nJugglers
 		bind:siteswapInputs={input}
+		bind:jif
 		siteswapValid={valid}
 		idPrefix=main
 	/>
