@@ -13,7 +13,7 @@
 	let newStyleThrow = JSON.stringify({label:'all'});
 	let newStyleJugglers = '-1';
 	let newStyleWhat = 'spins';
-	let newStyleValue = '';
+	let newStyleValue = '1';
 	let throwSelect = {};
 
 	const throwStylesBetaWarning = 'Note: Throw styles is new and might still have bugs';
