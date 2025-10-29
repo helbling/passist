@@ -73,29 +73,37 @@
 </script>
 
 <style>
-	.style-overview {
+	.input-group {
 		display: inline-flex;
 		position:relative;
-	}
-	.style-overview {
-		border-top-left-radius:0;
-		border-bottom-left-radius:0;
-		padding-right:1.55rem;
+
 		width: 12rem;
 
 		/* NOTE: copy-pasted from InputField.svelte! */
 		color: #495057;
 		border: 1px solid #ced4da;
-		border-radius: 0.25rem;
 		-webkit-box-shadow: inset 0 1px 3px #ddd;
 		        box-shadow: inset 0 1px 3px #ddd;
 		margin:0;
-		border-top-left-radius:0;
-		border-bottom-left-radius:0;
 		appearance: none;
 		-webkit-appearance:none;
+
+		line-height:1.15;
+		padding:0.5em 1em;
+		width:auto;
+		padding-right:3em;
+		margin-bottom:1em;
+		margin-right:1em
 	}
-	.style-overview { line-height:1.15; padding:0.5em 1em; width:auto; padding-right:3em; margin-bottom:1em; margin-right:1em }
+	:global(.input-group select), :global(.input-group input) {
+			border-radius: 0 !important;
+			border-right:none;
+	}
+	.style-overview {
+		border-radius: 4px;
+	}
+
+	
 
 	select { height: 2.4em }
 </style>
@@ -139,9 +147,9 @@
 				add
 			</button>
 		</InputField>
-		<div class=throw-styles>
+		<div class=style-overview throw-styles>
 			{#each throwStyles as s,idx}
-			<div class="style-overview input-group">
+			<div class="input-group">
 				{throwStyleString(s, jif)}
 				<Icon type=close on:click={() => { throwStyles.splice(idx, 1); throwStyles = throwStyles }}/>
 			</div>
