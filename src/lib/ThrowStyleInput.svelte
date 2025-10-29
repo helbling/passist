@@ -10,11 +10,11 @@
 	export let showSettings = false;
 
 	let newStyle = {};
-	let newStyleThrow = '';
+	let newStyleThrow = JSON.stringify({label:'all'});
 	let newStyleJugglers = '-1';
 	let newStyleWhat = 'spins';
 	let newStyleValue = '';
-	let throwSelect = [];
+	let throwSelect = {};
 
 	const throwStylesBetaWarning = 'Note: Throw styles is new and might still have bugs';
 
@@ -26,7 +26,7 @@
 				throwLabels.add(th.label);
 				labelCount[th.label] = (labelCount[th.label] ?? 0) + 1;
 			}
-			throwSelect = [];
+			throwSelect = { 'all': { label:'all' }};
 			for (const label of [...throwLabels.keys()]) {
 				if (labelCount[label] == 1) {
 					throwSelect[label] = { label };
