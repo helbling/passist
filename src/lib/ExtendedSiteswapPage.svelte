@@ -20,16 +20,14 @@
 	let url;
 	let urlSuffix;
 
-	let inputStr, searchParams;
+	let inputStr;
 	if (init) {
 		inputStr = init.params.input;
-		searchParams = init.url.searchParams;
 	} else if (useLocalStorage) {
 		const urlSuffix = localStorage.getItem('extended-siteswap/urlSuffix');
 		if (urlSuffix) {
 			let queryStr
 			[inputStr, queryStr] = urlSuffix.split('?');
-			searchParams = new URLSearchParams(queryStr);
 		}
 	}
 
