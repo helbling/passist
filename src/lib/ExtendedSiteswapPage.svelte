@@ -19,10 +19,20 @@
 	let title;
 	let url;
 	let urlSuffix;
+	let throwStyles = [];
 
 	let inputStr;
 	if (init) {
 		inputStr = init.params.input;
+
+		const throwStylesParam = init.url.searchParams.get('throw_styles');
+		if (throwStylesParam) {
+			try {
+				throwStyles = JSON.parse(throwStylesParam);
+			} catch(e) {
+				throwStyles = [];
+			}
+		}
 	} else if (useLocalStorage) {
 		const urlSuffix = localStorage.getItem('extended-siteswap/urlSuffix');
 		if (urlSuffix) {
@@ -45,7 +55,7 @@
 		/* 		name: siteswapName ? siteswapName + " (" + extendedSiteswap.toString() + ")" : undefined, */
 		/* 		flipTwos: true, // TODO: implement this */
 
-		extendedSiteswap = new ExtendedSiteswap(input, {nJugglers, jugglers:jugglersInCircle(nJugglers)});
+		extendedSiteswap = new ExtendedSiteswap(input, {nJugglers, jugglers:jugglersInCircle(nJugglers), throwStyles });
 		url = extendedSiteswap.toUrl();
 		urlSuffix = extendedSiteswap.toUrlSuffix();
 		extendedSiteswapString = extendedSiteswap.toString();
@@ -65,6 +75,7 @@
 		bind:nJugglers
 		bind:siteswapInputs={input}
 		bind:jif
+		bind:throwStyles
 		siteswapValid={valid}
 		idPrefix=main
 	/>
@@ -73,6 +84,8 @@
 		slot=animation_input
 		bind:siteswapInputs={input}
 		siteswapValid={valid}
+		bind:jif
+		bind:throwStyles
 		{nJugglers}
 		idPrefix=animation
 	/>

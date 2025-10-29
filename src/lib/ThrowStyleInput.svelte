@@ -114,10 +114,12 @@
 			</select>
 			{#if nJugglers > 1}
 				<select name="jugglers" bind:value={newStyleJugglers}>
-				  <option value="-1">of {nJugglers == 2 ? 'both' : 'all'} jugglers</option>
-					{#each jif.jugglers as juggler, idx}
-						<option value="{idx}">of juggler {juggler.name}</option>
-					{/each}
+					<option value="-1">of {nJugglers == 2 ? 'both' : 'all'} jugglers</option>
+					{#if jif }
+						{#each jif.jugglers as juggler, idx}
+							<option value="{idx}">of juggler {juggler.name}</option>
+						{/each}
+					{/if}
 				</select>
 			{/if}
 			<select name="what" bind:value={newStyleWhat} on:change={setDefaultThrowStyleValue}>

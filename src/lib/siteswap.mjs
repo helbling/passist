@@ -175,9 +175,11 @@ toJif(options)
 			t.spins = 1;
 		}
 
-		for (const style of options.throwStyles) {
-			if (style.label == 'all' || style.label == t.label) // TODO: do other checks?
-				t[style.what] = style.value;
+		if (Array.isArray(options.throwStyles)) {
+			for (const style of options.throwStyles) {
+				if (style.label == 'all' || style.label == t.label) // TODO: do other checks?
+					t[style.what] = style.value;
+			}
 		}
 
 		jif.throws.push(t);

@@ -1,7 +1,7 @@
 import peggy from 'peggy';
 import Siteswap from './siteswap.mjs';
 import Jif from './jif.mjs';
-import { encodeUrlPathPart } from './utils.mjs';
+import { U, encodeUrlPathPart } from './utils.mjs';
 
 const grammar = `
 {{
@@ -233,6 +233,7 @@ constructor(input, options = {})
 {
 	this._valid = false;
 	this.nProps = NaN;
+	this.throwStyles = options.throwStyles;
 
 	if (typeof input === 'string') {
 		this.notation = input; // in case we can't parse it
@@ -338,7 +339,10 @@ toUrlSuffix()
 
 toUrl()
 {
-	return '/extended-siteswap/' + this.toUrlSuffix(); // TODO proper url encoding!
+	const query = [];
+	if (this.throwStyles && this.throwStyles.length > 0)
+		query.throw_styles = JSON.stringify(this.throwStyles);
+	return U('/extended-siteswap/' + this.toUrlSuffix(), query); // TODO proper url encoding!
 }
 
 toJif(options = {})
@@ -402,6 +406,15 @@ toJif(options = {})
 				juggler: Math.floor(i / 2),
 				type: ((i & 1) ? 'left' : 'right') + ' hand',
 			});
+		}
+	}
+
+	if (Array.isArray(options.throwStyles)) {
+		for (const t of throws) {
+			for (const style of options.throwStyles) {
+				if (style.label == 'all' || style.label == t.label) // TODO: do other checks?
+					t[style.what] = style.value;
+			}
 		}
 	}
 
