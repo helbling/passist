@@ -14,29 +14,28 @@
 	let newStyleJugglers = '-1';
 	let newStyleWhat = 'spins';
 	let newStyleValue = '1';
-	let throwSelect = {};
+	let throwSelect = new Map();
 
 	const throwStylesBetaWarning = 'Note: Throw styles is new and might still have bugs';
 
 	$: {
 		if (jif && jif.throws) {
 			const throwLabels = new Set();
-			const labelCount = {};
+			const maxOrdinal = {};
 			for (const th of jif.throws) {
 				throwLabels.add(th.label);
-				labelCount[th.label] = (labelCount[th.label] ?? 0) + 1;
+				maxOrdinal[th.label] = Math.max(maxOrdinal[th.label] ?? 0, th._throwStyleOrdinal);
 			}
-			throwSelect = { 'all': { label:'all' }};
+			throwSelect = new Map([['all', { label:'all' }]]);
 			for (const label of [...throwLabels.keys()]) {
-				if (labelCount[label] == 1) {
-					throwSelect[label] = { label };
+				if (maxOrdinal[label] < 2) {
+					throwSelect.set(label, { label });
 				} else {
-					throwSelect[(labelCount[label] == 2 ? 'both' : 'all') + ' ' + label] = { label };
-					for (let ith = 0; ith < labelCount[label]; ith++)
-						throwSelect[ordinal(ith + 1) + ' ' + label] = { label, ith };
+					throwSelect.set((maxOrdinal[label] == 2 ? 'both' : 'all') + ' ' + label, label);
+					for (let ordinal = 1; ordinal <= maxOrdinal[label]; ordinal++)
+						throwSelect.set(ordinalString(ordinal) + ' ' + label, { label, ordinal });
 				}
 			}
-			// newStyleThrow = JSON.stringify(Object.values(throwSelect)[0]);
 		}
 	}
 
@@ -62,12 +61,12 @@
 	/**
 	 * prints the ordinal string for a number (1st, 2nd, 3rd, 4th, etc)
 	 */
-	function ordinal(n) {
+	function ordinalString(n) {
 			return n + ([,'st','nd','rd'][(''+n).match`1?.$`]||'th');
 	}
 
 	function throwStyleString(style, jif) {
-		return style.label + (style.jugglers >= 0 ? ' of ' + jif.jugglers[style.jugglers].name : '') + ': ' + style.what + '=' + style.value;
+		return (style.ordinal ? ordinalString(style.ordinal) + ' ' : '') + style.label + (style.jugglers >= 0 ? ' of ' + jif.jugglers[style.jugglers].name : '') + ': ' + style.what + '=' + style.value;
 	}
 	
 </script>
@@ -116,20 +115,21 @@
 		type=custom
 		>
 			<select bind:value={newStyleThrow}  on:change={setDefaultThrowStyleValue} >
-				{#each Object.entries(throwSelect) as [key, values]}
+				{#each [...throwSelect] as [key, values]}
 					  <option value="{JSON.stringify(values)}">{key}</option>
 				{/each}
 			</select>
 			{#if nJugglers > 1}
 				<select name="jugglers" bind:value={newStyleJugglers}>
-					<option value="-1">of {nJugglers == 2 ? 'both' : 'all'} jugglers</option>
+					<option value="-1">{nJugglers == 2 ? 'both' : 'all'} jugglers</option>
 					{#if jif }
 						{#each jif.jugglers as juggler, idx}
-							<option value="{idx}">of juggler {juggler.name}</option>
+							<option value="{idx}">juggler {juggler.name}</option>
 						{/each}
 					{/if}
 				</select>
 			{/if}
+
 			<select name="what" bind:value={newStyleWhat} on:change={setDefaultThrowStyleValue}>
 				  <option value="spins">#spins</option>
 				  <option value="dwell">dwell time</option>

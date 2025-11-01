@@ -159,14 +159,17 @@ toJif(options)
 		jif.repetition.limbPermutation = [...Array(nLimbs).keys()].map(limb => (limb + this.period) % nLimbs);
 
 	let time = 0;
+	const throwStyleOrdinals = {};
 	for (const height of this.heights) {
 		const t = {
 			time,
 			duration: height,
 			from: time % nLimbs,
 			to:  (time + height) % nLimbs,
-			label: Siteswap.heightToChar(height)
+			label: Siteswap.heightToChar(height),
 		};
+		throwStyleOrdinals[t.label] ||= 1;
+		t._throwStyleOrdinal = throwStyleOrdinals[t.label]++;
 		if (
 			options.flipTwos
 			&& (jif.limbs[t.from].juggler == jif.limbs[t.to].juggler) // throw is a self
@@ -177,8 +180,13 @@ toJif(options)
 
 		if (Array.isArray(options.throwStyles)) {
 			for (const style of options.throwStyles) {
-				if (style.label == 'all' || style.label == t.label) // TODO: do other checks?
+				if (
+					(style.label == 'all' || style.label == t.label)
+					// && (style.jugglers < 0 || style.jugglers == t.from) // TODO: implement this
+					&& (!style.ordinal || style.ordinal == t._throwStyleOrdinal)
+				) {
 					t[style.what] = style.value;
+				}
 			}
 		}
 

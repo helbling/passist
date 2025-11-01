@@ -88,7 +88,7 @@ function label(t)
 	return result;
 }
 
-function addTo(jifThrow, astThrow, nLimbs)
+function addTo(jifThrow, astThrow, nLimbs, throwStyleOrdinals)
 {
 	let to = jifThrow.from;
 
@@ -111,6 +111,9 @@ function addTo(jifThrow, astThrow, nLimbs)
 
 	jifThrow.to = to;
 
+	throwStyleOrdinals[jifThrow.label] ||= 1;
+	jifThrow._throwStyleOrdinal = throwStyleOrdinals[jifThrow.label]++;
+
 	return jifThrow;
 }
 
@@ -118,6 +121,7 @@ function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 {
 	const throws = [];
 	const initialFrom = from;
+	const throwStyleOrdinals = {};
 	for (const beat of beats) {
 
 		if (beat.type == 'async') {
@@ -127,7 +131,7 @@ function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 					duration: t.duration,
 					label: label(t),
 					from,
-				}, t, nLimbs));
+				}, t, nLimbs, throwStyleOrdinals));
 
 			from ^= 1;
 			time++;
@@ -138,7 +142,7 @@ function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 					duration: t.duration,
 					from: from | 1,
 					label: label(t),
-				}, t, nLimbs));
+				}, t, nLimbs, throwStyleOrdinals));
 
 			for (const t of beat.right.throws)
 				throws.push(addTo({
@@ -146,7 +150,7 @@ function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 					duration: t.duration,
 					from: from & ~1,
 					label: label(t),
-				}, t, nLimbs));
+				}, t, nLimbs, throwStyleOrdinals));
 
 			from = initialFrom;
 			time += beat.short ? 1 : 2;
@@ -412,8 +416,13 @@ toJif(options = {})
 	if (Array.isArray(options.throwStyles)) {
 		for (const t of throws) {
 			for (const style of options.throwStyles) {
-				if (style.label == 'all' || style.label == t.label) // TODO: do other checks?
+				if (
+					(style.label == 'all' || style.label == t.label)
+					// && (style.jugglers < 0 || style.jugglers == t.from) // TODO: implement this
+					&& (!style.ordinal || style.ordinal == t._throwStyleOrdinal)
+				) {
 					t[style.what] = style.value;
+				}
 			}
 		}
 	}
