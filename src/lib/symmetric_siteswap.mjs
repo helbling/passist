@@ -53,20 +53,21 @@ constructor(input, options = {})
 
 	const nJugglers = options.jugglers.length;
 	const nLimbs = nJugglers * 2;
+	const throwStyles = options?.throwStyles;
 
 	this.notation = input; // in case we can't parse it
 
 	// in-phase pattern, same start for every juggler
-	this.jif = SymmetricSiteswap._inPhase(input, { nJugglers, nLimbs });
+	this.jif = SymmetricSiteswap._inPhase(input, { nJugglers, nLimbs,throwStyles });
 
 	if (!this.jif)
-		this.jif = SymmetricSiteswap._inPhase(input, { options, nJugglers, nLimbs, flipped:true } );
+		this.jif = SymmetricSiteswap._inPhase(input, { options, nJugglers, nLimbs, throwStyles, flipped:true } );
 
 	if (!this.jif)
-		this.jif = SymmetricSiteswap._outOfPhase(input, { options, nJugglers, nLimbs } );
+		this.jif = SymmetricSiteswap._outOfPhase(input, { options, nJugglers, nLimbs, throwStyles } );
 
 	if (!this.jif)
-		this.jif = SymmetricSiteswap._outOfPhase(input, { options, nJugglers, nLimbs, flipped:true } );
+		this.jif = SymmetricSiteswap._outOfPhase(input, { options, nJugglers, nLimbs, throwStyles, flipped:true } );
 
 	if (!this.error && this.jif) {
 		try {
@@ -115,9 +116,13 @@ static _inPhase(input, p = {})
 		Array(p.nJugglers).fill(
 			p.flipped ?  ExtendedSiteswap.astToNotation(flippedPasses) : input
 		),
+		{
+			throwStyles: p.throwStyles
+		}
 	);
 	const jifOptions = {
 		flipTwos: true, // TODO: implement this
+		throwStyles: p.throwStyles,
 	};
 
 	if (p.flipped) {
@@ -241,10 +246,23 @@ static _outOfPhase(input, p = {})
 
 			if (!simultaneous)
 				th.to = (th.to + 2 * ((th.duration % nJugglers) - 1)) % nLimbs;
-			// console.log(th);
 		}
 
 		lastJuggler = juggler;
+
+
+	if (Array.isArray(options.throwStyles)) {
+			for (const style of options.throwStyles) {
+				if (
+					(style.label == 'all' || style.label == th.label)
+					// && (style.jugglers < 0 || style.jugglers == th.from) // TODO: implement this
+					&& (!style.ordinal || style.ordinal == th._throwStyleOrdinal)
+				) {
+					th[style.what] = style.value;
+				}
+			}
+		}
+
 		throws.push(th);
 	}
 
@@ -285,7 +303,6 @@ static _outOfPhase(input, p = {})
 		repetition,
 		timeStretchFactor: nJugglers,
 	};
-	// console.log(jif);
 
 	return jif;
 }

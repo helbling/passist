@@ -231,6 +231,7 @@ static beatsToThrows = beatsToThrows;
  *  - options: object with the following optional keys:
  *     - jugglers/limbs/props according to the JIF specification
  *     - name: pattern name
+ *     - throwStyles: throw styles
  *
  */
 constructor(input, options = {})

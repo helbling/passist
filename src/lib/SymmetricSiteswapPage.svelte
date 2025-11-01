@@ -54,7 +54,7 @@
 				nJugglers,
 				throwStyles,
 		});
-		symmetricSiteswap = new SymmetricSiteswap(input, {symmetric:true, jugglers:jugglersInCircle(nJugglers)});
+		symmetricSiteswap = new SymmetricSiteswap(input, {symmetric:true, jugglers:jugglersInCircle(nJugglers), throwStyles});
 		valid = symmetricSiteswap.isValid();
 		symmetricSiteswapString = symmetricSiteswap.toString();
 		siteswapName = siteswapNames[url];
