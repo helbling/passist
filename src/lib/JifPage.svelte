@@ -6,10 +6,7 @@
 	import InfoBox from '$lib/InfoBox.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import Jif from '$lib/jif.mjs';
-
-	/*
-	TODO import CausalDiagramWidget from '$lib/CausalDiagramWidget.svelte';
-	 */
+	import CausalDiagramWidget from '$lib/CausalDiagramWidget.svelte';
 
 	let jif;
 	let jsonValid = true;
@@ -20,6 +17,7 @@
 	let error = '';
 	let warnings = [];
 	let animationSpeed = defaults.animationSpeed;
+	let showLadderDiagram = false;
 
 	if (useLocalStorage)
 		jifString = localStorage.getItem('jif', null);
@@ -77,6 +75,9 @@
 	.input  { width:100%; height:30em }
 	.invalid { color:#dc3545 }
 	.animation-controls { display:flex; flex-flow:row wrap }
+	.causalDiagram { overflow-x:auto; margin-bottom:1em }
+	.causalDiagram span { display:inline-block; cursor:pointer }
+	.causalDiagram .selected { font-weight: bold; border:2px solid #ccc; border-bottom:2px solid #fff; z-index:10; position:relative; margin-bottom:-2px }
 </style>
 
 <div class=horizontal-split>
@@ -89,7 +90,7 @@
 		{jif}
 		animationSpeed={parseFloat(animationSpeed)}
 	/>
-	<p class=animation-controls>
+	<div class=animation-controls>
 		<InputField
 			bind:value={animationSpeed}
 			type=range
@@ -100,7 +101,7 @@
 			max=2
 			defaultValue={defaults.animationSpeed}
 		/>
-	</p>
+	</div>
 {/if}
 </div>
 
@@ -137,4 +138,18 @@
 		</ul>
 	</InfoBox>
 	{/if}
+{/if}
+
+{#if jif && jif.throws && jif.throws.length > 0}
+	<div class=causalDiagram>
+		<div>
+			<span class=pure-menu-link class:selected={!showLadderDiagram} on:click={e => showLadderDiagram=false }>Causal Diagram</span>
+			<span class=pure-menu-link class:selected={ showLadderDiagram} on:click={e => showLadderDiagram=true  }>Ladder Diagram</span>
+		</div>
+		<CausalDiagramWidget
+			{jif}
+			startConfigurations={false}
+			isLadderDiagram={showLadderDiagram}
+		/>
+	</div>
 {/if}
