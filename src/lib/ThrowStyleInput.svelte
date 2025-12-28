@@ -22,18 +22,24 @@
 		if (jif && jif.throws) {
 			const throwLabels = new Set();
 			const maxOrdinal = {};
+			const labelToDuration = {};
+			const timeStretchFactor = jif.timeStretchFactor || 1;
+
 			for (const th of jif.throws) {
 				throwLabels.add(th.label);
+				labelToDuration[th.label] = th.duration;
 				maxOrdinal[th.label] = Math.max(maxOrdinal[th.label] ?? 0, th._throwStyleOrdinal);
 			}
 			throwSelect = new Map([['all', { label:'all' }]]);
 			for (const label of [...throwLabels.keys()]) {
+				const soloHeight = labelToDuration[label] / timeStretchFactor;
+
 				if (maxOrdinal[label] < 2) {
-					throwSelect.set(label, { label });
+					throwSelect.set(label, { label,soloHeight });
 				} else {
-					throwSelect.set((maxOrdinal[label] == 2 ? 'both' : 'all') + ' ' + label, label);
+					throwSelect.set((maxOrdinal[label] == 2 ? 'both' : 'all') + ' ' + label, { label, soloHeight });
 					for (let ordinal = 1; ordinal <= maxOrdinal[label]; ordinal++)
-						throwSelect.set(ordinalString(ordinal) + ' ' + label, { label, ordinal });
+						throwSelect.set(ordinalString(ordinal) + ' ' + label, { label, soloHeight, ordinal });
 				}
 			}
 		}
@@ -51,7 +57,8 @@
 		const nst = JSON.parse(newStyleThrow);
 		if (!nst.label)
 			return;
-		const soloHeight = nst.label.replace(/[px]*$/g, '') / nJugglers;
+
+		const soloHeight = nst.soloHeight || 3;
 		if (newStyleWhat == 'spins')
 			newStyleValue = Math.max(0, Math.floor(soloHeight - 2));
 		if (newStyleWhat == 'dwell')
