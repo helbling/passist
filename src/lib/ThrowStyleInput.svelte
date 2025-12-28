@@ -15,10 +15,14 @@
 	let newStyleWhat = 'spins';
 	let newStyleValue = '1';
 	let throwSelect = new Map();
+	let lastIdx = {};
 
 	const throwStylesBetaWarning = 'Note: Throw styles is new and might still have bugs';
 
 	$: {
+		for (const idx in throwStyles)
+			lastIdx[throwStyles[idx].label] = idx;
+
 		if (jif && jif.throws) {
 			const throwLabels = new Set();
 			const maxOrdinal = {};
@@ -109,9 +113,8 @@
 		border-radius: 4px;
 	}
 
-	
-
 	select { height: 2.4em }
+	.inactive { color: #aaa; }
 </style>
 
 {#if showSettings}
@@ -156,7 +159,7 @@
 		</InputField>
 		<div class=style-overview throw-styles>
 			{#each throwStyles as s,idx}
-			<div class="input-group">
+			<div class="input-group" class:inactive={idx != lastIdx[s.label] } >
 				{throwStyleString(s, jif)}
 				<Icon type=close on:click={() => { throwStyles.splice(idx, 1); throwStyles = throwStyles }}/>
 			</div>
