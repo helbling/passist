@@ -2,6 +2,7 @@
 	import Icon from '$lib/Icon.svelte';
 	import InfoBox from '$lib/InfoBox.svelte';
 	import InputField from '$lib/InputField.svelte';
+	import Jif from '$lib/jif.mjs';
 
 	export let nJugglers;
 	export let idPrefix;
@@ -16,6 +17,7 @@
 	let newStyleValue = '1';
 	let throwSelect = new Map();
 	let lastIdx = {};
+	let completedJif = jif;
 
 	const throwStylesBetaWarning = 'Note: Throw styles is new and might still have bugs';
 
@@ -24,6 +26,7 @@
 			lastIdx[throwStyles[idx].label] = idx;
 
 		if (jif && jif.throws) {
+			completedJif = Jif.complete(jif).jif;
 			const throwLabels = new Set();
 			const maxOrdinal = {};
 			const labelToDuration = {};
@@ -134,7 +137,7 @@
 				<select name="jugglers" bind:value={newStyleJugglers}>
 					<option value="-1">{nJugglers == 2 ? 'both' : 'all'} jugglers</option>
 					{#if jif }
-						{#each jif.jugglers as juggler, idx}
+						{#each completedJif.jugglers as juggler, idx}
 							<option value="{idx}">juggler {juggler.name}</option>
 						{/each}
 					{/if}
