@@ -80,7 +80,7 @@
 	}
 
 	function throwStyleString(style, jif) {
-		return (style.ordinal ? ordinalString(style.ordinal) + ' ' : '') + style.label + (style.jugglers >= 0 ? ' of ' + jif.jugglers[style.jugglers].name : '') + ': ' + style.what + '=' + style.value;
+		return (style.ordinal ? ordinalString(style.ordinal) + ' ' : '') + style.label + (style.jugglers >= 0 ? ' of ' + completedJif.jugglers[style.jugglers].name : '') + ': ' + style.what + '=' + style.value;
 	}
 	
 </script>
