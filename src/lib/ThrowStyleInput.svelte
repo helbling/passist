@@ -103,7 +103,7 @@
 		width:auto;
 		padding-right:3em;
 		margin-bottom:1em;
-		margin-right:1em
+		margin-right:0.5em
 	}
 	:global(.input-group select), :global(.input-group input) {
 			border-radius: 0 !important;
