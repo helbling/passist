@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "express": "^5.1.0",
-    "heap-js": "^2.7.1",
     "marked": "^16.3.0",
     "peggy": "^5.0.6",
     "three": "^0.154.0",
