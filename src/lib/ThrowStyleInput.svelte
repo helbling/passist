@@ -74,7 +74,7 @@
 		if (newStyleWhat == 'spins')
 			newStyleValue = Math.max(0, Math.floor(soloHeight - 2));
 		if (newStyleWhat == 'dwell')
-			newStyleValue = soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5);
+			newStyleValue = (soloHeight > 2 ? 1 : (soloHeight < 1 ? 0 : 0.5)) * timeStretchFactor;
 	}
 
 	/**
