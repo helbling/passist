@@ -27,7 +27,11 @@
 			lastIdx[throwStyles[idx].label] = idx;
 
 		if (jif && jif.throws) {
-			completedJif = Jif.complete(jif).jif;
+			try {
+				completedJif = Jif.complete(jif).jif;
+			} catch (e) {
+				completedJif = jif;
+			}
 			const throwLabels = new Set();
 			const maxOrdinal = {};
 			labelToDuration = {};
