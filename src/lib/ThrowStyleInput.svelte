@@ -18,6 +18,7 @@
 	let throwSelect = new Map();
 	let lastIdx = {};
 	let completedJif = jif;
+	let labelToDuration = {};
 
 	const throwStylesBetaWarning = 'Note: Throw styles is new and might still have bugs';
 
@@ -29,8 +30,7 @@
 			completedJif = Jif.complete(jif).jif;
 			const throwLabels = new Set();
 			const maxOrdinal = {};
-			const labelToDuration = {};
-			const timeStretchFactor = jif.timeStretchFactor || 1;
+			labelToDuration = {};
 
 			for (const th of jif.throws) {
 				throwLabels.add(th.label);
@@ -39,14 +39,12 @@
 			}
 			throwSelect = new Map([['all', { label:'all' }]]);
 			for (const label of [...throwLabels.keys()]) {
-				const soloHeight = labelToDuration[label] / timeStretchFactor;
-
 				if (maxOrdinal[label] < 2) {
-					throwSelect.set(label, { label,soloHeight });
+					throwSelect.set(label, { label });
 				} else {
-					throwSelect.set((maxOrdinal[label] == 2 ? 'both' : 'all') + ' ' + label, { label, soloHeight });
+					throwSelect.set((maxOrdinal[label] == 2 ? 'both' : 'all') + ' ' + label, { label  });
 					for (let ordinal = 1; ordinal <= maxOrdinal[label]; ordinal++)
-						throwSelect.set(ordinalString(ordinal) + ' ' + label, { label, soloHeight, ordinal });
+						throwSelect.set(ordinalString(ordinal) + ' ' + label, { label, ordinal });
 				}
 			}
 		}
@@ -65,7 +63,10 @@
 		if (!nst.label)
 			return;
 
-		const soloHeight = nst.soloHeight || 3;
+		const timeStretchFactor = jif.timeStretchFactor || 1;
+		const duration = labelToDuration[nst.label];
+		const soloHeight = duration ? labelToDuration[nst.label] / timeStretchFactor : 3;
+
 		if (newStyleWhat == 'spins')
 			newStyleValue = Math.max(0, Math.floor(soloHeight - 2));
 		if (newStyleWhat == 'dwell')
