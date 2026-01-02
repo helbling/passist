@@ -12,10 +12,12 @@
 
 	let newStyle = {};
 	let newStyleThrow = '{}';
-	let newStyleJugglers = '-1';
+	let newStyleLimbs = '{}';
 	let newStyleWhat = 'spins';
 	let newStyleValue = '1';
 	let throwSelect = new Map();
+	let limbsSelect = new Map();
+	let limbsLabels = {};
 	let lastIdx = {};
 	let completedJif = jif;
 	let labelToDuration = {};
@@ -51,12 +53,28 @@
 						throwSelect.set(ordinalString(ordinal) + ' ' + label, { label, ordinal });
 				}
 			}
+
+			limbsSelect = new Map([[(nJugglers <= 2 ? 'both' : 'all') + ' ' + (nJugglers == 1 ? 'hands' : 'jugglers'), {}]]);
+			if (completedJif) {
+				const jugglerToLimbs = Array.from(new Array(completedJif.jugglers.length), ()=>[]);
+				completedJif.limbs.forEach((limb, idx) => jugglerToLimbs[limb.juggler].push(idx));
+
+				if (nJugglers > 1)
+					completedJif.jugglers.forEach((juggler, idx) => limbsSelect.set("juggler " + juggler.name, {limbs: jugglerToLimbs[idx]}));
+
+				completedJif.limbs.forEach((limb, idx) => limbsSelect.set(limb.type + (nJugglers > 1 ? " of " + completedJif.jugglers[limb.juggler].name : ''), { limbs: [idx]}));
+			}
+
+			limbsLabels = {};
+			limbsSelect.forEach((style, label) => {
+				limbsLabels[JSON.stringify(style.limbs)] = label;
+			});
 		}
 	}
 
 	$: {
 		try {
-			newStyle = Object.assign({}, {jugglers: newStyleJugglers, what: newStyleWhat, value: newStyleValue}, JSON.parse(newStyleThrow));
+			newStyle = Object.assign({}, { what: newStyleWhat, value: newStyleValue}, JSON.parse(newStyleThrow), JSON.parse(newStyleLimbs) );
 		} catch(e) {
 			// ignore
 		}
@@ -84,8 +102,19 @@
 			return n + ([,'st','nd','rd'][(''+n).match`1?.$`]||'th');
 	}
 
-	function throwStyleString(style, jif) {
-		return (style.ordinal ? ordinalString(style.ordinal) + ' ' : '') + (style.label || 'all') + (style.jugglers >= 0 ? ' of ' + completedJif.jugglers[style.jugglers].name : '') + ': ' + style.what + '=' + style.value;
+	function throwStyleString(style, limbsLabels) {
+		let limbsLabel = '';
+		if (style.limbs) {
+			const limbsJSON= JSON.stringify(style.limbs);
+			if (limbsLabels[limbsJSON])
+				limbsLabel = limbsLabels[limbsJSON];
+			else
+				limbsLabel = style.limbs; // cheap fallback, better than nothing..
+		}
+
+		const throwLabel = (style.ordinal ? ordinalString(style.ordinal) + ' ' : '') + (style.label || 'all');
+
+		return (limbsLabel ? (throwLabel == 'all' ? limbsLabel : throwLabel + ' of ' + limbsLabel) : throwLabel) + ': ' + style.what + '=' + style.value;
 	}
 	
 </script>
@@ -138,16 +167,12 @@
 					  <option value="{JSON.stringify(values)}">{key}</option>
 				{/each}
 			</select>
-			{#if nJugglers > 1}
-				<select name="jugglers" bind:value={newStyleJugglers}>
-					<option value="-1">{nJugglers == 2 ? 'both' : 'all'} jugglers</option>
-					{#if jif }
-						{#each completedJif.jugglers as juggler, idx}
-							<option value="{idx}">juggler {juggler.name}</option>
-						{/each}
-					{/if}
-				</select>
-			{/if}
+
+			<select bind:value={newStyleLimbs} >
+				{#each [...limbsSelect] as [key, values]}
+					  <option value="{JSON.stringify(values)}">{key}</option>
+				{/each}
+			</select>
 
 			<select name="what" bind:value={newStyleWhat} on:change={setDefaultThrowStyleValue}>
 				  <option value="spins">#spins</option>
@@ -169,7 +194,7 @@
 		<div class=style-overview throw-styles>
 			{#each throwStyles as s,idx}
 			<div class="input-group" class:inactive={idx != lastIdx[s.label] } >
-				{throwStyleString(s, jif)}
+				{throwStyleString(s, limbsLabels)}
 				<Icon type=close on:click={() => { throwStyles.splice(idx, 1); throwStyles = throwStyles }}/>
 			</div>
 			{/each}
@@ -187,7 +212,7 @@
 						throwStyles = [];
 						e.stopPropagation();
 					}}/>
-				Throw styles: {throwStyles.map(s => throwStyleString(s, jif)).join(', ')}
+				Throw styles: {throwStyles.map(s => throwStyleString(s, limbsLabels)).join(', ')}
 			</div>
 
 			<InfoBox type=warning>{throwStylesBetaWarning}</InfoBox>

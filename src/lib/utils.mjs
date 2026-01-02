@@ -16,7 +16,7 @@ function encodeThrowStyles(throwStyles)
 	return throwStyles.map(style => [
 		style.label || '',
 		'ordinal' in style ? style.ordinal : '',
-		style.jugglers,
+		style.limbs ? style.limbs.sort((a,b)=>a-b).join('_') : '',
 		style.what,
 		style.value
 	].join('~')).join('|');
@@ -26,7 +26,7 @@ function decodeThrowStyles(throwStylesParam)
 {
 	if (throwStylesParam) {
 		return throwStylesParam.split('|').map(s => {
-			let [label, ordinal, jugglers, what, value] = s.split('~');
+			let [label, ordinal, limbs, what, value] = s.split('~');
 			const style = {what, value};
 
 			if (label !== '')
@@ -35,8 +35,8 @@ function decodeThrowStyles(throwStylesParam)
 			if (ordinal !== '')
 				style.ordinal = parseInt(ordinal);
 
-			if (jugglers !== '')
-				style.jugglers = jugglers;
+			if (limbs !== '')
+				style.limbs = limbs.split('_').map(_=>parseInt(_)).sort((a,b)=>a-b);
 
 			return style;
 		});
