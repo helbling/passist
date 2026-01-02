@@ -4,7 +4,8 @@
 	import PatternResult from '$lib/PatternResult.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
 	import SiteswapInput from '$lib/SiteswapInput.svelte';
-	import { defaults, useLocalStorage, siteswapUrl, jugglersInCircle, defaultLimbs, limbs2hands, hands2limbs, getThrowStyles} from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, jugglersInCircle, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
+	import { getThrowStyles } from '$lib/utils.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let init;

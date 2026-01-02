@@ -3,7 +3,8 @@
 	import SiteswapInput from '$lib/SiteswapInput.svelte';
 	import InfoBox from '$lib/InfoBox.svelte';
 	import PatternResult from '$lib/PatternResult.svelte';
-	import { defaults, useLocalStorage, jugglersInCircle, symmetricSiteswapUrl, getThrowStyles } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, jugglersInCircle, symmetricSiteswapUrl } from '$lib/passist.mjs';
+	import { getThrowStyles } from '$lib/utils.mjs';
 	import { siteswapNames } from '$lib/patterns.mjs';
 
 	export let init = undefined;

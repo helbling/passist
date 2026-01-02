@@ -1,5 +1,5 @@
 import { browser, dev } from '$app/environment';
-import { U, encodeUrlPathPart } from '$lib/utils.mjs';
+import { U, encodeUrlPathPart, encodeThrowStyles } from '$lib/utils.mjs';
 
 const defaults = {
 	notation: 'siteswap',
@@ -21,28 +21,6 @@ const defaults = {
 
 const useLocalStorage = browser === true && 'localStorage' in window;
 
-function throwStylesParam(throwStyles)
-{
-	return throwStyles.map(style => [
-		style.label,
-		style.jugglers,
-		style.what,
-		style.value
-	].join('~')).join('|');
-}
-
-function getThrowStyles(url)
-{
-	const throwStylesParam = url.searchParams.get('throw_styles');
-	if (throwStylesParam) {
-		return throwStylesParam.split('|').map(s => {
-			const [label, jugglers, what, value] = s.split('~');
-			return {label, jugglers, what, value};
-		});
-	}
-	return [];
-}
-
 function siteswapUrl(p)
 {
 	const query = {};
@@ -53,7 +31,7 @@ function siteswapUrl(p)
 	if (p.handsInput)
 		query.hands = p.handsInput.replace(/[^a-z]+/gi, '-');
 	if (p.throwStyles && p.throwStyles.length > 0)
-		query.throw_styles = throwStylesParam(p.throwStyles);
+		query.throw_styles = encodeThrowStyles(p.throwStyles);
 	return U('/siteswap/' + ((typeof p.siteswapInput === 'string') ? encodeUrlPathPart(p.siteswapInput || '-') : ''), query);
 }
 
@@ -65,7 +43,7 @@ function symmetricSiteswapUrl(p)
 	if (p.fullscreen)
 		query.fullscreen = 1;
 	if (p.throwStyles && p.throwStyles.length > 0)
-		query.throw_styles = throwStylesParam(p.throwStyles);
+		query.throw_styles = encodeThrowStyles(p.throwStyles);
 	return U('/symmetric-siteswap/' + encodeUrlPathPart(p.siteswapInput || '-'), query);
 }
 
@@ -205,7 +183,6 @@ export {
 	defaultLimbs,
 	defaults,
 	extendedSiteswapUrl,
-	getThrowStyles,
 	hands2limbs,
 	jifdev,
 	jugglerName,
@@ -217,6 +194,5 @@ export {
 	siteswapGeneratorUrl,
 	siteswapUrl,
 	symmetricSiteswapUrl,
-	throwStylesParam,
 	useLocalStorage,
 };
