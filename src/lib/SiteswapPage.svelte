@@ -4,7 +4,7 @@
 	import PatternResult from '$lib/PatternResult.svelte';
 	import Siteswap from '$lib/siteswap.mjs';
 	import SiteswapInput from '$lib/SiteswapInput.svelte';
-	import { defaults, useLocalStorage, siteswapUrl, jugglersInCircle, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, siteswapUrl, jugglersInCircle, defaultLimbs, limbs2hands, hands2limbs, getThrowStyles} from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let init;
@@ -44,14 +44,7 @@
 		if (limbs)
 			handsInput = limbs2hands(limbs);
 
-		const throwStylesParam = init.url.searchParams.get('throw_styles');
-		if (throwStylesParam) {
-			try {
-				throwStyles = JSON.parse(throwStylesParam);
-			} catch(e) {
-				throwStyles = [];
-			}
-		}
+		throwStyles = getThrowStyles(init.url);
 	} else if (useLocalStorage) {
 			input = localStorage.getItem('siteswap') || defaults.siteswap;
 			nJugglers = localStorage.getItem('nJugglers') || defaults.nJugglers;

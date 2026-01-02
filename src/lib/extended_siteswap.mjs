@@ -2,6 +2,7 @@ import peggy from 'peggy';
 import Siteswap from './siteswap.mjs';
 import Jif from './jif.mjs';
 import { U, encodeUrlPathPart } from './utils.mjs';
+import { throwStylesParam } from '$lib/passist.mjs';
 
 const grammar = `
 {{
@@ -346,7 +347,7 @@ toUrl()
 {
 	const query = [];
 	if (this.throwStyles && this.throwStyles.length > 0)
-		query.throw_styles = JSON.stringify(this.throwStyles);
+		query.throw_styles = throwStylesParam(this.throwStyles);
 	return U('/extended-siteswap/' + this.toUrlSuffix(), query); // TODO proper url encoding!
 }
 

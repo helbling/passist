@@ -3,7 +3,7 @@
 	import ExtendedSiteswapInput from '$lib/ExtendedSiteswapInput.svelte';
 	import InfoBox from '$lib/InfoBox.svelte';
 	import PatternResult from '$lib/PatternResult.svelte';
-	import { defaults, useLocalStorage, jugglersInCircle } from '$lib/passist.mjs';
+	import { defaults, useLocalStorage, jugglersInCircle, getThrowStyles } from '$lib/passist.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let init = undefined;
@@ -25,14 +25,7 @@
 	if (init) {
 		inputStr = init.params.input;
 
-		const throwStylesParam = init.url.searchParams.get('throw_styles');
-		if (throwStylesParam) {
-			try {
-				throwStyles = JSON.parse(throwStylesParam);
-			} catch(e) {
-				throwStyles = [];
-			}
-		}
+		throwStyles = getThrowStyles(init.url);
 	} else if (useLocalStorage) {
 		const urlSuffix = localStorage.getItem('extended-siteswap/urlSuffix');
 		if (urlSuffix) {
