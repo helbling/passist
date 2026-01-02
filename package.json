@@ -15,7 +15,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "express": "^4.21.0",
+    "express": "^5.2.1",
     "heap-js": "^2.5.0",
     "marked": "^14.1.2",
     "three": "^0.154.0",
