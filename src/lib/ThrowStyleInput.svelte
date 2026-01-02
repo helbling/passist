@@ -11,7 +11,7 @@
 	export let showSettings = false;
 
 	let newStyle = {};
-	let newStyleThrow = JSON.stringify({label:'all'});
+	let newStyleThrow = '{}';
 	let newStyleJugglers = '-1';
 	let newStyleWhat = 'spins';
 	let newStyleValue = '1';
@@ -41,7 +41,7 @@
 				labelToDuration[th.label] = th.duration;
 				maxOrdinal[th.label] = Math.max(maxOrdinal[th.label] ?? 0, th._throwStyleOrdinal);
 			}
-			throwSelect = new Map([['all', { label:'all' }]]);
+			throwSelect = new Map([['all', {}]]);
 			for (const label of [...throwLabels.keys()]) {
 				if (maxOrdinal[label] < 2) {
 					throwSelect.set(label, { label });
@@ -85,7 +85,7 @@
 	}
 
 	function throwStyleString(style, jif) {
-		return (style.ordinal ? ordinalString(style.ordinal) + ' ' : '') + style.label + (style.jugglers >= 0 ? ' of ' + completedJif.jugglers[style.jugglers].name : '') + ': ' + style.what + '=' + style.value;
+		return (style.ordinal ? ordinalString(style.ordinal) + ' ' : '') + (style.label || 'all') + (style.jugglers >= 0 ? ' of ' + completedJif.jugglers[style.jugglers].name : '') + ': ' + style.what + '=' + style.value;
 	}
 	
 </script>

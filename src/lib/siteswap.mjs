@@ -181,7 +181,7 @@ toJif(options)
 		if (Array.isArray(options.throwStyles)) {
 			for (const style of options.throwStyles) {
 				if (
-					(style.label == 'all' || style.label == t.label)
+					(!style.label || style.label == t.label)
 					// && (style.jugglers < 0 || style.jugglers == t.from) // TODO: implement this
 					&& (!style.ordinal || style.ordinal == t._throwStyleOrdinal)
 				) {

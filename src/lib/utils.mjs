@@ -14,7 +14,7 @@ function encodeUrlPathPart(string)
 function encodeThrowStyles(throwStyles)
 {
 	return throwStyles.map(style => [
-		style.label,
+		style.label || '',
 		'ordinal' in style ? style.ordinal : '',
 		style.jugglers,
 		style.what,
@@ -27,10 +27,16 @@ function decodeThrowStyles(throwStylesParam)
 	if (throwStylesParam) {
 		return throwStylesParam.split('|').map(s => {
 			let [label, ordinal, jugglers, what, value] = s.split('~');
-			const style = {label, jugglers, what, value};
+			const style = {what, value};
+
+			if (label !== '')
+				style.label = label;
 
 			if (ordinal !== '')
 				style.ordinal = parseInt(ordinal);
+
+			if (jugglers !== '')
+				style.jugglers = jugglers;
 
 			return style;
 		});
