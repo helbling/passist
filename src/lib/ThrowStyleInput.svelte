@@ -24,7 +24,14 @@
 
 	const throwStylesBetaWarning = 'Note: Throw styles is new and might still have bugs';
 
+	function styleKey(style) {
+				return [style.label, style.ordinal, style.limbs, style.what].join('|');
+	}
+
 	$: {
+		throwStyles.forEach((style, idx) => {
+				lastIdx[styleKey(style)] = idx;
+		});
 		for (const idx in throwStyles)
 			lastIdx[throwStyles[idx].label] = idx;
 
@@ -193,7 +200,7 @@
 		</InputField>
 		<div class=style-overview throw-styles>
 			{#each throwStyles as s,idx}
-			<div class="input-group" class:inactive={idx != lastIdx[s.label] } >
+			<div class="input-group" class:inactive={idx != lastIdx[styleKey(s)] } >
 				{throwStyleString(s, limbsLabels)}
 				<Icon type=close on:click={() => { throwStyles.splice(idx, 1); throwStyles = throwStyles }}/>
 			</div>
