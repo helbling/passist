@@ -419,7 +419,7 @@ toJif(options = {})
 			for (const style of options.throwStyles) {
 				if (
 					(!style.label || style.label == t.label)
-					// && (style.jugglers < 0 || style.jugglers == t.from) // TODO: implement this
+					&& (!style.limbs || style.limbs.indexOf(t.from) >= 0)
 					&& (!style.ordinal || style.ordinal == t._throwStyleOrdinal)
 				) {
 					t[style.what] = style.value;
