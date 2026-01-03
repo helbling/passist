@@ -136,7 +136,7 @@ toJif(options)
 	const nLimbs = options.limbs.length;
 	const siteswap = this.toString();
 
-	const jif = {
+	let jif = {
 		jif: '0.01',
 		meta: {
 			name: options.name ? options.name : 'siteswap ' + siteswap,
@@ -178,21 +178,30 @@ toJif(options)
 			t.spins = 1;
 		}
 
-		if (Array.isArray(options.throwStyles)) {
-			for (const style of options.throwStyles) {
-				if (
-					(!style.label || style.label == t.label)
-					&& (!style.limbs || style.limbs.indexOf(t.from) >= 0)
-					&& (!style.ordinal || style.ordinal == t._throwStyleOrdinal)
-				) {
-					t[style.what] = style.value;
-				}
-			}
-		}
-
 		jif.throws.push(t);
 		time++;
 	}
+
+		if (Array.isArray(options.throwStyles) && jif.throws) {
+			// if we have limbs specified in some style, the jif throws need to be expanded as otherwise they will be applied at the wrong places
+			if (options.throwStyles.filter(s => s.limbs).length) {
+					jif = Jif.complete(jif).jif;
+			}
+
+			for (const t of jif.throws)
+				for (const style of options.throwStyles) {
+					if (
+						(!style.label || style.label == t.label)
+						&& (!style.limbs || style.limbs.indexOf(t.from) >= 0)
+						&& (!style.ordinal || style.ordinal == t._throwStyleOrdinal)
+					) {
+						t[style.what] = style.value;
+					}
+				}
+		}
+
+
+	
 
 	return jif;
 }
