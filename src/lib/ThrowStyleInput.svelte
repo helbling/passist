@@ -25,7 +25,7 @@
 	const throwStylesBetaWarning = 'Note: Throw styles is new and might still have bugs';
 
 	function styleKey(style) {
-				return [style.label, style.ordinal, style.limbs, style.what].join('|');
+		return [style.label, style.ordinal, style.limbs, style.what].join('|');
 	}
 
 	$: {
