@@ -29,6 +29,9 @@ function decodeThrowStyles(throwStylesParam)
 			let [label, ordinal, limbs, what, value] = s.split('~');
 			const style = {what, value};
 
+			if (value === undefined)
+				return undefined;
+
 			if (label !== '')
 				style.label = label;
 
@@ -39,7 +42,7 @@ function decodeThrowStyles(throwStylesParam)
 				style.limbs = limbs.split('_').map(_=>parseInt(_)).sort((a,b)=>a-b);
 
 			return style;
-		});
+		}).filter(s => s);
 	}
 	return [];
 }
