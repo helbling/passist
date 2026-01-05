@@ -5,7 +5,6 @@
 </script>
 
 <style>
-	h2 { font-size:1.25rem}
 	.page  { text-align:center }
 	.description { display:inline-block; max-width:30em; text-align:justify; margin:0 1em }
 	.meeseeks img { height:8rem; }
