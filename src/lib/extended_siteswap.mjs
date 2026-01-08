@@ -354,7 +354,7 @@ toJif(options = {})
 {
 	const pattern = this.toString();
 
-	const jif = {
+	let jif = {
 		meta: {
 			name: options.name ? options.name : 'extended siteswap ' + pattern,
 			generator: 'passist', // TODO: put version of package.json here again
@@ -414,8 +414,23 @@ toJif(options = {})
 		}
 	}
 
+
+	jif.repetition = repetition;
+	jif.throws = throws;
+
 	if (Array.isArray(options.throwStyles)) {
-		for (const t of throws) {
+		// if we have limbs specified in some style, the jif throws need to be expanded as otherwise they will be applied at the wrong places
+		if (options.throwStyles.filter(s => s.limbs).length) {
+			try {
+				console.log('jif in', JSON.stringify(jif, null, 2));
+				jif = Jif.complete(jif).jif;
+				console.log('jif out', JSON.stringify(jif, null, 2));
+			} catch(e) {
+				console.log(e);
+			}
+		}
+
+		for (const t of jif.throws) {
 			for (const style of options.throwStyles) {
 				if (
 					(!style.label || style.label == t.label)
@@ -427,10 +442,6 @@ toJif(options = {})
 			}
 		}
 	}
-
-	jif.throws = throws;
-	jif.repetition = repetition;
-
 	return jif;
 }
 
