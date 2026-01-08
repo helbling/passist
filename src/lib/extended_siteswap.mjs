@@ -1,7 +1,7 @@
 import peggy from 'peggy';
 import Siteswap from './siteswap.mjs';
 import Jif from './jif.mjs';
-import { encodeUrlPathPart } from './utils.mjs';
+import { U, encodeUrlPathPart, encodeThrowStyles } from './utils.mjs';
 
 const grammar = `
 {{
@@ -88,7 +88,7 @@ function label(t)
 	return result;
 }
 
-function addTo(jifThrow, astThrow, nLimbs)
+function addTo(jifThrow, astThrow, nLimbs, throwStyleOrdinals)
 {
 	let to = jifThrow.from;
 
@@ -111,6 +111,9 @@ function addTo(jifThrow, astThrow, nLimbs)
 
 	jifThrow.to = to;
 
+	throwStyleOrdinals[jifThrow.label] ||= 1;
+	jifThrow._throwStyleOrdinal = throwStyleOrdinals[jifThrow.label]++;
+
 	return jifThrow;
 }
 
@@ -118,6 +121,7 @@ function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 {
 	const throws = [];
 	const initialFrom = from;
+	const throwStyleOrdinals = {};
 	for (const beat of beats) {
 
 		if (beat.type == 'async') {
@@ -127,7 +131,7 @@ function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 					duration: t.duration,
 					label: label(t),
 					from,
-				}, t, nLimbs));
+				}, t, nLimbs, throwStyleOrdinals));
 
 			from ^= 1;
 			time++;
@@ -138,7 +142,7 @@ function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 					duration: t.duration,
 					from: from | 1,
 					label: label(t),
-				}, t, nLimbs));
+				}, t, nLimbs, throwStyleOrdinals));
 
 			for (const t of beat.right.throws)
 				throws.push(addTo({
@@ -146,7 +150,7 @@ function beatsToThrows(beats, {nLimbs = 2, from = 0, time = 0 } = {})
 					duration: t.duration,
 					from: from & ~1,
 					label: label(t),
-				}, t, nLimbs));
+				}, t, nLimbs, throwStyleOrdinals));
 
 			from = initialFrom;
 			time += beat.short ? 1 : 2;
@@ -227,12 +231,14 @@ static beatsToThrows = beatsToThrows;
  *  - options: object with the following optional keys:
  *     - jugglers/limbs/props according to the JIF specification
  *     - name: pattern name
+ *     - throwStyles: throw styles
  *
  */
 constructor(input, options = {})
 {
 	this._valid = false;
 	this.nProps = NaN;
+	this.throwStyles = options.throwStyles;
 
 	if (typeof input === 'string') {
 		this.notation = input; // in case we can't parse it
@@ -338,14 +344,17 @@ toUrlSuffix()
 
 toUrl()
 {
-	return '/extended-siteswap/' + this.toUrlSuffix(); // TODO proper url encoding!
+	const query = [];
+	if (this.throwStyles && this.throwStyles.length > 0)
+		query.throw_styles = encodeThrowStyles(this.throwStyles);
+	return U('/extended-siteswap/' + this.toUrlSuffix(), query); // TODO proper url encoding!
 }
 
 toJif(options = {})
 {
 	const pattern = this.toString();
 
-	const jif = {
+	let jif = {
 		meta: {
 			name: options.name ? options.name : 'extended siteswap ' + pattern,
 			generator: 'passist', // TODO: put version of package.json here again
@@ -405,9 +414,34 @@ toJif(options = {})
 		}
 	}
 
-	jif.throws = throws;
-	jif.repetition = repetition;
 
+	jif.repetition = repetition;
+	jif.throws = throws;
+
+	if (Array.isArray(options.throwStyles)) {
+		// if we have limbs specified in some style, the jif throws need to be expanded as otherwise they will be applied at the wrong places
+		if (options.throwStyles.filter(s => s.limbs).length) {
+			try {
+				console.log('jif in', JSON.stringify(jif, null, 2));
+				jif = Jif.complete(jif).jif;
+				console.log('jif out', JSON.stringify(jif, null, 2));
+			} catch(e) {
+				console.log(e);
+			}
+		}
+
+		for (const t of jif.throws) {
+			for (const style of options.throwStyles) {
+				if (
+					(!style.label || style.label == t.label)
+					&& (!style.limbs || style.limbs.indexOf(t.from) >= 0)
+					&& (!style.ordinal || style.ordinal == t._throwStyleOrdinal)
+				) {
+					t[style.what] = style.value;
+				}
+			}
+		}
+	}
 	return jif;
 }
 

@@ -1,5 +1,3 @@
-import { Heap } from 'heap-js';
-
 function _mod(n, m) {
 	return ((n % m) + m) % m;
 }

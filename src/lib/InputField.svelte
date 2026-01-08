@@ -51,7 +51,7 @@ function blurTargetOnEnter(e) {
 
 <style>
 	.input-group {
-		margin-right:1em;
+		margin-right:0.5em;
 		margin-bottom:1em;
 		width:auto;
 		display: flex;

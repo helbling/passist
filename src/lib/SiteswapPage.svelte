@@ -5,6 +5,7 @@
 	import Siteswap from '$lib/siteswap.mjs';
 	import SiteswapInput from '$lib/SiteswapInput.svelte';
 	import { defaults, useLocalStorage, siteswapUrl, jugglersInCircle, defaultLimbs, limbs2hands, hands2limbs} from '$lib/passist.mjs';
+	import { getThrowStyles } from '$lib/utils.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let init;
@@ -15,6 +16,7 @@
 	let shift = 0;
 	let handsInput = '';
 	let handsValid = false;
+	let throwStyles = [];
 	let siteswap, strippedInput, originalSiteswap, extendedSiteswap;
 	let period;
 	let nProps;
@@ -42,15 +44,17 @@
 		const limbs = hands2limbs(handsParam, nJugglers);
 		if (limbs)
 			handsInput = limbs2hands(limbs);
+
+		throwStyles = getThrowStyles(init.url);
 	} else if (useLocalStorage) {
 			input = localStorage.getItem('siteswap') || defaults.siteswap;
 			nJugglers = localStorage.getItem('nJugglers') || defaults.nJugglers;
 	}
 
-
 	$: useLocalStorage && input && localStorage.setItem("siteswap", input);
 	$: useLocalStorage && nJugglers && localStorage.setItem("nJugglers", nJugglers);
 	// TODO: sticky handsInput
+	// TODO: sticky throwStyles
 
 	$:{
 		// TODO: add hint/link when entering extended siteswap
@@ -64,8 +68,9 @@
 
 			url = siteswapUrl({
 					siteswapInput: input,
-					nJugglers: nJugglers,
-					handsInput: handsInput,
+					nJugglers,
+					handsInput,
+					throwStyles
 			});
 
 			if (nJugglers > 0) {
@@ -86,7 +91,8 @@
 					jugglers: jugglers,
 					limbs: limbs,
 					props: valid ? Array.from(Array(nProps), () => { return {}; }) : [],
-					flipTwos: true
+					flipTwos: true, // TODO: make this configurable in throwStyles as well!
+					throwStyles,
 				});
 
 				startProperties = siteswap.getStartProperties(nJugglers);
@@ -179,6 +185,8 @@
 		bind:siteswapInput={input}
 		bind:handsInput
 		bind:handsValid
+		bind:throwStyles
+		{jif}
 		idPrefix=main
 	/>
 
@@ -190,6 +198,8 @@
 		bind:siteswapInput={input}
 		bind:handsInput
 		bind:handsValid
+		bind:throwStyles
+		{jif}
 		idPrefix=animation
 	/>
 

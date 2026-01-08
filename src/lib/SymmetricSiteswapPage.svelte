@@ -4,6 +4,7 @@
 	import InfoBox from '$lib/InfoBox.svelte';
 	import PatternResult from '$lib/PatternResult.svelte';
 	import { defaults, useLocalStorage, jugglersInCircle, symmetricSiteswapUrl } from '$lib/passist.mjs';
+	import { getThrowStyles } from '$lib/utils.mjs';
 	import { siteswapNames } from '$lib/patterns.mjs';
 
 	export let init = undefined;
@@ -13,12 +14,11 @@
 	let valid = false;
 	let symmetricSiteswapString = '';
 	let symmetricSiteswap;
-	let period;
 	let nProps;
 	let siteswapName;
 	let title;
 	let url;
-	let urlSuffix;
+	let throwStyles = [];
 
 	if (init) {
 		input = init.params.input;
@@ -29,6 +29,7 @@
 		if (nJugglersUrl && nJugglersUrl >= 1)
 			nJugglers = nJugglersUrl;
 
+		throwStyles = getThrowStyles(init.url);
 	} else if (useLocalStorage) {
 		input = localStorage.getItem('symmetric-siteswap/input') || defaults.siteswap;
 		nJugglers = localStorage.getItem('symmetric-siteswap/nJugglers') || defaults.nJugglers;
@@ -36,6 +37,7 @@
 
 	$: useLocalStorage && input && localStorage.setItem("symmetric-siteswap/input", input);
 	$: useLocalStorage && nJugglers && localStorage.setItem("symmetric-siteswap/nJugglers", nJugglers);
+	// TODO: sticky throwStyles
 
 	// TODO: make sure causal diagram works
 
@@ -43,9 +45,10 @@
 		title = 'Symmetric Siteswap ' + input;
 		url = symmetricSiteswapUrl({
 				siteswapInput: input,
-				nJugglers: nJugglers,
+				nJugglers,
+				throwStyles,
 		});
-		symmetricSiteswap = new SymmetricSiteswap(input, {symmetric:true, jugglers:jugglersInCircle(nJugglers)});
+		symmetricSiteswap = new SymmetricSiteswap(input, {symmetric:true, jugglers:jugglersInCircle(nJugglers), throwStyles});
 		valid = symmetricSiteswap.isValid();
 		symmetricSiteswapString = symmetricSiteswap.toString();
 		siteswapName = siteswapNames[url];
@@ -68,6 +71,8 @@
 		idPrefix=main
 		showHandOrderInput={false}
 		big={true}
+		bind:throwStyles
+		{jif}
 	/>
 	<SiteswapInput
 		showNJugglers={false}
@@ -78,6 +83,8 @@
 		idPrefix=animation
 		showHandOrderInput={false}
 		big={true}
+		bind:throwStyles
+		{jif}
 	/>
 
 	<div slot=info>

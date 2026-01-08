@@ -4,6 +4,7 @@
 	import InfoBox from '$lib/InfoBox.svelte';
 	import PatternResult from '$lib/PatternResult.svelte';
 	import { defaults, useLocalStorage, jugglersInCircle } from '$lib/passist.mjs';
+	import { getThrowStyles } from '$lib/utils.mjs';
 	import { siteswapNames} from '$lib/patterns.mjs';
 
 	export let init = undefined;
@@ -19,17 +20,18 @@
 	let title;
 	let url;
 	let urlSuffix;
+	let throwStyles = [];
 
-	let inputStr, searchParams;
+	let inputStr;
 	if (init) {
 		inputStr = init.params.input;
-		searchParams = init.url.searchParams;
+
+		throwStyles = getThrowStyles(init.url);
 	} else if (useLocalStorage) {
 		const urlSuffix = localStorage.getItem('extended-siteswap/urlSuffix');
 		if (urlSuffix) {
 			let queryStr
 			[inputStr, queryStr] = urlSuffix.split('?');
-			searchParams = new URLSearchParams(queryStr);
 		}
 	}
 
@@ -47,7 +49,7 @@
 		/* 		name: siteswapName ? siteswapName + " (" + extendedSiteswap.toString() + ")" : undefined, */
 		/* 		flipTwos: true, // TODO: implement this */
 
-		extendedSiteswap = new ExtendedSiteswap(input, {nJugglers, jugglers:jugglersInCircle(nJugglers)});
+		extendedSiteswap = new ExtendedSiteswap(input, {nJugglers, jugglers:jugglersInCircle(nJugglers), throwStyles });
 		url = extendedSiteswap.toUrl();
 		urlSuffix = extendedSiteswap.toUrlSuffix();
 		extendedSiteswapString = extendedSiteswap.toString();
@@ -66,6 +68,8 @@
 		slot=input
 		bind:nJugglers
 		bind:siteswapInputs={input}
+		bind:jif
+		bind:throwStyles
 		siteswapValid={valid}
 		idPrefix=main
 	/>
@@ -74,6 +78,8 @@
 		slot=animation_input
 		bind:siteswapInputs={input}
 		siteswapValid={valid}
+		bind:jif
+		bind:throwStyles
 		{nJugglers}
 		idPrefix=animation
 	/>
