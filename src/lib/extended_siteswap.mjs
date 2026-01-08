@@ -422,11 +422,9 @@ toJif(options = {})
 		// if we have limbs specified in some style, the jif throws need to be expanded as otherwise they will be applied at the wrong places
 		if (options.throwStyles.filter(s => s.limbs).length) {
 			try {
-				console.log('jif in', JSON.stringify(jif, null, 2));
 				jif = Jif.complete(jif).jif;
-				console.log('jif out', JSON.stringify(jif, null, 2));
 			} catch(e) {
-				console.log(e);
+				// console.log(e);
 			}
 		}
 
