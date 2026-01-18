@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "devwidget": "NODE_ENV=development npm run build:api",
-    "build": "vite build && npm run build:api",
+    "devwidget": "NODE_ENV=development yarn run build:api",
+    "build": "vite build && yarn run build:api",
     "build:causal_diagram_widget": "BUILD_TARGET=causal_diagram_widget vite build -c vite.api.config.js",
     "build:animation_widget": "BUILD_TARGET=animation_widget vite build -c vite.api.config.js",
-    "build:api": "npm run build:causal_diagram_widget && npm run build:animation_widget",
+    "build:api": "yarn run build:causal_diagram_widget && yarn run build:animation_widget",
     "preview": "vite preview",
     "start": "node bin/server.js",
     "test": "uvu tests",
@@ -24,7 +24,6 @@
   },
   "devDependencies": {
     "eslint": "^9.39.2",
-    "npm-run-all": "^4.1.5",
     "@rollup/plugin-alias": "^6.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "^6.0.3",

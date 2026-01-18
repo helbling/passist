@@ -19,8 +19,8 @@ Work in progress..
 
 # Usage
 ```
- npm clean-install
- npm run build
+ yarn install --frozen-lockfile
+ yarn run build
  node build
  open http://localhost:3000
 ```
