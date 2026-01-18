@@ -271,44 +271,46 @@ $:	{
 	{#if nJugglers > 1}
 		<div class=localThrows>
 			<table>
-				<tr>
-					<td>Local&nbsp;</td>
-					<td class=space />
-					<td colspan={localPeriod + 1}>Siteswap</td>
-					<td colspan={localPeriod + 1}>
-						{#if prechacthisUrl}
-							<a href={prechacthisUrl}>Prechac</a>
-						{:else}
-							Local
-						{/if}
-					</td>
-
-					{#if nJugglers == 2 && !unusualThrows}
-						<td colspan={localPeriod}>Words</td>
-					{/if}
-				</tr>
-				{#each startConfigurations as j}
+				<tbody>
 					<tr>
-						<th>{j.name} <sub>{j.startProps['left hand'] || 0}|{j.startProps['right hand'] || 0}</sub></th>
+						<td>Local&nbsp;</td>
 						<td class=space />
-						{#each j.local as t}
-							<td>{#if t}{t.siteswap}{@html t.desc}{/if}&nbsp;</td>
-						{/each}
-						<td class=space />
-						{#each j.local as t}
-							<td>
-								{#if t}{prechac(t.height, nJugglers)}{@html t.desc}{:else}&nbsp;{/if}
-							</td>
-						{/each}
+						<td colspan={localPeriod + 1}>Siteswap</td>
+						<td colspan={localPeriod + 1}>
+							{#if prechacthisUrl}
+								<a href={prechacthisUrl}>Prechac</a>
+							{:else}
+								Local
+							{/if}
+						</td>
+
 						{#if nJugglers == 2 && !unusualThrows}
-							<td class=space />
-							{#each j.local as t}
-								<td>{#if t}{word(t.height)},{/if}&nbsp;</td>
-							{/each}
+							<td colspan={localPeriod}>Words</td>
 						{/if}
 					</tr>
+					{#each startConfigurations as j}
+						<tr>
+							<th>{j.name} <sub>{j.startProps['left hand'] || 0}|{j.startProps['right hand'] || 0}</sub></th>
+							<td class=space />
+							{#each j.local as t}
+								<td>{#if t}{t.siteswap}{@html t.desc}{/if}&nbsp;</td>
+							{/each}
+							<td class=space />
+							{#each j.local as t}
+								<td>
+									{#if t}{prechac(t.height, nJugglers)}{@html t.desc}{:else}&nbsp;{/if}
+								</td>
+							{/each}
+							{#if nJugglers == 2 && !unusualThrows}
+								<td class=space />
+								{#each j.local as t}
+									<td>{#if t}{word(t.height)},{/if}&nbsp;</td>
+								{/each}
+							{/if}
+						</tr>
 
-				{/each}
+					{/each}
+				</tbody>
 			</table>
 
 		</div>

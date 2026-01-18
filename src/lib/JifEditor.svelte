@@ -101,7 +101,7 @@ function deleteKey(type, key) {
 		bind:value={content}
 	/>
 {:else if children}
-	<table><tr><td>
+	<table><tbody><tr><td>
 				<!--
 		<button
 			class="pure-button"
@@ -111,7 +111,7 @@ function deleteKey(type, key) {
 		</button>
 		-->
 	</td><td>
-		<table>
+		<table><tbody>
 			{#each children as { key, subschema, foldable } }
 			<tr class:clickable={foldable} on:click={(e) => { if (foldable) { open[key] ^= 1; } }}>
 				<td>
@@ -167,6 +167,6 @@ function deleteKey(type, key) {
 					{/if}
 				</td>
 			</tr>
-		</table>
-	</td></tr></table>
+		</tbody></table>
+	</td></tr></tbody></table>
 {/if}
