@@ -62,16 +62,15 @@ export default {
     lib: {
       ...config,
     },
+		sourcemap: true,
   	rollupOptions: {
 		output: [
 			{
-				sourcemap: true,
 				format: 'esm',
 				entryFileNames: config.fileName,
 				inlineDynamicImports: true,
 			},
 			{
-				sourcemap: true,
 				format: 'iife',
 				name: config.name,
 				entryFileNames: config.fileName.replace(/\.mjs$/, '.js'),
