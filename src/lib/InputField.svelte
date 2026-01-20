@@ -84,7 +84,7 @@ function blurTargetOnEnter(e) {
 
 	input[type="number"].digit    { width:3rem !important }
 	input[type="number"].twodigit { width:4rem !important }
-	input[type="search"] { width: 12rem; -webkit-appearance:none; padding-right:1.55rem }
+	input[type="search"] { width: 12rem; appearance:none; -webkit-appearance:none; padding-right:1.55rem }
 	input[type="search"].big { width: 22rem }
 	input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none }
 	@media screen and (max-width: 30rem) {
@@ -172,7 +172,7 @@ function blurTargetOnEnter(e) {
 				{...inputAttr}
 			>
 			{#if value != defaultValue}
-			<button class=reset on:click={e => value = defaultValue}>
+			<button class=reset on:click={_ => value = defaultValue}>
 				<Icon type=reload/>
 			</button>
 			{/if}
@@ -181,7 +181,7 @@ function blurTargetOnEnter(e) {
 		<slot/>
 	{:else if type != 'checkbox'}
 		{#if type == 'search' && value}
-		<Icon type=close on:click={e => {value = ''; searchInput.focus()}}/>
+		<Icon type=close on:click={_ => {value = ''; searchInput.focus()}}/>
 		{/if}
 		<input
 			bind:this={searchInput}

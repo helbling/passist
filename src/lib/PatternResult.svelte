@@ -23,7 +23,6 @@
 	let windowHeight;
 	let sharebutton = browser === true && 'share' in navigator;
 	let showAnimationWidget = false;
-	let limbs = [];
 	let fullUrl;
 	let showLadderDiagram = false;
 
@@ -110,7 +109,7 @@
 <slot name="input"/>
 
 {#if jifdev && valid && jif}
-	<button class="pure-button jif-button" on:click={e => {
+	<button class="pure-button jif-button" on:click={_ => {
 		localStorage.setItem("jif", JSON.stringify(jif, null, 2)); goto('/jif');
 	}}>
 		<Icon type=code /> JIF
@@ -122,8 +121,8 @@
 {#if jif && jif.throws && jif.throws.length > 0}
 	<div class=causalDiagram>
 		<div>
-			<span class=pure-menu-link class:selected={!showLadderDiagram} on:click={e => showLadderDiagram=false }>Causal Diagram</span>
-			<span class=pure-menu-link class:selected={ showLadderDiagram} on:click={e => showLadderDiagram=true  }>Ladder Diagram</span>
+			<span class=pure-menu-link class:selected={!showLadderDiagram} on:click={_ => showLadderDiagram=false }>Causal Diagram</span>
+			<span class=pure-menu-link class:selected={ showLadderDiagram} on:click={_ => showLadderDiagram=true  }>Ladder Diagram</span>
 		</div>
 		<CausalDiagramWidget
 			{jif}
@@ -148,7 +147,7 @@
 			animationSpeed={parseFloat(animationSpeed)}
 			{showOrbits}
 			on:fullscreenchange={onFullscreenChange}
-			on:close={e => {showAnimationWidget = false;}}
+			on:close={_ => {showAnimationWidget = false;}}
 		>
 			<slot name="animation_input"/>
 			<InputField
@@ -206,7 +205,7 @@
 </p>
 
 {:else}
-	<button class="pure-button" on:click={e => {showAnimationWidget = true;}}>Show Animation</button>
+	<button class="pure-button" on:click={_ => {showAnimationWidget = true;}}>Show Animation</button>
 {/if}
 
 
