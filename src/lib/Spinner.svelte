@@ -31,7 +31,7 @@
 </style>
 
 <div class="spinner">
-	<div class="ball a" />
-	<div class="ball b" />
-	<div class="ball c" />
+	<div class="ball a"></div>
+	<div class="ball b"></div>
+	<div class="ball c"></div>
 </div>

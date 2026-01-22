@@ -101,12 +101,12 @@
 				<InfoBox type=error>
 					<h5>Invalid Symmetric Siteswap</h5>
 					{#if symmetricSiteswap && symmetricSiteswap.error}
-						<p>
+						<div>
 						{symmetricSiteswap.error}
 						{#if symmetricSiteswap.error.snippet}
 								<pre>{symmetricSiteswap.error.snippet}</pre>
 						{/if}
-						</p>
+						</div>
 					{/if}
 				 <img src=/images/mr_meeseeks_shocked_small.png alt="mr meeseeks is shocked to see an invalid siteswap" >
 				</InfoBox>

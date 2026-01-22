@@ -23,6 +23,7 @@ $: {
 	li .siteswap { width:5.5em; vertical-align:top; overflow:hidden; text-overflow:ellipsis }
 	span { display:inline-block; color:#212529 }
 	.pure-menu { margin-bottom:1em }
+	.small { font-size: 80% }
 </style>
 
 <div class="filter-form pure-form form-inline">
@@ -37,7 +38,7 @@ $: {
 
 <h2>Well-known siteswaps</h2>
 
-<p><small>© Christian Kästner, <a href='https://github.com/ckaestne/CompatSiteswaps/blob/master/named-siteswaps.txt'>named-siteswaps.txt</a></p>
+<p class=small>© Christian Kästner, <a href='https://github.com/ckaestne/CompatSiteswaps/blob/master/named-siteswaps.txt'>named-siteswaps.txt</a></p>
 
 <div class=pure-menu>
 <ul class="pure-menu-list pure-g">
