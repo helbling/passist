@@ -1,5 +1,5 @@
 <script>
-import Icon from './Icon.svelte';
+import IconButton from './IconButton.svelte';
 
 export let id;
 export let type;
@@ -122,7 +122,8 @@ function blurTargetOnEnter(e) {
 	select { height: auto }
 	.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0 }
 
-	:global(.input-group .close) { position:absolute; right:0; top:0; margin:0.7rem 0; height:1rem }
+	:global(.input-group svg.close) { height:1rem; }
+	:global(.input-group button.close) { position:absolute; right:0; top:0; height:100%; }
 </style>
 
 {#if title != label}
@@ -172,16 +173,14 @@ function blurTargetOnEnter(e) {
 				{...inputAttr}
 			>
 			{#if value != defaultValue}
-			<button class=reset on:click={_ => value = defaultValue}>
-				<Icon type=reload/>
-			</button>
+				<IconButton type=reload  on:click={_ => value = defaultValue} />
 			{/if}
 		</div>
 	{:else if type == 'custom'}
 		<slot/>
 	{:else if type != 'checkbox'}
 		{#if type == 'search' && value}
-		<Icon type=close on:click={_ => {value = ''; searchInput.focus()}}/>
+			<IconButton type=close on:click={_ => {value = ''; searchInput.focus()} } />
 		{/if}
 		<input
 			bind:this={searchInput}

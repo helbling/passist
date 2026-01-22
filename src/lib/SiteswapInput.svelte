@@ -1,6 +1,7 @@
 <script>
 	import DragDropList from '$lib/DragDropList.svelte';
 	import Icon from '$lib/Icon.svelte';
+	import IconButton from '$lib/IconButton.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import ThrowStyleInput from '$lib/ThrowStyleInput.svelte';
 	import { jugglerName, hands2limbs, limbs2hands, defaultLimbs } from '$lib/passist.mjs';
@@ -167,7 +168,7 @@
 				</div>
 				{/if}
 				{#if handsInput}
-				<Icon type=close on:click={() => {handsInput = '';}}/>
+				<IconButton type=close on:click={() => {handsInput = '';}}/>
 				{/if}
 			</div>
 		</InputField>
@@ -188,7 +189,7 @@
 			<!--svelte-ignore a11y_no_static_element_interactions -->
 			<!--svelte-ignore a11y_click_events_have_key_events -->
 			<div class="style-overview input-group" on:click={() => showSettings = true}>
-				<Icon type=close on:click={e => {
+				<IconButton type=close on:click={e => {
 						handsInput = '';
 						e.stopPropagation();
 					}}/>

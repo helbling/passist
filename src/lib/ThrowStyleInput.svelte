@@ -1,5 +1,5 @@
 <script>
-	import Icon from '$lib/Icon.svelte';
+	import IconButton from '$lib/IconButton.svelte';
 	import InfoBox from '$lib/InfoBox.svelte';
 	import InputField from '$lib/InputField.svelte';
 	import Jif from '$lib/jif.mjs';
@@ -202,7 +202,7 @@
 			{#each throwStyles as s,idx}
 			<div class="input-group" class:inactive={idx != lastIdx[styleKey(s)] } >
 				{throwStyleString(s, limbsLabels)}
-				<Icon type=close on:click={() => { throwStyles.splice(idx, 1); throwStyles = throwStyles }}/>
+				<IconButton type=close on:click={() => { throwStyles.splice(idx, 1); throwStyles = throwStyles }}/>
 			</div>
 			{/each}
 		</div>
@@ -215,7 +215,7 @@
 			<!--svelte-ignore a11y_no_static_element_interactions -->
 			<!--svelte-ignore a11y_click_events_have_key_events -->
 			<div class="style-overview input-group" on:click={() => showSettings = true}>
-				<Icon type=close on:click={e => {
+				<IconButton type=close on:click={e => {
 						throwStyles = [];
 						e.stopPropagation();
 					}}/>

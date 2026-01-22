@@ -2,6 +2,7 @@
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
 	import { defaults } from './passist.mjs';
 	import Icon from './Icon.svelte';
+	import IconButton from './Icon.svelte';
 	import InputField from './InputField.svelte';
 	import { browser } from '$app/environment';
 	import Jif from './jif.mjs';
@@ -223,9 +224,10 @@
 	</canvas>
 	<div class="controls position-top position-right">
 		{#if isFull}
-		<Icon type=fullscreen_exit on:click={e => {showSettings = false; exitFullscreen()}}/>
+		<IconButton type=fullscreen_exit on:click={_ => {showSettings = false; exitFullscreen();}}/>
+
 		{:else}
-		<Icon type=fullscreen on:click={requestFullscreen}/>
+		<IconButton type=fullscreen on:click={requestFullscreen}/>
 		{/if}
 	</div>
 
@@ -233,7 +235,7 @@
 
 	{#if enableSettings}
 		<div class="controls position-top position-left">
-			<Icon type=settings on:click={e => showSettings = !showSettings}/>
+			<IconButton type=settings on:click={_ => showSettings = !showSettings}/>
 		</div>
 		{#if showSettings}
 		<div class="settings-outer">
