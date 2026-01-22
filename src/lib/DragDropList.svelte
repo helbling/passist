@@ -48,7 +48,7 @@
         }
     }
 
-    function dragEnter(ev, target) {
+    function dragEnter(_, target) {
         // swap items in data
         if (grabbed && target != grabbed && target.classList.contains("item")) {
             moveDatum(parseInt(grabbed.dataset.index), parseInt(target.dataset.index));
@@ -62,7 +62,7 @@
         data = [...data.slice(0, to), temp, ...data.slice(to)];
     }
 
-    function release(ev) {
+    function release(_) {
         grabbed = null;
     }
 
@@ -192,15 +192,17 @@
                 animate:flip|local={{duration: 200}}>
                 <div class="buttons">
                     <button 
+                        title="up"
                         class="up" 
                         style={"visibility: " + (i > 0 ? "" : "hidden") + ";"}
-                        on:click={function(ev) {moveDatum(i, i - 1)}}>
+                        on:click={function(_) {moveDatum(i, i - 1)}}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6 1.41 1.41z"/></svg>
                     </button>
                     <button 
+                        title="down"
                         class="down" 
                         style={"visibility: " + (i < data.length - 1 ? "" : "hidden") + ";"}
-                        on:click={function(ev) {moveDatum(i, i + 1)}}>
+                        on:click={function(_) {moveDatum(i, i + 1)}}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16px" height="16px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
                     </button>
                 </div>
