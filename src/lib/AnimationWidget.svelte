@@ -2,7 +2,7 @@
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
 	import { defaults } from './passist.mjs';
 	import Icon from './Icon.svelte';
-	import IconButton from './Icon.svelte';
+	import IconButton from './IconButton.svelte';
 	import InputField from './InputField.svelte';
 	import { browser } from '$app/environment';
 	import Jif from './jif.mjs';
@@ -40,7 +40,7 @@
 	const noop = () => {};
 	const maximize = () => {
 		isMaximized = true;
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			resolve()
 		})
 	};
@@ -62,7 +62,7 @@
 		dispatch('fullscreenchange', isFull);
 	}
 
-	const onFullscreenChange = e => {
+	const onFullscreenChange = _ => {
 		isFullscreen = (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) === container;
 	};
 	onMount(async () => {
@@ -80,7 +80,7 @@
 				container.msRequestFullscreen ||
 				maximize
 			).bind(container);
-			requestFS().catch(e => {
+			requestFS().catch(_ => {
 				maximize();
 			});
 		};
@@ -271,18 +271,21 @@
 		{#if teaser && !isFull}
 			<div class=teaserForeground on:click={requestFullscreen}>
 				{#if closeButton}
-				<div class="controls position-top position-left" on:click|stopPropagation={dispatch('close', !isFull)}>
-					<Icon type=close/>
+				<div class="controls position-top position-left">
+					<button class=invisible on:click|stopPropagation={dispatch('close', !isFull)}>
+						<Icon type=close />
+						</button>
 				</div>
 				<div
 					class="controls position-bottom position-left"
-					on:click|stopPropagation={e => togglePause()}
 				>
-					<Icon type={paused ? 'play' : 'pause'} />
+					<button class=invisible on:click|stopPropagation={_ => togglePause()}>
+						<Icon type={paused ? 'play' : 'pause'} />
+						</button>
 				</div>
 				{/if}
 				{#if loaded}
-				<div class=message>Click to interact in fullscreen</div>
+					<div class=message>Click to interact in fullscreen</div>
 				{/if}
 			</div>
 		{/if}
