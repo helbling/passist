@@ -376,10 +376,10 @@
     "@rollup/plugin-node-resolve" "^16.0.0"
     rollup "^4.9.5"
 
-"@sveltejs/kit@2.52.2":
-  version "2.52.2"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.52.2.tgz#8de4a96ef7b54a59ccb2d13f4297da3f22c3ec1d"
-  integrity sha512-1in76dftrofUt138rVLvYuwiQLkg9K3cG8agXEE6ksf7gCGs8oIr3+pFrVtbRmY9JvW+psW5fvLM/IwVybOLBA==
+"@sveltejs/kit@2.53.0":
+  version "2.53.0"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.53.0.tgz#12b84268ac1bc7efd4b09bd02ff453e8232ae831"
+  integrity sha512-Brh/9h8QEg7rWIj+Nnz/2sC49NUeS8g3Qd9H5dTO3EbWG8vCEUl06jE+r5jQVDMHdr1swmCkwZkONFsWelGTpQ==
   dependencies:
     "@standard-schema/spec" "^1.0.0"
     "@sveltejs/acorn-typescript" "^1.0.5"
@@ -394,23 +394,15 @@
     set-cookie-parser "^3.0.0"
     sirv "^3.0.0"
 
-"@sveltejs/vite-plugin-svelte-inspector@^5.0.0":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@sveltejs/vite-plugin-svelte-inspector/-/vite-plugin-svelte-inspector-5.0.2.tgz#81302822c29d530cfe707c795cca014ef00e9c1e"
-  integrity sha512-TZzRTcEtZffICSAoZGkPSl6Etsj2torOVrx6Uw0KpXxrec9Gg6jFWQ60Q3+LmNGfZSxHRCZL7vXVZIWmuV50Ig==
+"@sveltejs/vite-plugin-svelte@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@sveltejs/vite-plugin-svelte/-/vite-plugin-svelte-7.0.0.tgz#a291a0e3b8cc6e2509e2b9a3a7b1c7146505a6a7"
+  integrity sha512-ILXmxC7HAsnkK2eslgPetrqqW1BKSL7LktsFgqzNj83MaivMGZzluWq32m25j2mDOjmSKX7GGWahePhuEs7P/g==
   dependencies:
-    obug "^2.1.0"
-
-"@sveltejs/vite-plugin-svelte@^6.2.3":
-  version "6.2.4"
-  resolved "https://registry.yarnpkg.com/@sveltejs/vite-plugin-svelte/-/vite-plugin-svelte-6.2.4.tgz#f3a1dac0eba70a053bd750e1a15f7fb1ae71fa4f"
-  integrity sha512-ou/d51QSdTyN26D7h6dSpusAKaZkAiGM55/AKYi+9AGZw7q85hElbjK3kEyzXHhLSnRISHOYzVge6x0jRZ7DXA==
-  dependencies:
-    "@sveltejs/vite-plugin-svelte-inspector" "^5.0.0"
     deepmerge "^4.3.1"
     magic-string "^0.30.21"
     obug "^2.1.0"
-    vitefu "^1.1.1"
+    vitefu "^1.1.2"
 
 "@types/cookie@^0.6.0":
   version "0.6.0"
@@ -445,10 +437,10 @@ acorn@^8.12.1, acorn@^8.14.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.15.0.tgz#a360898bc415edaac46c8241f6383975b930b816"
   integrity sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==
 
-aria-query@^5.3.1:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-5.3.2.tgz#93f81a43480e33a338f19163a3d10a50c01dcd59"
-  integrity sha512-COROpnaoap1E2F000S62r6A60uHZnmlvomhfyT2DlTcrY1OrBKn2UhH7qn5wTC9zMvD0AY7csdPSNwKP+7WiQw==
+aria-query@5.3.1:
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-5.3.1.tgz#ebcb2c0d7fc43e68e4cb22f774d1209cb627ab42"
+  integrity sha512-Z/ZeOgVl7bcSYZ/u/rh0fOpvEpq//LZmdbkXyc7syVzjPAhfOa9ebsdTSjEBDU4vs5nC98Kfduj1uFo0qyET3g==
 
 axobject-query@^4.1.0:
   version "4.1.0"
@@ -1189,10 +1181,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-svelte-check@^4.3.5:
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.4.2.tgz#d937c0768291fa7eb377a2382f87555760cda0c8"
-  integrity sha512-hkTWXT1emHOpLhihTzaMsPXtZPnXjIJzIYhfxUO5T8BhIwNxvlyweb9ifWoAj3n3Y1fXfbpvS591hx0ecDOTGA==
+svelte-check@^4.4.3:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-4.4.3.tgz#70b7c9e00d2edaade33433fb80385b3d1fe404ab"
+  integrity sha512-4HtdEv2hOoLCEsSXI+RDELk9okP/4sImWa7X02OjMFFOWeSdFF3NFy3vqpw0z+eH9C88J9vxZfUXz/Uv2A1ANw==
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.25"
     chokidar "^4.0.1"
@@ -1200,10 +1192,10 @@ svelte-check@^4.3.5:
     picocolors "^1.0.0"
     sade "^1.7.4"
 
-svelte@5.53.0:
-  version "5.53.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.53.0.tgz#c6d33f93c5032ab300f3f157eb8cef59c032659c"
-  integrity sha512-7dhHkSamGS2vtoBmIW2hRab+gl5Z60alEHZB4910ePqqJNxAWnDAxsofVmlZ2tREmWyHNE+A1nCKwICAquoD2A==
+svelte@5.53.3:
+  version "5.53.3"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.53.3.tgz#4a2f8a5cc6053f812050cb48ae0e747f6c63ec7b"
+  integrity sha512-pRUBr6j6uQDgBi208gHnGRMykw0Rf2Yr1HmLyRucsvcaYgIUxswJkT93WZJflsmezu5s8Lq+q78EoyLv2yaFCg==
   dependencies:
     "@jridgewell/remapping" "^2.3.4"
     "@jridgewell/sourcemap-codec" "^1.5.0"
@@ -1211,7 +1203,7 @@ svelte@5.53.0:
     "@types/estree" "^1.0.5"
     "@types/trusted-types" "^2.0.7"
     acorn "^8.12.1"
-    aria-query "^5.3.1"
+    aria-query "5.3.1"
     axobject-query "^4.1.0"
     clsx "^2.1.1"
     devalue "^5.6.3"
@@ -1293,10 +1285,10 @@ vite@^7.3.1:
   optionalDependencies:
     fsevents "~2.3.3"
 
-vitefu@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/vitefu/-/vitefu-1.1.1.tgz#c39b7e4c91bf2f6c590fb96e0758f394dff5795b"
-  integrity sha512-B/Fegf3i8zh0yFbpzZ21amWzHmuNlLlmJT6n7bu5e+pCHUKQIfXSYokrqOBGEMMe9UG2sostKQF9mml/vYaWJQ==
+vitefu@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/vitefu/-/vitefu-1.1.2.tgz#b63fcf3b606170702318b8c432663a3b9030f51d"
+  integrity sha512-zpKATdUbzbsycPFBN71nS2uzBUQiVnFoOrr2rvqv34S1lcAgMKKkjWleLGeiJlZ8lwCXvtWaRn7R3ZC16SYRuw==
 
 wrappy@1:
   version "1.0.2"
