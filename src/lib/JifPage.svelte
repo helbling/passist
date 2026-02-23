@@ -78,15 +78,16 @@
 	.causalDiagram { overflow-x:auto; margin-bottom:1em }
 	.causalDiagram .selected { font-weight: bold; border:2px solid #ccc; border-bottom:2px solid #fff; z-index:10; position:relative; margin-bottom:-2px }
 	button.unstyled {
-		background: none;
-		color: inherit;
+		display:inline-block;
+		background: #fff !important;
+		color: #777;
 		border: none;
 		font: inherit;
 		cursor: pointer;
 		outline: inherit;
 	}
-	button.unstyled:focus {
-		background: none;
+	button.unstyled:hover{
+		background: var(--highlight-bg-color) !important;
 	}
 </style>
 
