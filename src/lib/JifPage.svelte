@@ -76,8 +76,18 @@
 	.invalid { color:#dc3545 }
 	.animation-controls { display:flex; flex-flow:row wrap }
 	.causalDiagram { overflow-x:auto; margin-bottom:1em }
-	.causalDiagram span { display:inline-block; cursor:pointer }
 	.causalDiagram .selected { font-weight: bold; border:2px solid #ccc; border-bottom:2px solid #fff; z-index:10; position:relative; margin-bottom:-2px }
+	button.unstyled {
+		background: none;
+		color: inherit;
+		border: none;
+		font: inherit;
+		cursor: pointer;
+		outline: inherit;
+	}
+	button.unstyled:focus {
+		background: none;
+	}
 </style>
 
 <div class=horizontal-split>
@@ -143,8 +153,12 @@
 {#if jif && jif.throws && jif.throws.length > 0}
 	<div class=causalDiagram>
 		<div>
-			<span class=pure-menu-link class:selected={!showLadderDiagram} on:click={e => showLadderDiagram=false }>Causal Diagram</span>
-			<span class=pure-menu-link class:selected={ showLadderDiagram} on:click={e => showLadderDiagram=true  }>Ladder Diagram</span>
+			<button class="unstyled pure-menu-link" class:selected={!showLadderDiagram} on:click={_ => showLadderDiagram=false }>
+					Causal Diagram
+			</button>
+			<button class="unstyled pure-menu-link" class:selected={ showLadderDiagram} on:click={_ => showLadderDiagram=true  }>
+					Ladder Diagram
+			</button>
 		</div>
 		<CausalDiagramWidget
 			{jif}
