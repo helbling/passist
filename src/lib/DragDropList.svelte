@@ -172,7 +172,9 @@
         id="ghost"
         class={grabbed ? "item haunting" : "item"}
         style={"top: " + (mouseY + offsetY - layerY) + "px"}><p></p></div>
-    <div 
+
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div
         class="list"
         on:mousemove={function(ev) {ev.stopPropagation(); drag(ev.clientY);}}
         on:touchmove={function(ev) {ev.stopPropagation(); drag(ev.touches[0].clientY);}}
@@ -181,6 +183,8 @@
         {#each data as datum, i (datum.id ? datum.id : JSON.stringify(datum))}
             <div 
                 id={(grabbed && (datum.id ? datum.id : JSON.stringify(datum)) == grabbed.dataset.id) ? "grabbed" : ""}
+                role=menuitem
+                tabindex=0
                 class="item"
                 data-index={i}
                 data-id={(datum.id ? datum.id : JSON.stringify(datum))}
@@ -220,7 +224,8 @@
                 <div class="buttons delete">
                     {#if removesItems}
                         <button
-                            on:click={function(ev) {removeDatum(i);}}>
+                            title="reset"
+                            on:click={_ => removeDatum(i)}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 24 24" width="16"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                         </button>
                     {/if}
