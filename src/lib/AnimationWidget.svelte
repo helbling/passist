@@ -178,7 +178,7 @@
 	canvas { position:absolute; top:0; right:0; bottom:0; left:0; z-index:10; cursor:grab }
 	canvas.dragging { cursor:grabbing }
 	.background {  position:absolute; z-index:0; top:0; right:0; bottom:0; left:0; background-color:#c9ede7 }
-	.controls { position:absolute; z-index:20 }
+	.controls { position:absolute; z-index:22 }
 	.position-top    { top:1ex }
 	.position-left   { left:1ex }
 	.position-right  { right:1ex }
