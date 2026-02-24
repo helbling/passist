@@ -3,7 +3,6 @@
 	import Icon from '$lib/Icon.svelte';
 	import JifEditor from '$lib/JifEditor.svelte';
 	import schema from '../../static/jif.schema.json';
-	import CausalDiagramWidget from '$lib/CausalDiagramWidget.svelte';
 	import AnimationWidget from '$lib/AnimationWidget.svelte';
 	import { browser } from '$app/environment';
 
@@ -114,11 +113,11 @@ $: {
 			{jif}
 			closeButton={true}
 			enableSettings={true}
-			on:close={e => {showAnimationWidget = false;}}
+			onClose={_ => {showAnimationWidget = false;}}
 		/>
 	</div>
 	{:else}
-		<button class="pure-button" on:click={e => {showAnimationWidget = true;}}>Show Animation</button>
+		<button class="pure-button" on:click={_ => {showAnimationWidget = true;}}>Show Animation</button>
 	{/if}
 
 	<pre>

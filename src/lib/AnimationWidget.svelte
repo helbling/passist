@@ -1,5 +1,5 @@
 <script>
-	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { defaults } from './passist.mjs';
 	import Icon from './Icon.svelte';
 	import IconButton from './IconButton.svelte';
@@ -17,6 +17,8 @@
 	export let animationSpeed = defaults.animationSpeed;
 	export let showOrbits = false;
 	export let resolution = 'medium';
+	export let onFullscreenChange = _ => {};
+	export let onClose = _ => {};
 
 	let animation;
 	let paused = false;
@@ -55,14 +57,12 @@
 	$: animationOptions = { valid, jugglingSpeed, animationSpeed, showOrbits };
 	$: sizeOptions = { width, height, pixelRatio };
 
-	const dispatch = createEventDispatcher();
-
 	$: {
 		isFull = isFullscreen || isMaximized;
-		dispatch('fullscreenchange', isFull);
+		onFullscreenChange(isFull);
 	}
 
-	const onFullscreenChange = _ => {
+	const onDocumentFullscreenChange = _ => {
 		isFullscreen = (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) === container;
 	};
 	onMount(async () => {
@@ -99,7 +99,7 @@
 			}
 		};
 
-		document.addEventListener("fullscreenchange", onFullscreenChange);
+		document.addEventListener("fullscreenchange", onDocumentFullscreenChange);
 
 		if (initialFullscreen)
 			requestFullscreen();
@@ -122,7 +122,7 @@
 			clearInterval(fpsInterval);
 
 		if (browser === true)
-			document.removeEventListener("fullscreenchange", onFullscreenChange);
+			document.removeEventListener("fullscreenchange", onDocumentFullscreenChange);
 	});
 
 	$: if (browser === true && animation) { animation.updateScene(animationJif, animationOptions); }
@@ -272,7 +272,7 @@
 			<div class=teaserForeground on:click={requestFullscreen}>
 				{#if closeButton}
 				<div class="controls position-top position-left">
-					<button class=invisible on:click|stopPropagation={dispatch('close', !isFull)}>
+					<button class=invisible on:click|stopPropagation={onClose(!isFull)}>
 						<Icon type=close />
 						</button>
 				</div>

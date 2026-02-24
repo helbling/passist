@@ -161,8 +161,8 @@
 			jugglingSpeed={parseFloat(jugglingSpeed)}
 			animationSpeed={parseFloat(animationSpeed)}
 			{showOrbits}
-			on:fullscreenchange={onFullscreenChange}
-			on:close={_ => {showAnimationWidget = false;}}
+			onFullscreenChange={onFullscreenChange}
+			onClose={_ => {showAnimationWidget = false;}}
 		>
 			<slot name="animation_input"/>
 			<InputField
