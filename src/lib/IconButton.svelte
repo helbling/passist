@@ -3,6 +3,7 @@ import Icon from './Icon.svelte';
 
 export let type;
 export let fill = false;
+export let title = "";
 
 </script>
 
@@ -18,7 +19,7 @@ export let fill = false;
 	}
 </style>
 
-<button class="{type}" on:click>
+<button class="{type}" on:click {title}>
 	  <Icon {type} {fill} />
 </button>
 

@@ -224,10 +224,18 @@
 	</canvas>
 	<div class="controls position-top position-right">
 		{#if isFull}
-		<IconButton type=fullscreen_exit on:click={_ => {showSettings = false; exitFullscreen();}}/>
+			<IconButton
+				type=fullscreen_exit
+				title="exit fullscreen"
+				on:click={_ => {showSettings = false; exitFullscreen();}}
+			/>
 
 		{:else}
-		<IconButton type=fullscreen on:click={requestFullscreen}/>
+			<IconButton
+				type=fullscreen
+				title="show animation fullscreen"
+				on:click={requestFullscreen}
+			/>
 		{/if}
 	</div>
 
@@ -235,7 +243,11 @@
 
 	{#if enableSettings}
 		<div class="controls position-top position-left">
-			<IconButton type=settings on:click={_ => showSettings = !showSettings}/>
+			<IconButton
+					type=settings
+					title="animation settings"
+					on:click={_ => showSettings = !showSettings}
+				/>
 		</div>
 		{#if showSettings}
 		<div class="settings-outer">
@@ -272,14 +284,14 @@
 			<div class=teaserForeground on:click={requestFullscreen}>
 				{#if closeButton}
 				<div class="controls position-top position-left">
-					<button class=invisible on:click|stopPropagation={onClose(!isFull)}>
+					<button class=invisible title="close animation" on:click|stopPropagation={onClose(!isFull)}>
 						<Icon type=close />
 						</button>
 				</div>
 				<div
 					class="controls position-bottom position-left"
 				>
-					<button class=invisible on:click|stopPropagation={_ => togglePause()}>
+					<button class=invisible title={(paused ? 'play' : 'pause') + " animation"} on:click|stopPropagation={_ => togglePause()}>
 						<Icon type={paused ? 'play' : 'pause'} />
 						</button>
 				</div>
