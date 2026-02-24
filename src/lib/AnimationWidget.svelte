@@ -281,6 +281,7 @@
 	{/if}
 	{#if valid}
 		{#if teaser && !isFull}
+	    <!-- svelte-ignore a11y-no-static-element-interactions a11y_click_events_have_key_events -->
 			<div class=teaserForeground on:click={requestFullscreen}>
 				{#if closeButton}
 				<div class="controls position-top position-left">
