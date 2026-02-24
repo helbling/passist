@@ -22,7 +22,7 @@ a:not(.pure-menu-link):hover { text-decoration: underline }
 .form-inline { display: -ms-flexbox; display: flex; -ms-flex-flow: row wrap; flex-flow: row wrap; -ms-flex-align: center; align-items: center }
 
 button.invisible {
-	background: none;
+	background: none !important;
 	color: inherit;
 	border: none;
 	padding: 0;
