@@ -52,18 +52,18 @@ export default {
 			...config,
 		},
 		sourcemap: true,
-		rollupOptions: {
+		rolldownOptions: {
 			output: [
 				{
 					format: 'esm',
 					entryFileNames: config.fileName,
-					inlineDynamicImports: true,
+					codeSplitting: false
 				},
 				{
 					format: 'iife',
 					name: config.name,
 					entryFileNames: config.fileName.replace(/\.mjs$/, '.js'),
-					inlineDynamicImports: true,
+					codeSplitting: false
 				}
 			],
 		},
