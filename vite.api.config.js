@@ -19,53 +19,53 @@ const config = {
 }[process.env.BUILD_TARGET];
 
 export default {
-  plugins: [
-	replace({
-		preventAssignment: true,
-		'import.meta.env.VITE_SERVERTYPE': JSON.stringify(process.env.VITE_SERVERTYPE),
-		'import.meta.env.DEV': dev.toString(),
-	}),
-	alias({
-		entries: {
-			'$lib':     'src/lib',
-			'$app/environment': 'src/api/env.js',
-			//'$app':     '.svelte-kit/build/runtime/app',
-		},
-	}),
-    svelte({
-		compilerOptions: {
-			// enable run-time checks when not in production
-			dev,
-			accessors:true,
-			// we'll extract any component CSS out into
-			// a separate file - better for performance
-			// css: css => { css.write('animation-widget.css'); }
-			hmr: false,
-		},
-		emitCss: false
-    }),
-  ],
-  build: {
-    outDir: "./static/api/",
-	emptyOutDir: false,
-    lib: {
-      ...config,
-    },
-		sourcemap: true,
-  	rollupOptions: {
-		output: [
-			{
-				format: 'esm',
-				entryFileNames: config.fileName,
-				inlineDynamicImports: true,
+	plugins: [
+		replace({
+			preventAssignment: true,
+			'import.meta.env.VITE_SERVERTYPE': JSON.stringify(process.env.VITE_SERVERTYPE),
+			'import.meta.env.DEV': dev.toString(),
+		}),
+		alias({
+			entries: {
+				'$lib': 'src/lib',
+				'$app/environment': 'src/api/env.js',
+				//'$app':     '.svelte-kit/build/runtime/app',
 			},
-			{
-				format: 'iife',
-				name: config.name,
-				entryFileNames: config.fileName.replace(/\.mjs$/, '.js'),
-				inlineDynamicImports: true,
-			}
-		],
-    },
-  },
+		}),
+		svelte({
+			compilerOptions: {
+				// enable run-time checks when not in production
+				dev,
+				accessors: true,
+				// we'll extract any component CSS out into
+				// a separate file - better for performance
+				// css: css => { css.write('animation-widget.css'); }
+				hmr: false,
+			},
+			emitCss: false
+		}),
+	],
+	build: {
+		outDir: "./static/api/",
+		emptyOutDir: false,
+		lib: {
+			...config,
+		},
+		sourcemap: true,
+		rollupOptions: {
+			output: [
+				{
+					format: 'esm',
+					entryFileNames: config.fileName,
+					inlineDynamicImports: true,
+				},
+				{
+					format: 'iife',
+					name: config.name,
+					entryFileNames: config.fileName.replace(/\.mjs$/, '.js'),
+					inlineDynamicImports: true,
+				}
+			],
+		},
+	},
 };
