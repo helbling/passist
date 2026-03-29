@@ -74,6 +74,7 @@ constructor(input, options = {})
 			this.completeJif = Jif.complete(this.jif, { expand:true, props:true }).jif;
 			this._valid = true;
 			this.nProps = this.completeJif.props.length;
+			this.jif.props = this.completeJif.props;
 		} catch (e) {
 			this.error = e;
 		}

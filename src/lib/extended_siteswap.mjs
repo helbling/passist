@@ -315,6 +315,7 @@ constructor(input, options = {})
 	if (!this.error && this.jif) {
 		try {
 			this.completeJif = Jif.complete(this.jif, { expand:true, props:true }).jif;
+			this.jif.props = this.completeJif.props;
 		} catch (e) {
 			this.error = e;
 		}
