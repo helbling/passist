@@ -1,7 +1,6 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import alias from '@rollup/plugin-alias';
 import replace from '@rollup/plugin-replace';
-import resolve from '@rollup/plugin-node-resolve';
 
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
@@ -34,7 +33,6 @@ export default {
 		},
 	}),
     svelte({
-		hot: false, // hot module replacement hmr
 		compilerOptions: {
 			// enable run-time checks when not in production
 			dev,
@@ -42,19 +40,10 @@ export default {
 			// we'll extract any component CSS out into
 			// a separate file - better for performance
 			// css: css => { css.write('animation-widget.css'); }
+			hmr: false,
 		},
 		emitCss: false
     }),
-
-	// If you have external dependencies installed from
-	// npm, you'll most likely need these plugins. In
-	// some cases you'll need additional configuration -
-	// consult the documentation for details:
-	// https://github.com/rollup/plugins/tree/master/packages/commonjs
-	resolve({
-		browser: true,
-		dedupe: ['svelte']
-	}),
   ],
   build: {
     outDir: "./static/api/",
