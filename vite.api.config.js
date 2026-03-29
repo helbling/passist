@@ -18,6 +18,8 @@ const config = {
 	},
 }[process.env.BUILD_TARGET];
 
+const cwd = process.cwd()
+
 export default {
 	plugins: [
 		replace({
@@ -27,8 +29,8 @@ export default {
 		}),
 		alias({
 			entries: {
-				'$lib': 'src/lib',
-				'$app/environment': 'src/api/env.js',
+				'$lib': cwd + '/src/lib',
+				'$app/environment': cwd + '/src/api/env.js',
 				//'$app':     '.svelte-kit/build/runtime/app',
 			},
 		}),
