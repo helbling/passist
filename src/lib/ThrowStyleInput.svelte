@@ -21,6 +21,9 @@
 	let lastIdx = {};
 	let completedJif = jif;
 	let labelToDuration = {};
+	let hasHolds = false;
+	let holdLabel;
+	let holdSpins;
 
 	const throwStylesBetaWarning = 'Note: Throw styles is new and might still have bugs';
 
@@ -28,6 +31,9 @@
 		return [style.label, style.ordinal, style.limbs, style.what].join('|');
 	}
 
+	function isHoldSpinStyle(style) {
+		return style.what == "spins" && style.label == holdLabel && !style.ordinal;
+	}
 	$: {
 		throwStyles.forEach((style, idx) => {
 				lastIdx[styleKey(style)] = idx;
@@ -76,6 +82,24 @@
 			limbsSelect.forEach((style, label) => {
 				limbsLabels[JSON.stringify(style.limbs)] = label;
 			});
+
+			// for flip/hold "two"s buttons
+			const timeStretchFactor = jif.timeStretchFactor || 1;
+			hasHolds = false;
+			holdSpins = 1;
+			for (const th of jif.throws) {
+				const soloHeight = th.duration / timeStretchFactor;
+				if (soloHeight == 2 && !th.ordinal && th.label == soloHeight * timeStretchFactor) { // must make sure we don't have some 2p, 2x, 1st 2 or similar
+					hasHolds = true;
+					holdLabel = th.label;
+				}
+			}
+			if (hasHolds) {
+				throwStyles.forEach(style => {
+					if (isHoldSpinStyle(style))
+						holdSpins = style.value;
+				});
+			}
 		}
 	}
 
@@ -209,6 +233,27 @@
 		<InfoBox type=warning>{throwStylesBetaWarning}</InfoBox>
 	</div>
 
+	{#if hasHolds}
+	{#if holdSpins == 1}
+	<div class="pure-form form-inline">
+		<button
+			class="pure-button"
+			on:click={_ => {throwStyles.push({what:"spins", label:holdLabel, value:0}); throwStyles=throwStyles}}
+		>
+			hold {holdLabel}s
+		</button>
+	</div>
+	{:else}
+	<div class="pure-form form-inline">
+		<button
+			class="pure-button"
+			on:click={_ => {throwStyles = throwStyles.filter(style => !isHoldSpinStyle(style))}}
+		>
+			flip {holdLabel}s
+		</button>
+	</div>
+	{/if}
+	{/if}
 
 	{:else} <!-- !showSettings -->
 		{#if throwStyles.length > 0}
