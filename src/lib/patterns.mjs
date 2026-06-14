@@ -57,7 +57,7 @@ const kaestnersKnownSiteswaps = [
 	[7, "9964786", "7 club Jim's 2 count (variation)"],
 	[7, "9784966", "7 club Jim's 2 count (variation)"],
 	[7, "9784786", "7 club Jim's 2 count (variation)"],
-	[7, "b64", "Odd Scots"],
+	[7, "b64", "Odd godz"],
 	[6, "726778827", "Self Centered"],
 	[6, "7747746677466", "Jim's ppsps (async)"],
 	[7, "8686777", "Vitoria"],
