@@ -20,8 +20,16 @@
 	let warnings = [];
 	let animationSpeed = defaults.animationSpeed;
 
-	if (useLocalStorage)
-		jifString = localStorage.getItem('jif', null);
+	if (useLocalStorage) {
+		// getItem returns null when the key is unset (e.g. first visit, incognito,
+		// or after clearing site data). The old code assigned that null straight to
+		// jifString, so Jif.complete(null) threw ("Cannot read properties of null")
+		// and the page froze. Only override the default when a real value is stored.
+		// (The second `null` arg was also a no-op — getItem takes one argument.)
+		const stored = localStorage.getItem('jif');
+		if (stored !== null && stored !== '')
+			jifString = stored;
+	}
 
 	$: {
 		try {
