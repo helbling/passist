@@ -498,21 +498,29 @@ constructor(p)
 
 getCurveAndFraction(t)
 {
+	// Commit this.lastIndex (the search-start hint) only on a MATCH. The old code
+	// reassigned it every iteration, so `index = (lastIndex + i) % nCurves` used a
+	// lastIndex that grew within the loop and skipped curves: starting from
+	// lastIndex 0 with 6 curves it probed 0,1,3,0,4,3 — never 2 or 5. The
+	// period-wrapping curve was among those skipped, so the prop/hand froze for that
+	// span and then snapped. Only advancing the hint on a hit keeps the scan honest.
 	for (let i = 0; i < this.nCurves; i++) {
 		const index = (this.lastIndex + i) % this.nCurves;
-		this.lastIndex = index;
 		const c = this.positionCurves[index];
 		const end = c.start + c.duration;
-		if (c.start <= t && t < end)
+		if (c.start <= t && t < end) {
+			this.lastIndex = index;
 			return {
 				curve: c,
 				fraction: (t - c.start) / c.duration,
 			};
-		else if (end > this.periodSeconds && t < (end % this.periodSeconds)) // wrap around period
+		} else if (end > this.periodSeconds && t < (end % this.periodSeconds)) { // wrap around period
+			this.lastIndex = index;
 			return {
 				curve: c,
 				fraction: (t - c.start + this.periodSeconds) / c.duration,
 			};
+		}
 	}
 	return undefined;
 }
