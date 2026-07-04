@@ -83,8 +83,8 @@
 	.right  { grid-column:2 }
 	.input  { width:100%; height:30em }
 	.invalid { color:#dc3545 }
-	.error   { color:red }
-	.warnings { color:orange }
+	.error   { color:red; user-select:text; -webkit-user-select:text }
+	.warnings { color:orange; user-select:text; -webkit-user-select:text }
 	.animation-controls { display:flex; flex-flow:row wrap }
 </style>
 
