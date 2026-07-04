@@ -175,7 +175,7 @@ function _completeRepetition({ jif, warnings })
 				if (typeof rep.propPermutation != 'undefined')
 					warnings.push("repetition.propPermutation has unexpected type, setting to identity");
 				rep.propPermutation = defaultPropPermutation;
-			} else if (rep.propPermutation.length != jif.limbs.length) {
+			} else if (rep.propPermutation.length != jif.props.length) {
 				rep.propPermutation = defaultPropPermutation;
 				warnings.push("invalid size of repetition.propPermutation, setting to identity");
 			}
