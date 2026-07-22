@@ -38,6 +38,8 @@
 				name = (jif && jif.meta && jif.meta.name) || "";
 				if (useLocalStorage)
 					localStorage.setItem('jif', jifString);
+			} else {
+				jif = null;
 			}
 		} catch (e) {
 			jsonValid = false;
