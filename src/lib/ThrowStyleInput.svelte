@@ -181,6 +181,10 @@
 		border-radius: 4px;
 	}
 
+	.style-overview .input-group, .style-overview.input-group {
+		background-color: white;
+	}
+
 	select { height: 2.4em !important }
 	.inactive { color: #aaa; }
 	input { margin-bottom: 0 !important } /* override weird pure margin on small screens that made value field smaller in height than add button */

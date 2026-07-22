@@ -54,6 +54,9 @@
 		display: inline-flex;
 		position:relative;
 	}
+	.style-overview.input-group {
+		background-color: white;
+	}
 	.hands-input input, .style-overview {
 		border-top-left-radius:0;
 		border-bottom-left-radius:0;
