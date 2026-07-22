@@ -27,15 +27,17 @@
 			warnings = [];
 			error = '';
 
-			// TODO: would a destructuring assignment work?
-			const complete = Jif.complete(jifString, { expand:true });
-			jif = complete.jif;
-			warnings = complete.warnings;
+			if (jifString) {
+				// TODO: would a destructuring assignment work?
+				const complete = Jif.complete(jifString, { expand:true });
+				jif = complete.jif;
+				warnings = complete.warnings;
 
-			jsonValid = true;
-			name = (jif && jif.meta && jif.meta.name) || "";
-			if (useLocalStorage)
-				localStorage.setItem('jif', jifString);
+				jsonValid = true;
+				name = (jif && jif.meta && jif.meta.name) || "";
+				if (useLocalStorage)
+					localStorage.setItem('jif', jifString);
+			}
 		} catch (e) {
 			jsonValid = false;
 			error = e.message;
