@@ -126,13 +126,13 @@ const symmetricPassings = [
 
 
 	// TODO: make the following patterns use singles..
-	[8, '4p',        'double treff'],
-	[8, '(4x,4px)',  '8 prop two count symmetric with doubles'],
-	[8, '(4x,4px)*', 'swinging door with doubles'],
+	[8, '4p',        'Single Treff',               '~~~spins~1'],
+	[8, '(4x,4px)',  '8 prop two count symmetric', '~~~spins~1'],
+	[8, '(4x,4px)*', 'swinging door',              '~~~spins~1'],
 ];
 
-for (const [nProps, notation, name] of symmetricPassings) {
-	const url = '/symmetric-siteswap/' + encodeUrlPathPart(notation) + '?jugglers=2';
+for (const [nProps, notation, name, throw_styles] of symmetricPassings) {
+	const url = '/symmetric-siteswap/' + encodeUrlPathPart(notation) + '?jugglers=2' + (throw_styles ? '&throw_styles=' + throw_styles : '');
 	siteswapNames[url] = name;
 	patterns.push({
 		nJugglers: 2,
