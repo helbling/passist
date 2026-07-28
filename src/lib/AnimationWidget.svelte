@@ -284,9 +284,9 @@
 				<div
 					class="controls position-bottom position-left"
 				>
-					<button class=invisible title={(paused ? 'play' : 'pause') + " animation"} on:click|stopPropagation={_ => togglePause()}>
+					<button class=invisible title={(paused ? 'play' : 'pause') + " animation"} on:click|stopPropagation={ togglePause }>
 						<Icon type={paused ? 'play' : 'pause'} />
-						</button>
+					</button>
 				</div>
 				{/if}
 				{#if loaded}
