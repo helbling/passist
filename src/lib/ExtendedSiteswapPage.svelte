@@ -14,7 +14,6 @@
 	let valid = false;
 	let extendedSiteswapString = '';
 	let extendedSiteswap;
-	let period;
 	let nProps;
 	let siteswapName;
 	let title;
@@ -29,10 +28,8 @@
 		throwStyles = getThrowStyles(init.url);
 	} else if (useLocalStorage) {
 		const urlSuffix = localStorage.getItem('extended-siteswap/urlSuffix');
-		if (urlSuffix) {
-			let queryStr
-			[inputStr, queryStr] = urlSuffix.split('?');
-		}
+		if (urlSuffix)
+			[ inputStr ] = urlSuffix.split('?');
 	}
 
 	if (inputStr) {
