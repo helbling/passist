@@ -277,7 +277,7 @@
 			<div class=teaserForeground on:click={requestFullscreen}>
 				{#if closeButton}
 				<div class="controls position-top position-left">
-					<button class=invisible title="close animation" on:click|stopPropagation={onClose(!isFull)}>
+					<button class=invisible title="close animation" on:click|stopPropagation={ _ => onClose(!isFull) }>
 						<Icon type=close />
 						</button>
 				</div>
