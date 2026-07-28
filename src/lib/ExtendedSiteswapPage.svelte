@@ -47,11 +47,13 @@
 		/* 		flipTwos: true, // TODO: implement this */
 
 		extendedSiteswap = new ExtendedSiteswap(input, {nJugglers, jugglers:jugglersInCircle(nJugglers), throwStyles });
-		url = extendedSiteswap.toUrl();
+		url = ExtendedSiteswap.inputToUrl(input,throwStyles);
+
+		const canonicUrl = extendedSiteswap.toUrl();
 		urlSuffix = extendedSiteswap.toUrlSuffix();
 		extendedSiteswapString = extendedSiteswap.toString();
 		valid = extendedSiteswap.isValid();
-		siteswapName = siteswapNames[url];
+		siteswapName = siteswapNames[canonicUrl];
 		title = 'Extended Siteswap ' + extendedSiteswapString;
 
 		jif = extendedSiteswap.jif;

@@ -345,7 +345,7 @@ toUrlSuffix()
 
 toUrl()
 {
-	const query = [];
+	const query = {};
 	if (this.throwStyles && this.throwStyles.length > 0)
 		query.throw_styles = encodeThrowStyles(this.throwStyles);
 	return U('/extended-siteswap/' + this.toUrlSuffix(), query); // TODO proper url encoding!
@@ -459,6 +459,14 @@ static isVanillaSiteswap(notation)
 static stringToUrl(s)
 {
 	return s.replace(/^<(.*)>$/, '$1').split('|').map(encodeUrlPathPart).join('/');
+}
+
+static inputToUrl(input, throwStyles)
+{
+	const query = {};
+	if (throwStyles && throwStyles.length > 0)
+		query.throw_styles = encodeThrowStyles(throwStyles);
+	return U('/extended-siteswap/' + input.map(encodeUrlPathPart).join('/'), query);
 }
 
 }
