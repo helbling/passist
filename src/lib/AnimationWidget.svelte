@@ -103,14 +103,6 @@
 
 		if (initialFullscreen)
 			requestFullscreen();
-
-		setTimeout(() => {
-			const containerRect = container.getBoundingClientRect();
-			if (containerRect.width != width || containerRect.height != height) {
-				width = containerRect.width;
-				height = containerRect.height;
-			}
-		}, 1);
 	});
 
 	onDestroy(() => {
