@@ -1,7 +1,8 @@
 <script>
 	import SiteswapAlternativesPage from '$lib/SiteswapAlternativesPage.svelte';
 	import { useLocalStorage, siteswapAlternativesUrl } from '$lib/passist.mjs';
-	import { browser } from '$app/environment';
+	// import { browser } from '$app/environment';
+	// import { replaceState } from '$app/navigation';
 
 	export let data;
 	$: ({siteswapInput, nJugglers, handsInput} = data);
@@ -12,14 +13,14 @@
 	$:  useLocalStorage && nJugglers && localStorage.setItem("siteswap-alternatives/nJugglers", nJugglers);
 
 	$: {
-		if (browser === true && window && ('history' in window)) {
-			const url = siteswapAlternativesUrl({
-				siteswapInput,
-				nJugglers,
-				handsInput,
-			});
-			history.replaceState({}, '', url);
-		}
+		// if (browser === true && window && ('history' in window)) {
+		// 	const url = siteswapAlternativesUrl({
+		// 		siteswapInput,
+		// 		nJugglers,
+		// 		handsInput,
+		// 	});
+		// 	replaceState(url);
+		// }
 	}
 </script>
 
