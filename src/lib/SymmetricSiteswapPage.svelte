@@ -31,8 +31,13 @@
 
 		throwStyles = getThrowStyles(init.url);
 	} else if (useLocalStorage) {
-		input = localStorage.getItem('symmetric-siteswap/input') || defaults.siteswap;
+		input = localStorage.getItem('symmetric-siteswap/input');
 		nJugglers = localStorage.getItem('symmetric-siteswap/nJugglers') || defaults.nJugglers;
+
+		if (!input) {
+			// six-count popcorn
+			input = '534px333';
+		}
 	}
 
 	$: useLocalStorage && input && localStorage.setItem("symmetric-siteswap/input", input);
