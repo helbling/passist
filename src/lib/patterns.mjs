@@ -1,4 +1,3 @@
-import Siteswap from "./siteswap.mjs";
 import ExtendedSiteswap from "./extended_siteswap.mjs";
 import { encodeUrlPathPart } from './utils.mjs';
 
@@ -91,7 +90,7 @@ const kaestnersKnownSiteswaps = [
 	[7, "94949", "Erdnussflips"],
 ];
 
-var siteswapNames = {}
+const siteswapNames = {}
 for (const [nProps, notation, name] of kaestnersKnownSiteswaps) {
 	const url = '/siteswap/' + notation + '?jugglers=2';
 	for (let i = 0; i < notation.length; i++)
