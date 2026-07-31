@@ -185,7 +185,14 @@
 		background-color: white;
 	}
 
-	select { height: 2.4em !important }
+	:global(.mainthrow-styles > *) {
+		height: 2.4em !important;
+		margin-bottom:0.5em;
+	}
+
+	:global(.mainthrow-styles.input-group) {
+		margin-bottom:0.5em;
+	}
 	.inactive { color: #aaa; }
 	input { margin-bottom: 0 !important } /* override weird pure margin on small screens that made value field smaller in height than add button */
 
