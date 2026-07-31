@@ -13,38 +13,53 @@ function encodeUrlPathPart(string)
 
 function encodeThrowStyles(throwStyles)
 {
-	return throwStyles.map(style => [
-		style.label || '',
-		'ordinal' in style ? style.ordinal : '',
-		style.limbs ? style.limbs.sort((a,b)=>a-b).join('_') : '',
-		style.what,
-		style.value
-	].join('~')).join('|');
+	return throwStyles.map(style =>
+		[
+			style.label && 'label-' + style.label,
+			'ordinal' in style ? 'nth-' + style.ordinal : '',
+			style.limbs ? 'limbs-' + style.limbs.sort((a,b)=>a-b).join('_') : '',
+			style.what + '-' + style.value
+		].filter(a => a).join('~')
+	).join('|');
 }
 
 function decodeThrowStyles(throwStylesParam)
 {
 	if (throwStylesParam) {
 		return throwStylesParam.split('|').map(s => {
-			let [label, ordinal, limbs, what, value] = s.split('~');
-			const style = {what, value};
+			const parts = s.split('~');
+			if (parts.length < 1)
+				return undefined;
+
+			let [what, value] = parts.pop().split('-');
 
 			if (value === undefined)
 				return undefined;
 
-			if (label !== '')
-				style.label = label;
+			if (what == 'spins')
+				value = parseInt(value); // currently only integer spins supported
+			else if (what == 'dwell')
+				value = parseFloat(value);
+			else
+				return undefined;
 
-			if (ordinal !== '')
-				style.ordinal = parseInt(ordinal);
+			const style = {what, value};
 
-			if (limbs !== '')
-				style.limbs = limbs.split('_').map(_=>parseInt(_)).sort((a,b)=>a-b);
+			for (const part of parts) {
+				const [k, v] = part.split('-');
+				if (k == 'label')
+					style.label = v;
+				else if (k == 'nth')
+					style.ordinal = parseInt(v);
+				else if (k == 'limbs')
+					style.limbs = v.split('_').map(_ => parseInt(_)).sort((a,b) => a-b);
+			}
 
 			return style;
 		}).filter(s => s);
+	} else {
+		return [];
 	}
-	return [];
 }
 
 function getThrowStyles(url)
