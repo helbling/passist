@@ -75,8 +75,10 @@ You won't need to type in \'<\', \'>\' or \'|\', the user interface will do that
 If we have more than two jugglers, a \`3p\` is a single pass to the next juggler in-line.
 
 A single pass two jugglers forward is \`3p+2\`, one backwards \`3p-1\`, and so on. Make sure to put a space between passes for these relative pass notations.
+Example: ${symmetric('3p+2 3', {nJugglers:3})}
 
 For extended siteswaps, you can also specify \`3p:2\` for a single pass to the second juggler.
+Example: ${extended(['<3p:2 3p:3 3p:4|3p:1 3p:4 3p:3|3p:4 3p:1 3p:2|3p:3 3p:2 3p:1>'])}
 
 ### Throw heights
 As the letter \`p\` is used to mark a pass, throws can get up to height \`o\`, which corresponds to 24 beats.
