@@ -11,8 +11,8 @@
 
 	const pages = [
 		{ path:'/siteswap',           title:'Global' },
-		{ path:'/symmetric-siteswap', title:'Symmetric (beta)' },
-		{ path:'/extended-siteswap',  title:'Extended (beta)' },
+		{ path:'/symmetric-siteswap', title:'Symmetric', longtitle:'Symmetric (beta)' },
+		{ path:'/extended-siteswap',  title:'Extended',  longtitle:'Extended (beta)' },
 		{ path:'/pattern/notation',   title:'Notation' },
 		// { path:'/social-siteswap',   title:'Social Siteswap' }, // same as symmetric?
 	];
@@ -22,8 +22,14 @@
 	nav { margin-top:-1em; margin-bottom:1em; border-bottom:1px solid lightgray; overflow-x:auto }
 	.pure-menu-selected, .pure-menu-link:focus { font-weight:bold }
 	.pure-menu-link { color:#212529 }
-	@media (max-width:30em) {
+	@media (max-width:34em) {
 		.pure-menu-link { padding: .5em .5em }
+	}
+	@media (max-width:34em) {
+		.longtitle { display:none }
+	}
+	@media (min-width:34em) {
+		.shorttitle { display:none }
 	}
 </style>
 
@@ -35,7 +41,12 @@
 				class=pure-menu-link
 				href={p.path}
 			>
-				{p.title}
+				<span class=shorttitle>
+					{p.title}
+				</span>
+				<span class=longtitle>
+					{p.longtitle || p.title}
+				</span>
 			</a>
 		</li>
 		{/each}
