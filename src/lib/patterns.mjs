@@ -126,9 +126,9 @@ const symmetricPassings = [
 
 
 	// TODO: make the following patterns use singles..
-	[8, '4p',        'Single Treff',               '~~~spins~1'],
-	[8, '(4x,4px)',  '8 prop two count symmetric', '~~~spins~1'],
-	[8, '(4x,4px)*', 'swinging door',              '~~~spins~1'],
+	[8, '4p',        'Single Treff',               'spins-1'],
+	[8, '(4x,4px)',  '8 prop two count symmetric', 'spins-1'],
+	[8, '(4x,4px)*', 'swinging door',              'spins-1'],
 ];
 
 for (const [nProps, notation, name, throw_styles] of symmetricPassings) {
@@ -148,7 +148,7 @@ for (const [nProps, notation, name, throw_styles] of symmetricPassings) {
 const extendedPassings = [
 	[6, '<3p33|234p>',                          'three-count vs early double'],
 	[7, '<(3p,4)(4,3p)|(0,0)!(3px,4)(4,3px)!>', 'Scratch your head'], // TODO: can this be turned into a sync pattern?
-	[7, '<(4x,4px)(2,4x)*/(4x,2)(4x,4p)*>',     'Techno', '~~~spins~1'],
+	[7, '<(4x,4px)(2,4x)*/(4x,2)(4x,4p)*>',     'Techno', 'spins-1'],
 ];
 
 for (const [nProps, notation, name, throw_styles] of extendedPassings) {
