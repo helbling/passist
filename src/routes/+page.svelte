@@ -36,6 +36,6 @@
 		<a class=pure-button href="{randomPatternUrl}">Random Pattern</a>
 	</p>
 	<p class=new>
-		New: <a href='/extended-siteswap/'>Extended Siteswap (beta)</a>
+		New: <a href="/symmetric-siteswap/">Symmetric Siteswap (beta)</a> and <a href='/extended-siteswap/'>Extended Siteswap (beta)</a>
 	</p>
 </div>
