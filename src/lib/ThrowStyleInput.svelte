@@ -188,6 +188,10 @@
 	select { height: 2.4em !important }
 	.inactive { color: #aaa; }
 	input { margin-bottom: 0 !important } /* override weird pure margin on small screens that made value field smaller in height than add button */
+
+	.flip-twos, .hold-twos {
+		margin-bottom:1em;
+	}
 </style>
 
 {#if showSettings}
@@ -239,7 +243,7 @@
 
 	{#if hasHolds}
 	{#if holdSpins == 1}
-	<div class="pure-form form-inline">
+	<div class="pure-form form-inline hold-twos">
 		<button
 			class="pure-button"
 			on:click={_ => {throwStyles.push({what:"spins", label:holdLabel, value:0}); throwStyles=throwStyles}}
@@ -248,7 +252,7 @@
 		</button>
 	</div>
 	{:else}
-	<div class="pure-form form-inline">
+	<div class="pure-form form-inline flip-twos">
 		<button
 			class="pure-button"
 			on:click={_ => {throwStyles = throwStyles.filter(style => !isHoldSpinStyle(style))}}
