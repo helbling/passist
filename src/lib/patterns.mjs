@@ -88,6 +88,7 @@ const kaestnersKnownSiteswaps = [
 	[5, "64555", "Funky magazine rack"],
 	[7, "966777777", "Double BANANA"],
 	[7, "94949", "Erdnussflips"],
+	[5, "7572662", "Chill in the park"],
 ];
 
 const siteswapNames = {}
