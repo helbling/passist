@@ -87,13 +87,30 @@ const kaestnersKnownSiteswaps = [
 	[5, "95524", "Dragon cat"],
 	[5, "64555", "Funky magazine rack"],
 	[7, "966777777", "Double BANANA"],
-	[7, "94949", "Erdnussflips"],
+	[5, "7525844", "Flip vergessen"],
+	[6, "7727788289247", "Missing elevator button"],
+	[7, "96677", "Funky bookend friend"],
+	[7, "94949", "Erdnussflips / Peanut Flips"],
+	[8, "9969968", "Ollerup"],
+	[7, "7777786", "Mojito"],
+	[7, "7777966", "Caipirinha"],
+	[7, "9797926", "Moscow Mule"],
+	[7, "9969727", "Baco (Cuba Libre)"],
+	[7, "9697882", "Espresso Martini"],
+	[7, "979a626", "Tequila Sunrise"],
+	[6, "97842", "Israeli bicep curls"],
+	// TODO: enable 6/8 handed siteswaps to enable the next two patterns..
+	[8, "a37979999", "Mayday Zap (6 handed siteswap)", 3],
+	[13, "fcc", "3-count friction (8 handed siteswap)", 4],
+	[6, "9557772", "Hidden dragon"],
+	[5, "6456455", "Shirley Temple"],
+
 	[5, "7572662", "Chill in the park"],
 ];
 
 const siteswapNames = {}
-for (const [nProps, notation, name] of kaestnersKnownSiteswaps) {
-	const url = '/siteswap/' + notation + '?jugglers=2';
+for (const [nProps, notation, name, nJugglers] of kaestnersKnownSiteswaps) {
+	const url = '/siteswap/' + notation + '?jugglers=' + (nJugglers || 2);
 	for (let i = 0; i < notation.length; i++)
 		siteswapNames['/siteswap/' + notation.slice(i) + notation.slice(0, i) + '?jugglers=2'] = name;
 	patterns.push({
