@@ -34,5 +34,8 @@
     "rollup-plugin-svelte": "^7.2.2",
     "svelte": "^4.2.19",
     "uvu": "^0.5.4"
+  },
+  "overrides": {
+    "nanoid": "3.3.17"
   }
 }
