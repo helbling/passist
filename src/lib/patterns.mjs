@@ -82,7 +82,24 @@ const knownSiteswaps = [
 	["95524", "Dragon cat"],
 	["64555", "Funky magazine rack"],
 	["966777777", "Double BANANA"],
-	["94949", "Erdnussflips"],
+	["7525844", "Flip vergessen"],
+	["7727788289247", "Missing elevator button"],
+	["96677", "Funky bookend friend"],
+	["99494", "Erdnussflips / Peanut Flips"],
+	["9969968", "Ollerup"],
+	["7777786", "Mojito"],
+	["7777966", "Caipirinha"],
+	["9797926", "Moscow Mule"],
+	["9969727", "Baco (Cuba Libre)"],
+	["9697882", "Espresso Martini"],
+	["979a626", "Tequila Sunrise"],
+	["97842", "Israeli bicep curls"],
+	// TODO: enable 6/8 handed siteswaps to enable the next two patterns..
+	// ["a37979999", "Mayday Zap (6 handed siteswap)"],"
+	// ["fcc", "3-count friction (8 handed siteswap)"],"
+	["9557772", "Hidden dragon"],
+	["6456455", "Shirley Temple"],
+
 	["7572662", "Chill in the park"],
 ];
 
